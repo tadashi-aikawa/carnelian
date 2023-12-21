@@ -6,7 +6,7 @@ import path from "path";
 import chokidar from "chokidar";
 
 const PLUGIN_DIR =
-  "/mnt/c/Users/syoum/work/minerva/.obsidian/plugins/obsidian-plugin-for-tadashi-aikawa/";
+  "/mnt/c/Users/syoum/work/minerva/.obsidian/plugins/carnelian/";
 const FILES = ["main.js", "manifest.json", "styles.css"];
 
 const banner = `/*

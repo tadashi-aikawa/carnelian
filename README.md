@@ -1,4 +1,4 @@
-# Obsidian Plugin for tadashi-aikawa
+# Carnelian
 
 tadashi-aikawa専用のObsidianプラグイン。
 
@@ -22,7 +22,7 @@ bun i
 
 ```ts
 const PLUGIN_DIR =
-  "/mnt/c/Users/syoum/work/minerva/.obsidian/plugins/obsidian-plugin-for-tadashi-aikawa/";
+  "/mnt/c/Users/syoum/work/minerva/.obsidian/plugins/carnelian/";
 ```
 
 ### .hotreloadの配置

@@ -1,8 +1,8 @@
-import { Plugin as ObsidianPlugin } from "obsidian";
+import { Plugin } from "obsidian";
 import { createCommands } from "./commands";
 import { DEFAULT_SETTINGS, PluginSettings, SettingTab } from "./settings";
 
-export default class Plugin extends ObsidianPlugin {
+export default class CarnelianPlugin extends Plugin {
   settings!: PluginSettings;
 
   async onload() {

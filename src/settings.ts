@@ -1,6 +1,6 @@
 // TODO: 必要になったらつくる
 import { App, PluginSettingTab } from "obsidian";
-import Plugin from "./main";
+import CarnelianPlugin from "./main";
 
 export interface PluginSettings {
   mySetting: string;
@@ -11,9 +11,9 @@ export const DEFAULT_SETTINGS: PluginSettings = {
 };
 
 export class SettingTab extends PluginSettingTab {
-  plugin: Plugin;
+  plugin: CarnelianPlugin;
 
-  constructor(app: App, plugin: Plugin) {
+  constructor(app: App, plugin: CarnelianPlugin) {
     super(app, plugin);
     this.plugin = plugin;
   }
