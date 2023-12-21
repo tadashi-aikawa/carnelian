@@ -1,6 +1,11 @@
 # Carnelian
 
+<img src="./logo.png" width=256 />
+
 tadashi-aikawa専用のObsidianプラグイン。
+
+> **Note**
+> 上記のロゴ画像はAIで生成されています
 
 ## 開発の前提環境
 
