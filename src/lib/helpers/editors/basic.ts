@@ -1,13 +1,7 @@
-import { UApp, UEditor, UMetadataEditor } from "../types";
-import { map, orThrow } from "../utils/types";
-import { errorMessage, ExhaustiveError } from "../utils/errors";
-import {
-  parseMarkdownList,
-  parseTags,
-  stripDecoration,
-  stripLinks,
-} from "../obsutils/parser";
-import { orderBy } from "../utils/collections";
+import { parseTags } from "src/lib/obsutils/parser";
+import { UApp, UEditor } from "src/lib/types";
+import { errorMessage } from "src/lib/utils/errors";
+import { map, orThrow } from "src/lib/utils/types";
 
 declare let app: UApp;
 
@@ -137,104 +131,4 @@ export function appendLine(str: string): void {
   orThrow(getActiveEditor(), (e) =>
     e.replaceRange(`\n${str}`, { line: e.lastLine() + 1, ch: 0 })
   );
-}
-
-//************ 高度な操作 ******************
-
-/**
- * 現在行のリスト要素に対して、先頭や末尾にテキストを追記します
- *
- * @param option.attached
- *   - prefix: 先頭に追記 (default)
- *   - suffix: 末尾に追記
- * @param option.cursor
- *   - last: 追記後、現在行の末尾にカーソルを移動する
- *
- * ```ts
- * await attachTextToListItem("👺")
- * await attachTextToListItem("🐈", { attached: "suffix", cursor: "last" })
- * ```
- */
-export function attachTextToListItem(
-  text: string,
-  option?: { attached?: "prefix" | "suffix"; cursor?: "last" }
-): void {
-  const activeLine = getActiveLine()!;
-  const { prefix, content } = parseMarkdownList(activeLine);
-
-  const attached = option?.attached ?? "prefix";
-  let after: string;
-  switch (attached) {
-    case "prefix":
-      after = `${prefix}${text}${content}`;
-      break;
-    case "suffix":
-      after = `${prefix}${content}${text}`;
-      break;
-    default:
-      throw new ExhaustiveError(attached);
-  }
-
-  replaceStringInActiveLine(after, { cursor: option?.cursor });
-}
-
-/**
- * 選択中のテキスト複数行をソートします
- *
- * @param option.order
- *   - asc:  昇順 (default)
- *   - desc: 降順
- * @param option.predicate: ソートの指標決めロジック
- *
- * ```ts
- * sortSelectionLines()
- * // 文字列の長さで降順ソート
- * sortSelectionLines({ order: "desc", predicate: (x) => x.length })
- * ```
- */
-export function sortSelectionLines(option?: {
-  order?: "asc" | "desc";
-  predicate?: (x: any) => string | number;
-}): void {
-  const order = option?.order ?? "asc";
-  const predicate = option?.predicate ?? ((x) => x);
-
-  const lines = getSelectionLines();
-  if (!lines) {
-    return;
-  }
-
-  const sortedLines = orderBy(lines, predicate, order);
-
-  setSelection(sortedLines.join("\n"));
-}
-
-/**
- * 選択範囲のテキストから装飾を除外します
- *
- * ◆実行後のbefore/after例
- * ```diff
- * - **hoge** _hoga_ ==hogu==
- * + hoge hoga hogu
- * ```
- */
-export function stripDecorationFromSelection(): void {
-  orThrow(getSelection(), (sl) => {
-    setSelection(stripDecoration(sl));
-  });
-}
-
-/**
- * 選択範囲のテキストからリンクを除外します
- *
- * ◆実行後のbefore/after例
- * ```diff
- * - [hoge] [huga](xxx) [[fuga]]
- * + hoge huga fuga
- * ```
- */
-export function stripLinksFromSelection(): void {
-  orThrow(getSelection(), (sl) => {
-    setSelection(stripLinks(sl));
-  });
 }

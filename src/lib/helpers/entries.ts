@@ -2,7 +2,7 @@ import { Loc, TFile } from "obsidian";
 import { toEditorPosition } from "../obsutils/mapper";
 import { UApp } from "../types";
 import { map } from "../utils/types";
-import { getActiveEditor } from "./editors";
+import { getActiveEditor } from "./editors/basic";
 
 declare let app: UApp;
 

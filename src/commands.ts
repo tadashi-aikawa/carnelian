@@ -1,5 +1,5 @@
 import { Command } from "obsidian";
-import { insertToCursor } from "./lib/helpers/editors";
+import { insertToCursor } from "./lib/helpers/editors/basic";
 import { getDailyNotes } from "./lib/helpers/plugins";
 import { getActiveFileProperties } from "./lib/helpers/properties";
 import { loadCodeBlocks } from "./lib/helpers/sections";

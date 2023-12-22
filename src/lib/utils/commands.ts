@@ -1,5 +1,5 @@
 import { Command } from "obsidian";
-import { getActiveEditor } from "../helpers/editors";
+import { getActiveEditor } from "../helpers/editors/basic";
 import { getActiveFile } from "../helpers/entries";
 
 type Args = {
