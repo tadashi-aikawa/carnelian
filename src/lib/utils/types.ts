@@ -28,7 +28,6 @@ export function orThrow<T, U>(
     return;
   }
   throw Error(
-    opts?.message ??
-      "引数が予期せずnull/undefinedになったため、処理を中断しました"
+    opts?.message ?? "予期せずundefined/nullが発生しましたので中断しました"
   );
 }

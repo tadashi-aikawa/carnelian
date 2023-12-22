@@ -1,8 +1,3 @@
-/**
- * Obsidianの型ファイルの接頭語にUをつけた型を定義しています
- * これは公式の公開APIだけでなく、非公開API(runtimeでは利用可能)を含みます
- * そのため、いきなり利用できなくなるリスクがあります
- */
 import {
   App,
   CacheItem,
@@ -16,6 +11,8 @@ import {
   Vault,
   Workspace,
 } from "obsidian";
+
+type CommandId = "editor:toggle-source";
 
 export interface CodeBlock {
   language: string | null;
@@ -51,6 +48,10 @@ type Config = {
   useMarkdownLinks?: boolean;
   newLinkFormat?: "shortest" | "relative" | "absolute";
   readableLineLength?: boolean;
+  // Default editing modeに関係
+  livePreview?: boolean;
+  // Default view for new tabsに関係
+  defaultViewMode?: "preview" | "source";
 };
 
 export type UVault = Vault & {
@@ -82,5 +83,8 @@ export type UApp = App & {
       };
       [key: string]: any;
     };
+  };
+  commands: {
+    executeCommandById(id: CommandId): boolean;
   };
 };

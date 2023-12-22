@@ -1,3 +1,4 @@
+import { WorkspaceLeaf } from "obsidian";
 import { parseTags } from "src/lib/obsutils/parser";
 import { UApp, UEditor } from "src/lib/types";
 import { errorMessage } from "src/lib/utils/errors";
@@ -131,4 +132,13 @@ export function appendLine(str: string): void {
   orThrow(getActiveEditor(), (e) =>
     e.replaceRange(`\n${str}`, { line: e.lastLine() + 1, ch: 0 })
   );
+}
+
+/**
+ * エディタのLive previewモードを切り替えます
+ */
+export function setLivePreview(leaf: WorkspaceLeaf, enabled: boolean) {
+  const vs = leaf.getViewState();
+  vs.state.source = enabled;
+  leaf.setViewState(vs);
 }

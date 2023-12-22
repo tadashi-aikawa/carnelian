@@ -11,3 +11,16 @@ export function toggleEditorLength() {
   app.vault.setConfig("readableLineLength", next);
   return next;
 }
+
+/**
+ * Default editing modeの設定値を切り替えます
+ * 現在のエディタの状態は切り替えません
+ *
+ * @returns 変更後の値
+ */
+export function toggleDefaultEditingMode(): "source" | "livePreview" {
+  const current = app.vault.getConfig("livePreview") ?? false;
+  const next = !current;
+  app.vault.setConfig("livePreview", next);
+  return next ? "source" : "livePreview";
+}

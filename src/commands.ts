@@ -1,11 +1,13 @@
 import { Command } from "obsidian";
-import { insertToCursor } from "./lib/helpers/editors/basic";
+import { insertToCursor, setLivePreview } from "./lib/helpers/editors/basic";
+import { getAllMarkdownLeaves } from "./lib/helpers/leaves";
 import { getDailyNotes } from "./lib/helpers/plugins";
 import { getActiveFileProperties } from "./lib/helpers/properties";
 import { loadCodeBlocks } from "./lib/helpers/sections";
+import { toggleDefaultEditingMode } from "./lib/helpers/settings";
 import { notify } from "./lib/helpers/ui";
+import { createCommand } from "./lib/obsutils/commands";
 import { CodeBlock } from "./lib/types";
-import { createCommand } from "./lib/utils/commands";
 import { PluginSettings } from "./settings";
 
 export function createCommands(settings: PluginSettings): Command[] {
@@ -15,7 +17,21 @@ export function createCommands(settings: PluginSettings): Command[] {
       kind: "editor",
       executor: insertMFDIPostsToWeeklyNote,
     }),
+    createCommand({
+      name: "Toggle Live preview",
+      kind: "all",
+      executor: toggleLivePreviewMode,
+    }),
   ];
+}
+
+/**
+ * Editor > Default editing mode の設定を切り替えます
+ *  開いているMarkdownノートもすべて切り替えます
+ */
+function toggleLivePreviewMode() {
+  const nextDefault = toggleDefaultEditingMode() === "livePreview";
+  getAllMarkdownLeaves().forEach((l) => setLivePreview(l, nextDefault));
 }
 
 /**
