@@ -71,6 +71,18 @@ export function readActiveFileAliasesProperty(): string[] {
 }
 
 /**
+ * 現在ファイルのdescriptionプロパティを取得します
+ *
+ * ```ts
+ * readActiveFileDescriptionProperty()
+ * // 説明文
+ * ```
+ */
+export function readActiveFileDescriptionProperty(): string | null {
+  return getActiveFileProperties()?.description ?? null;
+}
+
+/**
  * 現在ファイルにプロパティを追加します
  *
  * ```ts
