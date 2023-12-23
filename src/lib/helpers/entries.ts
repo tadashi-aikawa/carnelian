@@ -74,6 +74,18 @@ export function getMarkdownFiles(): TFile[] {
 }
 
 /**
+ * 期間内に作成されたマークダウンファイル一覧を取得します
+ * beginは境界値を含み、endは境界値を含みません
+ */
+export function getMarkdownFilesInRange(begin: Dayjs, end: Dayjs): TFile[] {
+  return getMarkdownFiles().filter((x) => {
+    // stat.ctimeはミリ秒、Dayjsは秒 なので単位の違いに注意
+    const ctimeSec = x.stat.ctime / 1000;
+    return ctimeSec >= begin.unix() && ctimeSec < end.unix();
+  });
+}
+
+/**
  * パスからファイルを取得します
  * 存在しないパスの場合はnullを返却します
  */

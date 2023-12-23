@@ -1,5 +1,7 @@
-import { Command } from "obsidian";
+import dayjs from "dayjs";
+import { Command, TFile } from "obsidian";
 import { insertToCursor, setLivePreview } from "./lib/helpers/editors/basic";
+import { getMarkdownFilesInRange } from "./lib/helpers/entries";
 import { getAllMarkdownLeaves } from "./lib/helpers/leaves";
 import { getDailyNotes } from "./lib/helpers/plugins";
 import { getActiveFileProperties } from "./lib/helpers/properties";
@@ -16,6 +18,11 @@ export function createCommands(settings: PluginSettings): Command[] {
       name: "Insert MFDI posts to the weekly note",
       kind: "editor",
       executor: insertMFDIPostsToWeeklyNote,
+    }),
+    createCommand({
+      name: "Insert inputs to the weekly note",
+      kind: "editor",
+      executor: insertInputsToWeeklyNote,
     }),
     createCommand({
       name: "Toggle Live preview",
@@ -40,12 +47,14 @@ function toggleLivePreviewMode() {
  * TODO: createLinkも含めてもう少し楽にしたい
  */
 async function insertMFDIPostsToWeeklyNote() {
+  // TODO: 専用関数をつくりたい
   const description = getActiveFileProperties()?.description as string;
   if (!description) {
     notify("プロパティにdescriptionが存在しません");
     return;
   }
 
+  // TODO: リファクタリングしたい
   const [weekBegin, weekEnd] = Array.from(
     description.matchAll(/(\d{4}-\d{2}-\d{2})/g)
   ).map((x) => x[0]);
@@ -78,5 +87,48 @@ async function insertMFDIPostsToWeeklyNote() {
       .filter((x) => x.includes("http"))
       .join("\n\n")
   );
+  notify(`${weekBegin} ～ ${weekEnd} に作成されたノートを挿入しました`);
+}
+
+/**
+ * 1週間で作成したノートの一覧をWeekly Reportに差し込みます
+ */
+async function insertInputsToWeeklyNote() {
+  // FIXME:
+
+  // TODO: 専用関数をつくりたい
+  const description = getActiveFileProperties()?.description as string;
+  if (!description) {
+    notify("プロパティにdescriptionが存在しません");
+    return;
+  }
+
+  // TODO: リファクタリングしたい
+  const [weekBegin, weekEnd] = Array.from(
+    description.matchAll(/(\d{4}-\d{2}-\d{2})/g)
+  ).map((x) => x[0]);
+  if (!weekBegin) {
+    notify("descriptionプロパティに開始日が存在しません");
+    return;
+  }
+  if (!weekEnd) {
+    notify("descriptionプロパティに終了日が存在しません");
+    return;
+  }
+
+  const isPublicNote = (file: TFile) =>
+    !file.path.startsWith("_") && file.extension === "md";
+
+  const noteLists = getMarkdownFilesInRange(
+    dayjs(weekBegin),
+    dayjs(weekEnd).add(1, "days")
+  )
+    .filter(isPublicNote)
+    .map((x) => `- [[${x.basename}]]`)
+    .sort()
+    .join("\n");
+
+  insertToCursor(noteLists);
+
   notify(`${weekBegin} ～ ${weekEnd} に作成されたノートを挿入しました`);
 }
