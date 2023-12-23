@@ -142,6 +142,41 @@ export async function createMeta(url: string): Promise<Meta | null> {
 }
 
 /**
+ * HTMLメタ情報からサイトのカードを生成します
+ * 作成に失敗した場合は例外をthrowします
+ */
+export function createHTMLCard(meta: HTMLMeta): string {
+  const isSecure = (url: string | undefined) =>
+    url && !url.startsWith("http://");
+
+  // TODO: internalに対応したときは分岐処理が入る予定
+  const siteName = meta.siteName;
+  const title = meta.title;
+  // const description = meta.description;
+  const faviconUrl = meta.faviconUrl;
+  const imageUrl = meta.coverUrl;
+
+  const imageDom = isSecure(imageUrl)
+    ? `<img src="${imageUrl}" class="link-card-image" />`
+    : "";
+  const linkDom = `<a href="${meta.originUrl}"></a>`;
+
+  return `<div class="link-card">
+	<div class="link-card-header">
+		<img src="${faviconUrl}" class="link-card-site-icon"/>
+		<span class="link-card-site-name">${siteName}</span>
+	</div>
+	<div class="link-card-body">
+		<div class="link-card-content">
+      <p class="link-card-title">${title}</p>
+		</div>
+		${imageDom}
+	</div>
+	${linkDom}
+</div>`;
+}
+
+/**
  * サイトのカードを生成します
  * 作成に失敗した場合は例外をthrowします
  *
@@ -157,32 +192,5 @@ export async function createCard(url: string): Promise<string> {
     throw new Error("HTML以外のメタデータ取得には対応していません");
   }
 
-  const isSecure = (url: string | undefined) =>
-    url && !url.startsWith("http://");
-
-  // TODO: internalに対応したときは分岐処理が入る予定
-  const siteName = meta.siteName;
-  const title = meta.title;
-  const description = meta.description;
-  const faviconUrl = meta.faviconUrl;
-  const imageUrl = meta.coverUrl;
-
-  const imageDom = isSecure(imageUrl)
-    ? `<img src="${imageUrl}" class="link-card-image" />`
-    : "";
-  const linkDom = `<a href="${url}"></a>`;
-
-  return `<div class="link-card">
-	<div class="link-card-header">
-		<img src="${faviconUrl}" class="link-card-site-icon"/>
-		<span class="link-card-site-name">${siteName}</span>
-	</div>
-	<div class="link-card-body">
-		<div class="link-card-content">
-      <p class="link-card-title">${title}</p>
-		</div>
-		${imageDom}
-	</div>
-	${linkDom}
-</div>`;
+  return createHTMLCard(meta);
 }

@@ -12,6 +12,7 @@ import { createCommand } from "./lib/obsutils/commands";
 import { CodeBlock } from "./lib/types";
 import { doSinglePatternMatching } from "./lib/utils/strings";
 import { PluginSettings } from "./settings";
+import { createHTMLCard, createMeta } from "./lib/helpers/web";
 
 export function createCommands(settings: PluginSettings): Command[] {
   return [
@@ -44,8 +45,6 @@ function toggleLivePreviewMode() {
 
 /**
  * MFDIでポストした内容をWeekly Reportに差し込みます
- *
- * TODO: createLinkも含めてもう少し楽にしたい
  */
 async function insertMFDIPostsToWeeklyNote() {
   const description = getActiveFileDescriptionProperty();
@@ -75,15 +74,35 @@ async function insertMFDIPostsToWeeklyNote() {
     });
   }
 
-  insertToCursor(
-    codeBlocks
-      .filter(({ codeBlock }) => codeBlock.language === "fw")
-      .map(
-        ({ path, codeBlock }) => `\`\`\`${path}\n${codeBlock.content}\n\`\`\``
-      )
-      .filter((x) => x.includes("http"))
-      .join("\n\n")
-  );
+  const targetCodeBlocks = codeBlocks
+    .map((x) => x.codeBlock)
+    .filter((cb) => cb.language === "fw" && cb.content.includes("http"))
+    .toReversed();
+
+  for (const cb of targetCodeBlocks) {
+    const [url] = doSinglePatternMatching(cb.content, /http.+/g);
+    const meta = await createMeta(url);
+    if (meta?.type !== "html") {
+      continue;
+    }
+
+    insertToCursor(
+      `## ${meta.title}
+
+#todo 事実の概要
+
+${createHTMLCard(meta)}
+
+#todo 詳細や所感
+
+~~~
+${cb.content}
+~~~
+
+`
+    );
+  }
+
   notify(`${weekBegin} ～ ${weekEnd} に作成されたノートを挿入しました`, 5000);
 }
 
@@ -130,7 +149,7 @@ async function insertInputsToWeeklyNote() {
 //  * サイトからカードレイアウトのHTML文字列を挿入します
 //  */
 // async function insertSiteCard() {
-//   // FIXME: 入力UIが必要
+//   // TODO: 入力UIが必要
 //   const url = "https://minerva.mamansoft.net/Home";
 
 //   try {
