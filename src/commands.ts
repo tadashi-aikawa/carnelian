@@ -89,7 +89,7 @@ async function insertMFDIPostsToWeeklyNote() {
       .filter((x) => x.includes("http"))
       .join("\n\n")
   );
-  notify(`${weekBegin} ～ ${weekEnd} に作成されたノートを挿入しました`);
+  notify(`${weekBegin} ～ ${weekEnd} に作成されたノートを挿入しました`, 5000);
 }
 
 /**
@@ -130,5 +130,5 @@ async function insertInputsToWeeklyNote() {
 
   insertToCursor(noteLists);
 
-  notify(`${weekBegin} ～ ${weekEnd} に作成されたノートを挿入しました`);
+  notify(`${weekBegin} ～ ${weekEnd} に作成されたノートを挿入しました`, 5000);
 }
