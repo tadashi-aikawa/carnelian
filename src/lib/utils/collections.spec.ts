@@ -1,5 +1,5 @@
 import { expect, test } from "bun:test";
-import { orderBy } from "./collections";
+import { forceLowerCaseKeys, orderBy } from "./collections";
 
 const asis = (x: any) => x;
 const ASC = "asc" as const;
@@ -28,5 +28,20 @@ test.each([
     expected: ReturnType<typeof orderBy>
   ) => {
     expect(orderBy(collection, predicate, order)).toEqual(expected);
+  }
+);
+
+test.each([
+  [
+    { key: 1, key2: 2, Key3: 3, KEY4: 4 },
+    { key: 1, key2: 2, key3: 3, key4: 4 },
+  ],
+])(
+  `forceLowerCaseKeys("%s")`,
+  (
+    obj: Parameters<typeof forceLowerCaseKeys>[0],
+    expected: ReturnType<typeof forceLowerCaseKeys>
+  ) => {
+    expect(forceLowerCaseKeys(obj)).toStrictEqual(expected);
   }
 );

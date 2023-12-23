@@ -123,3 +123,20 @@ async function insertInputsToWeeklyNote() {
 
   notify(`${weekBegin} ～ ${weekEnd} に作成されたノートを挿入しました`, 5000);
 }
+
+// TODO: 入力ダイアログの仕組みを作ったら完成
+//
+// /**
+//  * サイトからカードレイアウトのHTML文字列を挿入します
+//  */
+// async function insertSiteCard() {
+//   // FIXME: 入力UIが必要
+//   const url = "https://minerva.mamansoft.net/Home";
+
+//   try {
+//     const html = await createCard(url);
+//     insertToCursor(html);
+//   } catch (e: any) {
+//     notify(e);
+//   }
+// }

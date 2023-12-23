@@ -23,3 +23,11 @@ export function orderBy<T, U extends number | string>(
 ): T[] {
   return collections.slice().sort(sorter(predicate, order));
 }
+
+export function forceLowerCaseKeys(obj: { [key: string]: any }): {
+  [key: string]: any;
+} {
+  return Object.fromEntries(
+    Object.entries(obj).map(([key, value]) => [key.toLowerCase(), value])
+  );
+}
