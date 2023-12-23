@@ -103,7 +103,10 @@ ${cb.content}
     );
   }
 
-  notify(`${weekBegin} ～ ${weekEnd} に作成されたノートを挿入しました`, 5000);
+  notify(
+    `${weekBegin} ～ ${weekEnd} にMFDIで投稿されたサイトURL付の投稿を挿入しました`,
+    5000
+  );
 }
 
 /**
