@@ -4,15 +4,13 @@ import { insertToCursor, setLivePreview } from "./lib/helpers/editors/basic";
 import { getMarkdownFilesInRange } from "./lib/helpers/entries";
 import { getAllMarkdownLeaves } from "./lib/helpers/leaves";
 import { getDailyNotes } from "./lib/helpers/plugins";
-import {
-  getActiveFileProperties,
-  getActiveFileDescriptionProperty,
-} from "./lib/helpers/properties";
+import { getActiveFileDescriptionProperty } from "./lib/helpers/properties";
 import { loadCodeBlocks } from "./lib/helpers/sections";
 import { toggleDefaultEditingMode } from "./lib/helpers/settings";
 import { notify } from "./lib/helpers/ui";
 import { createCommand } from "./lib/obsutils/commands";
 import { CodeBlock } from "./lib/types";
+import { doSinglePatternMatching } from "./lib/utils/strings";
 import { PluginSettings } from "./settings";
 
 export function createCommands(settings: PluginSettings): Command[] {
@@ -56,10 +54,10 @@ async function insertMFDIPostsToWeeklyNote() {
     return;
   }
 
-  // TODO: リファクタリングしたい
-  const [weekBegin, weekEnd] = Array.from(
-    description.matchAll(/(\d{4}-\d{2}-\d{2})/g)
-  ).map((x) => x[0]);
+  const [weekBegin, weekEnd] = doSinglePatternMatching(
+    description,
+    /\d{4}-\d{2}-\d{2}/g
+  );
   if (!weekBegin) {
     notify("descriptionプロパティに開始日が存在しません");
     return;
@@ -102,10 +100,10 @@ async function insertInputsToWeeklyNote() {
     return;
   }
 
-  // TODO: リファクタリングしたい
-  const [weekBegin, weekEnd] = Array.from(
-    description.matchAll(/(\d{4}-\d{2}-\d{2})/g)
-  ).map((x) => x[0]);
+  const [weekBegin, weekEnd] = doSinglePatternMatching(
+    description,
+    /\d{4}-\d{2}-\d{2}/g
+  );
   if (!weekBegin) {
     notify("descriptionプロパティに開始日が存在しません");
     return;
