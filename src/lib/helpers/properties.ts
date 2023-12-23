@@ -40,11 +40,11 @@ export function getActiveFileProperties(): Properties | null {
  * 現在ファイルのtagsプロパティを取得します
  *
  * ```ts
- * readActiveFileTagsProperty()
+ * getActiveFileTagsProperty()
  * // ["id", "favorites"]
  * ```
  */
-export function readActiveFileTagsProperty(): string[] {
+export function getActiveFileTagsProperty(): string[] {
   const tagsValue = getActiveFileProperties()?.tags;
   if (!tagsValue) {
     return [];
@@ -57,11 +57,11 @@ export function readActiveFileTagsProperty(): string[] {
  * 現在ファイルのaliasesプロパティを取得します
  *
  * ```ts
- * readActiveFileAliasesProperty()
+ * getActiveFileAliasesProperty()
  * // ["obsidian", "オブシディアン"]
  * ```
  */
-export function readActiveFileAliasesProperty(): string[] {
+export function getActiveFileAliasesProperty(): string[] {
   const aliasesValue = getActiveFileProperties()?.aliases;
   if (!aliasesValue) {
     return [];
@@ -74,11 +74,11 @@ export function readActiveFileAliasesProperty(): string[] {
  * 現在ファイルのdescriptionプロパティを取得します
  *
  * ```ts
- * readActiveFileDescriptionProperty()
+ * getActiveFileDescriptionProperty()
  * // 説明文
  * ```
  */
-export function readActiveFileDescriptionProperty(): string | null {
+export function getActiveFileDescriptionProperty(): string | null {
   return getActiveFileProperties()?.description ?? null;
 }
 

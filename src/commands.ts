@@ -6,7 +6,7 @@ import { getAllMarkdownLeaves } from "./lib/helpers/leaves";
 import { getDailyNotes } from "./lib/helpers/plugins";
 import {
   getActiveFileProperties,
-  readActiveFileDescriptionProperty,
+  getActiveFileDescriptionProperty,
 } from "./lib/helpers/properties";
 import { loadCodeBlocks } from "./lib/helpers/sections";
 import { toggleDefaultEditingMode } from "./lib/helpers/settings";
@@ -50,7 +50,7 @@ function toggleLivePreviewMode() {
  * TODO: createLinkも含めてもう少し楽にしたい
  */
 async function insertMFDIPostsToWeeklyNote() {
-  const description = readActiveFileDescriptionProperty();
+  const description = getActiveFileDescriptionProperty();
   if (!description) {
     notify("プロパティにdescriptionが存在しません");
     return;
@@ -96,8 +96,7 @@ async function insertMFDIPostsToWeeklyNote() {
  * 1週間で作成したノートの一覧をWeekly Reportに差し込みます
  */
 async function insertInputsToWeeklyNote() {
-  // TODO: 専用関数をつくりたい
-  const description = readActiveFileDescriptionProperty();
+  const description = getActiveFileDescriptionProperty();
   if (!description) {
     notify("プロパティにdescriptionが存在しません");
     return;
