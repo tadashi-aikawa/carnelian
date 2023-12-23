@@ -50,8 +50,7 @@ function toggleLivePreviewMode() {
 async function insertMFDIPostsToWeeklyNote() {
   const description = getActiveFileDescriptionProperty();
   if (!description) {
-    notify("プロパティにdescriptionが存在しません");
-    return;
+    return notify("プロパティにdescriptionが存在しません");
   }
 
   const [weekBegin, weekEnd] = doSinglePatternMatching(
@@ -59,12 +58,10 @@ async function insertMFDIPostsToWeeklyNote() {
     /\d{4}-\d{2}-\d{2}/g
   );
   if (!weekBegin) {
-    notify("descriptionプロパティに開始日が存在しません");
-    return;
+    return notify("descriptionプロパティに開始日が存在しません");
   }
   if (!weekEnd) {
-    notify("descriptionプロパティに終了日が存在しません");
-    return;
+    return notify("descriptionプロパティに終了日が存在しません");
   }
 
   const codeBlocks: { path: string; codeBlock: CodeBlock }[] = [];
@@ -96,8 +93,7 @@ async function insertMFDIPostsToWeeklyNote() {
 async function insertInputsToWeeklyNote() {
   const description = getActiveFileDescriptionProperty();
   if (!description) {
-    notify("プロパティにdescriptionが存在しません");
-    return;
+    return notify("プロパティにdescriptionが存在しません");
   }
 
   const [weekBegin, weekEnd] = doSinglePatternMatching(
@@ -105,12 +101,10 @@ async function insertInputsToWeeklyNote() {
     /\d{4}-\d{2}-\d{2}/g
   );
   if (!weekBegin) {
-    notify("descriptionプロパティに開始日が存在しません");
-    return;
+    return notify("descriptionプロパティに開始日が存在しません");
   }
   if (!weekEnd) {
-    notify("descriptionプロパティに終了日が存在しません");
-    return;
+    return notify("descriptionプロパティに終了日が存在しません");
   }
 
   const isPublicNote = (file: TFile) =>
