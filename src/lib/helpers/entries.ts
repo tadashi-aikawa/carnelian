@@ -1,3 +1,4 @@
+import dayjs, { Dayjs } from "dayjs";
 import { Loc, TFile } from "obsidian";
 import { toEditorPosition } from "../obsutils/mapper";
 import { UApp } from "../types";
@@ -170,4 +171,56 @@ export function getActiveFileContent(position?: {
     toEditorPosition(position.start),
     toEditorPosition(position.end)
   );
+}
+
+/**
+ * 現在ファイルの作成日時を取得します
+ *
+ * ```ts
+ * getCreationDate("YYYY-MM-DD")
+ * // "2023-11-06"
+ * getCreationDate("unixtime")
+ * // 1699259384
+ * getCreationDate("dayjs")
+ * ```
+ */
+export function getCreationDate(
+  format: string | "unixtime" | "dayjs"
+): string | number | Dayjs | null {
+  return map(getActiveFile()?.stat.ctime, (unixtime) => {
+    switch (format) {
+      case "unixtime":
+        return unixtime;
+      case "dayjs":
+        return dayjs(unixtime);
+      default:
+        return dayjs(unixtime).format(format);
+    }
+  });
+}
+
+/**
+ * 現在ファイルの更新日時を取得します
+ *
+ * ```ts
+ * getUpdateDate("YYYY-MM-DD")
+ * // "2023-11-06"
+ * getUpdateDate("unixtime")
+ * // 1699259384
+ * getUpdateDate("dayjs")
+ * ```
+ */
+export function getUpdateDate(
+  format: string | "unixtime" | "dayjs"
+): string | number | Dayjs | null {
+  return map(getActiveFile()?.stat.mtime, (unixtime) => {
+    switch (format) {
+      case "unixtime":
+        return unixtime;
+      case "dayjs":
+        return dayjs(unixtime);
+      default:
+        return dayjs(unixtime).format(format);
+    }
+  });
 }
