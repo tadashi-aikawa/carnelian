@@ -4,8 +4,8 @@
   "author": "tadashi-aikawa",
   "main": "main.js",
   "devDependencies": {
+    "@types/bun": "^1.0.0",
     "builtin-modules": "^3.3.0",
-    "bun-types": "latest",
     "chokidar": "^3.5.3",
     "esbuild": "^0.19.10",
     "obsidian": "latest",

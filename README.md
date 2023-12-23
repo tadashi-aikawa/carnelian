@@ -10,7 +10,7 @@ tadashi-aikawa専用のObsidianプラグイン。
 ## 開発の前提環境
 
 - Ubuntu (macOSでも動きそう)
-- [Bun]
+- [Bun] v1.0.19以上
 - [Hot Reload]プラグイン
 
 ## 開発環境構築
