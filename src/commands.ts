@@ -1,21 +1,30 @@
 import dayjs from "dayjs";
 import { Command, TFile } from "obsidian";
+import { now } from "./lib/helpers/datetimes";
 import { insertToCursor, setLivePreview } from "./lib/helpers/editors/basic";
-import { getMarkdownFilesInRange } from "./lib/helpers/entries";
+import {
+  createFile,
+  exists,
+  getMarkdownFilesInRange,
+  openFile,
+} from "./lib/helpers/entries";
 import { getAllMarkdownLeaves } from "./lib/helpers/leaves";
 import { getDailyNotes } from "./lib/helpers/plugins";
-import { getActiveFileDescriptionProperty } from "./lib/helpers/properties";
+import {
+  addActiveFileProperties,
+  getActiveFileDescriptionProperty,
+} from "./lib/helpers/properties";
 import { loadCodeBlocks } from "./lib/helpers/sections";
 import {
   toggleDefaultEditingMode,
   toggleVimKeyBindings,
 } from "./lib/helpers/settings";
-import { notify } from "./lib/helpers/ui";
+import { notify, showInputDialog } from "./lib/helpers/ui";
+import { createHTMLCard, createMeta } from "./lib/helpers/web";
 import { createCommand } from "./lib/obsutils/commands";
 import { CodeBlock } from "./lib/types";
 import { doSinglePatternMatching } from "./lib/utils/strings";
 import { PluginSettings } from "./settings";
-import { createHTMLCard, createMeta } from "./lib/helpers/web";
 
 export function createCommands(settings: PluginSettings): Command[] {
   return [
@@ -44,7 +53,50 @@ export function createCommands(settings: PluginSettings): Command[] {
         toggleVimKeyBindings();
       },
     }),
+    createCommand({
+      name: "Create an Article",
+      kind: "all",
+      executor: createArticle,
+    }),
   ];
+}
+
+/**
+ * Articleを作成します
+ */
+async function createArticle() {
+  const title = await showInputDialog({
+    message: "Articleのタイトルを入力してください",
+  });
+  if (title == null) {
+    return;
+  }
+  if (title === "") {
+    return notify("タイトルは必須です");
+  }
+
+  const fp = `📘Articles/📘${title}.md`;
+  if (await exists(fp)) {
+    return notify(`${fp} はすでに存在しています`);
+  }
+
+  const today = now("YYYY-MM-DD");
+  const f = await createFile(
+    fp,
+    `[[📒Articles]] > [[📒2023 Articles]]
+
+![[${today}.jpg|cover-picture]]
+`
+  );
+
+  await openFile(f.path);
+
+  addActiveFileProperties({
+    created: today,
+    updated: today,
+    description: "TODO",
+    cover: `📘Articles/attachments/${today}.jpg`,
+  });
 }
 
 /**

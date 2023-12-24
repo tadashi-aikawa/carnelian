@@ -1,3 +1,5 @@
+import { InputDialog } from "./components/InputDialog";
+
 // HACK: ObsidianのNoticeはundefinedとnullで挙動が異なるが、型定義はそうなっていなかったので上書き定義
 declare class Notice {
   // undefinedは5000ms、nullはタイムアウトなし となっている
@@ -24,20 +26,21 @@ export async function copyToClipboard(text: string): Promise<void> {
   await (navigator as any).clipboard.writeText(text);
 }
 
-// TODO:
-//
-///**
-// * 入力ダイアログを表示します
-// *
-// * ```ts
-// * await showInputDialog("名前を入力してください")
-// * // "入力した名前"
-// * ```
-// */
-//export function showInputDialog(message: string): Promise<string | null> {
-//  const tp = useTemplaterInternalFunction();
-//  return tp.system.prompt(message);
-//}
+/**
+ * 入力ダイアログを表示し、入力された値を返却します。
+ * キャンセル時はnullを返却します。(入力なしで決定した場合は空文字)
+ *
+ * ```ts
+ * await showInputDialog("名前を入力してください")
+ * // "入力した名前"
+ * ```
+ */
+export async function showInputDialog(args: {
+  message: string;
+  placeholder?: string;
+}): Promise<string | null> {
+  return new InputDialog(args.message, args.placeholder).open();
+}
 
 ///**
 // * 候補選択ダイアログを表示します

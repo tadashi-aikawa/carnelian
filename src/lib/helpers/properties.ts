@@ -99,6 +99,21 @@ export function addActiveFileProperty(key: string, value: any | any[]): void {
 }
 
 /**
+ * 現在ファイルに複数のプロパティを追加します
+ *
+ * ```ts
+ * addActiveFileProperty({id: 100, favorites: ["apple", "orange"]})
+ * ```
+ */
+export function addActiveFileProperties(properties: {
+  [key: string]: any | any[];
+}): void {
+  orThrow(getActiveMetadataEditor(), (me) => me.insertProperties(properties), {
+    message: errorMessage["MetadataEditor is null"],
+  });
+}
+
+/**
  * 現在ファイルのプロパティを削除します
  *
  * ```ts
