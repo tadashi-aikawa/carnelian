@@ -6,7 +6,10 @@ import { getAllMarkdownLeaves } from "./lib/helpers/leaves";
 import { getDailyNotes } from "./lib/helpers/plugins";
 import { getActiveFileDescriptionProperty } from "./lib/helpers/properties";
 import { loadCodeBlocks } from "./lib/helpers/sections";
-import { toggleDefaultEditingMode } from "./lib/helpers/settings";
+import {
+  toggleDefaultEditingMode,
+  toggleVimKeyBindings,
+} from "./lib/helpers/settings";
 import { notify } from "./lib/helpers/ui";
 import { createCommand } from "./lib/obsutils/commands";
 import { CodeBlock } from "./lib/types";
@@ -29,18 +32,19 @@ export function createCommands(settings: PluginSettings): Command[] {
     createCommand({
       name: "Toggle Live preview",
       kind: "all",
-      executor: toggleLivePreviewMode,
+      executor: () => {
+        const nextDefault = toggleDefaultEditingMode() === "livePreview";
+        getAllMarkdownLeaves().forEach((l) => setLivePreview(l, nextDefault));
+      },
+    }),
+    createCommand({
+      name: "Toggle Vim mode",
+      kind: "all",
+      executor: () => {
+        toggleVimKeyBindings();
+      },
     }),
   ];
-}
-
-/**
- * Editor > Default editing mode の設定を切り替えます
- *  開いているMarkdownノートもすべて切り替えます
- */
-function toggleLivePreviewMode() {
-  const nextDefault = toggleDefaultEditingMode() === "livePreview";
-  getAllMarkdownLeaves().forEach((l) => setLivePreview(l, nextDefault));
 }
 
 /**

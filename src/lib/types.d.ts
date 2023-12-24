@@ -52,6 +52,8 @@ type Config = {
   livePreview?: boolean;
   // Default view for new tabsに関係
   defaultViewMode?: "preview" | "source";
+  // Vim key bindingsに関係
+  vimMode?: boolean;
 };
 
 export type UVault = Vault & {

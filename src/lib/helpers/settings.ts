@@ -5,7 +5,7 @@ declare let app: UApp;
 /**
  * Readable line lengthの設定値を切り替えます
  */
-export function toggleEditorLength() {
+export function toggleEditorLength(): boolean {
   const current = app.vault.getConfig("readableLineLength") ?? false;
   const next = !current;
   app.vault.setConfig("readableLineLength", next);
@@ -23,4 +23,16 @@ export function toggleDefaultEditingMode(): "source" | "livePreview" {
   const next = !current;
   app.vault.setConfig("livePreview", next);
   return next ? "source" : "livePreview";
+}
+
+/**
+ * Vim key bindings (Vim mode) の設定値を切り替えます
+ *
+ * @returns 変更後の値
+ */
+export function toggleVimKeyBindings(): boolean {
+  const current = app.vault.getConfig("vimMode") ?? false;
+  const next = !current;
+  app.vault.setConfig("vimMode", next);
+  return next;
 }
