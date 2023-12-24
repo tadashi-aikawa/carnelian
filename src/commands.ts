@@ -20,7 +20,7 @@ import {
   toggleVimKeyBindings,
 } from "./lib/helpers/settings";
 import { notify, showInputDialog } from "./lib/helpers/ui";
-import { createHTMLCard, createMeta } from "./lib/helpers/web";
+import { createCard, createHTMLCard, createMeta } from "./lib/helpers/web";
 import { createCommand } from "./lib/obsutils/commands";
 import { CodeBlock } from "./lib/types";
 import { doSinglePatternMatching } from "./lib/utils/strings";
@@ -57,6 +57,11 @@ export function createCommands(settings: PluginSettings): Command[] {
       name: "Create an Article",
       kind: "all",
       executor: createArticle,
+    }),
+    createCommand({
+      name: "Insert site card",
+      kind: "editor",
+      executor: insertSiteCard,
     }),
   ];
 }
@@ -202,19 +207,19 @@ async function insertInputsToWeeklyNote() {
   notify(`${weekBegin} ～ ${weekEnd} に作成されたノートを挿入しました`, 5000);
 }
 
-// TODO: 入力ダイアログの仕組みを作ったら完成
-//
-// /**
-//  * サイトからカードレイアウトのHTML文字列を挿入します
-//  */
-// async function insertSiteCard() {
-//   // TODO: 入力UIが必要
-//   const url = "https://minerva.mamansoft.net/Home";
+/**
+ * サイトからカードレイアウトのHTML文字列を挿入します
+ */
+async function insertSiteCard() {
+  const url = await showInputDialog({ message: "URLを入力してください" });
+  if (!url) {
+    return;
+  }
 
-//   try {
-//     const html = await createCard(url);
-//     insertToCursor(html);
-//   } catch (e: any) {
-//     notify(e);
-//   }
-// }
+  try {
+    const html = await createCard(url);
+    insertToCursor(html);
+  } catch (e: any) {
+    notify(e);
+  }
+}
