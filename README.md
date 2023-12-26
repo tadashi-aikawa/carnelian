@@ -39,8 +39,9 @@ bun i
 bun dev
 ```
 
-このコマンドは以下2つのことを行う。
+このコマンドは3つのことを行います。
 
+- Vaultのプラグインディレクトリ(`.obsidian/plugins`)配下に`carnelian`プロジェクトを生成する
 - TypeScriptのファイルに変更があったら、[esbuild]が自動でビルドしてJavaScriptファイルを生成する
 - `esbuild.config.mjs`の`FILES`に記載されたファイルに変更があったら、`PLUGIN_DIR`で指定したディレクトリ配下に自動でコピーする
 
