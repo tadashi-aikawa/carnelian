@@ -1,12 +1,50 @@
 import esbuild from "esbuild";
-import process from "process";
+import process, { exit } from "process";
 import builtins from "builtin-modules";
-import fs from "fs";
+import fs, { existsSync } from "fs";
 import path from "path";
 import chokidar from "chokidar";
 
-const PLUGIN_DIR =
-  "/mnt/c/Users/syoum/work/minerva/.obsidian/plugins/carnelian/";
+async function loadPluginDir() {
+  const configName = "carnelianrc.json";
+
+  if (!existsSync(configName)) {
+    console.error(`${configName}がカレントディレクトリに存在しません`);
+    exit(1);
+  }
+
+  let rcConfig;
+  try {
+    rcConfig = await Bun.file(configName).json();
+  } catch (e) {
+    console.error(`${configName}のパースに失敗しました`);
+    exit(1);
+  }
+
+  const vaultPath = rcConfig.vaultPath;
+  if (!vaultPath) {
+    console.error(`carnelianrc.jsonにVaultのパスが指定されていません`);
+    exit(1);
+  }
+  if (!existsSync(vaultPath)) {
+    console.error(
+      `carnelianrc.jsonのVaultに指定されたパス ${vaultPath} は存在しません`
+    );
+    exit(1);
+  }
+
+  return path.join(vaultPath, ".obsidian/plugins/carnelian");
+}
+
+const pluginDir = await loadPluginDir();
+
+console.log(`📁 ${pluginDir}ディレクトリを作成します(既にある場合は変更なし)`);
+fs.mkdirSync(pluginDir, { recursive: true });
+
+const hotreloadPath = path.join(pluginDir, ".hotreload", "");
+console.log(`🌶️ ${hotreloadPath}ファイルを作成します`);
+fs.writeFileSync(hotreloadPath, "");
+
 const FILES = ["main.js", "manifest.json", "styles.css"];
 
 const banner = `/*
@@ -56,9 +94,9 @@ if (prod) {
   const watcher = chokidar.watch(FILES, { persistent: true });
   watcher
     .on("add", (p) => {
-      fs.copyFileSync(p, path.join(PLUGIN_DIR, p));
+      fs.copyFileSync(p, path.join(pluginDir, p));
     })
     .on("change", (p) => {
-      fs.copyFileSync(p, path.join(PLUGIN_DIR, p));
+      fs.copyFileSync(p, path.join(pluginDir, p));
     });
 }

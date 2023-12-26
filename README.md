@@ -21,18 +21,15 @@ tadashi-aikawa専用のObsidianプラグイン。
 bun i
 ```
 
-### プラグインディレクトリの設定
+### 設定ファイルの作成
 
-`esbuild.config.mjs`の`PLUGIN_DIR`を変更する。 (TODO: 設定で変更できるようにする)
+`carnelianrc.json`を作成してください。
 
-```ts
-const PLUGIN_DIR =
-  "/mnt/c/Users/syoum/work/minerva/.obsidian/plugins/carnelian/";
+```json
+{
+  "vaultPath": "<Vaultのパス>"
+}
 ```
-
-### .hotreloadの配置
-
-`PLUGIN_DIR`配下に空の`.hotreload`を配置する。[Hot Reload]プラグインで変更があったら自動リロードするため。
 
 ## 開発コマンド
 
