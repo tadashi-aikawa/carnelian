@@ -2,7 +2,9 @@
 
 <img src="./logo.png" width=256 />
 
-tadashi-aikawa専用のObsidianプラグイン。
+Obsidianのプラグイン機能を使って、InvisibleなObsidian体験を実現するための機能を提供する宝石。紅玉髄(カーネリアン)。
+
+基本的にtadashi-aikawaが利用する機能を実装しています。ただ、全体の仕組みと`lib`配下のメソッドは流用できるので、どなたでも利用できます。
 
 > **Note**
 > 上記のロゴ画像はAIで生成されています
@@ -47,10 +49,9 @@ bun dev
 const FILES = ["main.js", "manifest.json", "styles.css"];
 ```
 
-## リリース
+## 機能追加要望
 
-TODO:
-
+個人的に必要と感じたものに限り取り入れることがあります。IssueやPull Requestからどうぞ。(受け入れ基準は厳しめです)
 
 [Bun]: https://bun.sh/
 [esbuild]: https://esbuild.github.io/
