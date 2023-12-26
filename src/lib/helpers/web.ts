@@ -144,6 +144,7 @@ export async function createMeta(url: string): Promise<Meta | null> {
 /**
  * HTMLメタ情報からサイトのカードを生成します
  * 作成に失敗した場合は例外をthrowします
+ * タイトルの長さに応じて説明の長さを変更します
  */
 export function createHTMLCard(meta: HTMLMeta): string {
   const isSecure = (url: string | undefined) =>
@@ -152,9 +153,14 @@ export function createHTMLCard(meta: HTMLMeta): string {
   // TODO: internalに対応したときは分岐処理が入る予定
   const siteName = meta.siteName;
   const title = meta.title;
-  // const description = meta.description;
   const faviconUrl = meta.faviconUrl;
   const imageUrl = meta.coverUrl;
+
+  const descriptionMaxLength = 200 - title.length * 2;
+  const description = meta.description?.slice(0, descriptionMaxLength);
+  const descriptionDom = description
+    ? `<p class="link-card-description">${description}</p>`
+    : "";
 
   const imageDom = isSecure(imageUrl)
     ? `<img src="${imageUrl}" class="link-card-image" />`
@@ -169,6 +175,7 @@ export function createHTMLCard(meta: HTMLMeta): string {
 	<div class="link-card-body">
 		<div class="link-card-content">
       <p class="link-card-title">${title}</p>
+      ${descriptionDom}  
 		</div>
 		${imageDom}
 	</div>
