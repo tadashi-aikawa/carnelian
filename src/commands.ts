@@ -25,6 +25,7 @@ import { createCommand } from "./lib/obsutils/commands";
 import { CodeBlock } from "./lib/types";
 import { doSinglePatternMatching } from "./lib/utils/strings";
 import { PluginSettings } from "./settings";
+import { sortSelectionLines } from "./lib/helpers/editors/advanced";
 
 export function createCommands(settings: PluginSettings): Command[] {
   return [
@@ -62,6 +63,11 @@ export function createCommands(settings: PluginSettings): Command[] {
       name: "Insert site card",
       kind: "editor",
       executor: insertSiteCard,
+    }),
+    createCommand({
+      name: "Sort selection",
+      kind: "editor",
+      executor: sortSelectionLines,
     }),
   ];
 }
