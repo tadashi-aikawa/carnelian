@@ -7,6 +7,7 @@ import {
   exists,
   getMarkdownFilesInRange,
   openFile,
+  renameFileWithoutLinkModified,
 } from "./lib/helpers/entries";
 import { getAllMarkdownLeaves } from "./lib/helpers/leaves";
 import { getDailyNotes } from "./lib/helpers/plugins";
@@ -69,7 +70,45 @@ export function createCommands(settings: PluginSettings): Command[] {
       kind: "editor",
       executor: sortSelectionLines,
     }),
+    createCommand({
+      name: "Clean old daily notes",
+      kind: "all",
+      executor: () =>
+        cleanOldDailyNotes("2020-12-30", "../minerva-daily-note-backup"),
+    }),
   ];
+}
+
+/**
+ * 14日前よりも古いDaily Noteをクリーンします
+ * クリーンとは任意の別ディレクトリに移すこと
+ *
+ * WARN:
+ * デイリーノート一覧はキャッシュの情報から判断します
+ * デイリーノートファイルに大きな増減があった場合はObsidianを再起動してから実行してください
+ *
+ * @param startDate - 探索開始日付 (ex: 2023-12-30)
+ * @param cleanDir - クリーンしたファイルを配置するディレクトリパス
+ */
+async function cleanOldDailyNotes(startDate: string, cleanDir: string) {
+  const end = dayjs().subtract(2, "weeks").format("YYYY-MM-DD");
+
+  const notes = getDailyNotes(startDate, end);
+  if (notes.length === 0) {
+    return notify(
+      `${startDate} ～ ${end} の期間にはデイリーノートが存在しませんでした。`
+    );
+  }
+
+  notify(
+    `${notes.length}件のノートを ${cleanDir} 配下に移動します。しばらく時間がかかる場合があります。`
+  );
+
+  for (const f of notes) {
+    await renameFileWithoutLinkModified(f.path, `${cleanDir}/${f.name}`);
+  }
+
+  notify(`${notes.length}件のノートを ${cleanDir} 配下に移動しました。`);
 }
 
 /**

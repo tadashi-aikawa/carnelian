@@ -111,6 +111,21 @@ export function createFile(path: string, data: string = ""): Promise<TFile> {
 }
 
 /**
+ * 関連リンクを変更せずに関連ファイルをリネームします
+ *
+ * ```ts
+ * await renameFileWithoutLinkModified("Notes/mimizou.md", "Notes/mimizou2.md")
+ * await renameFileWithoutLinkModified("Notes/mimizou.md", "../vaultの親のmimizou.md")
+ * ```
+ */
+export async function renameFileWithoutLinkModified(
+  path: string,
+  dst: string
+): Promise<void> {
+  await app.vault.adapter.rename(path, dst);
+}
+
+/**
  * ファイルを開きます
  *
  * ```ts
