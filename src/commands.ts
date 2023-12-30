@@ -1,10 +1,15 @@
 import dayjs from "dayjs";
 import { Command, TFile } from "obsidian";
 import { now } from "./lib/helpers/datetimes";
-import { insertToCursor, setLivePreview } from "./lib/helpers/editors/basic";
+import {
+  appendLine,
+  insertToCursor,
+  setLivePreview,
+} from "./lib/helpers/editors/basic";
 import {
   createFile,
   exists,
+  getMarkdownFiles,
   getMarkdownFilesInRange,
   openFile,
   renameFileWithoutLinkModified,
@@ -27,6 +32,7 @@ import { CodeBlock } from "./lib/types";
 import { doSinglePatternMatching } from "./lib/utils/strings";
 import { PluginSettings } from "./settings";
 import { sortSelectionLines } from "./lib/helpers/editors/advanced";
+import { sorter } from "./lib/utils/collections";
 
 export function createCommands(settings: PluginSettings): Command[] {
   return [
@@ -76,7 +82,79 @@ export function createCommands(settings: PluginSettings): Command[] {
       executor: () =>
         cleanOldDailyNotes("2020-12-30", "../minerva-daily-note-backup"),
     }),
+    createCommand({
+      name: "Create MIN ADR",
+      kind: "all",
+      executor: () => {
+        createADR("MIN");
+      },
+    }),
   ];
+}
+
+/**
+ * 指定した種類のADRノートを作成し、一覧表の最後に挿入する
+ */
+async function createADR(type: "MIN" | "OBS" | "PRO") {
+  const NOTE_BODY = `
+## ステータス
+
+#🤔Proposed 
+
+## 経緯
+
+%%提案に至った理由が分かるように書く%%
+
+## 提案内容
+
+%%選択肢がある場合は複数書く%%
+
+## 承諾した場合の結果
+
+%%選択肢がある場合は複数書く%%
+
+### メリット
+
+- aa
+- bb
+
+### デメリット
+
+- aa
+- bb
+`.trim();
+
+  const prefix = `💿${type}`;
+  const maxNumber = Number(
+    getMarkdownFiles()
+      .filter((x) => x.name.startsWith(`${prefix}-`))
+      .sort(sorter((x) => x.name))
+      .pop()
+      ?.name.split(" ")[0]
+      .replace(`${prefix}-`, "") ?? -1
+  );
+
+  const newNumber = String(maxNumber + 1).padStart(4, "0");
+  const inputTitle = await showInputDialog({
+    message: `[${prefix}-${newNumber}] タイトルを入力してください`,
+  });
+  if (!inputTitle) {
+    return;
+  }
+
+  const adrTitle = `${prefix}-${newNumber} ${inputTitle}`;
+
+  const adrFilePath = `💿ADR/${adrTitle}.md`;
+  if (await exists(adrFilePath)) {
+    return notify(`${adrFilePath} は既に存在します`);
+  }
+
+  const adrListPath = `💿ADR/${prefix}.md`;
+  await openFile(adrListPath);
+  appendLine(`| [[${adrTitle}]]       | #🤔Proposed |`);
+
+  const f = await createFile(adrFilePath, NOTE_BODY);
+  await openFile(f.path);
 }
 
 /**
