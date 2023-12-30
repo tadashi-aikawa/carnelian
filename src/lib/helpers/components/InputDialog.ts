@@ -8,7 +8,11 @@ export class InputDialog extends Modal {
   promise!: Promise<string | null>;
   submitted: boolean = false;
 
-  constructor(public title: string, public placeholder?: string) {
+  constructor(
+    public title: string,
+    public placeholder?: string,
+    public defaultValue?: string
+  ) {
     super(app);
   }
 
@@ -19,6 +23,7 @@ export class InputDialog extends Modal {
       type: "text",
       placeholder: this.placeholder ?? "",
       cls: "carnelian-input-dialog-input",
+      value: this.defaultValue,
     });
   }
 

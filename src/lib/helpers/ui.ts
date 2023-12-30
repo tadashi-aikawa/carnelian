@@ -31,15 +31,20 @@ export async function copyToClipboard(text: string): Promise<void> {
  * キャンセル時はnullを返却します。(入力なしで決定した場合は空文字)
  *
  * ```ts
- * await showInputDialog("名前を入力してください")
+ * await showInputDialog({ message: "名前を入力してください" })
  * // "入力した名前"
  * ```
  */
 export async function showInputDialog(args: {
   message: string;
   placeholder?: string;
+  defaultValue?: string;
 }): Promise<string | null> {
-  return new InputDialog(args.message, args.placeholder).open();
+  return new InputDialog(
+    args.message,
+    args.placeholder,
+    args.defaultValue
+  ).open();
 }
 
 ///**
