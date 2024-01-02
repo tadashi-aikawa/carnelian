@@ -157,7 +157,12 @@ export function createHTMLCard(meta: HTMLMeta): string {
   const imageUrl = meta.coverUrl;
 
   const descriptionMaxLength = 300 - title.length * 2 - (imageUrl ? 100 : 0);
-  const description = meta.description?.slice(0, descriptionMaxLength);
+  const description =
+    meta.description == null
+      ? ""
+      : meta.description?.length <= descriptionMaxLength
+      ? meta.description
+      : `${meta.description?.slice(0, descriptionMaxLength)} ... `;
   const descriptionDom = description
     ? `<p class="link-card-description">${description}</p>`
     : "";
