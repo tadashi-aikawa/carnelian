@@ -1,15 +1,15 @@
 import { requestUrl } from "obsidian";
-import {
-  getCharsetFromMeta,
-  getMetaByHttpEquiv,
-  getMetaByProperty,
-  getMetaByName,
-  getFaviconUrl,
-  getCoverUrl,
-} from "../utils/meta-helper";
 import { defineUserAgent } from "../utils/agent";
 import { forceLowerCaseKeys } from "../utils/collections";
-import { sjis2String } from "../utils/strings";
+import {
+  getCharsetFromMeta,
+  getCoverUrl,
+  getFaviconUrl,
+  getMetaByHttpEquiv,
+  getMetaByName,
+  getMetaByProperty,
+} from "../utils/meta-helper";
+import { countCharsWidth, sjis2String } from "../utils/strings";
 
 export type Meta = HTMLMeta | ImageMeta | TwitterMeta;
 export interface HTMLMeta {
@@ -156,13 +156,15 @@ export function createHTMLCard(meta: HTMLMeta): string {
   const faviconUrl = meta.faviconUrl;
   const imageUrl = meta.coverUrl;
 
-  const descriptionMaxLength = 300 - title.length * 2 - (imageUrl ? 100 : 0);
+  // TODO: ロジックが変なのでいつかなおす
+  const descriptionMaxWidth =
+    300 - countCharsWidth(title) * 2 - (imageUrl ? 50 : 0);
   const description =
     meta.description == null
       ? ""
-      : meta.description?.length <= descriptionMaxLength
+      : countCharsWidth(meta.description) <= descriptionMaxWidth
       ? meta.description
-      : `${meta.description?.slice(0, descriptionMaxLength)} ... `;
+      : `${meta.description?.slice(0, descriptionMaxWidth)} ... `;
   const descriptionDom = description
     ? `<p class="link-card-description">${description}</p>`
     : "";

@@ -1,5 +1,5 @@
 import { expect, test } from "bun:test";
-import { doSinglePatternMatching } from "./strings";
+import { countCharsWidth, doSinglePatternMatching } from "./strings";
 
 test.each([
   [
@@ -18,5 +18,19 @@ test.each([
     expected: ReturnType<typeof doSinglePatternMatching>
   ) => {
     expect(doSinglePatternMatching(text, pattern)).toEqual(expected);
+  }
+);
+
+test.each([
+  ["abc", 3],
+  ["あいう", 6],
+  ["%.,●", 5],
+])(
+  `countCharsWidth("%s")`,
+  (
+    chars: Parameters<typeof countCharsWidth>[0],
+    expected: ReturnType<typeof countCharsWidth>
+  ) => {
+    expect(countCharsWidth(chars)).toBe(expected);
   }
 );

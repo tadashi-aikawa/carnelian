@@ -20,3 +20,13 @@ export function sjis2String(sjisBuffer: ArrayBuffer): string {
   });
   return Encoding.codeToString(unicodeArray);
 }
+
+/**
+ * 文字幅をカウントします
+ * アルファベットや記号は1、それ以外のマルチバイト文字は2の単純計算
+ */
+export function countCharsWidth(chars: string): number {
+  return chars
+    .split("")
+    .reduce((acc, _, i) => acc + (chars.charCodeAt(i) > 0x7f ? 2 : 1), 0);
+}
