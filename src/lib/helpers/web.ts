@@ -10,6 +10,7 @@ import {
   getMetaByProperty,
 } from "../utils/meta-helper";
 import { countCharsWidth, sjis2String } from "../utils/strings";
+import { stripDecoration, stripLinks } from "../obsutils/parser";
 
 export type Meta = HTMLMeta | ImageMeta | TwitterMeta;
 export interface HTMLMeta {
@@ -145,17 +146,29 @@ export async function createMeta(url: string): Promise<Meta | null> {
  * description DOMの文字列を生成します
  */
 function createDescriptionDOM(meta: HTMLMeta): string {
+  if (!meta.description) {
+    return "";
+  }
+
+  // 1byte文字で何文字にするか上限を決める
   const descriptionMaxWidth =
     300 - countCharsWidth(meta.title) * 2 - (meta.coverUrl ? 50 : 0);
-  const description =
-    meta.description == null
-      ? ""
-      : countCharsWidth(meta.description) <= descriptionMaxWidth
-      ? meta.description
-      : `${meta.description?.slice(0, descriptionMaxWidth)} ... `;
 
-  return description
-    ? `<p class="link-card-description">${description}</p>`
+  const description = stripLinks(
+    stripDecoration(meta.description?.replaceAll("\n", ""))
+  );
+
+  // 上限を考慮した最終的に表示する文言
+  // TODO: 2byte文字をちゃんと考慮するようにしたい
+  const displayDescription =
+    description == null
+      ? ""
+      : countCharsWidth(description) <= descriptionMaxWidth
+      ? description
+      : `${description?.slice(0, descriptionMaxWidth)} ... `;
+
+  return displayDescription
+    ? `<p class="link-card-description">${displayDescription}</p>`
     : "";
 }
 
