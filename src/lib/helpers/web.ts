@@ -142,6 +142,24 @@ export async function createMeta(url: string): Promise<Meta | null> {
 }
 
 /**
+ * description DOMの文字列を生成します
+ */
+function createDescriptionDOM(meta: HTMLMeta): string {
+  const descriptionMaxWidth =
+    300 - countCharsWidth(meta.title) * 2 - (meta.coverUrl ? 50 : 0);
+  const description =
+    meta.description == null
+      ? ""
+      : countCharsWidth(meta.description) <= descriptionMaxWidth
+      ? meta.description
+      : `${meta.description?.slice(0, descriptionMaxWidth)} ... `;
+
+  return description
+    ? `<p class="link-card-description">${description}</p>`
+    : "";
+}
+
+/**
  * HTMLメタ情報からサイトのカードを生成します
  * 作成に失敗した場合は例外をthrowします
  * タイトルの長さに応じて説明の長さを変更します
@@ -156,18 +174,7 @@ export function createHTMLCard(meta: HTMLMeta): string {
   const faviconUrl = meta.faviconUrl;
   const imageUrl = meta.coverUrl;
 
-  // TODO: ロジックが変なのでいつかなおす
-  const descriptionMaxWidth =
-    300 - countCharsWidth(title) * 2 - (imageUrl ? 50 : 0);
-  const description =
-    meta.description == null
-      ? ""
-      : countCharsWidth(meta.description) <= descriptionMaxWidth
-      ? meta.description
-      : `${meta.description?.slice(0, descriptionMaxWidth)} ... `;
-  const descriptionDom = description
-    ? `<p class="link-card-description">${description}</p>`
-    : "";
+  const descriptionDom = createDescriptionDOM(meta);
 
   const imageDom = isSecure(imageUrl)
     ? `<img src="${imageUrl}" class="link-card-image" />`
