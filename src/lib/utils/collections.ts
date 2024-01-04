@@ -31,3 +31,12 @@ export function forceLowerCaseKeys(obj: { [key: string]: any }): {
     Object.entries(obj).map(([key, value]) => [key.toLowerCase(), value])
   );
 }
+
+export const maxReducer = <T>(toNum: (t: T) => number) => {
+  return (a: T, b: T) => (toNum(a) >= toNum(b) ? a : b);
+};
+
+export function zipRotate<T>(matrix: T[][]): T[][] {
+  const maxColRow = matrix.reduce(maxReducer((x) => x.length));
+  return maxColRow.map((_col, i) => matrix.map((row) => row[i]));
+}

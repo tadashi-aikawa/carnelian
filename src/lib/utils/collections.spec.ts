@@ -1,5 +1,5 @@
 import { expect, test } from "bun:test";
-import { forceLowerCaseKeys, orderBy } from "./collections";
+import { forceLowerCaseKeys, orderBy, zipRotate } from "./collections";
 
 const asis = (x: any) => x;
 const ASC = "asc" as const;
@@ -43,5 +43,23 @@ test.each([
     expected: ReturnType<typeof forceLowerCaseKeys>
   ) => {
     expect(forceLowerCaseKeys(obj)).toStrictEqual(expected);
+  }
+);
+
+test.each([
+  [
+    [["1", "2"], ["3", "4"], ["5"]],
+    [
+      ["1", "3", "5"],
+      ["2", "4", undefined],
+    ],
+  ],
+])(
+  `zipRotate("%s")`,
+  (
+    matrix: Parameters<typeof zipRotate>[0],
+    expected: ReturnType<typeof zipRotate>
+  ) => {
+    expect(zipRotate(matrix)).toStrictEqual(expected);
   }
 );

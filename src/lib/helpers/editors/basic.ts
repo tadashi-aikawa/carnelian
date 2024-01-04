@@ -108,6 +108,31 @@ export function setSelection(text: string): void {
 }
 
 /**
+ * エディタの指定行範囲にテキストを設定します
+ * @param start - 開始行番号(0から)
+ * @param end - 終了行番号(0から)
+ *
+ * ```ts
+ * setLinesInRange(2, 8, "hogehogehoge")
+ * ```
+ */
+export function setLinesInRange(
+  start: number,
+  end: number,
+  text: string
+): void {
+  orThrow(getActiveEditor(), (e) => {
+    const cur = e.getCursor();
+    e.replaceRange(
+      text,
+      { line: start, ch: 0 },
+      { line: end, ch: e.getLine(end).length }
+    );
+    e.setCursor(cur);
+  });
+}
+
+/**
  * 選択しているテキストを1行ずつ取得します
  *
  * ```ts

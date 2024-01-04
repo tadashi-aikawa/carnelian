@@ -2,8 +2,13 @@ import dayjs from "dayjs";
 import { Command, TFile } from "obsidian";
 import { now } from "./lib/helpers/datetimes";
 import {
+  getActiveParagraph,
+  sortSelectionLines,
+} from "./lib/helpers/editors/advanced";
+import {
   appendLine,
   insertToCursor,
+  setLinesInRange,
   setLivePreview,
 } from "./lib/helpers/editors/basic";
 import {
@@ -29,10 +34,9 @@ import { notify, showInputDialog } from "./lib/helpers/ui";
 import { createCard, createHTMLCard, createMeta } from "./lib/helpers/web";
 import { createCommand } from "./lib/obsutils/commands";
 import { CodeBlock } from "./lib/types";
-import { doSinglePatternMatching } from "./lib/utils/strings";
-import { PluginSettings } from "./settings";
-import { sortSelectionLines } from "./lib/helpers/editors/advanced";
 import { sorter } from "./lib/utils/collections";
+import * as strings from "./lib/utils/strings";
+import { PluginSettings } from "./settings";
 
 export function createCommands(settings: PluginSettings): Command[] {
   return [
@@ -89,11 +93,35 @@ export function createCommands(settings: PluginSettings): Command[] {
         createADR("MIN");
       },
     }),
+    createCommand({
+      name: "Format table",
+      kind: "editor",
+      executor: () => {
+        formatTable();
+      },
+    }),
   ];
 }
 
 /**
- * 指定した種類のADRノートを作成し、一覧表の最後に挿入する
+ * Markdownテーブルをフォーマットします
+ */
+function formatTable() {
+  const p = getActiveParagraph();
+  if (!p) {
+    return;
+  }
+
+  const formattedTableText = strings.formatTable(p.text);
+  if (!formattedTableText) {
+    return;
+  }
+
+  setLinesInRange(p.startLine, p.endLine, formattedTableText);
+}
+
+/**
+ * 指定した種類のADRノートを作成し、一覧表の最後に挿入します
  */
 async function createADR(type: "MIN" | "OBS" | "PRO") {
   const NOTE_BODY = `
@@ -236,7 +264,7 @@ async function insertMFDIPostsToWeeklyNote() {
     return notify("プロパティにdescriptionが存在しません");
   }
 
-  const [weekBegin, weekEnd] = doSinglePatternMatching(
+  const [weekBegin, weekEnd] = strings.doSinglePatternMatching(
     description,
     /\d{4}-\d{2}-\d{2}/g
   );
@@ -264,7 +292,7 @@ async function insertMFDIPostsToWeeklyNote() {
     .toReversed();
 
   for (const cb of targetCodeBlocks) {
-    const [url] = doSinglePatternMatching(cb.content, /http.+/g);
+    const [url] = strings.doSinglePatternMatching(cb.content, /http.+/g);
     const meta = await createMeta(url);
     if (meta?.type !== "html") {
       continue;
@@ -302,7 +330,7 @@ async function insertInputsToWeeklyNote() {
     return notify("プロパティにdescriptionが存在しません");
   }
 
-  const [weekBegin, weekEnd] = doSinglePatternMatching(
+  const [weekBegin, weekEnd] = strings.doSinglePatternMatching(
     description,
     /\d{4}-\d{2}-\d{2}/g
   );

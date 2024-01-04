@@ -5,14 +5,16 @@ import {
 } from "src/lib/obsutils/parser";
 import { orderBy } from "src/lib/utils/collections";
 import { ExhaustiveError } from "src/lib/utils/errors";
-import { orThrow } from "src/lib/utils/types";
+import { map, orThrow } from "src/lib/utils/types";
 import {
+  getActiveEditor,
   getActiveLine,
   getSelection,
   getSelectionLines,
   replaceStringInActiveLine,
   setSelection,
 } from "./basic";
+import { getParagraphAtLine } from "src/lib/utils/strings";
 
 /**
  * 現在行のリスト要素に対して、先頭や末尾にテキストを追記します
@@ -110,4 +112,24 @@ export function stripLinksFromSelection(): void {
   orThrow(getSelection(), (sl) => {
     setSelection(stripLinks(sl));
   });
+}
+
+/**
+ * 現在段落の情報とテキストを取得します
+ * 現在行が空白の場合はnullを返します
+ *
+ * @returns {
+ *   startLine: 段落の開始行番号(0はじまり)
+ *   endLine: 段落の終了行番号(0はじまり)
+ *   text: 段落のテキスト全体
+ * }
+ */
+export function getActiveParagraph(): {
+  startLine: number;
+  endLine: number;
+  text: string;
+} | null {
+  return map(getActiveEditor(), (editor) =>
+    getParagraphAtLine(editor.getValue(), editor.getCursor().line)
+  );
 }
