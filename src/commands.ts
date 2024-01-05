@@ -4,6 +4,7 @@ import { now } from "./lib/helpers/datetimes";
 import {
   getActiveParagraph,
   sortSelectionLines,
+  stripLinksAndDecorationsFromSelection,
 } from "./lib/helpers/editors/advanced";
 import {
   appendLine,
@@ -100,7 +101,23 @@ export function createCommands(settings: PluginSettings): Command[] {
         formatTable();
       },
     }),
+    createCommand({
+      name: "Strip links and decorations",
+      kind: "editor",
+      executor: () => {
+        stripLinksAndDecorations();
+      },
+    }),
   ];
+}
+
+/**
+ * 選択範囲のリンクや装飾を無効化します
+ * WARN: 1文字のリンクには対応していません
+ * WARN: このメソッドはObsidian MobileのiPhone/iPadでは動作しない可能性があります
+ */
+function stripLinksAndDecorations() {
+  stripLinksAndDecorationsFromSelection();
 }
 
 /**

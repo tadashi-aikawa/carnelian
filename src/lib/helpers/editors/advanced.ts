@@ -117,6 +117,23 @@ export function stripLinksFromSelection(): void {
 }
 
 /**
+ * 選択範囲のテキストからリンクと装飾を除去します
+ * WARN: 1文字のリンクには対応していません
+ * WARN: このメソッドはObsidian MobileのiPhone/iPadでは動作しない可能性があります
+ *
+ * ◆実行後のbefore/after例
+ * ```diff
+ * - [hoge] [huga](xxx) **[[fuga]]**
+ * + hoge huga fuga
+ * ```
+ */
+export function stripLinksAndDecorationsFromSelection(): void {
+  orThrow(getSelection(), (sl) => {
+    setSelection(stripLinks(stripDecoration(sl)));
+  });
+}
+
+/**
  * 現在段落の情報とテキストを取得します
  * 現在行が空白の場合はnullを返します
  *
