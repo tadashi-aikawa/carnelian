@@ -97,6 +97,7 @@ export function getParagraphAtLine(
 
 /**
  * Markdownテーブル形式の行テキストを値の配列に変換します
+ * WARN: このメソッドはObsidian MobileのiPhone/iPadでは動作しない可能性があります
  */
 function splitAsTableRow(rowText: string): string[] {
   let text = rowText.trim();
@@ -106,7 +107,7 @@ function splitAsTableRow(rowText: string): string[] {
   if (text.at(-1) === "|") {
     text = text.slice(0, -1);
   }
-  return text.split("|").map((x) => x.trim());
+  return text.split(/(?<!\\)\|/).map((x) => x.trim());
 }
 
 function padEndAsWidth(text: string, length: number, char = " "): string {
@@ -115,6 +116,7 @@ function padEndAsWidth(text: string, length: number, char = " "): string {
 
 /**
  * Markdownテーブル形式のテキストをフォーマットします
+ * WARN: このメソッドはObsidian MobileのiPhone/iPadでは動作しない可能性があります
  * WARN: alignには現在対応していません. もっとも シンプルなケースのみ
  */
 export function formatTable(tableText: string): string | null {

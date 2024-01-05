@@ -105,6 +105,7 @@ export function createCommands(settings: PluginSettings): Command[] {
 
 /**
  * Markdownテーブルをフォーマットします
+ * WARN: このメソッドはObsidian MobileのiPhone/iPadでは動作しない可能性があります
  */
 function formatTable() {
   const p = getActiveParagraph();
