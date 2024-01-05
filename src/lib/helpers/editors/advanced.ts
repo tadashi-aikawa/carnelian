@@ -101,6 +101,8 @@ export function stripDecorationFromSelection(): void {
 
 /**
  * 選択範囲のテキストからリンクを除外します
+ * WARN: 1文字のリンクには対応していません
+ * WARN: このメソッドはObsidian MobileのiPhone/iPadでは動作しない可能性があります
  *
  * ◆実行後のbefore/after例
  * ```diff

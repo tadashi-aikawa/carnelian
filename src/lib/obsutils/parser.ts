@@ -40,11 +40,13 @@ export function stripDecoration(text: string): string {
 
 /**
  * テキストのリンクを除外します
+ * WARN: 1文字のリンクには対応していません
+ * WARN: このメソッドはObsidian MobileのiPhone/iPadでは動作しない可能性があります
  */
 export function stripLinks(text: string): string {
   return text
     .replaceAll(/\[\[[^\|\]]*?\|([^\]]*?)\]\]/g, "$1")
     .replaceAll(/\[\[([^\]]*?)\]\]/g, "$1")
     .replaceAll(/\[([^\]]*?)\]\(.*?\)/g, "$1")
-    .replaceAll(/\[([^\]]*?)\]/g, "$1");
+    .replaceAll(/(?<![-\*] )\[([^\]]*?)\]/g, "$1");
 }

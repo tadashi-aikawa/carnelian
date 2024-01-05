@@ -114,6 +114,14 @@ test.each([
 
   // mixed
   ["[e](link) [[f]] [g] [[h|H!]]", "e f g H!"],
+
+  // checkbox
+  ["- [ ] hoge", "- [ ] hoge"],
+  ["- [ ] [hoge](fuga)", "- [ ] hoge"],
+  ["- [ ] [[hoge]]", "- [ ] hoge"],
+  ["- [x] hoge", "- [x] hoge"],
+  ["- [x] [hoge](fuga)", "- [x] hoge"],
+  ["- [x] [[hoge]]", "- [x] hoge"],
 ])(
   `stripLinks("%s")`,
   (text: string, expected: ReturnType<typeof stripLinks>) => {

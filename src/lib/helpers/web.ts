@@ -144,6 +144,7 @@ export async function createMeta(url: string): Promise<Meta | null> {
 
 /**
  * description DOMの文字列を生成します
+ * WARN: このメソッドはObsidian MobileのiPhone/iPadでは動作しない可能性があります
  */
 function createDescriptionDOM(meta: HTMLMeta): string {
   if (!meta.description) {
