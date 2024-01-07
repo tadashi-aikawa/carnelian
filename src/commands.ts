@@ -8,6 +8,8 @@ import {
 } from "./lib/helpers/editors/advanced";
 import {
   appendLine,
+  deleteActiveLine,
+  getActiveLineTags,
   insertToCursor,
   setLinesInRange,
   setLivePreview,
@@ -25,6 +27,8 @@ import { getAllMarkdownLeaves } from "./lib/helpers/leaves";
 import { createObsidianPublishUrl, getDailyNotes } from "./lib/helpers/plugins";
 import {
   addActiveFileProperties,
+  addActiveFileProperty,
+  focusPropertyValue,
   getActiveFileDescriptionProperty,
 } from "./lib/helpers/properties";
 import { loadCodeBlocks } from "./lib/helpers/sections";
@@ -43,6 +47,11 @@ import { PluginSettings } from "./settings";
 
 export function createCommands(settings: PluginSettings): Command[] {
   return [
+    createCommand({
+      name: "Add tags property",
+      kind: "editor",
+      executor: addTagsProperty,
+    }),
     createCommand({
       name: "Insert MFDI posts to the weekly note",
       kind: "editor",
@@ -309,6 +318,21 @@ async function createArticle() {
     description: "TODO",
     cover: `📘Articles/attachments/${today}.jpg`,
   });
+}
+
+/**
+ * tagsプロパティを追加します
+ * 現在行に#tag形式のタグがある場合は、それをプロパティに移動します
+ */
+function addTagsProperty() {
+  const addedTags = getActiveLineTags()!;
+  addActiveFileProperty("tags", addedTags);
+  if (addedTags.length > 0) {
+    // XXX: タグ以外のものも削除してしまうが、Minervaではそのようなケースで利用しないので一旦捨ておく
+    deleteActiveLine();
+  } else {
+    focusPropertyValue("tags");
+  }
 }
 
 /**

@@ -50,6 +50,10 @@ export function deleteActiveLine(): void {
  * ```ts
  * getActiveLineTags()
  * // ["todo", "done"]
+ * getActiveLineTags() // タグが現在行にないとき
+ * // []
+ * getActiveLineTags() // エディタがアクティブでないとき
+ * // null
  * ```
  */
 export function getActiveLineTags(): string[] | null {
