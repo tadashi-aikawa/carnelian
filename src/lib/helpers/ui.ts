@@ -4,6 +4,10 @@ import { InputDialog } from "./components/InputDialog";
 declare class Notice {
   // undefinedは5000ms、nullはタイムアウトなし となっている
   constructor(message: string | DocumentFragment, duration?: number | null);
+
+  // オリジナルと同じ
+  setMessage(message: string | DocumentFragment): this;
+  hide(): void;
 }
 
 /**
@@ -11,8 +15,11 @@ declare class Notice {
  *
  * @param timeoutMs - 未指定(undefined)の場合はタイムアウトなし
  */
-export function notify(text: string | DocumentFragment, timeoutMs?: number) {
-  new Notice(text, timeoutMs ?? null);
+export function notify(
+  text: string | DocumentFragment,
+  timeoutMs?: number
+): Notice {
+  return new Notice(text, timeoutMs ?? null);
 }
 
 /**

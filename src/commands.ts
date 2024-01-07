@@ -15,13 +15,14 @@ import {
 import {
   createFile,
   exists,
+  getActiveFilePath,
   getMarkdownFiles,
   getMarkdownFilesInRange,
   openFile,
   renameFileWithoutLinkModified,
 } from "./lib/helpers/entries";
 import { getAllMarkdownLeaves } from "./lib/helpers/leaves";
-import { getDailyNotes } from "./lib/helpers/plugins";
+import { createObsidianPublishUrl, getDailyNotes } from "./lib/helpers/plugins";
 import {
   addActiveFileProperties,
   getActiveFileDescriptionProperty,
@@ -32,7 +33,7 @@ import {
   toggleEditorLength,
   toggleVimKeyBindings,
 } from "./lib/helpers/settings";
-import { notify, showInputDialog } from "./lib/helpers/ui";
+import { copyToClipboard, notify, showInputDialog } from "./lib/helpers/ui";
 import { createCard, createHTMLCard, createMeta } from "./lib/helpers/web";
 import { createCommand } from "./lib/obsutils/commands";
 import { CodeBlock } from "./lib/types";
@@ -116,7 +117,36 @@ export function createCommands(settings: PluginSettings): Command[] {
         stripLinksAndDecorations();
       },
     }),
+    createCommand({
+      name: "Copy Minerva URL",
+      kind: "editor",
+      executor: async () => {
+        await copyMinervaURL();
+      },
+    }),
   ];
+}
+
+/**
+ * MinervaのURLをコピーします
+ */
+async function copyMinervaURL(): Promise<void> {
+  // INFO:
+  // この関数の処理はMinervaに限らずObsidian Publish全体で動作します
+  // 関数名はコマンド名にあわせており、たまたま今は実装が↑となっている
+
+  const nt = notify("⏳MinervaのURL情報を取得中...");
+
+  const url = await createObsidianPublishUrl(getActiveFilePath()!);
+  await copyToClipboard(url);
+
+  nt.setMessage(
+    `👍MinervaのURLをコピーしました
+
+${url}`
+  );
+  await sleep(5000);
+  nt.hide();
 }
 
 /**
