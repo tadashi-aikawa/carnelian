@@ -5,7 +5,7 @@ import { getActiveFile } from "../helpers/entries";
 type Args = {
   name: string;
   kind: "file" | "editor" | "all";
-  executor: () => void | Promise<void>;
+  executor: () => Awaited<any> | Promise<any>;
 };
 export function createCommand(args: Args): Command {
   return {
