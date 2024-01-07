@@ -29,6 +29,7 @@ import {
 import { loadCodeBlocks } from "./lib/helpers/sections";
 import {
   toggleDefaultEditingMode,
+  toggleEditorLength,
   toggleVimKeyBindings,
 } from "./lib/helpers/settings";
 import { notify, showInputDialog } from "./lib/helpers/ui";
@@ -64,6 +65,13 @@ export function createCommands(settings: PluginSettings): Command[] {
       kind: "all",
       executor: () => {
         toggleVimKeyBindings();
+      },
+    }),
+    createCommand({
+      name: "Toggle editor length",
+      kind: "all",
+      executor: () => {
+        toggleEditorLength();
       },
     }),
     createCommand({
