@@ -1,4 +1,5 @@
-import { getActiveFile, getActiveFilePath } from "./lib/helpers/entries";
+import { EventRef } from "obsidian";
+import { getActiveFilePath } from "./lib/helpers/entries";
 import {
   setOnFileOpenEvent,
   setOnPropertiesChangedEvent,
@@ -11,7 +12,6 @@ import {
   removeElementsFromContainer,
 } from "./lib/helpers/ui";
 import { PluginSettings } from "./settings";
-import { EventRef } from "obsidian";
 
 export function createServices(settings: PluginSettings): Service[] {
   return [new AddDatePropertiesToHeadService()];
