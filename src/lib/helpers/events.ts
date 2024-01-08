@@ -1,5 +1,6 @@
-import { CachedMetadata, EventRef, TFile } from "obsidian";
+import { CachedMetadata, EventRef, TAbstractFile, TFile } from "obsidian";
 import { UApp } from "../types";
+import { isFile, isFolder } from "./entries";
 
 declare let app: UApp;
 
@@ -35,4 +36,31 @@ export function setOnPropertiesChangedEvent(
  */
 export function unsetOnPropertiesChangedEvent(ref: EventRef): void {
   app.metadataCache.offref(ref);
+}
+
+/**
+ * ファイルが作成されたときに実行する処理を設定します
+ */
+export function setOnCreateFileEvent(
+  handler: (file: TFile) => any,
+  ctx?: any
+): EventRef {
+  return app.vault.on(
+    "create",
+    (entry: TAbstractFile) => {
+      if (!isFile(entry)) {
+        return;
+      }
+
+      handler(entry);
+    },
+    ctx
+  );
+}
+
+/**
+ * ファイルが作成されたときに実行する処理を解除します
+ */
+export function unsetOnCreateFileEvent(ref: EventRef): void {
+  app.vault.offref(ref);
 }

@@ -1,8 +1,15 @@
 import { EventRef } from "obsidian";
-import { getActiveFilePath } from "./lib/helpers/entries";
+import { now } from "./lib/helpers/datetimes";
 import {
+  appendTextToFile,
+  getActiveFilePath,
+  loadFileContent,
+} from "./lib/helpers/entries";
+import {
+  setOnCreateFileEvent as setOnFileCreatedEvent,
   setOnFileOpenEvent,
   setOnPropertiesChangedEvent,
+  unsetOnCreateFileEvent as unsetOnFileCreatedEvent,
   unsetOnFileOpenEvent,
   unsetOnPropertiesChangedEvent,
 } from "./lib/helpers/events";
@@ -14,7 +21,7 @@ import {
 import { PluginSettings } from "./settings";
 
 export function createServices(settings: PluginSettings): Service[] {
-  return [new AddDatePropertiesToHeadService()];
+  return [new AddDatePropertiesToHeadService(), new AddDatePropertiesService()];
 }
 
 export interface Service {
@@ -23,8 +30,46 @@ export interface Service {
   onunload(): void;
 }
 
+/**
+ * 新しくファイルを開いたときにテンプレのテキストを差し込むサービスです
+ * 既にテキストが存在する場合は何もしません
+ */
+class AddDatePropertiesService implements Service {
+  name = "Add date properties";
+  fileCreatedEventRef!: EventRef;
+
+  onload(): void {
+    this.fileCreatedEventRef = setOnFileCreatedEvent(async (file) => {
+      const content = await loadFileContent(file.path);
+      if (content) {
+        // テンプレ付きのコンテンツの場合は何もしない
+        return;
+      }
+
+      const today = now("YYYY-MM-DD");
+      await appendTextToFile(
+        file.path,
+        `
+---
+created: ${today}
+updated: ${today}
+---
+      `.trim()
+      );
+    });
+  }
+
+  onunload(): void {
+    unsetOnFileCreatedEvent(this.fileCreatedEventRef);
+  }
+}
+
+/**
+ * 新しくファイルを開いたときにcreated/updatesプロパティを差し込むサービスです
+ * 既にテキストが存在する場合は何もしません
+ */
 class AddDatePropertiesToHeadService implements Service {
-  name = "Add Date properties to head";
+  name = "Add date properties to head";
   className = "additional-date-properties";
   fileOpenEventRef!: EventRef;
   propertiesChangedEventRef!: EventRef;

@@ -1,11 +1,25 @@
 import dayjs, { Dayjs } from "dayjs";
-import { Loc, TFile } from "obsidian";
+import { Loc, TAbstractFile, TFile, TFolder } from "obsidian";
 import { toEditorPosition } from "../obsutils/mapper";
 import { UApp } from "../types";
 import { map } from "../utils/types";
 import { getActiveEditor } from "./editors/basic";
 
 declare let app: UApp;
+
+/**
+ * entryがファイルであるかを判定します
+ */
+export function isFile(entry: TAbstractFile): entry is TFile {
+  return "stat" in entry;
+}
+
+/**
+ * entryがフォルダであるかを判定します
+ */
+export function isFolder(entry: TAbstractFile): entry is TFolder {
+  return !isFile(entry);
+}
 
 /**
  * パス(ファイル/ディレクトリ)が存在するかどうかを確認します
@@ -141,6 +155,21 @@ export function openFile(
 ): Promise<void> {
   const newLeaf = option?.newLeaf ?? false;
   return app.workspace.openLinkText("", path, newLeaf);
+}
+
+/**
+ * ファイルの最後にテキストを追記します
+ *
+ * ```ts
+ * // 最後に新しくhogehogeの行を追加
+ * await appendTextToFile("hogehoge")
+ * ```
+ */
+export async function appendTextToFile(
+  path: string,
+  text: string
+): Promise<void> {
+  await app.vault.adapter.append(path, text);
 }
 
 /**
