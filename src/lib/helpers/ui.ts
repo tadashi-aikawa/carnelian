@@ -1,4 +1,7 @@
+import { UApp } from "../types";
 import { InputDialog } from "./components/InputDialog";
+
+declare let app: UApp;
 
 // HACK: ObsidianのNoticeはundefinedとnullで挙動が異なるが、型定義はそうなっていなかったので上書き定義
 declare class Notice {
@@ -69,3 +72,23 @@ export async function showInputDialog(args: {
 //  const tp = useTemplaterInternalFunction();
 //  return tp.system.suggester(texts, items);
 //}
+
+/**
+ * 現在ファイルViewのヘッダ前に要素を差し込みます
+ */
+export function insertElementBeforeHeader(element: Element): void {
+  app.workspace
+    .getActiveFileView()
+    .containerEl.find(".view-header")
+    .insertAdjacentElement("afterend", element);
+}
+
+/**
+ * 現在ファイルViewから要素を削除します
+ */
+export function removeElementsFromContainer(selector: string): void {
+  app.workspace
+    .getActiveFileView()
+    .containerEl.querySelectorAll(selector)
+    .forEach((el) => el.remove());
+}
