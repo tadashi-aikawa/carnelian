@@ -271,7 +271,7 @@ async function cleanOldDailyNotes(startDate: string, cleanDir: string) {
     );
   }
 
-  notify(
+  const nt = notify(
     `${notes.length}件のノートを ${cleanDir} 配下に移動します。しばらく時間がかかる場合があります。`
   );
 
@@ -279,7 +279,7 @@ async function cleanOldDailyNotes(startDate: string, cleanDir: string) {
     await renameFileWithoutLinkModified(f.path, `${cleanDir}/${f.name}`);
   }
 
-  notify(`${notes.length}件のノートを ${cleanDir} 配下に移動しました。`);
+  nt.setMessage(`${notes.length}件のノートを ${cleanDir} 配下に移動しました。`);
 }
 
 /**
