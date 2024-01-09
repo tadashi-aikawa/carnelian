@@ -1,4 +1,3 @@
-import { EventRef } from "obsidian";
 import { now } from "./lib/helpers/datetimes";
 import {
   appendTextToFile,
@@ -9,9 +8,6 @@ import {
   setOnCreateFileEvent as setOnFileCreatedEvent,
   setOnFileOpenEvent,
   setOnPropertiesChangedEvent,
-  unsetOnCreateFileEvent as unsetOnFileCreatedEvent,
-  unsetOnFileOpenEvent,
-  unsetOnPropertiesChangedEvent,
 } from "./lib/helpers/events";
 import { getPropertiesByPath } from "./lib/helpers/properties";
 import {
@@ -37,10 +33,10 @@ export interface Service {
  */
 class AddDatePropertiesService implements Service {
   name = "Add date properties";
-  fileCreatedEventRef!: EventRef;
+  unsetHandler!: () => void;
 
   onLayoutReady(): void {
-    this.fileCreatedEventRef = setOnFileCreatedEvent(async (file) => {
+    this.unsetHandler = setOnFileCreatedEvent(async (file) => {
       const content = await loadFileContent(file.path);
       if (content) {
         // テンプレ付きのコンテンツの場合は何もしない
@@ -61,7 +57,7 @@ updated: ${today}
   }
 
   onunload(): void {
-    unsetOnFileCreatedEvent(this.fileCreatedEventRef);
+    this.unsetHandler();
   }
 }
 
@@ -72,13 +68,12 @@ updated: ${today}
 class AddDatePropertiesToHeadService implements Service {
   name = "Add date properties to head";
   className = "additional-date-properties";
-  fileOpenEventRef!: EventRef;
-  propertiesChangedEventRef!: EventRef;
 
-  constructor() {}
+  unsetFileOpenHandler!: () => void;
+  unsetPropertiesChangedEventRef!: () => void;
 
   onload() {
-    this.fileOpenEventRef = setOnFileOpenEvent((file) => {
+    this.unsetFileOpenHandler = setOnFileOpenEvent((file) => {
       if (!file) {
         return;
       }
@@ -87,7 +82,7 @@ class AddDatePropertiesToHeadService implements Service {
       this.addDatePropertiesElement(file.path);
     });
 
-    this.propertiesChangedEventRef = setOnPropertiesChangedEvent(
+    this.unsetPropertiesChangedEventRef = setOnPropertiesChangedEvent(
       (file, _, cache) => {
         this.removeDatePropertiesElements();
         if (cache.frontmatter?.created && cache.frontmatter?.updated) {
@@ -104,8 +99,8 @@ class AddDatePropertiesToHeadService implements Service {
   }
 
   onunload() {
-    unsetOnFileOpenEvent(this.fileOpenEventRef);
-    unsetOnPropertiesChangedEvent(this.propertiesChangedEventRef);
+    this.unsetFileOpenHandler();
+    this.unsetPropertiesChangedEventRef();
     this.removeDatePropertiesElements();
   }
 
