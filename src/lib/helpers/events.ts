@@ -40,6 +40,9 @@ export function unsetOnPropertiesChangedEvent(ref: EventRef): void {
 
 /**
  * ファイルが作成されたときに実行する処理を設定します
+ * WARN:
+ * このイベントはVaultロード時(workspace読み込み時)にも発生します
+ * それが意図通りでない場合は onload ではなく onLayoutReady で呼び出してください
  */
 export function setOnCreateFileEvent(
   handler: (file: TFile) => any,

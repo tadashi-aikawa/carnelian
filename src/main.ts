@@ -13,11 +13,19 @@ export default class CarnelianPlugin extends Plugin {
     createCommands(this.settings).forEach((cmd) => this.addCommand(cmd));
 
     this.services = createServices(this.settings);
-    this.services.forEach((sv) => sv.onload());
+    this.services.forEach((sv) => {
+      sv.onload?.();
+    });
+
+    this.app.workspace.onLayoutReady(() => {
+      this.services.forEach((sv) => {
+        sv.onLayoutReady?.();
+      });
+    });
   }
 
   onunload() {
-    this.services.forEach((sv) => sv.onunload());
+    this.services.forEach((sv) => sv.onunload?.());
   }
 
   async loadSettings() {

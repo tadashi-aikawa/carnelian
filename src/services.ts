@@ -26,8 +26,9 @@ export function createServices(settings: PluginSettings): Service[] {
 
 export interface Service {
   name: string;
-  onload(): void;
-  onunload(): void;
+  onload?(): void;
+  onLayoutReady?(): void;
+  onunload?(): void;
 }
 
 /**
@@ -38,7 +39,7 @@ class AddDatePropertiesService implements Service {
   name = "Add date properties";
   fileCreatedEventRef!: EventRef;
 
-  onload(): void {
+  onLayoutReady(): void {
     this.fileCreatedEventRef = setOnFileCreatedEvent(async (file) => {
       const content = await loadFileContent(file.path);
       if (content) {
