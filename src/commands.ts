@@ -63,6 +63,11 @@ export function createCommands(settings: PluginSettings): Command[] {
       executor: insertInputsToWeeklyNote,
     }),
     createCommand({
+      name: "Insert today's MTG",
+      kind: "editor",
+      executor: insertTodaysMTG,
+    }),
+    createCommand({
       name: "Toggle Live preview",
       kind: "all",
       executor: () => {
@@ -137,9 +142,33 @@ export function createCommands(settings: PluginSettings): Command[] {
 }
 
 /**
+ * 本日のMTGノートを挿入します
+ */
+async function insertTodaysMTG() {
+  const today = now("YYYY-MM-DD");
+
+  const title = await showInputDialog({
+    message: "MTGタイトルを入力してください",
+  });
+  if (!title) {
+    return;
+  }
+
+  const startTime = await showInputDialog({
+    message: "開始時間を入力してください",
+    placeholder: "12:30",
+  });
+  if (!startTime) {
+    return;
+  }
+
+  insertToCursor(`- [ ] ${startTime} [[📅${today} ${title}]]`);
+}
+
+/**
  * MinervaのURLをコピーします
  */
-async function copyMinervaURL(): Promise<void> {
+async function copyMinervaURL() {
   // INFO:
   // この関数の処理はMinervaに限らずObsidian Publish全体で動作します
   // 関数名はコマンド名にあわせており、たまたま今は実装が↑となっている
