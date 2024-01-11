@@ -162,7 +162,7 @@ function showCarnelianCommands(commands: Command[]) {
       return commands;
     }
     getItemText(item: Command): string {
-      return item.name;
+      return item.name.replace("Carnelian: ", "");
     }
     onChooseItem(item: Command, evt: MouseEvent | KeyboardEvent): void {
       item.checkCallback?.(false);
