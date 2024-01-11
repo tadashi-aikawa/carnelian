@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import { Command, TFile } from "obsidian";
+import { Command, FuzzyMatch, FuzzySuggestModal, TFile } from "obsidian";
 import { now } from "./lib/helpers/datetimes";
 import {
   getActiveParagraph,
@@ -46,7 +46,7 @@ import * as strings from "./lib/utils/strings";
 import { PluginSettings } from "./settings";
 
 export function createCommands(settings: PluginSettings): Command[] {
-  return [
+  const commands = [
     createCommand({
       name: "Add tags property",
       kind: "editor",
@@ -139,6 +139,36 @@ export function createCommands(settings: PluginSettings): Command[] {
       },
     }),
   ];
+
+  return [
+    ...commands,
+    createCommand({
+      name: "Show Carnelian commands",
+      kind: "all",
+      executor: () => {
+        showCarnelianCommands(commands);
+      },
+    }),
+  ];
+}
+
+/**
+ * Carnelianコマンドを実行するクイックスウィッチャーを表示します
+ * TODO: もうちょっといい実装場所がありそうなので...
+ */
+function showCarnelianCommands(commands: Command[]) {
+  const cl = class extends FuzzySuggestModal<Command> {
+    getItems(): Command[] {
+      return commands;
+    }
+    getItemText(item: Command): string {
+      return item.name;
+    }
+    onChooseItem(item: Command, evt: MouseEvent | KeyboardEvent): void {
+      item.checkCallback?.(false);
+    }
+  };
+  new cl(app).open();
 }
 
 /**
