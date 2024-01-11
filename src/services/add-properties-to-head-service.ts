@@ -56,10 +56,15 @@ export class AddPropertiesToHeadService implements Service {
    * ボタンの要素を作成します
    * @param title (ex: 作成: 2023-10-09)
    */
-  createButton(title: string): HTMLElement {
+  createButton(title: string, type: "date" | "status"): HTMLElement {
     return createDiv({
       text: title,
-      cls: "additional-properties__button",
+      cls:
+        type === "date"
+          ? "additional-properties__date-button"
+          : type === "status"
+          ? "additional-properties__status-button"
+          : "",
     });
   }
 
@@ -73,14 +78,21 @@ export class AddPropertiesToHeadService implements Service {
       return;
     }
 
-    const { created, updated } = properties;
-    if (!(created && updated)) {
+    const { created, updated, status } = properties;
+    if (!(created || updated || status)) {
       return;
     }
 
     const propertiesEl = createDiv({ cls: this.className });
-    propertiesEl.appendChild(this.createButton(`作成日: ${created}`));
-    propertiesEl.appendChild(this.createButton(`更新日: ${updated}`));
+    if (created) {
+      propertiesEl.appendChild(this.createButton(`作成日: ${created}`, "date"));
+    }
+    if (updated) {
+      propertiesEl.appendChild(this.createButton(`更新日: ${updated}`, "date"));
+    }
+    if (status) {
+      propertiesEl.appendChild(this.createButton(status, "status"));
+    }
     insertElementBeforeHeader(propertiesEl);
   }
 
