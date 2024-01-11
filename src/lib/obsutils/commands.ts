@@ -2,25 +2,26 @@ import { Command } from "obsidian";
 import { getActiveEditor } from "../helpers/editors/basic";
 import { getActiveFile } from "../helpers/entries";
 
-type Args = {
+export type CarnelianCommand = {
   name: string;
   kind: "file" | "editor" | "all";
   executor: () => Awaited<any> | Promise<any>;
 };
-export function createCommand(args: Args): Command {
+
+export function createCommand(command: CarnelianCommand): Command {
   return {
-    id: "carnelian_" + args.name.toLowerCase().split(" ").join("-"),
-    name: args.name,
+    id: "carnelian_" + command.name.toLowerCase().split(" ").join("-"),
+    name: command.name,
     checkCallback: (checking: boolean) => {
-      if (args.kind === "file" && !getActiveFile()) {
+      if (command.kind === "file" && !getActiveFile()) {
         return false;
       }
-      if (args.kind === "editor" && !getActiveEditor()) {
+      if (command.kind === "editor" && !getActiveEditor()) {
         return false;
       }
 
       if (!checking) {
-        args.executor();
+        command.executor();
       }
       return true;
     },

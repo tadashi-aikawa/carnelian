@@ -39,106 +39,108 @@ import {
 } from "./lib/helpers/settings";
 import { copyToClipboard, notify, showInputDialog } from "./lib/helpers/ui";
 import { createCard, createHTMLCard, createMeta } from "./lib/helpers/web";
-import { createCommand } from "./lib/obsutils/commands";
+import { CarnelianCommand, createCommand } from "./lib/obsutils/commands";
 import { CodeBlock } from "./lib/types";
 import { sorter } from "./lib/utils/collections";
 import * as strings from "./lib/utils/strings";
 import { PluginSettings } from "./settings";
 
 export function createCommands(settings: PluginSettings): Command[] {
-  const commands = [
-    createCommand({
+  const carnelianCommands: CarnelianCommand[] = [
+    {
       name: "Add tags property",
       kind: "editor",
       executor: addTagsProperty,
-    }),
-    createCommand({
+    },
+    {
       name: "Insert MFDI posts to the weekly note",
       kind: "editor",
       executor: insertMFDIPostsToWeeklyNote,
-    }),
-    createCommand({
+    },
+    {
       name: "Insert inputs to the weekly note",
       kind: "editor",
       executor: insertInputsToWeeklyNote,
-    }),
-    createCommand({
+    },
+    {
       name: "Insert today's MTG",
       kind: "editor",
       executor: insertTodaysMTG,
-    }),
-    createCommand({
+    },
+    {
       name: "Toggle Live preview",
       kind: "all",
       executor: () => {
         const nextDefault = toggleDefaultEditingMode() === "livePreview";
         getAllMarkdownLeaves().forEach((l) => setLivePreview(l, nextDefault));
       },
-    }),
-    createCommand({
+    },
+    {
       name: "Toggle Vim mode",
       kind: "all",
       executor: () => {
         toggleVimKeyBindings();
       },
-    }),
-    createCommand({
+    },
+    {
       name: "Toggle editor length",
       kind: "all",
       executor: () => {
         toggleEditorLength();
       },
-    }),
-    createCommand({
+    },
+    {
       name: "Create an Article",
       kind: "all",
       executor: createArticle,
-    }),
-    createCommand({
+    },
+    {
       name: "Insert site card",
       kind: "editor",
       executor: insertSiteCard,
-    }),
-    createCommand({
+    },
+    {
       name: "Sort selection",
       kind: "editor",
       executor: sortSelectionLines,
-    }),
-    createCommand({
+    },
+    {
       name: "Clean old daily notes",
       kind: "all",
       executor: () =>
         cleanOldDailyNotes("2020-12-30", "../minerva-daily-note-backup"),
-    }),
-    createCommand({
+    },
+    {
       name: "Create MIN ADR",
       kind: "all",
       executor: () => {
         createADR("MIN");
       },
-    }),
-    createCommand({
+    },
+    {
       name: "Format table",
       kind: "editor",
       executor: () => {
         formatTable();
       },
-    }),
-    createCommand({
+    },
+    {
       name: "Strip links and decorations",
       kind: "editor",
       executor: () => {
         stripLinksAndDecorations();
       },
-    }),
-    createCommand({
+    },
+    {
       name: "Copy Minerva URL",
       kind: "editor",
       executor: async () => {
         await copyMinervaURL();
       },
-    }),
+    },
   ];
+
+  const commands = carnelianCommands.map(createCommand);
 
   return [
     ...commands,
@@ -146,7 +148,7 @@ export function createCommands(settings: PluginSettings): Command[] {
       name: "Show Carnelian commands",
       kind: "all",
       executor: () => {
-        showCarnelianCommands(commands);
+        showCarnelianCommands(carnelianCommands);
       },
     }),
   ];
@@ -156,16 +158,19 @@ export function createCommands(settings: PluginSettings): Command[] {
  * Carnelianコマンドを実行するクイックスウィッチャーを表示します
  * TODO: もうちょっといい実装場所がありそうなので...
  */
-function showCarnelianCommands(commands: Command[]) {
-  const cl = class extends FuzzySuggestModal<Command> {
-    getItems(): Command[] {
+function showCarnelianCommands(commands: CarnelianCommand[]) {
+  const cl = class extends FuzzySuggestModal<CarnelianCommand> {
+    getItems(): CarnelianCommand[] {
       return commands;
     }
-    getItemText(item: Command): string {
-      return item.name.replace("Carnelian: ", "");
+    getItemText(item: CarnelianCommand): string {
+      return item.name;
     }
-    onChooseItem(item: Command, evt: MouseEvent | KeyboardEvent): void {
-      item.checkCallback?.(false);
+    onChooseItem(
+      item: CarnelianCommand,
+      evt: MouseEvent | KeyboardEvent
+    ): void {
+      item.executor();
     }
   };
   new cl(app).open();
