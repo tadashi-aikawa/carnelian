@@ -23,7 +23,8 @@ import {
 } from "./lib/obsutils/commands";
 import { PluginSettings } from "./settings";
 
-export function createCommands(settings: PluginSettings): Command[] {
+// INFO: _settingsは使ってないけど、設定を使いたい場合はここで渡すべし
+export function createCommands(_settings: PluginSettings): Command[] {
   const carnelianCommands: CarnelianCommand[] = [
     {
       name: "Add tags property",
