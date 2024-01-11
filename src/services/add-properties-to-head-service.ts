@@ -11,12 +11,11 @@ import {
 import { Service } from "src/services";
 
 /**
- * 新しくファイルを開いたときにcreated/updatesプロパティを差し込むサービスです
- * 既にテキストが存在する場合は何もしません
+ * 新しくファイルを開いたときに特定プロパティを差し込むサービスです
  */
-export class AddDatePropertiesToHeadService implements Service {
-  name = "Add date properties to head";
-  className = "additional-date-properties";
+export class AddPropertiesToHeadService implements Service {
+  name = "Add properties to head";
+  className = "additional-properties";
 
   unsetFileOpenHandler!: () => void;
   unsetPropertiesChangedEventRef!: () => void;
@@ -60,7 +59,7 @@ export class AddDatePropertiesToHeadService implements Service {
   createDateButton(title: string): HTMLElement {
     return createDiv({
       text: title,
-      cls: "additional-date-properties__date-button",
+      cls: "additional-properties__button",
     });
   }
 

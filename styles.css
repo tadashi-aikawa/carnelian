@@ -11,7 +11,7 @@ If your plugin does not need CSS, delete this file.
   width: 95%;
 }
 
-.additional-date-properties {
+.additional-properties {
   height: 30px;
   display: flex;
   align-items: center;
@@ -21,11 +21,11 @@ If your plugin does not need CSS, delete this file.
   color: gray;
   font-weight: 600;
 }
-.additional-date-properties__date-button {
+.additional-properties__button {
   display: flex;
   cursor: pointer;
 }
-.additional-date-properties__date-button::before {
+.additional-properties__button::before {
   display: inline-block;
   filter: invert(0.4);
   width: 14px;
