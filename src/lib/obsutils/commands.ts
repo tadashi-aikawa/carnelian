@@ -2,6 +2,7 @@ import { Command, FuzzySuggestModal } from "obsidian";
 import { getActiveEditor } from "../helpers/editors/basic";
 import { getActiveFile } from "../helpers/entries";
 import { UApp } from "../types";
+import { ExhaustiveError } from "../utils/errors";
 
 declare let app: UApp;
 
@@ -39,7 +40,20 @@ export function createCommand(command: CarnelianCommand): Command {
 export function showCarnelianCommands(commands: CarnelianCommand[]) {
   const cl = class extends FuzzySuggestModal<CarnelianCommand> {
     getItems(): CarnelianCommand[] {
-      return commands.filter((x) => !x.hideOnCommandList);
+      return commands
+        .filter((x) => !x.hideOnCommandList)
+        .filter((x) => {
+          switch (x.kind) {
+            case "all":
+              return true;
+            case "file":
+              return Boolean(getActiveFile());
+            case "editor":
+              return Boolean(getActiveEditor());
+            default:
+              throw new ExhaustiveError(x.kind);
+          }
+        });
     }
     getItemText(item: CarnelianCommand): string {
       return item.name;
