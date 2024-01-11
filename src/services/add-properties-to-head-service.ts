@@ -26,15 +26,15 @@ export class AddPropertiesToHeadService implements Service {
         return;
       }
 
-      this.removeDatePropertiesElements();
-      this.addDatePropertiesElement(file.path);
+      this.removePropertiesElements();
+      this.addPropertiesElement(file.path);
     });
 
     this.unsetPropertiesChangedEventRef = setOnPropertiesChangedEvent(
       (file, _, cache) => {
-        this.removeDatePropertiesElements();
+        this.removePropertiesElements();
         if (cache.frontmatter?.created && cache.frontmatter?.updated) {
-          this.addDatePropertiesElement(file.path);
+          this.addPropertiesElement(file.path);
         }
       }
     );
@@ -42,21 +42,21 @@ export class AddPropertiesToHeadService implements Service {
     // 初回はイベントが発生しないので
     const path = getActiveFilePath();
     if (path != null) {
-      this.addDatePropertiesElement(path);
+      this.addPropertiesElement(path);
     }
   }
 
   onunload() {
     this.unsetFileOpenHandler();
     this.unsetPropertiesChangedEventRef();
-    this.removeDatePropertiesElements();
+    this.removePropertiesElements();
   }
 
   /**
-   * 日付ボタンの要素を作成します
+   * ボタンの要素を作成します
    * @param title (ex: 作成: 2023-10-09)
    */
-  createDateButton(title: string): HTMLElement {
+  createButton(title: string): HTMLElement {
     return createDiv({
       text: title,
       cls: "additional-properties__button",
@@ -67,7 +67,7 @@ export class AddPropertiesToHeadService implements Service {
    * ファイルが表示されているViewに日付プロパティ要素を追加します
    * @param path 追加するViewに表示されているファイルのpath
    */
-  addDatePropertiesElement(path: string): void {
+  addPropertiesElement(path: string): void {
     const properties = getPropertiesByPath(path);
     if (!properties) {
       return;
@@ -78,17 +78,17 @@ export class AddPropertiesToHeadService implements Service {
       return;
     }
 
-    const datePropertiesEl = createDiv({ cls: this.className });
-    datePropertiesEl.appendChild(this.createDateButton(`作成日: ${created}`));
-    datePropertiesEl.appendChild(this.createDateButton(`更新日: ${updated}`));
-    insertElementBeforeHeader(datePropertiesEl);
+    const propertiesEl = createDiv({ cls: this.className });
+    propertiesEl.appendChild(this.createButton(`作成日: ${created}`));
+    propertiesEl.appendChild(this.createButton(`更新日: ${updated}`));
+    insertElementBeforeHeader(propertiesEl);
   }
 
   /**
    * ファイルが表示されているViewから日付プロパティ要素を削除します
    * @param path 削除するViewに表示されているファイルのpath
    */
-  removeDatePropertiesElements(): void {
+  removePropertiesElements(): void {
     removeElementsFromContainer(`.${this.className}`);
   }
 }
