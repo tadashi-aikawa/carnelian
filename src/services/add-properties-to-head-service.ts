@@ -64,7 +64,7 @@ export class AddPropertiesToHeadService implements Service {
   }
 
   /**
-   * ファイルが表示されているViewに日付プロパティ要素を追加します
+   * ファイルが表示されているViewにプロパティ要素を追加します
    * @param path 追加するViewに表示されているファイルのpath
    */
   addPropertiesElement(path: string): void {
@@ -85,7 +85,7 @@ export class AddPropertiesToHeadService implements Service {
   }
 
   /**
-   * ファイルが表示されているViewから日付プロパティ要素を削除します
+   * ファイルが表示されているViewからプロパティ要素を削除します
    * @param path 削除するViewに表示されているファイルのpath
    */
   removePropertiesElements(): void {
