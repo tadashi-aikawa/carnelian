@@ -39,7 +39,11 @@ import {
 } from "./lib/helpers/settings";
 import { copyToClipboard, notify, showInputDialog } from "./lib/helpers/ui";
 import { createCard, createHTMLCard, createMeta } from "./lib/helpers/web";
-import { CarnelianCommand, createCommand } from "./lib/obsutils/commands";
+import {
+  CarnelianCommand,
+  createCommand,
+  showCarnelianCommands,
+} from "./lib/obsutils/commands";
 import { CodeBlock } from "./lib/types";
 import { sorter } from "./lib/utils/collections";
 import * as strings from "./lib/utils/strings";
@@ -51,6 +55,7 @@ export function createCommands(settings: PluginSettings): Command[] {
       name: "Add tags property",
       kind: "editor",
       executor: addTagsProperty,
+      hideOnCommandList: true,
     },
     {
       name: "Insert MFDI posts to the weekly note",
@@ -74,6 +79,7 @@ export function createCommands(settings: PluginSettings): Command[] {
         const nextDefault = toggleDefaultEditingMode() === "livePreview";
         getAllMarkdownLeaves().forEach((l) => setLivePreview(l, nextDefault));
       },
+      hideOnCommandList: true,
     },
     {
       name: "Toggle Vim mode",
@@ -123,6 +129,7 @@ export function createCommands(settings: PluginSettings): Command[] {
       executor: () => {
         formatTable();
       },
+      hideOnCommandList: true,
     },
     {
       name: "Strip links and decorations",
@@ -130,6 +137,7 @@ export function createCommands(settings: PluginSettings): Command[] {
       executor: () => {
         stripLinksAndDecorations();
       },
+      hideOnCommandList: true,
     },
     {
       name: "Copy Minerva URL",
@@ -137,6 +145,7 @@ export function createCommands(settings: PluginSettings): Command[] {
       executor: async () => {
         await copyMinervaURL();
       },
+      hideOnCommandList: true,
     },
   ];
 
@@ -152,28 +161,6 @@ export function createCommands(settings: PluginSettings): Command[] {
       },
     }),
   ];
-}
-
-/**
- * Carnelianコマンドを実行するクイックスウィッチャーを表示します
- * TODO: もうちょっといい実装場所がありそうなので...
- */
-function showCarnelianCommands(commands: CarnelianCommand[]) {
-  const cl = class extends FuzzySuggestModal<CarnelianCommand> {
-    getItems(): CarnelianCommand[] {
-      return commands;
-    }
-    getItemText(item: CarnelianCommand): string {
-      return item.name;
-    }
-    onChooseItem(
-      item: CarnelianCommand,
-      evt: MouseEvent | KeyboardEvent
-    ): void {
-      item.executor();
-    }
-  };
-  new cl(app).open();
 }
 
 /**
