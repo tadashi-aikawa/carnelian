@@ -14,6 +14,15 @@ export function getActiveEditor(): UEditor | null {
 }
 
 /**
+ * カーソルを最終行に移動します
+ */
+export function moveToLastLine(): void {
+  orThrow(getActiveEditor(), (e) => {
+    e.setCursor(e.lastLine());
+  });
+}
+
+/**
  * 現在行のテキストを取得します
  */
 export function getActiveLine(): string | null {
