@@ -1,15 +1,6 @@
 import { now } from "src/lib/helpers/datetimes";
-import {
-  appendLine,
-  getActiveEditor,
-  moveToLastLine,
-} from "src/lib/helpers/editors/basic";
 import { appendTextToFile, loadFileContent } from "src/lib/helpers/entries";
-import {
-  setOnCreateFileEvent,
-  setOnFileOpenEvent,
-} from "src/lib/helpers/events";
-import { notify } from "src/lib/helpers/ui";
+import { setOnCreateFileEvent } from "src/lib/helpers/events";
 import { Service } from "src/services";
 
 /**
