@@ -22,6 +22,7 @@ import {
   showCarnelianCommands,
 } from "./lib/obsutils/commands";
 import { PluginSettings } from "./settings";
+import { insertMOC } from "./commands/insert-moc";
 
 // INFO: _settingsは使ってないけど、設定を使いたい場合はここで渡すべし
 export function createCommands(_settings: PluginSettings): Command[] {
@@ -46,6 +47,11 @@ export function createCommands(_settings: PluginSettings): Command[] {
       name: "Insert today's MTG",
       kind: "editor",
       executor: insertTodaysMTG,
+    },
+    {
+      name: "Insert MOC",
+      kind: "editor",
+      executor: insertMOC,
     },
     {
       name: "Toggle Live preview",
