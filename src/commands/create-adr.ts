@@ -1,3 +1,4 @@
+import { now } from "src/lib/helpers/datetimes";
 import { appendLine } from "src/lib/helpers/editors/basic";
 import {
   getMarkdownFiles,
@@ -19,10 +20,16 @@ export async function createMINADR() {
  * 指定した種類のADRノートを作成し、一覧表の最後に挿入します
  */
 async function createADR(type: "MIN" | "OBS" | "PRO") {
-  const NOTE_BODY = `
-## ステータス
+  const today = now("YYYY-MM-DD");
 
-#🤔Proposed 
+  const NOTE_BODY = `
+---
+created: ${today}
+updated: ${today}
+status:
+  - 🤔Proposed
+---
+%% 結論があればここ %%
 
 ## 経緯
 
