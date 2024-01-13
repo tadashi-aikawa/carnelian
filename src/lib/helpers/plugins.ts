@@ -33,7 +33,7 @@ export async function getObsidianPublishHost(): Promise<string> {
  */
 export async function createObsidianPublishUrl(path: string): Promise<string> {
   const host = await getObsidianPublishHost();
-  return `https://${host}/${encodeURI(path.replace(".md", ""))}`;
+  return `https://${host}/${encodeURIComponent(path.replace(".md", ""))}`;
 }
 
 /**
