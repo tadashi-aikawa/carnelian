@@ -23,6 +23,7 @@ import {
 } from "./lib/obsutils/commands";
 import { PluginSettings } from "./settings";
 import { insertMOC } from "./commands/insert-moc";
+import { insertActivityNote } from "./commands/insert-activity-note";
 
 // INFO: _settingsは使ってないけど、設定を使いたい場合はここで渡すべし
 export function createCommands(_settings: PluginSettings): Command[] {
@@ -52,6 +53,11 @@ export function createCommands(_settings: PluginSettings): Command[] {
       name: "Insert MOC",
       kind: "editor",
       executor: insertMOC,
+    },
+    {
+      name: "Insert Activity note",
+      kind: "editor",
+      executor: insertActivityNote,
     },
     {
       name: "Toggle Live preview",
