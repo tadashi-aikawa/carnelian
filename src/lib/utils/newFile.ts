@@ -32,7 +32,7 @@ test.each([
 ])(
   "%s",
   async (
-    name: string,
+    _name: string,
     url: Parameters<typeof getCoverUrl>[1],
     expected: ReturnType<typeof getCoverUrl>,
   ) => {
