@@ -121,7 +121,7 @@ export function createCommands(_settings: PluginSettings): Command[] {
     },
     {
       name: "Copy active file full path",
-      kind: "editor",
+      kind: "file",
       executor: copyActiveFileFullPath,
       hideOnCommandList: true,
     },
