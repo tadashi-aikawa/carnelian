@@ -136,8 +136,8 @@ test.each([
   "%s",
   async (
     httpEquiv: string,
-    url: Parameters<typeof getCoverUrl>[1],
-    expected: ReturnType<typeof getCoverUrl>,
+    url: Parameters<typeof getMetaByHttpEquiv>[1],
+    expected: ReturnType<typeof getMetaByHttpEquiv>,
   ) => {
     const textResponse = await (await fetch(url)).text();
     const actual = getMetaByHttpEquiv(
@@ -161,10 +161,7 @@ test.each([
   ["https://www.itmedia.co.jp/pcuser/spv/2310/18/news078.html", "shift_jis"],
 ])(
   "%s",
-  async (
-    url: Parameters<typeof getCoverUrl>[1],
-    expected: ReturnType<typeof getCoverUrl>,
-  ) => {
+  async (url: string, expected: ReturnType<typeof getCharsetFromMeta>) => {
     const textResponse = await (await fetch(url)).text();
     const actual = getCharsetFromMeta(new JSDOM(textResponse).window.document);
     if (expected === undefined) {
