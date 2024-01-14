@@ -59,7 +59,7 @@ test.each([
     "https://blog.studysapuri.jp/icon/favicon",
   ],
 ])(
-  `%s`,
+  "%s",
   async (
     name: string,
     url: Parameters<typeof getFaviconUrl>[1],
@@ -100,7 +100,7 @@ test.each([
     "https://lukas.zapletalovi.com/images/avatar_rh_512.jpg",
   ],
 ])(
-  `%s`,
+  "%s",
   async (
     name: string,
     url: Parameters<typeof getCoverUrl>[1],
@@ -133,7 +133,7 @@ test.each([
     undefined,
   ],
 ])(
-  `%s`,
+  "%s",
   async (
     httpEquiv: string,
     url: Parameters<typeof getCoverUrl>[1],
@@ -160,7 +160,7 @@ test.each([
   ["https://www.itmedia.co.jp/news/articles/2307/26/news116.html", undefined],
   ["https://www.itmedia.co.jp/pcuser/spv/2310/18/news078.html", "shift_jis"],
 ])(
-  `%s`,
+  "%s",
   async (
     url: Parameters<typeof getCoverUrl>[1],
     expected: ReturnType<typeof getCoverUrl>,

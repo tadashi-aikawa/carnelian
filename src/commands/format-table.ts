@@ -1,6 +1,6 @@
+import { getActiveParagraph } from "src/lib/helpers/editors/advanced";
 import { setLinesInRange } from "src/lib/helpers/editors/basic";
 import * as strings from "../lib/utils/strings";
-import { getActiveParagraph } from "src/lib/helpers/editors/advanced";
 
 /**
  * Markdownテーブルをフォーマットします

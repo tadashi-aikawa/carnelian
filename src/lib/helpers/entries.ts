@@ -132,7 +132,7 @@ export function getFileByPath(path: string): TFile | null {
  * await createFile("Notes/mimizou.md", "みみぞうとはフクロウのぬいぐるみです")
  * ```
  */
-export function createFile(path: string, data: string = ""): Promise<TFile> {
+export function createFile(path: string, data = ""): Promise<TFile> {
   return app.vault.create(path, data);
 }
 

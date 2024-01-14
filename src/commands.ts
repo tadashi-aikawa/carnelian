@@ -1,12 +1,15 @@
 import { Command } from "obsidian";
 import { addTagsProperty } from "./commands/add-tags-property";
 import { cleanOldDailyNotes } from "./commands/clean-old-daily-notes";
+import { copyActiveFileFullPath } from "./commands/copy-active-file-full-path";
 import { copyMinervaURL } from "./commands/copy-minerva-url";
 import { createMINADR } from "./commands/create-adr";
 import { createArticle } from "./commands/create-article";
 import { formatTable } from "./commands/format-table";
+import { insertActivityNote } from "./commands/insert-activity-note";
 import { insertInputsToWeeklyNote } from "./commands/insert-inputs-to-weekly-note";
 import { insertMFDIPostsToWeeklyNote } from "./commands/insert-mfdi-posts-to-weekly-note";
+import { insertMOC } from "./commands/insert-moc";
 import { insertSiteCard } from "./commands/insert-site-card";
 import { insertTodaysMTG } from "./commands/insert-todays-mtg";
 import { stripLinksAndDecorations } from "./commands/stripe-links-and-decorations";
@@ -22,9 +25,6 @@ import {
   showCarnelianCommands,
 } from "./lib/obsutils/commands";
 import { PluginSettings } from "./settings";
-import { insertMOC } from "./commands/insert-moc";
-import { insertActivityNote } from "./commands/insert-activity-note";
-import { copyActiveFileFullPath } from "./commands/copy-active-file-full-path";
 
 // INFO: _settingsは使ってないけど、設定を使いたい場合はここで渡すべし
 export function createCommands(_settings: PluginSettings): Command[] {

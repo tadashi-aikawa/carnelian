@@ -6,7 +6,7 @@ declare let app: UApp;
 export class InputDialog extends Modal {
   inputEl!: HTMLInputElement;
   promise!: Promise<string | null>;
-  submitted: boolean = false;
+  submitted = false;
 
   constructor(
     public title: string,

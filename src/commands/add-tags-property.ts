@@ -1,6 +1,6 @@
 import {
-  getActiveLineTags,
   deleteActiveLine,
+  getActiveLineTags,
 } from "src/lib/helpers/editors/basic";
 import {
   addActiveFileProperty,

@@ -1,4 +1,5 @@
 import { requestUrl } from "obsidian";
+import { stripDecoration, stripLinks } from "../obsutils/parser";
 import { defineUserAgent } from "../utils/agent";
 import { forceLowerCaseKeys } from "../utils/collections";
 import {
@@ -10,7 +11,6 @@ import {
   getMetaByProperty,
 } from "../utils/meta-helper";
 import { countCharsWidth, sjis2String } from "../utils/strings";
-import { stripDecoration, stripLinks } from "../obsutils/parser";
 
 export type Meta = HTMLMeta | ImageMeta | TwitterMeta;
 export interface HTMLMeta {

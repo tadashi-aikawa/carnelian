@@ -5,6 +5,7 @@ import {
 } from "src/lib/obsutils/parser";
 import { orderBy } from "src/lib/utils/collections";
 import { ExhaustiveError } from "src/lib/utils/errors";
+import { getParagraphAtLine } from "src/lib/utils/strings";
 import { map, orThrow } from "src/lib/utils/types";
 import {
   getActiveEditor,
@@ -14,7 +15,6 @@ import {
   replaceStringInActiveLine,
   setSelection,
 } from "./basic";
-import { getParagraphAtLine } from "src/lib/utils/strings";
 
 /**
  * 現在行のリスト要素に対して、先頭や末尾にテキストを追記します

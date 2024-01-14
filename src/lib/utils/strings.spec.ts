@@ -123,7 +123,7 @@ test.each([
     {
       startLine: 2,
       endLine: 2,
-      text: `3 C`,
+      text: "3 C",
     },
   ],
   [

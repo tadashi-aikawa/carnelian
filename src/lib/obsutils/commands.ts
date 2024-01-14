@@ -16,7 +16,7 @@ export type CarnelianCommand = {
 
 export function createCommand(command: CarnelianCommand): Command {
   return {
-    id: "carnelian_" + command.name.toLowerCase().split(" ").join("-"),
+    id: `carnelian_${command.name.toLowerCase().split(" ").join("-")}`,
     name: command.name,
     checkCallback: (checking: boolean) => {
       if (command.kind === "file" && !getActiveFile()) {

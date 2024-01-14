@@ -18,7 +18,7 @@ export function usePeriodicNotesSettings(): UApp["plugins"]["plugins"]["periodic
  * Obsidian Publishで設定したhostを取得します
  */
 export async function getObsidianPublishHost(): Promise<string> {
-  return app.internalPlugins.plugins["publish"].instance
+  return app.internalPlugins.plugins.publish.instance
     .apiCustomUrl()
     .then((x: any) => x.url);
 }

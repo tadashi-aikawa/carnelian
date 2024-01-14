@@ -3,7 +3,7 @@ import { getDailyNotes } from "src/lib/helpers/plugins";
 import { getActiveFileDescriptionProperty } from "src/lib/helpers/properties";
 import { loadCodeBlocks } from "src/lib/helpers/sections";
 import { notify } from "src/lib/helpers/ui";
-import { createMeta, createHTMLCard } from "src/lib/helpers/web";
+import { createHTMLCard, createMeta } from "src/lib/helpers/web";
 import { CodeBlock } from "src/lib/types";
 import * as strings from "../lib/utils/strings";
 
@@ -30,12 +30,12 @@ export async function insertMFDIPostsToWeeklyNote() {
   const codeBlocks: { path: string; codeBlock: CodeBlock }[] = [];
   for (const file of getDailyNotes(weekBegin, weekEnd)) {
     const cbs = await loadCodeBlocks(file.path);
-    cbs!.forEach((codeBlock) => {
+    for (const codeBlock of cbs!) {
       codeBlocks.push({
         path: file.path,
         codeBlock,
       });
-    });
+    }
   }
 
   const targetCodeBlocks = codeBlocks

@@ -7,5 +7,7 @@ import { toggleDefaultEditingMode } from "src/lib/helpers/settings";
  */
 export function toggleLivePreview() {
   const nextDefault = toggleDefaultEditingMode() === "livePreview";
-  getAllMarkdownLeaves().forEach((l) => setLivePreview(l, nextDefault));
+  for (const l of getAllMarkdownLeaves()) {
+    setLivePreview(l, nextDefault);
+  }
 }

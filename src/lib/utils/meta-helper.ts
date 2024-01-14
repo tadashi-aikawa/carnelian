@@ -14,7 +14,7 @@ export function getMetaByName(dom: Document, name: string): string | undefined {
 }
 
 export function getCharsetFromMeta(dom: Document): string | undefined {
-  return dom.querySelector(`meta[charset]`)?.attributes.getNamedItem("charset")
+  return dom.querySelector("meta[charset]")?.attributes.getNamedItem("charset")
     ?.value;
 }
 
@@ -28,14 +28,14 @@ export function getMetaByHttpEquiv(
 }
 
 export function getSrcById(dom: Document, id: string): string | undefined {
-  return dom.querySelector("#" + id)?.attributes.getNamedItem("src")?.value;
+  return dom.querySelector(`#${id}`)?.attributes.getNamedItem("src")?.value;
 }
 
 export function getFaviconUrl(dom: Document, url: string): string {
   const toIconHref = (selector: string) =>
     dom.querySelector(selector)?.attributes.getNamedItem("href")?.value;
 
-  let iconHref =
+  const iconHref =
     toIconHref("link[rel~='icon'][href$='.svg']") ??
     toIconHref("link[rel~='icon'][href$='.png']") ??
     toIconHref("link[rel~='icon'][href$='.ico']") ??

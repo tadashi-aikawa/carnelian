@@ -1,7 +1,7 @@
 import { Plugin } from "obsidian";
 import { createCommands } from "./commands";
+import { Service, createServices } from "./services";
 import { DEFAULT_SETTINGS, PluginSettings, SettingTab } from "./settings";
-import { createServices, Service } from "./services";
 
 export default class CarnelianPlugin extends Plugin {
   settings!: PluginSettings;
@@ -10,22 +10,26 @@ export default class CarnelianPlugin extends Plugin {
   async onload() {
     await this.loadSettings();
     this.addSettingTab(new SettingTab(this.app, this));
-    createCommands(this.settings).forEach((cmd) => this.addCommand(cmd));
+    for (const cmd of createCommands(this.settings)) {
+      this.addCommand(cmd);
+    }
 
     this.services = createServices(this.settings);
-    this.services.forEach((sv) => {
+    for (const sv of this.services) {
       sv.onload?.();
-    });
+    }
 
     this.app.workspace.onLayoutReady(() => {
-      this.services.forEach((sv) => {
-        sv.onLayoutReady?.();
-      });
+      for (const sv of this.services) {
+        sv.onload?.();
+      }
     });
   }
 
   onunload() {
-    this.services.forEach((sv) => sv.onunload?.());
+    for (const sv of this.services) {
+      sv.onunload?.();
+    }
   }
 
   async loadSettings() {

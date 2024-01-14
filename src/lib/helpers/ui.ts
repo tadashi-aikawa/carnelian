@@ -87,8 +87,11 @@ export function insertElementBeforeHeader(element: Element): void {
  * 現在ファイルViewから要素を削除します
  */
 export function removeElementsFromContainer(selector: string): void {
-  app.workspace
+  const elements = app.workspace
     .getActiveFileView()
-    .containerEl.querySelectorAll(selector)
-    .forEach((el) => el.remove());
+    .containerEl.querySelectorAll(selector);
+
+  for (const el of elements) {
+    el.remove();
+  }
 }
