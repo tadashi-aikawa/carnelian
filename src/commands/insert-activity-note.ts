@@ -18,5 +18,5 @@ export async function insertActivityNote() {
     return;
   }
 
-  insertToCursor(`- [[📜${today} ${title}]]`);
+  insertToCursor(`[[📜${today} ${title}]]`);
 }
