@@ -1,6 +1,6 @@
 import dayjs, { Dayjs } from "dayjs";
 import { Loc, TAbstractFile, TFile, TFolder } from "obsidian";
-import { toEditorPosition } from "../obsutils/mapper";
+import { toEditorPosition, toFullPath } from "../obsutils/mapper";
 import { UApp } from "../types";
 import { map } from "../utils/types";
 import { getActiveEditor } from "./editors/basic";
@@ -49,6 +49,18 @@ export function getActiveFile(): TFile | null {
  */
 export function getActiveFilePath(): string | null {
   return map(getActiveFile(), (af) => af.path);
+}
+
+/**
+ * 現在ファイルのフルパスを取得します
+ *
+ * ```ts
+ * getActiveFilePath()
+ * // "C:/Minerva/Notes/activeFile.md"
+ * ```
+ */
+export function getActiveFileFullPath(): string | null {
+  return map(getActiveFile(), (af) => toFullPath(af.path));
 }
 
 /**

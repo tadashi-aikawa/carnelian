@@ -24,6 +24,7 @@ import {
 import { PluginSettings } from "./settings";
 import { insertMOC } from "./commands/insert-moc";
 import { insertActivityNote } from "./commands/insert-activity-note";
+import { copyActiveFileFullPath } from "./commands/copy-active-file-full-path";
 
 // INFO: _settingsは使ってないけど、設定を使いたい場合はここで渡すべし
 export function createCommands(_settings: PluginSettings): Command[] {
@@ -116,6 +117,12 @@ export function createCommands(_settings: PluginSettings): Command[] {
       name: "Copy Minerva URL",
       kind: "editor",
       executor: copyMinervaURL,
+      hideOnCommandList: true,
+    },
+    {
+      name: "Copy active file full path",
+      kind: "editor",
+      executor: copyActiveFileFullPath,
       hideOnCommandList: true,
     },
   ];

@@ -1,6 +1,7 @@
 import {
   App,
   CacheItem,
+  DataAdapter,
   Editor,
   FileView,
   LinkCache,
@@ -56,7 +57,12 @@ type Config = {
   vimMode?: boolean;
 };
 
+export type UAdapter = DataAdapter & {
+  basePath: string;
+};
+
 export type UVault = Vault & {
+  adapter: UAdapter;
   fileMap: { [path: string]: TFile };
   getConfig<K extends keyof Config>(key: K): Config[K];
   setConfig<K extends keyof Config>(key: K, value: Config[K]): void;
