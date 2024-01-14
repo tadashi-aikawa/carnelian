@@ -10,7 +10,7 @@ export function isPresent<T>(arg: T | null | undefined): arg is T {
  */
 export function map<T, U>(
   arg: T | null | undefined,
-  callable: (arg: T) => U
+  callable: (arg: T) => U,
 ): U | null {
   return arg != null ? callable(arg) : null;
 }
@@ -21,13 +21,13 @@ export function map<T, U>(
 export function orThrow<T, U>(
   arg: T | null | undefined,
   callable: (arg: T) => void,
-  opts?: { message?: string }
+  opts?: { message?: string },
 ): void {
   if (arg != null) {
     callable(arg);
     return;
   }
   throw Error(
-    opts?.message ?? "予期せずundefined/nullが発生しましたので中断しました"
+    opts?.message ?? "予期せずundefined/nullが発生しましたので中断しました",
   );
 }

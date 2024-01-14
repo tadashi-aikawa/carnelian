@@ -61,7 +61,7 @@ status:
       .sort(sorter((x) => x.name))
       .pop()
       ?.name.split(" ")[0]
-      .replace(`${prefix}-`, "") ?? -1
+      .replace(`${prefix}-`, "") ?? -1,
   );
 
   const newNumber = String(maxNumber + 1).padStart(4, "0");

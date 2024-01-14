@@ -7,7 +7,7 @@ import { isPresent } from "./types";
  */
 export function doSinglePatternMatching(
   text: string,
-  pattern: RegExp
+  pattern: RegExp,
 ): string[] {
   return Array.from(text.matchAll(pattern)).map((x) => x[0]);
 }
@@ -63,7 +63,7 @@ export function pad(text: string, length: number, char = " "): string {
  */
 export function getParagraphAtLine(
   text: string,
-  line: number
+  line: number,
 ): {
   startLine: number;
   endLine: number;
@@ -81,7 +81,7 @@ export function getParagraphAtLine(
     previousEmptyLineIndex === -1 ? 0 : previousEmptyLineIndex + 1;
 
   const nextEmptyLineIndex = lineContents.findIndex(
-    (x, i) => i > line && x === ""
+    (x, i) => i > line && x === "",
   );
   const endLine =
     nextEmptyLineIndex === -1
@@ -127,11 +127,11 @@ export function formatTable(tableText: string): string | null {
 
   const maxColNum = Math.max(...rows.map((x) => x.length));
   const maxColWidthList = zipRotate(rows).map((colValues) =>
-    Math.max(...colValues.filter(isPresent).map(countCharsWidth))
+    Math.max(...colValues.filter(isPresent).map(countCharsWidth)),
   );
 
   const [header, divider, ...records] = rows.map((row) =>
-    row.concat(Array(maxColNum - row.length).fill(""))
+    row.concat(Array(maxColNum - row.length).fill("")),
   );
   const headerText = `| ${header
     .map((c, i) => padEndAsWidth(c, maxColWidthList[i]))
@@ -143,7 +143,7 @@ export function formatTable(tableText: string): string | null {
     (record) =>
       `| ${record
         .map((c, i) => padEndAsWidth(c, maxColWidthList[i]))
-        .join(" | ")} |`
+        .join(" | ")} |`,
   );
 
   return `

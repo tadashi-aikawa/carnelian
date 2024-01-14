@@ -42,7 +42,7 @@ test.each([
   `parseMarkdownList("%s")`,
   (text: string, expected: ReturnType<typeof parseMarkdownList>) => {
     expect(parseMarkdownList(text)).toEqual(expected);
-  }
+  },
 );
 
 test.each([
@@ -58,7 +58,7 @@ test.each([
   `parseTags("%s")`,
   (text: string, expected: ReturnType<typeof parseTags>) => {
     expect(parseTags(text)).toEqual(expected);
-  }
+  },
 );
 
 test.each([
@@ -96,7 +96,7 @@ test.each([
   `stripDecoration("%s")`,
   (text: string, expected: ReturnType<typeof stripDecoration>) => {
     expect(stripDecoration(text)).toEqual(expected);
-  }
+  },
 );
 
 test.each([
@@ -126,5 +126,5 @@ test.each([
   `stripLinks("%s")`,
   (text: string, expected: ReturnType<typeof stripLinks>) => {
     expect(stripLinks(text)).toEqual(expected);
-  }
+  },
 );

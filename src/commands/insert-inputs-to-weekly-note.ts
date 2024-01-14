@@ -17,7 +17,7 @@ export async function insertInputsToWeeklyNote() {
 
   const [weekBegin, weekEnd] = strings.doSinglePatternMatching(
     description,
-    /\d{4}-\d{2}-\d{2}/g
+    /\d{4}-\d{2}-\d{2}/g,
   );
   if (!weekBegin) {
     return notify("descriptionプロパティに開始日が存在しません");
@@ -31,7 +31,7 @@ export async function insertInputsToWeeklyNote() {
 
   const noteLists = getMarkdownFilesInRange(
     dayjs(weekBegin),
-    dayjs(weekEnd).add(1, "days")
+    dayjs(weekEnd).add(1, "days"),
   )
     .filter(isPublicNote)
     .map((x) => `- [[${x.basename}]]`)

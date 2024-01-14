@@ -18,7 +18,7 @@ export async function insertMFDIPostsToWeeklyNote() {
 
   const [weekBegin, weekEnd] = strings.doSinglePatternMatching(
     description,
-    /\d{4}-\d{2}-\d{2}/g
+    /\d{4}-\d{2}-\d{2}/g,
   );
   if (!weekBegin) {
     return notify("descriptionプロパティに開始日が存在しません");
@@ -63,12 +63,12 @@ ${createHTMLCard(meta)}
 ${cb.content}
 ~~~
 
-`
+`,
     );
   }
 
   notify(
     `${weekBegin} ～ ${weekEnd} にMFDIで投稿されたサイトURL付の投稿を挿入しました`,
-    5000
+    5000,
   );
 }

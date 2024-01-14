@@ -94,7 +94,7 @@ export function addActiveFileProperty(key: string, value: any | any[]): void {
   orThrow(
     getActiveMetadataEditor(),
     (me) => me.insertProperties({ [key]: value }),
-    { message: errorMessage["MetadataEditor is null"] }
+    { message: errorMessage["MetadataEditor is null"] },
   );
 }
 
@@ -124,7 +124,7 @@ export function removeActiveFileProperty(key: string): void {
   orThrow(
     getActiveMetadataEditor(),
     (me) => me.insertProperties({ [key]: null }),
-    { message: errorMessage["MetadataEditor is null"] }
+    { message: errorMessage["MetadataEditor is null"] },
   );
 }
 
@@ -137,7 +137,7 @@ export function removeActiveFileProperty(key: string): void {
  */
 export function updateActiveFileProperty(
   key: string,
-  value: any | any[]
+  value: any | any[],
 ): void {
   removeActiveFileProperty(key);
   addActiveFileProperty(key, value);

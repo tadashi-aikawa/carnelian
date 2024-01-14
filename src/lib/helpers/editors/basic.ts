@@ -27,7 +27,7 @@ export function moveToLastLine(): void {
  */
 export function getActiveLine(): string | null {
   return map(getActiveEditor(), (editor) =>
-    editor.getLine(editor.getCursor().line)
+    editor.getLine(editor.getCursor().line),
   );
 }
 
@@ -47,7 +47,7 @@ export function deleteActiveLine(): void {
         {
           line: cur.line + 1,
           ch: 0,
-        }
+        },
       );
     }
   });
@@ -88,7 +88,7 @@ export function insertToCursor(text: string): void {
  */
 export function replaceStringInActiveLine(
   str: string,
-  option?: { cursor?: "last" }
+  option?: { cursor?: "last" },
 ): void {
   orThrow(getActiveEditor(), (e) => {
     const { line, ch } = e.getCursor();
@@ -132,14 +132,14 @@ export function setSelection(text: string): void {
 export function setLinesInRange(
   start: number,
   end: number,
-  text: string
+  text: string,
 ): void {
   orThrow(getActiveEditor(), (e) => {
     const cur = e.getCursor();
     e.replaceRange(
       text,
       { line: start, ch: 0 },
-      { line: end, ch: e.getLine(end).length }
+      { line: end, ch: e.getLine(end).length },
     );
     e.setCursor(cur);
   });
@@ -168,7 +168,7 @@ export function getSelectionLines(): string[] | null {
  */
 export function appendLine(str: string): void {
   orThrow(getActiveEditor(), (e) =>
-    e.replaceRange(`\n${str}`, { line: e.lastLine() + 1, ch: 0 })
+    e.replaceRange(`\n${str}`, { line: e.lastLine() + 1, ch: 0 }),
   );
 }
 

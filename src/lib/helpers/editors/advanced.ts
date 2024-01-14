@@ -32,7 +32,7 @@ import { getParagraphAtLine } from "src/lib/utils/strings";
  */
 export function attachTextToListItem(
   text: string,
-  option?: { attached?: "prefix" | "suffix"; cursor?: "last" }
+  option?: { attached?: "prefix" | "suffix"; cursor?: "last" },
 ): void {
   const activeLine = getActiveLine()!;
   const { prefix, content } = parseMarkdownList(activeLine);
@@ -149,6 +149,6 @@ export function getActiveParagraph(): {
   text: string;
 } | null {
   return map(getActiveEditor(), (editor) =>
-    getParagraphAtLine(editor.getValue(), editor.getCursor().line)
+    getParagraphAtLine(editor.getValue(), editor.getCursor().line),
   );
 }

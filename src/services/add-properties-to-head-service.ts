@@ -36,7 +36,7 @@ export class AddPropertiesToHeadService implements Service {
         if (cache.frontmatter?.created && cache.frontmatter?.updated) {
           this.addPropertiesElement(file.path);
         }
-      }
+      },
     );
 
     // 初回はイベントが発生しないので
@@ -63,8 +63,8 @@ export class AddPropertiesToHeadService implements Service {
         type === "date"
           ? "additional-properties__date-button"
           : type === "status"
-          ? "additional-properties__status-button"
-          : "",
+            ? "additional-properties__status-button"
+            : "",
     });
   }
 

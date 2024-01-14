@@ -11,6 +11,6 @@ export async function insertMOC() {
 - 📒**関連**
 - 📜**アクティビティ**
 - 📝**トラブルシューティング**
-`.trim()
+`.trim(),
   );
 }

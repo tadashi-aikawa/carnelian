@@ -12,7 +12,7 @@ export function getActiveFileBacklinksByFilePath(): {
 } | null {
   return map(
     getActiveFile(),
-    (f) => app.metadataCache.getBacklinksForFile(f).data
+    (f) => app.metadataCache.getBacklinksForFile(f).data,
   );
 }
 

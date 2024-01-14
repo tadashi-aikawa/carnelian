@@ -27,12 +27,12 @@ async function _cleanOldDailyNotes(startDate: string, cleanDir: string) {
   const notes = getDailyNotes(startDate, end);
   if (notes.length === 0) {
     return notify(
-      `${startDate} ～ ${end} の期間にはデイリーノートが存在しませんでした。`
+      `${startDate} ～ ${end} の期間にはデイリーノートが存在しませんでした。`,
     );
   }
 
   const nt = notify(
-    `${notes.length}件のノートを ${cleanDir} 配下に移動します。しばらく時間がかかる場合があります。`
+    `${notes.length}件のノートを ${cleanDir} 配下に移動します。しばらく時間がかかる場合があります。`,
   );
 
   for (const f of notes) {

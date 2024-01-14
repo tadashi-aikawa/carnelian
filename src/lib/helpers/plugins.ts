@@ -54,9 +54,9 @@ export function getDailyNotes(begin: string, end: string): TFile[] {
     .map((x) =>
       getFileByPath(
         `${dailySettings.folder}/${x.format(
-          dailySettings.format || "YYYY-MM-DD"
-        )}.md`
-      )
+          dailySettings.format || "YYYY-MM-DD",
+        )}.md`,
+      ),
     )
     .filter(isPresent);
 }

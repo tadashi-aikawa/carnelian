@@ -28,7 +28,7 @@ export async function createArticle() {
     `[[📒Articles]] > [[📒2023 Articles]]
 
 ![[${today}.jpg|cover-picture]]
-`
+`,
   );
 
   await openFile(f.path);

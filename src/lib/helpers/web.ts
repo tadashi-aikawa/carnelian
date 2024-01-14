@@ -36,7 +36,7 @@ export interface TwitterMeta {
 
 async function getTwitterMeta(
   url: string,
-  type: "X" | "Twitter"
+  type: "X" | "Twitter",
 ): Promise<TwitterMeta | null> {
   const twitterEmbedUrl = `https://publish.${
     type === "X" ? "x" : "twitter"
@@ -63,7 +63,7 @@ export async function createMeta(url: string): Promise<Meta | null> {
   ) {
     const res = await getTwitterMeta(
       url,
-      url.startsWith("https://x.com") ? "X" : "Twitter"
+      url.startsWith("https://x.com") ? "X" : "Twitter",
     );
     if (!res) {
       return null;
@@ -105,7 +105,7 @@ export async function createMeta(url: string): Promise<Meta | null> {
   const metaContentType = getCharsetFromMeta(html)?.toLowerCase();
   const httpEquivContentType = getMetaByHttpEquiv(
     html,
-    "content-type"
+    "content-type",
   )?.toLowerCase();
   if (
     metaContentType?.includes("shift_jis") ||
@@ -114,7 +114,7 @@ export async function createMeta(url: string): Promise<Meta | null> {
     // HTMLのmetaデータにshift_jisと明記されている場合はbodyを作り直す
     html = new DOMParser().parseFromString(
       sjis2String(res.arrayBuffer),
-      "text/html"
+      "text/html",
     );
   }
 
@@ -156,7 +156,7 @@ function createDescriptionDOM(meta: HTMLMeta): string {
     300 - countCharsWidth(meta.title) * 2 - (meta.coverUrl ? 50 : 0);
 
   const description = stripLinks(
-    stripDecoration(meta.description?.replaceAll("\n", ""))
+    stripDecoration(meta.description?.replaceAll("\n", "")),
   );
 
   // 上限を考慮した最終的に表示する文言
@@ -165,8 +165,8 @@ function createDescriptionDOM(meta: HTMLMeta): string {
     description == null
       ? ""
       : countCharsWidth(description) <= descriptionMaxWidth
-      ? description
-      : `${description?.slice(0, descriptionMaxWidth)} ... `;
+        ? description
+        : `${description?.slice(0, descriptionMaxWidth)} ... `;
 
   return displayDescription
     ? `<p class="link-card-description">${displayDescription}</p>`

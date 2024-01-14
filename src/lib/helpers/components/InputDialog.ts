@@ -11,7 +11,7 @@ export class InputDialog extends Modal {
   constructor(
     public title: string,
     public placeholder?: string,
-    public defaultValue?: string
+    public defaultValue?: string,
   ) {
     super(app);
   }

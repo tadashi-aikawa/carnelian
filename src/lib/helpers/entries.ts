@@ -146,7 +146,7 @@ export function createFile(path: string, data: string = ""): Promise<TFile> {
  */
 export async function renameFileWithoutLinkModified(
   path: string,
-  dst: string
+  dst: string,
 ): Promise<void> {
   await app.vault.adapter.rename(path, dst);
 }
@@ -163,7 +163,7 @@ export async function renameFileWithoutLinkModified(
  */
 export function openFile(
   path: string,
-  option?: { newLeaf: boolean }
+  option?: { newLeaf: boolean },
 ): Promise<void> {
   const newLeaf = option?.newLeaf ?? false;
   return app.workspace.openLinkText("", path, newLeaf);
@@ -179,7 +179,7 @@ export function openFile(
  */
 export async function appendTextToFile(
   path: string,
-  text: string
+  text: string,
 ): Promise<void> {
   await app.vault.adapter.append(path, text);
 }
@@ -199,7 +199,7 @@ export async function loadFileContent(
   position?: {
     start: Pick<Loc, "offset">;
     end: Pick<Loc, "offset">;
-  }
+  },
 ): Promise<string | null> {
   const f = getFileByPath(path);
   if (!f) {
@@ -237,7 +237,7 @@ export function getActiveFileContent(position?: {
 
   return editor.getRange(
     toEditorPosition(position.start),
-    toEditorPosition(position.end)
+    toEditorPosition(position.end),
   );
 }
 
@@ -253,7 +253,7 @@ export function getActiveFileContent(position?: {
  * ```
  */
 export function getCreationDate(
-  format: string | "unixtime" | "dayjs"
+  format: string | "unixtime" | "dayjs",
 ): string | number | Dayjs | null {
   return map(getActiveFile()?.stat.ctime, (unixtime) => {
     switch (format) {
@@ -279,7 +279,7 @@ export function getCreationDate(
  * ```
  */
 export function getUpdateDate(
-  format: string | "unixtime" | "dayjs"
+  format: string | "unixtime" | "dayjs",
 ): string | number | Dayjs | null {
   return map(getActiveFile()?.stat.mtime, (unixtime) => {
     switch (format) {

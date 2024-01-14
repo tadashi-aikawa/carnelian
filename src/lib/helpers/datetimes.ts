@@ -12,7 +12,7 @@ import dayjs, { Dayjs } from "dayjs";
  * ```
  */
 export function now(
-  format: string | "unixtime" | "dayjs"
+  format: string | "unixtime" | "dayjs",
 ): string | number | Dayjs {
   const now = dayjs();
   switch (format) {

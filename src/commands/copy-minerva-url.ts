@@ -18,7 +18,7 @@ export async function copyMinervaURL() {
   nt.setMessage(
     `👍MinervaのURLをコピーしました
 
-${url}`
+${url}`,
   );
   await sleep(5000);
   nt.hide();

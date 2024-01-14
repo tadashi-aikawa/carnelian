@@ -8,7 +8,7 @@ import { getFileCacheByPath } from "./metadata";
  * ファイルパスからコードセクションを取得します
  */
 export function getCodeBlockSectionsByPath(
-  path: string
+  path: string,
 ): SectionCache[] | null {
   return (
     getFileCacheByPath(path)?.sections?.filter((x) => x.type === "code") ?? null
@@ -42,7 +42,7 @@ export async function loadActiveFileCodeBlocks(): Promise<CodeBlock[] | null> {
  * ```
  */
 export async function loadCodeBlocks(
-  path: string
+  path: string,
 ): Promise<CodeBlock[] | null> {
   const sections = getCodeBlockSectionsByPath(path);
   if (!sections) {

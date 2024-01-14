@@ -21,10 +21,10 @@ test.each([
   (
     text: Parameters<typeof doSinglePatternMatching>[0],
     pattern: Parameters<typeof doSinglePatternMatching>[1],
-    expected: ReturnType<typeof doSinglePatternMatching>
+    expected: ReturnType<typeof doSinglePatternMatching>,
   ) => {
     expect(doSinglePatternMatching(text, pattern)).toEqual(expected);
-  }
+  },
 );
 
 test.each([
@@ -35,10 +35,10 @@ test.each([
   `countCharsWidth("%s")`,
   (
     chars: Parameters<typeof countCharsWidth>[0],
-    expected: ReturnType<typeof countCharsWidth>
+    expected: ReturnType<typeof countCharsWidth>,
   ) => {
     expect(countCharsWidth(chars)).toBe(expected);
-  }
+  },
 );
 
 test.each([
@@ -53,10 +53,10 @@ test.each([
     text: Parameters<typeof pad>[0],
     length: Parameters<typeof pad>[1],
     char: Parameters<typeof pad>[2],
-    expected: ReturnType<typeof pad>
+    expected: ReturnType<typeof pad>,
   ) => {
     expect(pad(text, length, char)).toBe(expected);
-  }
+  },
 );
 
 test.each([
@@ -143,10 +143,10 @@ test.each([
   (
     text: Parameters<typeof getParagraphAtLine>[0],
     line: Parameters<typeof getParagraphAtLine>[1],
-    expected: ReturnType<typeof getParagraphAtLine>
+    expected: ReturnType<typeof getParagraphAtLine>,
   ) => {
     expect(getParagraphAtLine(text, line)).toStrictEqual(expected);
-  }
+  },
 );
 
 test.each([
@@ -226,8 +226,8 @@ test.each([
   `formatTable("%s")`,
   (
     tableText: Parameters<typeof formatTable>[0],
-    expected: ReturnType<typeof formatTable>
+    expected: ReturnType<typeof formatTable>,
   ) => {
     expect(formatTable(tableText)).toBe(expected);
-  }
+  },
 );

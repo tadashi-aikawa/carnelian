@@ -20,7 +20,7 @@ declare class Notice {
  */
 export function notify(
   text: string | DocumentFragment,
-  timeoutMs?: number
+  timeoutMs?: number,
 ): Notice {
   return new Notice(text, timeoutMs ?? null);
 }
@@ -53,7 +53,7 @@ export async function showInputDialog(args: {
   return new InputDialog(
     args.message,
     args.placeholder,
-    args.defaultValue
+    args.defaultValue,
   ).open();
 }
 

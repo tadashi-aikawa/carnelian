@@ -11,7 +11,7 @@ declare let app: UApp;
  */
 export function setOnFileOpenEvent(
   handler: (file: TFile | null) => any,
-  ctx?: any
+  ctx?: any,
 ): () => void {
   const ref = app.workspace.on("file-open", handler, ctx);
   return () => {
@@ -26,7 +26,7 @@ export function setOnFileOpenEvent(
  */
 export function setOnPropertiesChangedEvent(
   handler: (file: TFile, data: string, cache: CachedMetadata) => any,
-  ctx?: any
+  ctx?: any,
 ): () => void {
   const ref = app.metadataCache.on("changed", handler, ctx);
   return () => {
@@ -44,7 +44,7 @@ export function setOnPropertiesChangedEvent(
  */
 export function setOnCreateFileEvent(
   handler: (file: TFile) => any,
-  ctx?: any
+  ctx?: any,
 ): () => void {
   const ref = app.vault.on(
     "create",
@@ -55,7 +55,7 @@ export function setOnCreateFileEvent(
 
       handler(entry);
     },
-    ctx
+    ctx,
   );
   return () => {
     app.vault.offref(ref);

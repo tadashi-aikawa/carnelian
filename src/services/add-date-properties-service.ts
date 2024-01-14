@@ -27,7 +27,7 @@ export class AddDatePropertiesService implements Service {
 created: ${today}
 updated: ${today}
 ---
-`.trimStart()
+`.trimStart(),
       );
     });
   }

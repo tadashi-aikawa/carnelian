@@ -25,10 +25,10 @@ test.each([
     collection: any[],
     predicate: (t: any) => any,
     order: "asc" | "desc",
-    expected: ReturnType<typeof orderBy>
+    expected: ReturnType<typeof orderBy>,
   ) => {
     expect(orderBy(collection, predicate, order)).toEqual(expected);
-  }
+  },
 );
 
 test.each([
@@ -40,10 +40,10 @@ test.each([
   `forceLowerCaseKeys("%s")`,
   (
     obj: Parameters<typeof forceLowerCaseKeys>[0],
-    expected: ReturnType<typeof forceLowerCaseKeys>
+    expected: ReturnType<typeof forceLowerCaseKeys>,
   ) => {
     expect(forceLowerCaseKeys(obj)).toStrictEqual(expected);
-  }
+  },
 );
 
 test.each([
@@ -58,8 +58,8 @@ test.each([
   `zipRotate("%s")`,
   (
     matrix: Parameters<typeof zipRotate>[0],
-    expected: ReturnType<typeof zipRotate>
+    expected: ReturnType<typeof zipRotate>,
   ) => {
     expect(zipRotate(matrix)).toStrictEqual(expected);
-  }
+  },
 );

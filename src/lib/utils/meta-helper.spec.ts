@@ -63,13 +63,13 @@ test.each([
   async (
     name: string,
     url: Parameters<typeof getFaviconUrl>[1],
-    expected: ReturnType<typeof getFaviconUrl>
+    expected: ReturnType<typeof getFaviconUrl>,
   ) => {
     const textResponse = await (await fetch(url)).text();
     expect(getFaviconUrl(new JSDOM(textResponse).window.document, url)).toBe(
-      expected
+      expected,
     );
-  }
+  },
 );
 
 test.each([
@@ -104,7 +104,7 @@ test.each([
   async (
     name: string,
     url: Parameters<typeof getCoverUrl>[1],
-    expected: ReturnType<typeof getCoverUrl>
+    expected: ReturnType<typeof getCoverUrl>,
   ) => {
     const textResponse = await (await fetch(url)).text();
     const actual = getCoverUrl(new JSDOM(textResponse).window.document, url);
@@ -113,7 +113,7 @@ test.each([
     } else {
       expect(actual).toBe(expected);
     }
-  }
+  },
 );
 
 test.each([
@@ -137,19 +137,19 @@ test.each([
   async (
     httpEquiv: string,
     url: Parameters<typeof getCoverUrl>[1],
-    expected: ReturnType<typeof getCoverUrl>
+    expected: ReturnType<typeof getCoverUrl>,
   ) => {
     const textResponse = await (await fetch(url)).text();
     const actual = getMetaByHttpEquiv(
       new JSDOM(textResponse).window.document,
-      httpEquiv
+      httpEquiv,
     );
     if (expected === undefined) {
       expect(actual).toBeUndefined();
     } else {
       expect(actual).toBe(expected);
     }
-  }
+  },
 );
 
 test.each([
@@ -163,7 +163,7 @@ test.each([
   `%s`,
   async (
     url: Parameters<typeof getCoverUrl>[1],
-    expected: ReturnType<typeof getCoverUrl>
+    expected: ReturnType<typeof getCoverUrl>,
   ) => {
     const textResponse = await (await fetch(url)).text();
     const actual = getCharsetFromMeta(new JSDOM(textResponse).window.document);
@@ -172,5 +172,5 @@ test.each([
     } else {
       expect(actual).toBe(expected);
     }
-  }
+  },
 );
