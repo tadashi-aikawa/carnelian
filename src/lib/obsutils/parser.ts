@@ -30,12 +30,17 @@ export function parseTags(text: string): string[] {
  */
 export function stripDecoration(text: string): string {
   return text
-    .replaceAll(/\*\*([^*]*?)\*\*/g, "$1")
-    .replaceAll(/__([^*]*?)__/g, "$1")
-    .replaceAll(/\*([^*]*?)\*/g, "$1")
-    .replaceAll(/_([^*]*?)_/g, "$1")
-    .replaceAll(/~~([^~]*?)~~/g, "$1")
-    .replaceAll(/==([^~]*?)==/g, "$1");
+    .split("\n")
+    .map((x) =>
+      x
+        .replaceAll(/\*\*(.+?)\*\*/g, "$1")
+        .replaceAll(/__(.+?)__/g, "$1")
+        .replaceAll(/\*(.+?)\*/g, "$1")
+        .replaceAll(/_(.+?)_/g, "$1")
+        .replaceAll(/~~(.+?)~~/g, "$1")
+        .replaceAll(/==(.+?)==/g, "$1"),
+    )
+    .join("\n");
 }
 
 /**
@@ -45,8 +50,13 @@ export function stripDecoration(text: string): string {
  */
 export function stripLinks(text: string): string {
   return text
-    .replaceAll(/\[\[[^\|\]]*?\|([^\]]*?)\]\]/g, "$1")
-    .replaceAll(/\[\[([^\]]*?)\]\]/g, "$1")
-    .replaceAll(/\[([^\]]*?)\]\(.*?\)/g, "$1")
-    .replaceAll(/(?<![-\*] )\[([^\]]*?)\]/g, "$1");
+    .split("\n")
+    .map((x) =>
+      x
+        .replaceAll(/\[\[[^\|\]]*?\|([^\]]*?)\]\]/g, "$1")
+        .replaceAll(/\[\[([^\]]*?)\]\]/g, "$1")
+        .replaceAll(/\[([^\]]*?)\]\(.*?\)/g, "$1")
+        .replaceAll(/(?<![-\*] )\[([^\]]*?)\]/g, "$1"),
+    )
+    .join("\n");
 }

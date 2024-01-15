@@ -67,18 +67,22 @@ test.each([
   ["a **a** a", "a a a"],
   ["**a** **a**", "a a"],
   ["**abc** **efg**", "abc efg"],
+  ["**aaa\nbbb**", "**aaa\nbbb**"],
 
   ["__a__", "a"],
   ["a __a__ a", "a a a"],
   ["__a__ __a__", "a a"],
   ["__abc__ __efg__", "abc efg"],
+  ["__abc\nefg__", "__abc\nefg__"],
 
   // italic
   ["*a*", "a"],
   ["a *a* a", "a a a"],
+  ["* a\n* b", "* a\n* b"],
 
   ["_a_", "a"],
   ["a _a_ a", "a a a"],
+  ["a_b\nc_d", "a_b\nc_d"],
 
   // bold and italic
   ["**abc *d* efg**", "abc d efg"],
@@ -86,9 +90,11 @@ test.each([
 
   // strikethrough
   ["~~a~~", "a"],
+  ["~~a\n~~b", "~~a\n~~b"],
 
   // highlight
   ["==a==", "a"],
+  ["== a\nb ==", "== a\nb =="],
 
   // mixed
   ["a **b** ~~c~~ ==d== e", "a b c d e"],
