@@ -21,7 +21,7 @@ export default class CarnelianPlugin extends Plugin {
 
     this.app.workspace.onLayoutReady(() => {
       for (const sv of this.services) {
-        sv.onload?.();
+        sv.onLayoutReady?.();
       }
     });
   }
