@@ -26,6 +26,7 @@ If your plugin does not need CSS, delete this file.
   display: flex;
   cursor: pointer;
 }
+
 .additional-properties__date-button::before {
   display: inline-block;
   filter: invert(0.4);
@@ -37,4 +38,23 @@ If your plugin does not need CSS, delete this file.
 .additional-properties__status-button {
   display: flex;
   cursor: pointer;
+}
+
+.carnelian-command-palette-item {
+  /* do nothing */
+}
+
+.carnelian-command-palette-item-lastused {
+  display: flex;
+  color: goldenrod;
+  font-weight: bold;
+}
+
+.carnelian-command-palette-item-lastused::before {
+  background-size: 18px 18px;
+  width: 18px;
+  height: 18px;
+  margin-right: 2px;
+  filter: invert(0.5) hue-rotate(180deg);
+  content: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2aWV3Qm94PSIwIDAgMzIgMzIiPjxwYXRoIGQ9Ik0yMC41OSAyMkwxNSAxNi40MVY3aDJ2OC41OGw1IDUuMDFMMjAuNTkgMjJ6IiBmaWxsPSJjdXJyZW50Q29sb3IiPjwvcGF0aD48cGF0aCBkPSJNMTYgMkExMy45NCAxMy45NCAwIDAgMCA2IDYuMjNWMkg0djhoOFY4SDcuMDhBMTIgMTIgMCAxIDEgNCAxNkgyQTE0IDE0IDAgMSAwIDE2IDJ6IiBmaWxsPSJjdXJyZW50Q29sb3IiPjwvcGF0aD48L3N2Zz4=");
 }

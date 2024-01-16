@@ -25,6 +25,7 @@ import {
   showCarnelianCommands,
 } from "./lib/obsutils/commands";
 import { PluginSettings } from "./settings";
+import { showAnotherCommandPalette } from "./commands/show-another-command-palette";
 
 // INFO: _settingsは使ってないけど、設定を使いたい場合はここで渡すべし
 export function createCommands(_settings: PluginSettings): Command[] {
@@ -123,6 +124,12 @@ export function createCommands(_settings: PluginSettings): Command[] {
       name: "Copy active file full path",
       kind: "file",
       executor: copyActiveFileFullPath,
+      hideOnCommandList: true,
+    },
+    {
+      name: "Show another command palette",
+      kind: "all",
+      executor: showAnotherCommandPalette,
       hideOnCommandList: true,
     },
   ];

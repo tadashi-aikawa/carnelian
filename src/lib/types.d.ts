@@ -1,6 +1,7 @@
 import {
   App,
   CacheItem,
+  Command,
   DataAdapter,
   Editor,
   FileView,
@@ -93,6 +94,7 @@ export type UApp = App & {
     };
   };
   commands: {
+    commands: { [key: string]: Command };
     executeCommandById(id: CommandId): boolean;
   };
 };

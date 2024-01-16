@@ -1,5 +1,9 @@
 import dayjs, { Dayjs } from "dayjs";
 
+export function now(format: "unixtime"): number;
+export function now(format: "dayjs"): Dayjs;
+export function now(format: string): string;
+
 /**
  * 現在日時を取得します
  *
