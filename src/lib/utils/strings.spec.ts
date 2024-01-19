@@ -4,7 +4,10 @@ import {
   doSinglePatternMatching,
   formatTable,
   getParagraphAtLine,
+  getSinglePatternMatchingLocations,
+  getWikiLinks,
   pad,
+  replaceAt,
 } from "./strings";
 
 test.each([
@@ -24,6 +27,49 @@ test.each([
     expected: ReturnType<typeof doSinglePatternMatching>,
   ) => {
     expect(doSinglePatternMatching(text, pattern)).toEqual(expected);
+  },
+);
+
+test.each([
+  [
+    "2023-10-12から2023-10-02",
+    /\d{4}-\d{2}-\d{2}/g,
+    [
+      { text: "2023-10-12", range: { start: 0, end: 9 } },
+      { text: "2023-10-02", range: { start: 12, end: 21 } },
+    ],
+  ],
+
+  ["hoge", /h../g, [{ text: "hog", range: { start: 0, end: 2 } }]],
+  [
+    "hogehoge",
+    /h../g,
+    [
+      { text: "hog", range: { start: 0, end: 2 } },
+      { text: "hog", range: { start: 4, end: 6 } },
+    ],
+  ],
+  ["aaaa", /h../g, []],
+])(
+  `getSinglePatternMatchingLocations("%s")`,
+  (
+    text: Parameters<typeof getSinglePatternMatchingLocations>[0],
+    pattern: Parameters<typeof getSinglePatternMatchingLocations>[1],
+    expected: ReturnType<typeof getSinglePatternMatchingLocations>,
+  ) => {
+    expect(getSinglePatternMatchingLocations(text, pattern)).toEqual(expected);
+  },
+);
+
+test.each([["0123456789", { start: 3, end: 6 }, "---", "012---789"]])(
+  `replaceAt("%s")`,
+  (
+    base: Parameters<typeof replaceAt>[0],
+    range: Parameters<typeof replaceAt>[1],
+    text: Parameters<typeof replaceAt>[2],
+    expected: ReturnType<typeof replaceAt>,
+  ) => {
+    expect(replaceAt(base, range, text)).toBe(expected);
   },
 );
 
@@ -229,5 +275,28 @@ test.each([
     expected: ReturnType<typeof formatTable>,
   ) => {
     expect(formatTable(tableText)).toBe(expected);
+  },
+);
+
+test.each([
+  ["abc [[def]] ghi", [{ title: "def", range: { start: 4, end: 10 } }]],
+  [
+    "abc [[def]] ghi [[jkl]] mno",
+    [
+      { title: "def", range: { start: 4, end: 10 } },
+      { title: "jkl", range: { start: 16, end: 22 } },
+    ],
+  ],
+  [
+    "abc [[def|DEF]] ghi",
+    [{ title: "def", alias: "DEF", range: { start: 4, end: 14 } }],
+  ],
+])(
+  `getWikiLinks("%s")`,
+  (
+    text: Parameters<typeof getWikiLinks>[0],
+    expected: ReturnType<typeof getWikiLinks>,
+  ) => {
+    expect(getWikiLinks(text)).toStrictEqual(expected);
   },
 );

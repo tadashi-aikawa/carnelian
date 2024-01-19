@@ -2,6 +2,8 @@ import * as Encoding from "encoding-japanese";
 import { zipRotate } from "./collections";
 import { isPresent } from "./types";
 
+type Range = { start: number; end: number };
+
 /**
  * 1種類のパターンでパターンマッチした結果を文字列のリストで取得します
  */
@@ -10,6 +12,32 @@ export function doSinglePatternMatching(
   pattern: RegExp,
 ): string[] {
   return Array.from(text.matchAll(pattern)).map((x) => x[0]);
+}
+
+/**
+ * 1種類のパターンでパターンマッチした結果を文字列と位置のリストで取得します
+ */
+export function getSinglePatternMatchingLocations(
+  text: string,
+  pattern: RegExp,
+): {
+  text: string;
+  range: Range;
+}[] {
+  return Array.from(text.matchAll(pattern)).map((x) => ({
+    text: x[0],
+    range: {
+      start: x.index!,
+      end: x.index! + x[0].length - 1,
+    },
+  }));
+}
+
+/**
+ * baseのテキストからrangeの範囲をtextの文字列で置き換えます
+ */
+export function replaceAt(base: string, range: Range, text: string): string {
+  return base.substring(0, range.start) + text + base.substring(range.end + 1);
 }
 
 /**
@@ -151,4 +179,26 @@ ${headerText}
 ${dividerText}
 ${recordTextList.join("\n")}
 `.trim();
+}
+
+/**
+  テキストからwikiリンクのテキストと範囲を抽出します
+ */
+export function getWikiLinks(text: string): {
+  title: string;
+  alias?: string;
+  range: Range;
+}[] {
+  return getSinglePatternMatchingLocations(text, /\[\[.+?\]\]/g).map((x) => {
+    const [title, alias] = x.text
+      .replaceAll("[[", "")
+      .replaceAll("]]", "")
+      .split("|");
+
+    return {
+      title,
+      range: x.range,
+      ...(alias ? { alias } : {}),
+    };
+  });
 }

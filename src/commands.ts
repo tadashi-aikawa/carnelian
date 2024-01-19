@@ -26,6 +26,7 @@ import {
 } from "./lib/obsutils/commands";
 import { PluginSettings } from "./settings";
 import { showAnotherCommandPalette } from "./commands/show-another-command-palette";
+import { copyAsConfluence } from "./commands/copy-as-confluence";
 
 // INFO: _settingsは使ってないけど、設定を使いたい場合はここで渡すべし
 export function createCommands(_settings: PluginSettings): Command[] {
@@ -107,6 +108,11 @@ export function createCommands(_settings: PluginSettings): Command[] {
       kind: "editor",
       executor: formatTable,
       hideOnCommandList: true,
+    },
+    {
+      name: "Copy as Confluence",
+      kind: "editor",
+      executor: copyAsConfluence,
     },
     {
       name: "Strip links and decorations",

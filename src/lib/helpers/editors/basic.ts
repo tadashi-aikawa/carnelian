@@ -104,6 +104,14 @@ export function replaceStringInActiveLine(
 
 /**
  * エディタの選択範囲を取得します
+ * WARN: 選択範囲がないときは空文字を返します
+ *
+ * ```ts
+ * getSelection()
+ * // hogehoge
+ * getSelection() // 選択していないとき
+ * //
+ * ```
  */
 export function getSelection(): string | null {
   return getActiveEditor()?.getSelection() ?? null;
