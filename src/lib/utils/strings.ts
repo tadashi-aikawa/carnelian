@@ -154,7 +154,7 @@ export function formatTable(tableText: string): string | null {
   }
 
   const maxColNum = Math.max(...rows.map((x) => x.length));
-  const maxColWidthList = zipRotate(rows).map((colValues) =>
+  const maxColWidthList = zipRotate(rows.toSpliced(1, 1)).map((colValues) =>
     Math.max(...colValues.filter(isPresent).map(countCharsWidth)),
   );
 
