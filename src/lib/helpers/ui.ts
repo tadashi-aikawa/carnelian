@@ -37,6 +37,18 @@ export async function copyToClipboard(text: string): Promise<void> {
 }
 
 /**
+ * URLを開きます
+ *
+ * ```ts
+ * // (通常は)ブラウザでURLを開く
+ * openUrl("https://minerva.mamansoft.net")
+ * ```
+ */
+export function openUrl(url: string): void {
+  activeWindow.open(url);
+}
+
+/**
  * 入力ダイアログを表示し、入力された値を返却します。
  * キャンセル時はnullを返却します。(入力なしで決定した場合は空文字)
  *

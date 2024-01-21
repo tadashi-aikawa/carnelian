@@ -28,6 +28,7 @@ import { PluginSettings } from "./settings";
 import { showAnotherCommandPalette } from "./commands/show-another-command-palette";
 import { copyAsConfluence } from "./commands/copy-as-confluence";
 import { addUrlProperty } from "./commands/add-url-property";
+import { openPropertyUrl } from "./commands/open-property-url";
 
 // INFO: _settingsは使ってないけど、設定を使いたい場合はここで渡すべし
 export function createCommands(_settings: PluginSettings): Command[] {
@@ -131,6 +132,12 @@ export function createCommands(_settings: PluginSettings): Command[] {
       name: "Copy Minerva URL",
       kind: "editor",
       executor: copyMinervaURL,
+      hideOnCommandList: true,
+    },
+    {
+      name: "Open property URL",
+      kind: "editor",
+      executor: openPropertyUrl,
       hideOnCommandList: true,
     },
     {
