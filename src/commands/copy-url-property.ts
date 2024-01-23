@@ -11,5 +11,5 @@ export async function copyUrlProperty() {
   }
 
   await copyToClipboard(url);
-  notify("👍URLをコピーしました", 5000);
+  notify("👍urlプロパティの値をコピーしました", 5000);
 }
