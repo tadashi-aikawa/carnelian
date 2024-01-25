@@ -30,6 +30,7 @@ import { copyAsConfluence } from "./commands/copy-as-confluence";
 import { addUrlProperty } from "./commands/add-url-property";
 import { openPropertyUrl } from "./commands/open-property-url";
 import { copyUrlProperty } from "./commands/copy-url-property";
+import { addDescriptionProperty } from "./commands/add-description-property";
 
 export function createCommands(settings: PluginSettings): Command[] {
   const carnelianCommands: CarnelianCommand[] = [
@@ -43,6 +44,12 @@ export function createCommands(settings: PluginSettings): Command[] {
       name: "Add url property",
       kind: "editor",
       executor: addUrlProperty,
+      hideOnCommandList: true,
+    },
+    {
+      name: "Add description property",
+      kind: "editor",
+      executor: addDescriptionProperty,
       hideOnCommandList: true,
     },
     {
