@@ -1,6 +1,7 @@
 import { Command, FuzzyMatch, FuzzySuggestModal } from "obsidian";
 import { getAvailableCommands } from "src/lib/helpers/commands";
 import { now } from "src/lib/helpers/datetimes";
+import { loadJson, saveJson } from "src/lib/helpers/io";
 import { UApp } from "src/lib/types";
 import { sorter } from "src/lib/utils/collections";
 
@@ -11,26 +12,37 @@ type HistoricalCommand = Command & {
   lastUsed?: number;
 };
 
-// TODO: 今後 永続化したい
-const commandHistoryMap: { [id: string]: number } = {};
+type CommandHistoryMap = { [id: string]: number };
 
 /**
  * もう1つのコマンドパレットを表示
  */
-export function showAnotherCommandPalette(): void {
+export async function showAnotherCommandPalette(args: {
+  commandHistoryPath: string;
+}): Promise<void> {
+  const commandHistoryMap =
+    (await loadJson<CommandHistoryMap>(args.commandHistoryPath)) ?? {};
+
   const commands: HistoricalCommand[] = getAvailableCommands()
     .map((x) => ({
       ...x,
       lastUsed: commandHistoryMap[x.id],
     }))
     .sort(sorter((x) => x.lastUsed ?? 0, "desc"));
-  showCommandQuickSwitcher(commands);
+
+  new CommandQuickSwitcher(app, commands, async (item) => {
+    commandHistoryMap[item.id] = now("unixtime");
+    await saveJson(args.commandHistoryPath, commandHistoryMap, {
+      overwrite: true,
+    });
+  }).open();
 }
 
 class CommandQuickSwitcher extends FuzzySuggestModal<HistoricalCommand> {
   constructor(
     app: UApp,
     private commands: HistoricalCommand[],
+    private handleChooseItem: (item: HistoricalCommand) => any,
   ) {
     super(app);
   }
@@ -42,7 +54,7 @@ class CommandQuickSwitcher extends FuzzySuggestModal<HistoricalCommand> {
   }
   onChooseItem(item: HistoricalCommand): void {
     item.callback?.() ?? item.checkCallback?.(false);
-    commandHistoryMap[item.id] = now("unixtime");
+    this.handleChooseItem(item);
   }
   renderSuggestion(item: FuzzyMatch<HistoricalCommand>, el: HTMLElement): void {
     el.appendChild(
@@ -55,11 +67,4 @@ class CommandQuickSwitcher extends FuzzySuggestModal<HistoricalCommand> {
       }),
     );
   }
-}
-
-/**
- * コマンドを実行するクイックスウィッチャーを表示します
- */
-function showCommandQuickSwitcher(commands: HistoricalCommand[]) {
-  new CommandQuickSwitcher(app, commands).open();
 }

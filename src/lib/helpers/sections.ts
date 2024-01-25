@@ -1,7 +1,7 @@
 import { SectionCache } from "obsidian";
 import { CodeBlock } from "../types";
 import { map } from "../utils/types";
-import { getActiveFile, loadFileContent } from "./entries";
+import { getActiveFile, loadFileContentCache } from "./entries";
 import { getFileCacheByPath } from "./metadata";
 
 /**
@@ -51,7 +51,7 @@ export async function loadCodeBlocks(
 
   const blocks = [];
   for (const section of sections) {
-    const blockStr = (await loadFileContent(path, section.position))!;
+    const blockStr = (await loadFileContentCache(path, section.position))!;
     const language =
       blockStr.match(/[`~]{3,}(?<language>[^ \n]*)/)?.groups?.language || null;
     blocks.push({

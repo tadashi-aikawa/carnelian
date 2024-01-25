@@ -1,5 +1,8 @@
 import { now } from "src/lib/helpers/datetimes";
-import { appendTextToFile, loadFileContent } from "src/lib/helpers/entries";
+import {
+  appendTextToFile,
+  loadFileContentCache,
+} from "src/lib/helpers/entries";
 import { setOnCreateFileEvent } from "src/lib/helpers/events";
 import { Service } from "src/services";
 
@@ -13,7 +16,7 @@ export class AddDatePropertiesService implements Service {
 
   onLayoutReady(): void {
     this.unsetHandler = setOnCreateFileEvent(async (file) => {
-      const content = await loadFileContent(file.path);
+      const content = await loadFileContentCache(file.path);
       if (content) {
         // テンプレ付きのコンテンツの場合は何もしない
         return;

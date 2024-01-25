@@ -2,10 +2,10 @@ import { now } from "src/lib/helpers/datetimes";
 import { appendLine } from "src/lib/helpers/editors/basic";
 import {
   createFile,
-  exists,
   getMarkdownFiles,
   openFile,
 } from "src/lib/helpers/entries";
+import { exists } from "src/lib/helpers/io";
 import { notify, showInputDialog } from "src/lib/helpers/ui";
 import { sorter } from "src/lib/utils/collections";
 

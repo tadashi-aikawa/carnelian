@@ -31,8 +31,7 @@ import { addUrlProperty } from "./commands/add-url-property";
 import { openPropertyUrl } from "./commands/open-property-url";
 import { copyUrlProperty } from "./commands/copy-url-property";
 
-// INFO: _settingsは使ってないけど、設定を使いたい場合はここで渡すべし
-export function createCommands(_settings: PluginSettings): Command[] {
+export function createCommands(settings: PluginSettings): Command[] {
   const carnelianCommands: CarnelianCommand[] = [
     {
       name: "Add tags property",
@@ -156,7 +155,7 @@ export function createCommands(_settings: PluginSettings): Command[] {
     {
       name: "Show another command palette",
       kind: "all",
-      executor: showAnotherCommandPalette,
+      executor: () => showAnotherCommandPalette(settings),
       hideOnCommandList: true,
     },
   ];

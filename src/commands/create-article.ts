@@ -1,5 +1,6 @@
 import { now } from "src/lib/helpers/datetimes";
-import { createFile, exists, openFile } from "src/lib/helpers/entries";
+import { createFile, openFile } from "src/lib/helpers/entries";
+import { exists } from "src/lib/helpers/io";
 import { addActiveFileProperties } from "src/lib/helpers/properties";
 import { notify, showInputDialog } from "src/lib/helpers/ui";
 

@@ -22,17 +22,6 @@ export function isFolder(entry: TAbstractFile): entry is TFolder {
 }
 
 /**
- * パス(ファイル/ディレクトリ)が存在するかどうかを確認します
- *
- * ```ts
- * await exists("Notes/hoge.md")
- * // true
- */
-export function exists(path: string): Promise<boolean> {
-  return app.vault.adapter.exists(path);
-}
-
-/**
  * 現在のファイルを取得します
  */
 export function getActiveFile(): TFile | null {
@@ -185,7 +174,7 @@ export async function appendTextToFile(
 }
 
 /**
- * ファイルの中身(テキスト)を取得します
+ * ファイルキャッシュの中身(テキスト)を取得します
  *
  * ```ts
  * await loadFileContent("Notes/Obsidian.md")
@@ -194,7 +183,7 @@ export async function appendTextToFile(
  * // "bsidianは最"
  * ```
  */
-export async function loadFileContent(
+export async function loadFileContentCache(
   path: string,
   position?: {
     start: Pick<Loc, "offset">;
