@@ -23,12 +23,12 @@ async function loadPluginDir() {
 
   const vaultPath = rcConfig.vaultPath;
   if (!vaultPath) {
-    console.error(`carnelianrc.jsonにVaultのパスが指定されていません`);
+    console.error("carnelianrc.jsonにVaultのパスが指定されていません");
     exit(1);
   }
   if (!existsSync(vaultPath)) {
     console.error(
-      `carnelianrc.jsonのVaultに指定されたパス ${vaultPath} は存在しません`
+      `carnelianrc.jsonのVaultに指定されたパス ${vaultPath} は存在しません`,
     );
     exit(1);
   }

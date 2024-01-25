@@ -41,11 +41,16 @@ If your plugin does not need CSS, delete this file.
 }
 
 .carnelian-command-palette-item {
-  /* do nothing */
+  display: flex;
+}
+
+.carnelian-command-palette-item__key {
+  margin-left: auto;
+  font-size: 80%;
+  color: darkgrey;
 }
 
 .carnelian-command-palette-item-lastused {
-  display: flex;
   color: goldenrod;
   font-weight: bold;
 }

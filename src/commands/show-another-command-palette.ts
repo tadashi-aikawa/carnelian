@@ -57,14 +57,25 @@ class CommandQuickSwitcher extends FuzzySuggestModal<HistoricalCommand> {
     this.handleChooseItem(item);
   }
   renderSuggestion(item: FuzzyMatch<HistoricalCommand>, el: HTMLElement): void {
-    el.appendChild(
+    const recordEl = createDiv({
+      cls: [
+        "carnelian-command-palette-item",
+        item.item.lastUsed ? "carnelian-command-palette-item-lastused" : "",
+      ],
+    });
+
+    recordEl.appendChild(
       createDiv({
-        cls: [
-          "carnelian-command-palette-item",
-          item.item.lastUsed ? "carnelian-command-palette-item-lastused" : "",
-        ],
         text: item.item.name,
       }),
     );
+    recordEl.appendChild(
+      createDiv({
+        text: app.hotkeyManager.printHotkeyForCommand(item.item.id),
+        cls: ["carnelian-command-palette-item__key"],
+      }),
+    );
+
+    el.appendChild(recordEl);
   }
 }

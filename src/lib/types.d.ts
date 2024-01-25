@@ -97,4 +97,7 @@ export type UApp = App & {
     commands: { [key: string]: Command };
     executeCommandById(id: CommandId): boolean;
   };
+  hotkeyManager: {
+    printHotkeyForCommand(id: string): string;
+  };
 };
