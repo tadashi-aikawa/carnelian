@@ -27,6 +27,8 @@ export async function insertMFDIPostsToWeeklyNote() {
     return notify("descriptionプロパティに終了日が存在しません");
   }
 
+  const nt = notify("⏳ MFDIのデータを取得中...");
+
   const codeBlocks: { path: string; codeBlock: CodeBlock }[] = [];
   for (const file of getDailyNotes(weekBegin, weekEnd)) {
     const cbs = await loadCodeBlocks(file.path);
@@ -43,7 +45,12 @@ export async function insertMFDIPostsToWeeklyNote() {
     .filter((cb) => cb.language === "fw" && cb.content.includes("http"))
     .toReversed();
 
-  for (const cb of targetCodeBlocks) {
+  for (let i = 0; i < targetCodeBlocks.length; i++) {
+    const cb = targetCodeBlocks[i];
+    nt.setMessage(
+      `⏳ [${i + 1}/${targetCodeBlocks.length}] Cardのデータを作成中...`,
+    );
+
     const [url] = strings.doSinglePatternMatching(cb.content, /http.+/g);
     const meta = await createMeta(url);
     if (meta?.type !== "html") {
@@ -65,8 +72,9 @@ ${createHTMLCard(meta)}
     );
   }
 
-  notify(
-    `${weekBegin} ～ ${weekEnd} にMFDIで投稿されたサイトURL付の投稿を挿入しました`,
-    5000,
+  nt.setMessage(
+    `👍 ${weekBegin} ～ ${weekEnd} にMFDIで投稿されたサイトURL付の投稿を挿入しました`,
   );
+  await sleep(5000);
+  nt.hide();
 }
