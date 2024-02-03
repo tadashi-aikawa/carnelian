@@ -1,8 +1,12 @@
 import { Command } from "obsidian";
+import { addDescriptionProperty } from "./commands/add-description-property";
 import { addTagsProperty } from "./commands/add-tags-property";
+import { addUrlProperty } from "./commands/add-url-property";
 import { cleanOldDailyNotes } from "./commands/clean-old-daily-notes";
 import { copyActiveFileFullPath } from "./commands/copy-active-file-full-path";
+import { copyAsConfluence } from "./commands/copy-as-confluence";
 import { copyMinervaURL } from "./commands/copy-minerva-url";
+import { copyUrlProperty } from "./commands/copy-url-property";
 import { createMINADR } from "./commands/create-adr";
 import { createArticle } from "./commands/create-article";
 import { formatTable } from "./commands/format-table";
@@ -12,6 +16,8 @@ import { insertMFDIPostsToWeeklyNote } from "./commands/insert-mfdi-posts-to-wee
 import { insertMOC } from "./commands/insert-moc";
 import { insertSiteCard } from "./commands/insert-site-card";
 import { insertTodaysMTG } from "./commands/insert-todays-mtg";
+import { openPropertyUrl } from "./commands/open-property-url";
+import { showAnotherCommandPalette } from "./commands/show-another-command-palette";
 import { stripLinksAndDecorations } from "./commands/stripe-links-and-decorations";
 import { toggleLivePreview } from "./commands/toggle-live-preview";
 import { sortSelectionLines } from "./lib/helpers/editors/advanced";
@@ -25,12 +31,7 @@ import {
   showCarnelianCommands,
 } from "./lib/obsutils/commands";
 import { PluginSettings } from "./settings";
-import { showAnotherCommandPalette } from "./commands/show-another-command-palette";
-import { copyAsConfluence } from "./commands/copy-as-confluence";
-import { addUrlProperty } from "./commands/add-url-property";
-import { openPropertyUrl } from "./commands/open-property-url";
-import { copyUrlProperty } from "./commands/copy-url-property";
-import { addDescriptionProperty } from "./commands/add-description-property";
+import { createObsidianCookbook } from "./commands/create-obsidian-cookbook";
 
 export function createCommands(settings: PluginSettings): Command[] {
   const carnelianCommands: CarnelianCommand[] = [
@@ -117,6 +118,11 @@ export function createCommands(settings: PluginSettings): Command[] {
       name: "Create MIN ADR",
       kind: "all",
       executor: createMINADR,
+    },
+    {
+      name: "Create Obsidian逆引きレシピ",
+      kind: "all",
+      executor: createObsidianCookbook,
     },
     {
       name: "Format table",
