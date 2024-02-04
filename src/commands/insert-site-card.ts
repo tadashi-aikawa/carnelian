@@ -12,8 +12,12 @@ export async function insertSiteCard() {
   }
 
   try {
+    const nt = notify("⏳ カードの作成に必要な情報を取得中...");
+
     const html = await createCard(url);
     insertToCursor(html);
+
+    nt.hide();
   } catch (e: any) {
     notify(e);
   }
