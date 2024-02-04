@@ -1,21 +1,21 @@
 import { expect, test } from "bun:test";
-import { forceLowerCaseKeys, orderBy, zipRotate } from "./collections";
+import { forceLowerCaseKeys, omitBy, orderBy, zipRotate } from "./collections";
 
-const asis = (x: any) => x;
+const asIs = (x: any) => x;
 const ASC = "asc" as const;
 const DESC = "desc" as const;
 
 test.each([
   // Asc
-  [[2, 1], asis, ASC, [1, 2]],
-  [[1, 2], asis, ASC, [1, 2]],
-  [["z", "a"], asis, ASC, ["a", "z"]],
-  [["a", "z"], asis, ASC, ["a", "z"]],
+  [[2, 1], asIs, ASC, [1, 2]],
+  [[1, 2], asIs, ASC, [1, 2]],
+  [["z", "a"], asIs, ASC, ["a", "z"]],
+  [["a", "z"], asIs, ASC, ["a", "z"]],
   // Desc
-  [[1, 2], asis, DESC, [2, 1]],
-  [[2, 1], asis, DESC, [2, 1]],
-  [["a", "z"], asis, DESC, ["z", "a"]],
-  [["z", "a"], asis, DESC, ["z", "a"]],
+  [[1, 2], asIs, DESC, [2, 1]],
+  [[2, 1], asIs, DESC, [2, 1]],
+  [["a", "z"], asIs, DESC, ["z", "a"]],
+  [["z", "a"], asIs, DESC, ["z", "a"]],
   // predicate
   [["aaa", "bb", "c"], (x) => x.length, ASC, ["c", "bb", "aaa"]],
   [["c", "bb", "aaa"], (x) => x.length, ASC, ["c", "bb", "aaa"]],
@@ -30,6 +30,19 @@ test.each([
     expect(orderBy(collection, predicate, order)).toEqual(expected);
   },
 );
+
+test.each<
+  [
+    Parameters<typeof omitBy>[0],
+    Parameters<typeof omitBy>[1],
+    ReturnType<typeof omitBy>,
+  ]
+>([
+  [{ a: 1, b: 2, c: 3 }, (_, v) => v > 1, { a: 1 }],
+  [{ a: 1, b: 2, c: 3 }, (k, _) => k === "c", { a: 1, b: 2 }],
+])(`omitBy("%s")`, (collection, shouldOmit, expected) => {
+  expect(omitBy(collection, shouldOmit)).toEqual(expected);
+});
 
 test.each([
   [

@@ -24,6 +24,21 @@ export function orderBy<T, U extends number | string>(
   return collections.slice().sort(sorter(predicate, order));
 }
 
+export function omitBy<T extends { [key: string]: any }>(
+  obj: T,
+  shouldOmit: (key: string, value: any) => boolean,
+): T {
+  const cloned = { ...obj };
+
+  for (const [k, v] of Object.entries(cloned)) {
+    if (shouldOmit(k, v)) {
+      delete cloned[k];
+    }
+  }
+
+  return cloned;
+}
+
 export function forceLowerCaseKeys(obj: { [key: string]: any }): {
   [key: string]: any;
 } {

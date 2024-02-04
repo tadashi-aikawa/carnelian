@@ -3,7 +3,7 @@ import { getAvailableCommands } from "src/lib/helpers/commands";
 import { now } from "src/lib/helpers/datetimes";
 import { loadJson, saveJson } from "src/lib/helpers/io";
 import { UApp } from "src/lib/types";
-import { sorter } from "src/lib/utils/collections";
+import { omitBy, sorter } from "src/lib/utils/collections";
 import { microFuzzy } from "src/lib/utils/strings";
 
 // XXX: 少し気持ち悪い
@@ -21,8 +21,14 @@ type CommandHistoryMap = { [id: string]: number };
 export async function showAnotherCommandPalette(args: {
   commandHistoryPath: string;
 }): Promise<void> {
-  const commandHistoryMap =
+  const unixNow = now("unixtime");
+  let commandHistoryMap =
     (await loadJson<CommandHistoryMap>(args.commandHistoryPath)) ?? {};
+  // 最終コマンド利用日から3日以上経っているものは履歴から除外
+  commandHistoryMap = omitBy(
+    commandHistoryMap,
+    (_, lastUpdated: number) => unixNow - lastUpdated > 3 * 24 * 60 * 60,
+  );
 
   const commands: HistoricalCommand[] = getAvailableCommands().map((x) => ({
     ...x,
