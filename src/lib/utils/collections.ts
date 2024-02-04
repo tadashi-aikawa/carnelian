@@ -1,4 +1,4 @@
-export function sorter<T, U extends number | string>(
+export function sorter<T, U extends number | string | boolean>(
   toOrdered: (t: T) => U,
   order: "asc" | "desc" = "asc",
 ) {

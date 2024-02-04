@@ -1,14 +1,50 @@
 import { expect, test } from "bun:test";
 import {
+  FuzzyResult,
   countCharsWidth,
   doSinglePatternMatching,
+  excludeEmoji,
+  excludeSpace,
   formatTable,
   getParagraphAtLine,
   getSinglePatternMatchingLocations,
   getWikiLinks,
+  microFuzzy,
   pad,
   replaceAt,
 } from "./strings";
+
+test.each([
+  ["aa bb", "aabb"],
+  [" pre", "pre"],
+  ["suf ", "suf"],
+  [" both ", "both"],
+  [" a ll ", "all"],
+])(
+  `excludeSpace("%s"))`,
+  (
+    text: Parameters<typeof excludeSpace>[0],
+    expected: ReturnType<typeof excludeSpace>,
+  ) => {
+    expect(excludeSpace(text)).toBe(expected);
+  },
+);
+
+test.each([
+  ["a🍰b", "ab"],
+  ["🍰pre", "pre"],
+  ["suf🍰", "suf"],
+  ["🍰both😌", "both"],
+  ["🍰a🍊ll🅰️", "all"],
+])(
+  `excludeEmoji("%s"))`,
+  (
+    text: Parameters<typeof excludeEmoji>[0],
+    expected: ReturnType<typeof excludeEmoji>,
+  ) => {
+    expect(excludeEmoji(text)).toBe(expected);
+  },
+);
 
 test.each([
   [
@@ -312,3 +348,25 @@ test.each([
     expect(getWikiLinks(text)).toStrictEqual(expected);
   },
 );
+
+test.each<
+  [
+    Parameters<typeof microFuzzy>[0],
+    Parameters<typeof microFuzzy>[1],
+    ReturnType<typeof microFuzzy>,
+  ]
+>([
+  ["abcde", "ab", { type: "starts-with", score: 0.8 }],
+  ["abcde", "bc", { type: "includes", score: 0.8 }],
+  ["abcde", "ace", { type: "fuzzy", score: 1.2 }],
+  ["abcde", "abcde", { type: "starts-with", score: 6.4 }],
+  ["abcde", "abcdf", { type: "none", score: 0 }],
+  ["abcde", "abcdef", { type: "none", score: 0 }],
+  ["abcde", "bd", { type: "fuzzy", score: 0.8 }],
+  ["abcde", "ba", { type: "none", score: 0 }],
+  ["fuzzy name match", "match", { type: "includes", score: 2 }],
+  ["📝memo", "mem", { type: "starts-with", score: 1.3333333333333333 }],
+  ["📝memo", "📝", { type: "starts-with", score: 0.6666666666666666 }],
+])("microFuzzy(%s, %s)", (value, query, expected) => {
+  expect(microFuzzy(value, query)).toStrictEqual(expected);
+});
