@@ -1,4 +1,5 @@
 import { Command } from "obsidian";
+
 import { addDescriptionProperty } from "./commands/add-description-property";
 import { addTagsProperty } from "./commands/add-tags-property";
 import { addUrlProperty } from "./commands/add-url-property";
@@ -9,6 +10,7 @@ import { copyMinervaURL } from "./commands/copy-minerva-url";
 import { copyUrlProperty } from "./commands/copy-url-property";
 import { createMINADR } from "./commands/create-adr";
 import { createArticle } from "./commands/create-article";
+import { createObsidianCookbook } from "./commands/create-obsidian-cookbook";
 import { formatTable } from "./commands/format-table";
 import { insertActivityNote } from "./commands/insert-activity-note";
 import { insertInputsToWeeklyNote } from "./commands/insert-inputs-to-weekly-note";
@@ -20,6 +22,7 @@ import { openPropertyUrl } from "./commands/open-property-url";
 import { showAnotherCommandPalette } from "./commands/show-another-command-palette";
 import { stripLinksAndDecorations } from "./commands/stripe-links-and-decorations";
 import { toggleLivePreview } from "./commands/toggle-live-preview";
+import { updateChangeLog } from "./commands/update-change-log";
 import { sortSelectionLines } from "./lib/helpers/editors/advanced";
 import {
   toggleEditorLength,
@@ -31,7 +34,6 @@ import {
   showCarnelianCommands,
 } from "./lib/obsutils/commands";
 import { PluginSettings } from "./settings";
-import { createObsidianCookbook } from "./commands/create-obsidian-cookbook";
 
 export function createCommands(settings: PluginSettings): Command[] {
   const carnelianCommands: CarnelianCommand[] = [
@@ -164,6 +166,12 @@ export function createCommands(settings: PluginSettings): Command[] {
       kind: "editor",
       executor: copyUrlProperty,
       hideOnCommandList: true,
+    },
+    {
+      name: "Update change log",
+      kind: "editor",
+      executor: updateChangeLog,
+      // hideOnCommandList: true,
     },
     {
       name: "Show another command palette",
