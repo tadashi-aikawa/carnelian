@@ -7,10 +7,7 @@ import {
   getUpdateDate,
 } from "src/lib/helpers/entries";
 import { notify } from "src/lib/helpers/ui";
-import {
-  doSinglePatternCaptureMatching,
-  doSinglePatternMatching,
-} from "src/lib/utils/strings";
+import { doSinglePatternCaptureMatching } from "src/lib/utils/strings";
 import {
   addActiveFileProperties,
   getActiveFileProperties,
