@@ -1,6 +1,5 @@
 import { expect, test } from "bun:test";
 import {
-  FuzzyResult,
   countCharsWidth,
   doSinglePatternCaptureMatching,
   doSinglePatternMatching,
