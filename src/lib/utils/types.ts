@@ -18,14 +18,13 @@ export function map<T, U>(
 /**
  * argがnull/undefinedのときは例外を送出し、そうでなければcallable(arg)の結果を返します
  */
-export function orThrow<T, U>(
+export function orThrow<T, U = void>(
   arg: T | null | undefined,
-  callable: (arg: T) => void,
+  callable: (arg: T) => U,
   opts?: { message?: string },
-): void {
+): U {
   if (arg != null) {
-    callable(arg);
-    return;
+    return callable(arg);
   }
   throw Error(
     opts?.message ?? "予期せずundefined/nullが発生しましたので中断しました",

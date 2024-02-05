@@ -2,6 +2,7 @@ import { expect, test } from "bun:test";
 import {
   FuzzyResult,
   countCharsWidth,
+  doSinglePatternCaptureMatching,
   doSinglePatternMatching,
   excludeEmoji,
   excludeSpace,
@@ -9,6 +10,7 @@ import {
   getParagraphAtLine,
   getSinglePatternMatchingLocations,
   getWikiLinks,
+  match,
   microFuzzy,
   pad,
   replaceAt,
@@ -47,6 +49,21 @@ test.each([
 );
 
 test.each([
+  ["abc123cdf", /\d+/, true],
+  ["abc123cdf", /[a-z]+/, true],
+  ["abc123cdf", /^\d+/, false],
+])(
+  `match("%s", "%s"))`,
+  (
+    text: Parameters<typeof match>[0],
+    pattern: Parameters<typeof match>[1],
+    expected: ReturnType<typeof match>,
+  ) => {
+    expect(match(text, pattern)).toBe(expected);
+  },
+);
+
+test.each([
   [
     "2023-10-12から2023-10-02",
     /\d{4}-\d{2}-\d{2}/g,
@@ -63,6 +80,24 @@ test.each([
     expected: ReturnType<typeof doSinglePatternMatching>,
   ) => {
     expect(doSinglePatternMatching(text, pattern)).toEqual(expected);
+  },
+);
+
+test.each([
+  ["2023-10-12から2023-10-02", /から(\d{4}-\d{2}-\d{2})/g, ["2023-10-02"]],
+  [
+    "2023-10-12から2023-10-02から2023-10-22",
+    /から(\d{4}-\d{2}-\d{2})/g,
+    ["2023-10-02", "2023-10-22"],
+  ],
+])(
+  `doSinglePatternCaptureMatching("%s")`,
+  (
+    text: Parameters<typeof doSinglePatternCaptureMatching>[0],
+    pattern: Parameters<typeof doSinglePatternCaptureMatching>[1],
+    expected: ReturnType<typeof doSinglePatternCaptureMatching>,
+  ) => {
+    expect(doSinglePatternCaptureMatching(text, pattern)).toEqual(expected);
   },
 );
 

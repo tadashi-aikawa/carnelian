@@ -1,12 +1,16 @@
 import { now } from "src/lib/helpers/datetimes";
 
+import { deleteLinesFrom } from "src/lib/helpers/editors/advanced";
 import {
   getActiveFileContent,
   getCreationDate,
   getUpdateDate,
 } from "src/lib/helpers/entries";
 import { notify } from "src/lib/helpers/ui";
-import { doSinglePatternMatching } from "src/lib/utils/strings";
+import {
+  doSinglePatternCaptureMatching,
+  doSinglePatternMatching,
+} from "src/lib/utils/strings";
 import {
   addActiveFileProperties,
   getActiveFileProperties,
@@ -24,13 +28,13 @@ export function updateChangeLog() {
   }
 
   // フッタにHTML形式の記録があるなら、その日付を使う
-  const created = doSinglePatternMatching(
+  const created = doSinglePatternCaptureMatching(
     getActiveFileContent()!,
     /<div class="minerva-created-meta">(20[0-9]{2}\/[0-9]{2}\/[0-9]{2})<\/div>/g,
   )
     ?.first()
     ?.replace(/\//g, "-");
-  const updated = doSinglePatternMatching(
+  const updated = doSinglePatternCaptureMatching(
     getActiveFileContent()!,
     /<div class="minerva-updated-meta">(20[0-9]{2}\/[0-9]{2}\/[0-9]{2})<\/div>/g,
   )
@@ -38,7 +42,7 @@ export function updateChangeLog() {
     ?.replace(/\//g, "-");
 
   if (created != null) {
-    // FIXME: "----" から最後までを削除する
+    deleteLinesFrom(/^----$/);
     addActiveFileProperties({ created, updated });
     return notify("フッターからchange logを更新しました", 3000);
   }

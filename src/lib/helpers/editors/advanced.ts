@@ -8,6 +8,8 @@ import { ExhaustiveError } from "src/lib/utils/errors";
 import { getParagraphAtLine } from "src/lib/utils/strings";
 import { map, orThrow } from "src/lib/utils/types";
 import {
+  deleteLines,
+  findLineIndex,
   getActiveEditor,
   getActiveLine,
   getSelection,
@@ -151,4 +153,16 @@ export function getActiveParagraph(): {
   return map(getActiveEditor(), (editor) =>
     getParagraphAtLine(editor.getValue(), editor.getCursor().line),
   );
+}
+
+/**
+ * 正規表現パターンに一致する行を起点にファイルの最後まで削除します
+ */
+export function deleteLinesFrom(pattern: RegExp): void {
+  const lineIndex = findLineIndex(pattern);
+  if (lineIndex === -1) {
+    return;
+  }
+
+  deleteLines(lineIndex);
 }

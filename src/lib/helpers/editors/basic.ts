@@ -3,6 +3,8 @@ import { parseTags } from "src/lib/obsutils/parser";
 import { UApp, UEditor } from "src/lib/types";
 import { errorMessage } from "src/lib/utils/errors";
 import { map, orThrow } from "src/lib/utils/types";
+import { getActiveFileContent } from "../entries";
+import { doSinglePatternMatching, match } from "src/lib/utils/strings";
 
 declare let app: UApp;
 
@@ -50,6 +52,21 @@ export function deleteActiveLine(): void {
         },
       );
     }
+  });
+}
+
+/**
+ * 複数行を削除します
+ * @param beginLine - 開始行 (0はじまり)
+ * @param endLine   - 終了行 (0はじまり.省略で最後まで)
+ */
+export function deleteLines(beginLine: number, endLine?: number): void {
+  orThrow(getActiveEditor(), (e) => {
+    e.replaceRange(
+      "",
+      { line: beginLine - 1, ch: 0 },
+      { line: (endLine ?? e.lastLine()) + 1, ch: 0 },
+    );
   });
 }
 
@@ -187,4 +204,14 @@ export function setLivePreview(leaf: WorkspaceLeaf, enabled: boolean) {
   const vs = leaf.getViewState();
   vs.state.source = enabled;
   leaf.setViewState(vs);
+}
+
+/**
+ * パターンにマッチする最初の行index(0はじまり)を返却します
+ * マッチしなかった場合は-1を返します
+ */
+export function findLineIndex(pattern: RegExp): number {
+  return orThrow(getActiveFileContent(), (content) =>
+    content.split("\n").findIndex((line) => match(line, pattern)),
+  );
 }

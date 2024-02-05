@@ -171,7 +171,7 @@ export function createCommands(settings: PluginSettings): Command[] {
       name: "Update change log",
       kind: "editor",
       executor: updateChangeLog,
-      // hideOnCommandList: true,
+      hideOnCommandList: true,
     },
     {
       name: "Show another command palette",

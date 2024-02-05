@@ -24,6 +24,13 @@ export function excludeEmoji(text: string): string {
 }
 
 /**
+ * テキストが正規表現パターンにマッチしているかどうかを返却します
+ */
+export function match(text: string, pattern: RegExp): boolean {
+  return Boolean(text.match(pattern));
+}
+
+/**
  * 1種類のパターンでパターンマッチした結果を文字列のリストで取得します
  */
 export function doSinglePatternMatching(
@@ -31,6 +38,16 @@ export function doSinglePatternMatching(
   pattern: RegExp,
 ): string[] {
   return Array.from(text.matchAll(pattern)).map((x) => x[0]);
+}
+
+/**
+ * 1種類のパターンでパターンマッチした結果のキャプチャを文字列のリストで取得します
+ */
+export function doSinglePatternCaptureMatching(
+  text: string,
+  pattern: RegExp,
+): string[] {
+  return Array.from(text.matchAll(pattern)).map((x) => x[1]);
 }
 
 /**
