@@ -37,6 +37,18 @@ export async function copyToClipboard(text: string): Promise<void> {
 }
 
 /**
+ * クリップボードからテキストを取得します
+ *
+ * ```ts
+ * await getClipboardText()
+ * // クリップボードの中身
+ * ```
+ */
+export async function getClipboardText(): Promise<string> {
+  return await (navigator as any).clipboard.readText();
+}
+
+/**
  * URLを開きます
  *
  * ```ts

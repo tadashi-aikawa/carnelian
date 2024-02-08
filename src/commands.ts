@@ -34,9 +34,16 @@ import {
   showCarnelianCommands,
 } from "./lib/obsutils/commands";
 import { PluginSettings } from "./settings";
+import { addPropertySuitably } from "./commands/add-property-suitably";
 
 export function createCommands(settings: PluginSettings): Command[] {
   const carnelianCommands: CarnelianCommand[] = [
+    {
+      name: "Add property suitably",
+      kind: "editor",
+      executor: addPropertySuitably,
+      hideOnCommandList: true,
+    },
     {
       name: "Add tags property",
       kind: "editor",
