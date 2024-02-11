@@ -3,6 +3,7 @@ import { UApp } from "src/lib/types";
 import { sorter } from "src/lib/utils/collections";
 import { microFuzzy } from "src/lib/utils/strings";
 import { getMarkdownFilesWithRecentAccessIndex } from "../entries";
+import { isPresent } from "src/lib/utils/types";
 
 declare let app: UApp;
 
@@ -20,16 +21,19 @@ export class FileSearchDialog extends SuggestModal<TFile> {
       .map(({ file, lastAccessIndex }) => ({
         file,
         lastAccessIndex,
-        result: microFuzzy(file.name.toLowerCase(), query.toLowerCase()),
+        hitCount: query
+          .toLowerCase()
+          .split(" ")
+          .filter(isPresent)
+          .filter((q) => file.name.toLowerCase().includes(q)).length,
       }))
-      .filter(({ result }) => result.type !== "none")
-      .toSorted(sorter(({ result }) => result.score, "desc"))
-      .toSorted(sorter(({ result }) => result.type === "starts-with", "desc"))
+      .filter(({ hitCount }) => hitCount > 0)
       .toSorted(
         sorter(
           ({ lastAccessIndex }) => lastAccessIndex ?? Number.MAX_SAFE_INTEGER,
         ),
       )
+      .toSorted(sorter((x) => x.hitCount, "desc"))
       .map(({ file }) => file);
   }
 
