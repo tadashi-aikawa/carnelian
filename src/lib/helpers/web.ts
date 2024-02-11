@@ -240,7 +240,7 @@ export async function createNoteCard(
 	</div>
 	<div class="link-card-body">
 		<div class="link-card-content">
-      <p class="link-card-title">${file.name}</p>
+      <p class="link-card-title">${file.basename}</p>
       ${descriptionDom}  
 		</div>
 		${imageDom}
