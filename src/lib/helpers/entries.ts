@@ -4,6 +4,7 @@ import { toEditorPosition, toFullPath } from "../obsutils/mapper";
 import { UApp } from "../types";
 import { map } from "../utils/types";
 import { getActiveEditor } from "./editors/basic";
+import { sorter } from "../utils/collections";
 
 declare let app: UApp;
 
@@ -86,6 +87,24 @@ export function getAllFilesByPath(): { [path: string]: TFile } {
  */
 export function getMarkdownFiles(): TFile[] {
   return app.vault.getMarkdownFiles();
+}
+
+/**
+ * Vaultのマークダウンファイル一覧を最近アクセスした順を付与して取得します
+ */
+export function getMarkdownFilesWithRecentAccessIndex(): {
+  file: TFile;
+  lastAccessIndex?: number;
+}[] {
+  const lastOpenFileIndexByPath: { [path: string]: number } = {};
+  app.workspace.getLastOpenFiles().forEach((v, i) => {
+    lastOpenFileIndexByPath[v] = i;
+  });
+
+  return getMarkdownFiles().map((file) => ({
+    file,
+    lastAccessIndex: lastOpenFileIndexByPath[file.path],
+  }));
 }
 
 /**

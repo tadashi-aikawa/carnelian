@@ -15,25 +15,32 @@ export function usePeriodicNotesSettings(): UApp["plugins"]["plugins"]["periodic
 }
 
 /**
- * Obsidian Publishで設定したhostを取得します
+ * Obsidian Publishに関する情報を使用します。
+ * WARN: faviconにはLogoの画像を使用します
  */
-export async function getObsidianPublishHost(): Promise<string> {
-  return app.internalPlugins.plugins.publish.instance
-    .apiCustomUrl()
-    .then((x: any) => x.url);
-}
+export async function useObsidianPublishInfo(): Promise<{
+  id: string;
+  domain: string;
+  getPageUrl: (filePath: string) => string;
+  getResourceUrl: (filePath: string) => string;
+}> {
+  const ins = app.internalPlugins.plugins.publish.instance;
+  const { id, url: domain } = await ins.apiCustomUrl();
 
-/**
- * Obsidian PublishのURLを生成します
- *
- * ```ts
- * createObsidianPublishUrl("Notes/published_site.md")
- * // "https://minerva.mamansoft.net/Notes/published_site"
- * ```
- */
-export async function createObsidianPublishUrl(path: string): Promise<string> {
-  const host = await getObsidianPublishHost();
-  return `https://${host}/${encodeURIComponent(path.replace(".md", ""))}`;
+  const resourceBaseUrl = `https://${ins.host}/access/${id}`;
+
+  return {
+    id,
+    domain,
+    getPageUrl(filePath) {
+      return `https://${domain}/${encodeURIComponent(
+        filePath.replace(".md", ""),
+      )}`;
+    },
+    getResourceUrl(filePath) {
+      return `${resourceBaseUrl}/${encodeURIComponent(filePath)}`;
+    },
+  };
 }
 
 /**

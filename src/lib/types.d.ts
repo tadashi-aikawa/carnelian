@@ -81,7 +81,31 @@ export type UApp = App & {
     getBacklinksForFile(file: TFile): { data: Record<string, ULinkCache[]> };
   };
   internalPlugins: {
-    plugins: { [key: string]: any };
+    plugins: {
+      [key: string]: any;
+      publish: {
+        instance: {
+          // 独自ドメインではない
+          host: `publish-${string}.obsidian.md`;
+          excludes: string[];
+          includes: string[];
+          // id hash
+          siteId: string;
+          apiCustomUrl: () => Promise<{
+            // id hash
+            id: string;
+            // Obsidian Publishの独自?ドメイン
+            url: string;
+            redirect: boolean;
+          }>;
+          apiOptions: () => Promise<{
+            // path from root
+            logo: string;
+            siteName: string;
+          }>;
+        };
+      };
+    };
   };
   plugins: {
     plugins: {

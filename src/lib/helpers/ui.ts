@@ -1,4 +1,6 @@
+import { TFile } from "obsidian";
 import { UApp } from "../types";
+import { FileSearchDialog } from "./components/FileSearchDialog";
 import { InputDialog } from "./components/InputDialog";
 
 declare let app: UApp;
@@ -81,21 +83,18 @@ export async function showInputDialog(args: {
   ).open();
 }
 
-///**
-// * 候補選択ダイアログを表示します
-// *
-// * ```ts
-// * await showSelectionDialog(["item1", "item2"], [item1, item2])
-// * // 選択した結果 or null (キャンセル時)
-// * ```
-// */
-//export function showSelectionDialog<T>(
-//  texts: string[],
-//  items: T[]
-//): Promise<T | null> {
-//  const tp = useTemplaterInternalFunction();
-//  return tp.system.suggester(texts, items);
-//}
+/**
+ * ファイル選択ダイアログを表示し、選択されたファイルを返却します。
+ * キャンセル時はnullを返却します。
+ *
+ * ```ts
+ * await showFileSearchDialog()
+ * // "選択したファイル(TFile)"
+ * ```
+ */
+export async function showFileSearchDialog(): Promise<TFile | null> {
+  return new FileSearchDialog().open();
+}
 
 /**
  * 現在ファイルViewのヘッダ前に要素を差し込みます

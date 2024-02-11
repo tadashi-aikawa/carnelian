@@ -1,5 +1,5 @@
 import { getActiveFilePath } from "src/lib/helpers/entries";
-import { createObsidianPublishUrl } from "src/lib/helpers/plugins";
+import { useObsidianPublishInfo } from "src/lib/helpers/plugins";
 import { copyToClipboard, notify } from "src/lib/helpers/ui";
 
 /**
@@ -12,7 +12,8 @@ export async function copyMinervaURL() {
 
   const nt = notify("⏳ MinervaのURL情報を取得中...");
 
-  const url = await createObsidianPublishUrl(getActiveFilePath()!);
+  const { getPageUrl } = await useObsidianPublishInfo();
+  const url = getPageUrl(getActiveFilePath()!);
   await copyToClipboard(url);
 
   nt.setMessage(

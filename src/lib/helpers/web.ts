@@ -1,4 +1,4 @@
-import { requestUrl } from "obsidian";
+import { TFile, requestUrl } from "obsidian";
 import { stripDecoration, stripLinks } from "../obsutils/parser";
 import { defineUserAgent } from "../utils/agent";
 import { forceLowerCaseKeys } from "../utils/collections";
@@ -11,6 +11,9 @@ import {
   getMetaByProperty,
 } from "../utils/meta-helper";
 import { countCharsWidth, sjis2String } from "../utils/strings";
+import { getPropertiesByPath } from "./properties";
+import { map } from "../utils/types";
+import { useObsidianPublishInfo } from "./plugins";
 
 export type Meta = HTMLMeta | ImageMeta | TwitterMeta;
 export interface HTMLMeta {
@@ -182,7 +185,6 @@ export function createHTMLCard(meta: HTMLMeta): string {
   const isSecure = (url: string | undefined) =>
     url && !url.startsWith("http://");
 
-  // TODO: internalに対応したときは分岐処理が入る予定
   const siteName = meta.siteName;
   const title = meta.title;
   const faviconUrl = meta.faviconUrl;
@@ -203,6 +205,42 @@ export function createHTMLCard(meta: HTMLMeta): string {
 	<div class="link-card-body">
 		<div class="link-card-content">
       <p class="link-card-title">${title}</p>
+      ${descriptionDom}  
+		</div>
+		${imageDom}
+	</div>
+	${linkDom}
+</div>`;
+}
+
+/**
+ * Vaultのノートに対するカードを作成します。
+ * 作成に失敗した場合は例外をthrowします
+ */
+export async function createNoteCard(
+  file: TFile,
+  args: { defaultImageUrl: string; faviconUrl: string },
+): Promise<string> {
+  const { domain, getResourceUrl } = await useObsidianPublishInfo();
+
+  const description = getPropertiesByPath(file.path)?.description ?? "TODO";
+  const descriptionDom = `<p class="link-card-description">${description}</p>`;
+
+  const imageUrl =
+    map(getPropertiesByPath(file.path)?.cover, getResourceUrl) ??
+    args.defaultImageUrl;
+  const imageDom = `<img src="${imageUrl}" class="link-card-image" />`;
+
+  const linkDom = `<a class="internal-link" data-href="${file.path}"></a>`;
+
+  return `<div class="link-card">
+	<div class="link-card-header">
+		<img src="${args.faviconUrl}" class="link-card-site-icon"/>
+		<span class="link-card-site-name">${domain}</span>
+	</div>
+	<div class="link-card-body">
+		<div class="link-card-content">
+      <p class="link-card-title">${file.name}</p>
       ${descriptionDom}  
 		</div>
 		${imageDom}

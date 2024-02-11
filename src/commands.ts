@@ -35,6 +35,7 @@ import {
 } from "./lib/obsutils/commands";
 import { PluginSettings } from "./settings";
 import { addPropertySuitably } from "./commands/add-property-suitably";
+import { insertNoteCard } from "./commands/insert-note-card";
 
 export function createCommands(settings: PluginSettings): Command[] {
   const carnelianCommands: CarnelianCommand[] = [
@@ -112,6 +113,11 @@ export function createCommands(settings: PluginSettings): Command[] {
       name: "Insert site card",
       kind: "editor",
       executor: insertSiteCard,
+    },
+    {
+      name: "Insert note card",
+      kind: "editor",
+      executor: insertNoteCard,
     },
     {
       name: "Sort selection",
