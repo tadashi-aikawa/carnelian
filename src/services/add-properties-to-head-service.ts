@@ -105,7 +105,7 @@ export class AddPropertiesToHeadService implements Service {
     }
     if (updated) {
       propertiesEl.appendChild(
-        this.createHeaderContainer(`更新日: ${toDisplayDate(created)}`, "date"),
+        this.createHeaderContainer(`更新日: ${toDisplayDate(updated)}`, "date"),
       );
     }
     if (status) {
