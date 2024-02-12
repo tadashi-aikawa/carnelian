@@ -1,8 +1,7 @@
 import { Command } from "obsidian";
 
-import { addDescriptionProperty } from "./commands/add-description-property";
+import { addPropertySuitably } from "./commands/add-property-suitably";
 import { addTagsProperty } from "./commands/add-tags-property";
-import { addUrlProperty } from "./commands/add-url-property";
 import { cleanOldDailyNotes } from "./commands/clean-old-daily-notes";
 import { copyActiveFileFullPath } from "./commands/copy-active-file-full-path";
 import { copyAsConfluence } from "./commands/copy-as-confluence";
@@ -13,9 +12,9 @@ import { createArticle } from "./commands/create-article";
 import { createObsidianCookbook } from "./commands/create-obsidian-cookbook";
 import { formatTable } from "./commands/format-table";
 import { insertActivityNote } from "./commands/insert-activity-note";
-import { insertInputsToWeeklyNote } from "./commands/insert-inputs-to-weekly-note";
-import { insertMFDIPostsToWeeklyNote } from "./commands/insert-mfdi-posts-to-weekly-note";
+import { insertNewNotesToWeeklyNote } from "./commands/insert-inputs-to-weekly-note";
 import { insertMOC } from "./commands/insert-moc";
+import { insertNoteCard } from "./commands/insert-note-card";
 import { insertSiteCard } from "./commands/insert-site-card";
 import { insertTodaysMTG } from "./commands/insert-todays-mtg";
 import { openPropertyUrl } from "./commands/open-property-url";
@@ -34,44 +33,14 @@ import {
   showCarnelianCommands,
 } from "./lib/obsutils/commands";
 import { PluginSettings } from "./settings";
-import { addPropertySuitably } from "./commands/add-property-suitably";
-import { insertNoteCard } from "./commands/insert-note-card";
 
 export function createCommands(settings: PluginSettings): Command[] {
   const carnelianCommands: CarnelianCommand[] = [
+    // コマンドリストに表示する
     {
-      name: "Add property suitably",
+      name: "Insert new notes to the weekly note",
       kind: "editor",
-      executor: addPropertySuitably,
-      hideOnCommandList: true,
-    },
-    {
-      name: "Add tags property",
-      kind: "editor",
-      executor: addTagsProperty,
-      hideOnCommandList: true,
-    },
-    {
-      name: "Add url property",
-      kind: "editor",
-      executor: addUrlProperty,
-      hideOnCommandList: true,
-    },
-    {
-      name: "Add description property",
-      kind: "editor",
-      executor: addDescriptionProperty,
-      hideOnCommandList: true,
-    },
-    {
-      name: "Insert MFDI posts to the weekly note",
-      kind: "editor",
-      executor: insertMFDIPostsToWeeklyNote,
-    },
-    {
-      name: "Insert inputs to the weekly note",
-      kind: "editor",
-      executor: insertInputsToWeeklyNote,
+      executor: insertNewNotesToWeeklyNote,
     },
     {
       name: "Insert today's MTG",
@@ -87,12 +56,6 @@ export function createCommands(settings: PluginSettings): Command[] {
       name: "Insert Activity note",
       kind: "editor",
       executor: insertActivityNote,
-    },
-    {
-      name: "Toggle Live preview",
-      kind: "all",
-      executor: toggleLivePreview,
-      hideOnCommandList: true,
     },
     {
       name: "Toggle Vim mode",
@@ -140,15 +103,35 @@ export function createCommands(settings: PluginSettings): Command[] {
       executor: createObsidianCookbook,
     },
     {
+      name: "Copy as Confluence",
+      kind: "editor",
+      executor: copyAsConfluence,
+    },
+
+    // コマンドリストに表示しない
+    {
+      name: "Add property suitably",
+      kind: "editor",
+      executor: addPropertySuitably,
+      hideOnCommandList: true,
+    },
+    {
+      name: "Add tags property",
+      kind: "editor",
+      executor: addTagsProperty,
+      hideOnCommandList: true,
+    },
+    {
+      name: "Toggle Live preview",
+      kind: "all",
+      executor: toggleLivePreview,
+      hideOnCommandList: true,
+    },
+    {
       name: "Format table",
       kind: "editor",
       executor: formatTable,
       hideOnCommandList: true,
-    },
-    {
-      name: "Copy as Confluence",
-      kind: "editor",
-      executor: copyAsConfluence,
     },
     {
       name: "Strip links and decorations",
@@ -163,6 +146,12 @@ export function createCommands(settings: PluginSettings): Command[] {
       hideOnCommandList: true,
     },
     {
+      name: "Copy url property",
+      kind: "editor",
+      executor: copyUrlProperty,
+      hideOnCommandList: true,
+    },
+    {
       name: "Open property URL",
       kind: "editor",
       executor: openPropertyUrl,
@@ -172,12 +161,6 @@ export function createCommands(settings: PluginSettings): Command[] {
       name: "Copy active file full path",
       kind: "file",
       executor: copyActiveFileFullPath,
-      hideOnCommandList: true,
-    },
-    {
-      name: "Copy url property",
-      kind: "editor",
-      executor: copyUrlProperty,
       hideOnCommandList: true,
     },
     {

@@ -10,7 +10,7 @@ export type CarnelianCommand = {
   name: string;
   kind: "file" | "editor" | "all";
   executor: () => Awaited<any> | Promise<any>;
-  // Show Carnelian commandsで隠すかどうか (通常のクイックスウィッチャーには表示される)
+  /** Show Carnelian commandsで隠すかどうか (通常のクイックスウィッチャーには表示される) */
   hideOnCommandList?: boolean;
 };
 

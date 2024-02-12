@@ -9,7 +9,7 @@ import * as strings from "../lib/utils/strings";
 /**
  * 1週間で作成したノートの一覧をWeekly Reportに差し込みます
  */
-export async function insertInputsToWeeklyNote() {
+export async function insertNewNotesToWeeklyNote() {
   const description = getActiveFileDescriptionProperty();
   if (!description) {
     return notify("プロパティにdescriptionが存在しません");
