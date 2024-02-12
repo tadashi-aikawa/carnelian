@@ -1,3 +1,4 @@
+import { now } from "src/lib/helpers/datetimes";
 import { getActiveFilePath } from "src/lib/helpers/entries";
 import {
   setOnFileOpenEvent,
@@ -10,6 +11,13 @@ import {
 } from "src/lib/helpers/ui";
 import { ExhaustiveError } from "src/lib/utils/errors";
 import { Service } from "src/services";
+
+/**
+ * 日付の文字列(YYYY-MM-DD)を表示形式にします
+ */
+function toDisplayDate(date: string): string {
+  return date === now("YYYY-MM-DD") ? "✨Today" : date;
+}
 
 /**
  * 新しくファイルを開いたときに特定プロパティを差し込むサービスです
@@ -54,20 +62,20 @@ export class AddPropertiesToHeadService implements Service {
   }
 
   /**
-   * 日付コンテナ要素を作成します
+   * ヘッダコンテナの要素を作成します
    * @param title (ex: 作成: 2023-10-09)
    */
-  createDateContainer(title: string, type: "date" | "status"): HTMLElement {
+  createHeaderContainer(title: string, type: "date" | "status"): HTMLElement {
     switch (type) {
       case "date":
         return createDiv({
           text: title,
-          cls: "additional-properties__date-button",
+          cls: "additional-properties__date-container",
         });
       case "status":
         return createDiv({
           text: title,
-          cls: "additional-properties__status-button",
+          cls: "additional-properties__status-container",
         });
       default:
         throw new ExhaustiveError(type);
@@ -92,16 +100,16 @@ export class AddPropertiesToHeadService implements Service {
     const propertiesEl = createDiv({ cls: this.className });
     if (created) {
       propertiesEl.appendChild(
-        this.createDateContainer(`作成日: ${created}`, "date"),
+        this.createHeaderContainer(`作成日: ${toDisplayDate(created)}`, "date"),
       );
     }
     if (updated) {
       propertiesEl.appendChild(
-        this.createDateContainer(`更新日: ${updated}`, "date"),
+        this.createHeaderContainer(`更新日: ${toDisplayDate(created)}`, "date"),
       );
     }
     if (status) {
-      propertiesEl.appendChild(this.createDateContainer(status, "status"));
+      propertiesEl.appendChild(this.createHeaderContainer(status, "status"));
     }
     insertElementBeforeHeader(propertiesEl);
   }
