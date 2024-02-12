@@ -8,6 +8,7 @@ import {
   insertElementBeforeHeader,
   removeElementsFromContainer,
 } from "src/lib/helpers/ui";
+import { ExhaustiveError } from "src/lib/utils/errors";
 import { Service } from "src/services";
 
 /**
@@ -57,15 +58,20 @@ export class AddPropertiesToHeadService implements Service {
    * @param title (ex: 作成: 2023-10-09)
    */
   createDateContainer(title: string, type: "date" | "status"): HTMLElement {
-    return createDiv({
-      text: title,
-      cls:
-        type === "date"
-          ? "additional-properties__date-button"
-          : type === "status"
-            ? "additional-properties__status-button"
-            : "",
-    });
+    switch (type) {
+      case "date":
+        return createDiv({
+          text: title,
+          cls: "additional-properties__date-button",
+        });
+      case "status":
+        return createDiv({
+          text: title,
+          cls: "additional-properties__status-button",
+        });
+      default:
+        throw new ExhaustiveError(type);
+    }
   }
 
   /**
