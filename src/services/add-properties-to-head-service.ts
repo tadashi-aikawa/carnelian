@@ -53,10 +53,10 @@ export class AddPropertiesToHeadService implements Service {
   }
 
   /**
-   * ボタンの要素を作成します
+   * 日付コンテナ要素を作成します
    * @param title (ex: 作成: 2023-10-09)
    */
-  createButton(title: string, type: "date" | "status"): HTMLElement {
+  createDateContainer(title: string, type: "date" | "status"): HTMLElement {
     return createDiv({
       text: title,
       cls:
@@ -85,13 +85,17 @@ export class AddPropertiesToHeadService implements Service {
 
     const propertiesEl = createDiv({ cls: this.className });
     if (created) {
-      propertiesEl.appendChild(this.createButton(`作成日: ${created}`, "date"));
+      propertiesEl.appendChild(
+        this.createDateContainer(`作成日: ${created}`, "date"),
+      );
     }
     if (updated) {
-      propertiesEl.appendChild(this.createButton(`更新日: ${updated}`, "date"));
+      propertiesEl.appendChild(
+        this.createDateContainer(`更新日: ${updated}`, "date"),
+      );
     }
     if (status) {
-      propertiesEl.appendChild(this.createButton(status, "status"));
+      propertiesEl.appendChild(this.createDateContainer(status, "status"));
     }
     insertElementBeforeHeader(propertiesEl);
   }
