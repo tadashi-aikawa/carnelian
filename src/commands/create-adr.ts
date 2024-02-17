@@ -26,6 +26,7 @@ async function createADR(type: "MIN" | "OBS" | "PRO") {
 ---
 created: ${today}
 updated: ${today}
+cover: 💿ADR/attachments/owl.webp
 status:
   - 🤔Proposed
 ---
