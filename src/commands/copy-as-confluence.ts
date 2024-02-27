@@ -6,6 +6,7 @@ import { getPropertiesByPath } from "src/lib/helpers/properties";
 import { copyToClipboard, notify } from "src/lib/helpers/ui";
 import { sorter } from "src/lib/utils/collections";
 import { getWikiLinks, replaceAt } from "src/lib/utils/strings";
+import { PluginSettings } from "src/settings";
 
 type Link = ReturnType<typeof getWikiLinks>[number];
 
@@ -34,7 +35,7 @@ function getReplacedText(link: Link, confluenceDomain: string): string {
 /**
  * Confluenceに貼り付ける形式でクリップボードにコピーします
  */
-export async function copyAsConfluence() {
+export async function copyAsConfluence(settings: PluginSettings) {
   let target = getSelection();
   if (!target) {
     const startOffset =
@@ -49,7 +50,7 @@ export async function copyAsConfluence() {
     text = replaceAt(
       text,
       link.range,
-      getReplacedText(link, "mamansoft.atlassian.net"),
+      getReplacedText(link, settings.confluenceDomain),
     );
   }
 

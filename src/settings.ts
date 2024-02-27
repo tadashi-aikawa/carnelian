@@ -7,10 +7,12 @@ export const DEFAULT_COMMAND_HISTORY_PATH =
 
 export interface PluginSettings {
   commandHistoryPath: string;
+  confluenceDomain: string;
 }
 
 export const DEFAULT_SETTINGS: PluginSettings = {
   commandHistoryPath: DEFAULT_COMMAND_HISTORY_PATH,
+  confluenceDomain: "",
 };
 
 export class SettingTab extends PluginSettingTab {
@@ -34,6 +36,16 @@ export class SettingTab extends PluginSettingTab {
           this.plugin.settings.commandHistoryPath = value;
           await this.plugin.saveSettings();
         }).setValue(this.plugin.settings.commandHistoryPath);
+      });
+
+    new Setting(containerEl)
+      .setName("Confluenceのドメイン")
+      .setDesc("Copy as Confluenceコマンドで使用するConfluenceのドメイン情報")
+      .addText((cb) => {
+        TextComponentEvent.onChange(cb, async (value) => {
+          this.plugin.settings.confluenceDomain = value;
+          await this.plugin.saveSettings();
+        }).setValue(this.plugin.settings.confluenceDomain);
       });
   }
 }

@@ -105,7 +105,7 @@ export function createCommands(settings: PluginSettings): Command[] {
     {
       name: "Copy as Confluence",
       kind: "editor",
-      executor: copyAsConfluence,
+      executor: () => copyAsConfluence(settings),
     },
 
     // コマンドリストに表示しない
