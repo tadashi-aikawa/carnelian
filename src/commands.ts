@@ -33,6 +33,7 @@ import {
   showCarnelianCommands,
 } from "./lib/obsutils/commands";
 import { PluginSettings } from "./settings";
+import { createTroubleshootingNote } from "./commands/create-troubleshooting-note";
 
 export function createCommands(settings: PluginSettings): Command[] {
   const carnelianCommands: CarnelianCommand[] = [
@@ -96,6 +97,11 @@ export function createCommands(settings: PluginSettings): Command[] {
       name: "Create MIN ADR",
       kind: "all",
       executor: createMINADR,
+    },
+    {
+      name: "Create Troubleshooting notes",
+      kind: "editor",
+      executor: createTroubleshootingNote,
     },
     {
       name: "Create Obsidian逆引きレシピ",
