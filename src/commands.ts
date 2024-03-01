@@ -7,11 +7,12 @@ import { copyActiveFileFullPath } from "./commands/copy-active-file-full-path";
 import { copyAsConfluence } from "./commands/copy-as-confluence";
 import { copyMinervaURL } from "./commands/copy-minerva-url";
 import { copyUrlProperty } from "./commands/copy-url-property";
+import { createActivityNote } from "./commands/create-activity-note";
 import { createMINADR } from "./commands/create-adr";
 import { createArticle } from "./commands/create-article";
 import { createObsidianCookbook } from "./commands/create-obsidian-cookbook";
+import { createTroubleshootingNote } from "./commands/create-troubleshooting-note";
 import { formatTable } from "./commands/format-table";
-import { insertActivityNote } from "./commands/insert-activity-note";
 import { insertNewNotesToWeeklyNote } from "./commands/insert-inputs-to-weekly-note";
 import { insertMOC } from "./commands/insert-moc";
 import { insertNoteCard } from "./commands/insert-note-card";
@@ -33,7 +34,6 @@ import {
   showCarnelianCommands,
 } from "./lib/obsutils/commands";
 import { PluginSettings } from "./settings";
-import { createTroubleshootingNote } from "./commands/create-troubleshooting-note";
 
 export function createCommands(settings: PluginSettings): Command[] {
   const carnelianCommands: CarnelianCommand[] = [
@@ -52,11 +52,6 @@ export function createCommands(settings: PluginSettings): Command[] {
       name: "Insert MOC",
       kind: "editor",
       executor: insertMOC,
-    },
-    {
-      name: "Insert Activity note",
-      kind: "editor",
-      executor: insertActivityNote,
     },
     {
       name: "Toggle Vim mode",
@@ -97,6 +92,11 @@ export function createCommands(settings: PluginSettings): Command[] {
       name: "Create MIN ADR",
       kind: "all",
       executor: createMINADR,
+    },
+    {
+      name: "Create Activity note",
+      kind: "editor",
+      executor: createActivityNote,
     },
     {
       name: "Create Troubleshooting notes",
