@@ -20,7 +20,11 @@ export async function insertNoteCard() {
       faviconUrl:
         "https://publish-01.obsidian.md/access/35d05cd1bf5cc500e11cc8ba57daaf88/favicon-64.png",
     });
-    insertToCursor(html);
+    insertToCursor(`${html}
+
+%%[[${file.basename}]]%%
+
+`);
 
     nt.hide();
   } catch (e: any) {
