@@ -33,12 +33,10 @@ export async function useObsidianPublishInfo(): Promise<{
     id,
     domain,
     getPageUrl(filePath) {
-      return `https://${domain}/${encodeURIComponent(
-        filePath.replace(".md", ""),
-      )}`;
+      return `https://${domain}/${encodeURI(filePath.replace(".md", ""))}`;
     },
     getResourceUrl(filePath) {
-      return `${resourceBaseUrl}/${encodeURIComponent(filePath)}`;
+      return `${resourceBaseUrl}/${encodeURI(filePath)}`;
     },
   };
 }
