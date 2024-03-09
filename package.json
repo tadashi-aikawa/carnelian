@@ -9,7 +9,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^1.5.1",
-    "@types/bun": "^1.0.26",
+    "@types/bun": "^1.0.30",
     "@types/encoding-japanese": "^2.0.5",
     "@types/jsdom": "^21.1.6",
     "@types/web": "^0.0.130",
