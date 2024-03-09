@@ -1,8 +1,9 @@
-import { getActiveLine, insertToCursor } from "src/lib/helpers/editors/basic";
-import { addUrlProperty } from "./add-url-property";
-import { addTagsProperty } from "./add-tags-property";
-import { addDescriptionProperty } from "./add-description-property";
+import { getActiveLine } from "src/lib/helpers/editors/basic";
+import { addActiveFileProperty } from "src/lib/helpers/properties";
 import { getClipboardText } from "src/lib/helpers/ui";
+import { addDescriptionProperty } from "./add-description-property";
+import { addTagsProperty } from "./add-tags-property";
+import { addUrlProperty } from "./add-url-property";
 
 const isUrl = (text: string) =>
   text.startsWith("http://") || text.startsWith("https://");
@@ -30,8 +31,7 @@ export async function addPropertySuitably() {
 
   const text = await getClipboardText();
   if (isUrl(text)) {
-    insertToCursor(text);
-    addUrlProperty();
+    addActiveFileProperty("url", text);
     return;
   }
 
