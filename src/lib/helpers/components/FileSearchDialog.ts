@@ -1,7 +1,6 @@
 import { SuggestModal, TFile } from "obsidian";
 import { UApp } from "src/lib/types";
 import { sorter } from "src/lib/utils/collections";
-import { microFuzzy } from "src/lib/utils/strings";
 import { getMarkdownFilesWithRecentAccessIndex } from "../entries";
 import { isPresent } from "src/lib/utils/types";
 
