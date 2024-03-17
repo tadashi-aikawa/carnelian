@@ -2,6 +2,7 @@ import { TFile } from "obsidian";
 import { UApp } from "../types";
 import { FileSearchDialog } from "./components/FileSearchDialog";
 import { InputDialog } from "./components/InputDialog";
+import { SelectionDialog } from "./components/SelectionDialog";
 
 declare let app: UApp;
 
@@ -78,6 +79,29 @@ export async function showInputDialog(args: {
 }): Promise<string | null> {
   return new InputDialog(
     args.message,
+    args.placeholder,
+    args.defaultValue,
+  ).open();
+}
+
+/**
+ * 選択肢ダイアログを表示し、選択された値を返却します。
+ * キャンセル時はnullを返却します。
+ *
+ * ```ts
+ * await showSelectionDialog()
+ * // "選択したファイル(TFile)"
+ * ```
+ */
+export async function showSelectionDialog<T extends string[]>(args: {
+  message: string;
+  items: T;
+  placeholder?: string;
+  defaultValue?: T[number];
+}): Promise<T[number] | null> {
+  return new SelectionDialog(
+    args.message,
+    args.items,
     args.placeholder,
     args.defaultValue,
   ).open();

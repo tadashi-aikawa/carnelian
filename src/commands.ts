@@ -34,6 +34,7 @@ import {
   showCarnelianCommands,
 } from "./lib/obsutils/commands";
 import { PluginSettings } from "./settings";
+import { insertTasksOfRelease } from "./commands/insert-tasks-of-release";
 
 export function createCommands(settings: PluginSettings): Command[] {
   const carnelianCommands: CarnelianCommand[] = [
@@ -47,6 +48,11 @@ export function createCommands(settings: PluginSettings): Command[] {
       name: "Insert today's MTG",
       kind: "editor",
       executor: insertTodaysMTG,
+    },
+    {
+      name: "Insert tasks of release",
+      kind: "editor",
+      executor: insertTasksOfRelease,
     },
     {
       name: "Insert MOC",
