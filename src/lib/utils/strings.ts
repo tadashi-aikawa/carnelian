@@ -239,6 +239,13 @@ export function getWikiLinks(text: string): {
   });
 }
 
+/**
+ * textがURLかどうかを判定します
+ */
+export function isUrl(text: string): boolean {
+  return text.startsWith("http://") || text.startsWith("https://");
+}
+
 export type FuzzyResult =
   | { type: "starts-with"; score: number }
   | { type: "includes"; score: number }

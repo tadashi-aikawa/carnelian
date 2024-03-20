@@ -4,9 +4,7 @@ import { getClipboardText } from "src/lib/helpers/ui";
 import { addDescriptionProperty } from "./add-description-property";
 import { addTagsProperty } from "./add-tags-property";
 import { addUrlProperty } from "./add-url-property";
-
-const isUrl = (text: string) =>
-  text.startsWith("http://") || text.startsWith("https://");
+import { isUrl } from "src/lib/utils/strings";
 
 /**
  * カーソル行の内容からよしなにプロパティを追加します
