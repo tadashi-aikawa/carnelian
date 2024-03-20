@@ -1,4 +1,4 @@
-import { getSelection } from "src/lib/helpers/editors/basic";
+import { getSelectionText } from "src/lib/helpers/editors/basic";
 import { getActiveFileContent } from "src/lib/helpers/entries";
 import { linkText2Path } from "src/lib/helpers/links";
 import { getActiveFileCache } from "src/lib/helpers/metadata";
@@ -36,7 +36,7 @@ function getReplacedText(link: Link, confluenceDomain: string): string {
  * Confluenceに貼り付ける形式でクリップボードにコピーします
  */
 export async function copyAsConfluence(settings: PluginSettings) {
-  let target = getSelection();
+  let target = getSelectionText();
   if (!target) {
     const startOffset =
       getActiveFileCache()!.frontmatterPosition?.end.offset ?? 0;

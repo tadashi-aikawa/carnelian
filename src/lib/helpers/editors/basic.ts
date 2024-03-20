@@ -120,28 +120,28 @@ export function replaceStringInActiveLine(
 }
 
 /**
- * エディタの選択範囲を取得します
+ * エディタの選択範囲のテキストを取得します
  * WARN: 選択範囲がないときは空文字を返します
  *
  * ```ts
- * getSelection()
+ * getSelectionText()
  * // hogehoge
- * getSelection() // 選択していないとき
+ * getSelectionText() // 選択していないとき
  * //
  * ```
  */
-export function getSelection(): string | null {
+export function getSelectionText(): string | null {
   return getActiveEditor()?.getSelection() ?? null;
 }
 
 /**
- * エディタの選択範囲にテキストを設定します
+ * エディタの選択範囲のテキストを置換します
  *
  * ```ts
- * setSelection("after text")
+ * replaceSelection("after text")
  * ```
  */
-export function setSelection(text: string): void {
+export function replaceSelection(text: string): void {
   orThrow(getActiveEditor(), (e) => e.replaceSelection(text));
 }
 
@@ -181,7 +181,7 @@ export function setLinesInRange(
  * ```
  */
 export function getSelectionLines(): string[] | null {
-  return getSelection()?.split("\n") ?? null;
+  return getSelectionText()?.split("\n") ?? null;
 }
 
 /**

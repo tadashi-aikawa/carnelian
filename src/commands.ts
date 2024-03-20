@@ -35,6 +35,7 @@ import {
 } from "./lib/obsutils/commands";
 import { PluginSettings } from "./settings";
 import { insertTasksOfRelease } from "./commands/insert-tasks-of-release";
+import { transformURLToSiteLink } from "./commands/transform-url-to-site-link";
 
 export function createCommands(settings: PluginSettings): Command[] {
   const carnelianCommands: CarnelianCommand[] = [
@@ -83,6 +84,11 @@ export function createCommands(settings: PluginSettings): Command[] {
       name: "Insert note card",
       kind: "editor",
       executor: insertNoteCard,
+    },
+    {
+      name: "Transform URL to site link",
+      kind: "editor",
+      executor: transformURLToSiteLink,
     },
     {
       name: "Sort selection",

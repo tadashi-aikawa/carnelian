@@ -12,10 +12,10 @@ import {
   findLineIndex,
   getActiveEditor,
   getActiveLine,
-  getSelection,
+  getSelectionText,
   getSelectionLines,
   replaceStringInActiveLine,
-  setSelection,
+  replaceSelection,
 } from "./basic";
 
 /**
@@ -83,7 +83,7 @@ export function sortSelectionLines(option?: {
 
   const sortedLines = orderBy(lines, predicate, order);
 
-  setSelection(sortedLines.join("\n"));
+  replaceSelection(sortedLines.join("\n"));
 }
 
 /**
@@ -96,8 +96,8 @@ export function sortSelectionLines(option?: {
  * ```
  */
 export function stripDecorationFromSelection(): void {
-  orThrow(getSelection(), (sl) => {
-    setSelection(stripDecoration(sl));
+  orThrow(getSelectionText(), (sl) => {
+    replaceSelection(stripDecoration(sl));
   });
 }
 
@@ -113,8 +113,8 @@ export function stripDecorationFromSelection(): void {
  * ```
  */
 export function stripLinksFromSelection(): void {
-  orThrow(getSelection(), (sl) => {
-    setSelection(stripLinks(sl));
+  orThrow(getSelectionText(), (sl) => {
+    replaceSelection(stripLinks(sl));
   });
 }
 
@@ -130,8 +130,8 @@ export function stripLinksFromSelection(): void {
  * ```
  */
 export function stripLinksAndDecorationsFromSelection(): void {
-  orThrow(getSelection(), (sl) => {
-    setSelection(stripLinks(stripDecoration(sl)));
+  orThrow(getSelectionText(), (sl) => {
+    replaceSelection(stripLinks(stripDecoration(sl)));
   });
 }
 
