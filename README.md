@@ -12,7 +12,7 @@ Obsidianのプラグイン機能を使って、InvisibleなObsidian体験を実�
 ## 開発の前提環境
 
 - Ubuntu (macOSでも動きそう)
-- [Bun] v1.0.32
+- [Bun] v1.0.33
 - [Hot Reload]プラグイン
 
 ## 開発環境構築
