@@ -5,14 +5,17 @@ const releaseProductVars = {
   "Various Complements": {
     slug: "obsidian-various-complements-plugin",
     isCommunityPlugin: true,
+    runtime: "node",
   },
   "Another Quick Switcher": {
     slug: "obsidian-another-quick-switcher",
     isCommunityPlugin: true,
+    runtime: "bun",
   },
   "Mobile First Daily Interface": {
     slug: "mobile-first-daily-interface",
     isCommunityPlugin: false,
+    runtime: "node",
   },
 } as const;
 type Product = keyof typeof releaseProductVars;
@@ -38,9 +41,11 @@ export async function insertTasksOfRelease() {
   }
 
   const name = product;
-  const { slug, isCommunityPlugin } = releaseProductVars[product];
+  const { slug, isCommunityPlugin, runtime } = releaseProductVars[product];
 
-  insertToCursor(createTemplate({ name, slug, version, isCommunityPlugin }));
+  insertToCursor(
+    createTemplate({ name, slug, version, isCommunityPlugin, runtime }),
+  );
 }
 
 function createTemplate(vars: {
@@ -48,11 +53,12 @@ function createTemplate(vars: {
   slug: string;
   version: string;
   isCommunityPlugin: boolean;
+  runtime: "node" | "bun";
 }): string {
-  const { name, slug, version, isCommunityPlugin } = vars;
+  const { name, slug, version, isCommunityPlugin, runtime } = vars;
   let message = `
 - [ ] (必要なら) READMEの更新
-- [ ] \`task\`コマンドでリリース
+- [ ] ${runtime === "node" ? "taskコマンドでリリース" : "bunコマンドでリリース"}
 - [ ] GitHubリリースノートを記入し公開
 
 \`\`\`
