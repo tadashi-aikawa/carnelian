@@ -36,6 +36,7 @@ import {
 import { PluginSettings } from "./settings";
 import { insertTasksOfRelease } from "./commands/insert-tasks-of-release";
 import { transformURLToSiteLink } from "./commands/transform-url-to-site-link";
+import { transformMOC } from "./commands/transform-moc";
 
 export function createCommands(settings: PluginSettings): Command[] {
   const carnelianCommands: CarnelianCommand[] = [
@@ -59,6 +60,11 @@ export function createCommands(settings: PluginSettings): Command[] {
       name: "Insert MOC",
       kind: "editor",
       executor: insertMOC,
+    },
+    {
+      name: "Transform MOC",
+      kind: "editor",
+      executor: transformMOC,
     },
     {
       name: "Toggle Vim mode",
