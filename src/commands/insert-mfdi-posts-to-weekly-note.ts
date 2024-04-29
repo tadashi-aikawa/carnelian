@@ -60,13 +60,11 @@ export async function insertMFDIPostsToWeeklyNote() {
     insertToCursor(
       `## ${meta.title}
 
-#todo 詳細や所感
+${createHTMLCard(meta)}
 
 ~~~
 ${cb.content}
 ~~~
-
-${createHTMLCard(meta)}
 
 `,
     );

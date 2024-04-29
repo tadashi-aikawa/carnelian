@@ -37,6 +37,7 @@ import { PluginSettings } from "./settings";
 import { insertTasksOfRelease } from "./commands/insert-tasks-of-release";
 import { transformURLToSiteLink } from "./commands/transform-url-to-site-link";
 import { transformMOC } from "./commands/transform-moc";
+import { insertMFDIPostsToWeeklyNote } from "./commands/insert-mfdi-posts-to-weekly-note";
 
 export function createCommands(settings: PluginSettings): Command[] {
   const carnelianCommands: CarnelianCommand[] = [
@@ -45,6 +46,11 @@ export function createCommands(settings: PluginSettings): Command[] {
       name: "Insert new notes to the weekly note",
       kind: "editor",
       executor: insertNewNotesToWeeklyNote,
+    },
+    {
+      name: "Insert MFDI posts to weekly note",
+      kind: "editor",
+      executor: insertMFDIPostsToWeeklyNote,
     },
     {
       name: "Insert today's MTG",
