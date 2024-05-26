@@ -15,7 +15,7 @@ const releaseProductVars = {
   "Mobile First Daily Interface": {
     slug: "mobile-first-daily-interface",
     isCommunityPlugin: false,
-    runtime: "node",
+    runtime: "bun",
   },
 } as const;
 type Product = keyof typeof releaseProductVars;
