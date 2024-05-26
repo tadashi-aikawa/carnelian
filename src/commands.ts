@@ -8,6 +8,7 @@ import { copyAsConfluence } from "./commands/copy-as-confluence";
 import { copyMinervaURL } from "./commands/copy-minerva-url";
 import { copyUrlProperty } from "./commands/copy-url-property";
 import { createActivityNote } from "./commands/create-activity-note";
+import { createPrimeNote } from "./commands/create-prime-note";
 import { createMINADR } from "./commands/create-adr";
 import { createArticle } from "./commands/create-article";
 import { createObsidianCookbook } from "./commands/create-obsidian-cookbook";
@@ -116,6 +117,11 @@ export function createCommands(settings: PluginSettings): Command[] {
       name: "Create MIN ADR",
       kind: "all",
       executor: createMINADR,
+    },
+    {
+      name: "Create Prime note",
+      kind: "editor",
+      executor: createPrimeNote,
     },
     {
       name: "Create Activity note",
