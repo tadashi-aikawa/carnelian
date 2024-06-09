@@ -17,6 +17,11 @@ const releaseProductVars = {
     isCommunityPlugin: false,
     runtime: "bun",
   },
+  Silhouette: {
+    slug: "silhouette",
+    isCommunityPlugin: false,
+    runtime: "bun",
+  },
 } as const;
 type Product = keyof typeof releaseProductVars;
 
