@@ -18,7 +18,7 @@ import { insertNewNotesToWeeklyNote } from "./commands/insert-inputs-to-weekly-n
 import { insertMOC } from "./commands/insert-moc";
 import { insertNoteCard } from "./commands/insert-note-card";
 import { insertSiteCard } from "./commands/insert-site-card";
-import { insertTodaysMTG } from "./commands/insert-todays-mtg";
+import { insertMTG } from "./commands/insert-todays-mtg";
 import { openPropertyUrl } from "./commands/open-property-url";
 import { showAnotherCommandPalette } from "./commands/show-another-command-palette";
 import { stripLinksAndDecorations } from "./commands/stripe-links-and-decorations";
@@ -54,9 +54,9 @@ export function createCommands(settings: PluginSettings): Command[] {
       executor: insertMFDIPostsToWeeklyNote,
     },
     {
-      name: "Insert today's MTG",
+      name: "Insert MTG",
       kind: "editor",
-      executor: insertTodaysMTG,
+      executor: insertMTG,
     },
     {
       name: "Insert tasks of release",

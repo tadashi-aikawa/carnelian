@@ -1,12 +1,20 @@
 import { now } from "src/lib/helpers/datetimes";
 import { insertToCursor } from "src/lib/helpers/editors/basic";
-import { showInputDialog } from "src/lib/helpers/ui";
+import { getActiveFile } from "src/lib/helpers/entries";
+import { notify, showInputDialog } from "src/lib/helpers/ui";
 
 /**
- * 本日のMTGノートを挿入します
+ * MTGノートを挿入します
+ * 表示中のデイリーノートの日付を使用します
+ * WARN: YYYY-MM-DDというデイリーノート名である前提
  */
-export async function insertTodaysMTG() {
-  const today = now("YYYY-MM-DD");
+export async function insertMTG() {
+  const file = getActiveFile();
+  if (!file) {
+    return notify("デイリーノートで実行してください");
+  }
+
+  const date = now(file.basename);
 
   const title = await showInputDialog({
     message: "MTGタイトルを入力してください",
@@ -23,5 +31,5 @@ export async function insertTodaysMTG() {
     return;
   }
 
-  insertToCursor(`- [ ] ${startTime} [[📅${today} ${title}]]`);
+  insertToCursor(`- [ ] ${startTime} [[📅${date} ${title}]]`);
 }
