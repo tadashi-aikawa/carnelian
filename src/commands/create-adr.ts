@@ -17,9 +17,16 @@ export async function createMINADR() {
 }
 
 /**
+ * VIMのADRを作成します
+ */
+export async function createVIMADR() {
+  createADR("VIM");
+}
+
+/**
  * 指定した種類のADRノートを作成し、一覧表の最後に挿入します
  */
-async function createADR(type: "MIN" | "OBS" | "PRO") {
+async function createADR(type: "MIN" | "OBS" | "PRO" | "VIM") {
   const today = now("YYYY-MM-DD");
 
   const NOTE_BODY = `
