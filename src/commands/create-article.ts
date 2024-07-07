@@ -28,7 +28,7 @@ export async function createArticle() {
     fp,
     `[[📒Articles]] > [[📒2024 Articles]]
 
-![[${today}.jpg|cover-picture]]
+![[${today}.webp|cover-picture]]
 `,
   );
 
@@ -38,6 +38,7 @@ export async function createArticle() {
     created: today,
     updated: today,
     description: "TODO",
-    cover: `📘Articles/attachments/${today}.jpg`,
+    cover: `📘Articles/attachments/${today}.webp`,
+    publish: false,
   });
 }
