@@ -2,8 +2,8 @@
     <h1>Carnelian</h1>
     <img src="./logo.png" width="384" />
     <p>
-      <div>Obsidianのプラグイン機能を使って、InvisibleなObsidian体験を実現するための機能を提供する宝石。</div>
-      <div>紅玉髄(カーネリアン)。</div>
+      <div>InvisibleなObsidian体験を実現するための機能を提供する宝石、紅玉髄(カーネリアン)。</div>
+      <div>プラグインの機構を使って自分だけの最強のObsidianを構築する。</div>
     </p>
 </div>
 
