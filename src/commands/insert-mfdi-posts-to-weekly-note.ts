@@ -42,7 +42,15 @@ export async function insertMFDIPostsToWeeklyNote() {
 
   const targetCodeBlocks = codeBlocks
     .map((x) => x.codeBlock)
-    .filter((cb) => cb.language === "fw" && cb.content.includes("http"))
+    .filter(
+      (cb) =>
+        cb.language === "fw" &&
+        cb.content.includes("http") &&
+        // Minervaは単なる投稿用のPostであり、Weekly Reportの内容と重複するので除外
+        !cb.content.includes("minerva.mamansoft.net") &&
+        // GitHubもリリース連絡であり、Weekly Reportの内容と重複するので除外
+        !cb.content.includes("github.com/tadashi-aikawa"),
+    )
     .toReversed();
 
   for (let i = 0; i < targetCodeBlocks.length; i++) {
