@@ -9,7 +9,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^1.5.1",
-    "@types/bun": "^1.0.30",
+    "@types/bun": "^1.1.6",
     "@types/encoding-japanese": "^2.0.5",
     "@types/jsdom": "^21.1.6",
     "@types/web": "^0.0.130",
@@ -21,7 +21,7 @@
     "tslib": "^2.6.2"
   },
   "peerDependencies": {
-    "typescript": "^5.0.0"
+    "typescript": "^5.5.0"
   },
   "description": "Obsidian Plugin for tadashi-aikawa",
   "keywords": [],
