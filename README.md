@@ -51,6 +51,12 @@ bun dev
 const FILES = ["main.js", "manifest.json", "styles.css"];
 ```
 
+## Lint
+
+```console
+bun lint
+```
+
 ## 機能追加要望
 
 個人的に必要と感じたものに限り取り入れることがあります。IssueやPull Requestからどうぞ。(受け入れ基準は厳しめです)

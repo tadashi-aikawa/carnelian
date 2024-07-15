@@ -1,5 +1,5 @@
 import { getActiveParagraph } from "src/lib/helpers/editors/advanced";
-import { insertToCursor, setLinesInRange } from "src/lib/helpers/editors/basic";
+import { setLinesInRange } from "src/lib/helpers/editors/basic";
 import { match } from "src/lib/utils/strings";
 
 /**
@@ -30,15 +30,15 @@ export async function transformMOC() {
   }
 
   const text = `
-- 📒**関連**${toString(lines.related)}
-- 📜**アクティビティ**${toString(lines.activity)}
-- 📝**トラブルシューティング**${toString(lines.troubleshooting)}
+- 📒**関連**${_toString(lines.related)}
+- 📜**アクティビティ**${_toString(lines.activity)}
+- 📝**トラブルシューティング**${_toString(lines.troubleshooting)}
 `.trim();
 
   setLinesInRange(p.startLine, p.endLine, text);
 }
 
-function toString(lines: string[]): string {
+function _toString(lines: string[]): string {
   return lines.length === 0
     ? ""
     : `
