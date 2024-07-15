@@ -3,8 +3,10 @@ import { getAvailableCommands } from "src/lib/helpers/commands";
 import { now } from "src/lib/helpers/datetimes";
 import { loadJson, saveJson } from "src/lib/helpers/io";
 import { UApp } from "src/lib/types";
+import { maxReducer } from "src/lib/utils/collections";
 import { omitBy, sorter } from "src/lib/utils/collections";
 import { microFuzzy } from "src/lib/utils/strings";
+import { isPresent } from "src/lib/utils/types";
 
 // XXX: 少し気持ち悪い
 declare let app: UApp;
@@ -56,7 +58,15 @@ class CommandQuickSwitcher extends SuggestModal<HistoricalCommand> {
     return this.commands
       .map((command) => ({
         command,
-        result: microFuzzy(command.name.toLowerCase(), query.toLowerCase()),
+        results: query
+          .split(" ")
+          .filter(isPresent)
+          .map((q) => microFuzzy(command.name.toLowerCase(), q.toLowerCase())),
+      }))
+      .filter(({ results }) => results.every((r) => r.type !== "none"))
+      .map(({ command, results }) => ({
+        command,
+        result: results.reduce(maxReducer((x) => x.score)),
       }))
       .filter(({ result }) => result.type !== "none")
       .toSorted(sorter(({ result }) => result.score, "desc"))
