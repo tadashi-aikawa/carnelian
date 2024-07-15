@@ -10,7 +10,7 @@ import {
   removeElementsFromContainer,
 } from "src/lib/helpers/ui";
 import { ExhaustiveError } from "src/lib/utils/errors";
-import { Service } from "src/services";
+import type { Service } from "src/services";
 
 /**
  * 日付の文字列(YYYY-MM-DD)を表示形式にします

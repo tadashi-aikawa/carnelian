@@ -6,7 +6,7 @@ import { getPropertiesByPath } from "src/lib/helpers/properties";
 import { copyToClipboard, notify } from "src/lib/helpers/ui";
 import { sorter } from "src/lib/utils/collections";
 import { getWikiLinks, replaceAt } from "src/lib/utils/strings";
-import { PluginSettings } from "src/settings";
+import type { PluginSettings } from "src/settings";
 
 type Link = ReturnType<typeof getWikiLinks>[number];
 

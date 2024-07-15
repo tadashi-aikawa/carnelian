@@ -1,4 +1,4 @@
-import dayjs, { Dayjs } from "dayjs";
+import dayjs, { type Dayjs } from "dayjs";
 
 export function now(format: "unixtime"): number;
 export function now(format: "dayjs"): Dayjs;

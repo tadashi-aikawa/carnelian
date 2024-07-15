@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import { TFile } from "obsidian";
+import type { TFile } from "obsidian";
 import { insertToCursor } from "src/lib/helpers/editors/basic";
 import { getMarkdownFilesInRange } from "src/lib/helpers/entries";
 import { getActiveFileDescriptionProperty } from "src/lib/helpers/properties";

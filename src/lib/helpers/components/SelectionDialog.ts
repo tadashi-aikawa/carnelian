@@ -1,7 +1,7 @@
 import { SuggestModal } from "obsidian";
-import { UApp } from "src/lib/types";
-import { microFuzzy } from "src/lib/utils/strings";
+import type { UApp } from "src/lib/types";
 import { sorter } from "src/lib/utils/collections";
+import { microFuzzy } from "src/lib/utils/strings";
 
 declare let app: UApp;
 

@@ -12,10 +12,10 @@ import {
   findLineIndex,
   getActiveEditor,
   getActiveLine,
-  getSelectionText,
   getSelectionLines,
-  replaceStringInActiveLine,
+  getSelectionText,
   replaceSelection,
+  replaceStringInActiveLine,
 } from "./basic";
 
 /**

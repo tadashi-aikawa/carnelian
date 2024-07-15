@@ -1,5 +1,5 @@
 import { Modal } from "obsidian";
-import { UApp } from "src/lib/types";
+import type { UApp } from "src/lib/types";
 
 declare let app: UApp;
 

@@ -1,4 +1,4 @@
-import { Command } from "obsidian";
+import type { Command } from "obsidian";
 import { getActiveEditor } from "../helpers/editors/basic";
 import { getActiveFile } from "../helpers/entries";
 

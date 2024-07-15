@@ -1,5 +1,5 @@
-import { SectionCache } from "obsidian";
-import { CodeBlock } from "../types";
+import type { SectionCache } from "obsidian";
+import type { CodeBlock } from "../types";
 import { map } from "../utils/types";
 import { getActiveFile, loadFileContentCache } from "./entries";
 import { getFileCacheByPath } from "./metadata";

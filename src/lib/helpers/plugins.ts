@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
-import { TFile } from "obsidian";
-import { UApp } from "../types";
+import type { TFile } from "obsidian";
+import type { UApp } from "../types";
 import { getDatesInRange } from "../utils/dates";
 import { isPresent } from "../utils/types";
 import { getFileByPath } from "./entries";

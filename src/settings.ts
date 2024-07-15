@@ -1,6 +1,6 @@
-import { App, PluginSettingTab, Setting } from "obsidian";
-import CarnelianPlugin from "./main";
+import { type App, PluginSettingTab, Setting } from "obsidian";
 import { TextComponentEvent } from "./lib/obsutils/settings";
+import type CarnelianPlugin from "./main";
 
 export const DEFAULT_COMMAND_HISTORY_PATH =
   ".obsidian/plugins/carnelian/command-histories.json";

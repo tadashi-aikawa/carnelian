@@ -1,6 +1,6 @@
 import { AddDatePropertiesService } from "./services/add-date-properties-service";
 import { AddPropertiesToHeadService } from "./services/add-properties-to-head-service";
-import { PluginSettings } from "./settings";
+import type { PluginSettings } from "./settings";
 
 export interface Service {
   name: string;

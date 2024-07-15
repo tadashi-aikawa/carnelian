@@ -1,5 +1,5 @@
-import { WorkspaceLeaf } from "obsidian";
-import { UApp } from "../types";
+import type { WorkspaceLeaf } from "obsidian";
+import type { UApp } from "../types";
 
 declare let app: UApp;
 

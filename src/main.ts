@@ -1,7 +1,7 @@
 import { Plugin } from "obsidian";
 import { createCommands } from "./commands";
-import { Service, createServices } from "./services";
-import { DEFAULT_SETTINGS, PluginSettings, SettingTab } from "./settings";
+import { type Service, createServices } from "./services";
+import { DEFAULT_SETTINGS, type PluginSettings, SettingTab } from "./settings";
 
 export default class CarnelianPlugin extends Plugin {
   settings!: PluginSettings;

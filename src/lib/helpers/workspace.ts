@@ -1,4 +1,4 @@
-import { UApp, UWorkspace } from "../types";
+import type { UApp, UWorkspace } from "../types";
 
 declare let app: UApp;
 

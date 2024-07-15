@@ -1,10 +1,10 @@
-import { WorkspaceLeaf } from "obsidian";
+import type { WorkspaceLeaf } from "obsidian";
 import { parseTags } from "src/lib/obsutils/parser";
-import { UApp, UEditor } from "src/lib/types";
+import type { UApp, UEditor } from "src/lib/types";
 import { errorMessage } from "src/lib/utils/errors";
+import { doSinglePatternMatching, match } from "src/lib/utils/strings";
 import { map, orThrow } from "src/lib/utils/types";
 import { getActiveFileContent } from "../entries";
-import { doSinglePatternMatching, match } from "src/lib/utils/strings";
 
 declare let app: UApp;
 

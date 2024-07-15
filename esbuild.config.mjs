@@ -1,9 +1,9 @@
-import esbuild from "esbuild";
-import process, { exit } from "process";
-import builtins from "builtin-modules";
 import fs, { existsSync } from "fs";
 import path from "path";
+import builtins from "builtin-modules";
 import chokidar from "chokidar";
+import esbuild from "esbuild";
+import process, { exit } from "process";
 
 async function loadPluginDir() {
   const configName = "carnelianrc.json";

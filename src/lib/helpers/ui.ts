@@ -1,5 +1,5 @@
-import { TFile } from "obsidian";
-import { UApp } from "../types";
+import type { TFile } from "obsidian";
+import type { UApp } from "../types";
 import { FileSearchDialog } from "./components/FileSearchDialog";
 import { InputDialog } from "./components/InputDialog";
 import { SelectionDialog } from "./components/SelectionDialog";

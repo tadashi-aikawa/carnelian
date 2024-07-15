@@ -1,4 +1,4 @@
-import { Dayjs } from "dayjs";
+import type { Dayjs } from "dayjs";
 
 export function getDatesInRange(begin: Dayjs, end: Dayjs): Dayjs[] {
   let date = begin;

@@ -1,4 +1,4 @@
-import { Properties, UApp, UMetadataEditor } from "../types";
+import type { Properties, UApp, UMetadataEditor } from "../types";
 import { errorMessage } from "../utils/errors";
 import { orThrow } from "../utils/types";
 import { getActiveFileCache, getFileCacheByPath } from "./metadata";

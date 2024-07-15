@@ -1,4 +1,4 @@
-import { UApp, ULinkCache } from "../types";
+import type { UApp, ULinkCache } from "../types";
 import { map } from "../utils/types";
 import { getActiveFile } from "./entries";
 import { getMetadataCache } from "./metadata";

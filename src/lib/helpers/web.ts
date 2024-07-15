@@ -1,4 +1,4 @@
-import { TFile, requestUrl } from "obsidian";
+import { type TFile, requestUrl } from "obsidian";
 import { stripDecoration, stripLinks } from "../obsutils/parser";
 import { defineUserAgent } from "../utils/agent";
 import { forceLowerCaseKeys } from "../utils/collections";
@@ -11,9 +11,9 @@ import {
   getMetaByProperty,
 } from "../utils/meta-helper";
 import { countCharsWidth, sjis2String } from "../utils/strings";
-import { getPropertiesByPath } from "./properties";
 import { map } from "../utils/types";
 import { useObsidianPublishInfo } from "./plugins";
+import { getPropertiesByPath } from "./properties";
 
 export type Meta = HTMLMeta | ImageMeta | TwitterMeta;
 export interface HTMLMeta {

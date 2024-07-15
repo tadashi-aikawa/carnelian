@@ -1,4 +1,4 @@
-import { Command } from "obsidian";
+import type { Command } from "obsidian";
 
 import { addPropertySuitably } from "./commands/add-property-suitably";
 import { addTagsProperty } from "./commands/add-tags-property";
@@ -33,8 +33,8 @@ import {
   toggleEditorLength,
   toggleVimKeyBindings,
 } from "./lib/helpers/settings";
-import { CarnelianCommand, createCommand } from "./lib/obsutils/commands";
-import { PluginSettings } from "./settings";
+import { type CarnelianCommand, createCommand } from "./lib/obsutils/commands";
+import type { PluginSettings } from "./settings";
 
 export function createCommands(settings: PluginSettings): Command[] {
   const carnelianCommands: CarnelianCommand[] = [

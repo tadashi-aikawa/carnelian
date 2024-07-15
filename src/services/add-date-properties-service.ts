@@ -4,7 +4,7 @@ import {
   loadFileContentCache,
 } from "src/lib/helpers/entries";
 import { setOnCreateFileEvent } from "src/lib/helpers/events";
-import { Service } from "src/services";
+import type { Service } from "src/services";
 
 /**
  * 新しくファイルを開いたときにテンプレのテキストを差し込むサービスです

@@ -1,8 +1,8 @@
-import { Command, SuggestModal } from "obsidian";
+import { type Command, SuggestModal } from "obsidian";
 import { getAvailableCommands } from "src/lib/helpers/commands";
 import { now } from "src/lib/helpers/datetimes";
 import { loadJson, saveJson } from "src/lib/helpers/io";
-import { UApp } from "src/lib/types";
+import type { UApp } from "src/lib/types";
 import { maxReducer } from "src/lib/utils/collections";
 import { omitBy, sorter } from "src/lib/utils/collections";
 import { microFuzzy } from "src/lib/utils/strings";

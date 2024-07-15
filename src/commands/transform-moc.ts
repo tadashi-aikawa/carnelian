@@ -20,9 +20,9 @@ export async function transformMOC() {
   const targetLines = p.text.split("\n").filter((x) => !match(x, /^[-*] .+/g));
   for (const line of targetLines) {
     match;
-    if (match(line, /^\s+[-*] \[\[📜.+$/)) {
+    if (match(line, /^\s+[-*] \[\[📜.+$/u)) {
       lines.activity.push(line);
-    } else if (match(line, /^\s+[-*] \[\[📝.+$/)) {
+    } else if (match(line, /^\s+[-*] \[\[📝.+$/u)) {
       lines.troubleshooting.push(line);
     } else {
       lines.related.push(line);

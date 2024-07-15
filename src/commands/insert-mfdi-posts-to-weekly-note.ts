@@ -4,7 +4,7 @@ import { getActiveFileDescriptionProperty } from "src/lib/helpers/properties";
 import { loadCodeBlocks } from "src/lib/helpers/sections";
 import { notify } from "src/lib/helpers/ui";
 import { createHTMLCard, createMeta } from "src/lib/helpers/web";
-import { CodeBlock } from "src/lib/types";
+import type { CodeBlock } from "src/lib/types";
 import * as strings from "../lib/utils/strings";
 
 /**

@@ -1,10 +1,10 @@
 import { getActiveLine } from "src/lib/helpers/editors/basic";
 import { addActiveFileProperty } from "src/lib/helpers/properties";
 import { getClipboardText } from "src/lib/helpers/ui";
+import { isUrl } from "src/lib/utils/strings";
 import { addDescriptionProperty } from "./add-description-property";
 import { addTagsProperty } from "./add-tags-property";
 import { addUrlProperty } from "./add-url-property";
-import { isUrl } from "src/lib/utils/strings";
 
 /**
  * カーソル行の内容からよしなにプロパティを追加します

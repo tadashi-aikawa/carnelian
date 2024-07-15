@@ -1,4 +1,4 @@
-import { UApp } from "../types";
+import type { UApp } from "../types";
 import { map } from "../utils/types";
 
 declare let app: UApp;

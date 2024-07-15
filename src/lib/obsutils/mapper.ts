@@ -1,5 +1,5 @@
-import { EditorPosition, Loc, normalizePath } from "obsidian";
-import { UApp } from "../types";
+import { type EditorPosition, type Loc, normalizePath } from "obsidian";
+import type { UApp } from "../types";
 
 declare let app: UApp;
 
