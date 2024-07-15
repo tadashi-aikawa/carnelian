@@ -1,13 +1,14 @@
-# Carnelian
+<div align="center">
+    <h1>Carnelian</h1>
+    <img src="./logo.png" width="384" />
+    <p>
+      <div>Obsidianのプラグイン機能を使って、InvisibleなObsidian体験を実現するための機能を提供する宝石。</div>
+      <div>紅玉髄(カーネリアン)。</div>
+    </p>
+</div>
 
-<img src="./logo.png" width=256 />
-
-Obsidianのプラグイン機能を使って、InvisibleなObsidian体験を実現するための機能を提供する宝石。紅玉髄(カーネリアン)。
-
-基本的にtadashi-aikawaが利用する機能を実装しています。ただ、全体の仕組みと`lib`配下のメソッドは流用できるので、どなたでも利用できます。
-
-> **Note**
-> 上記のロゴ画像はAIで生成されています
+> [!NOTE]
+> 基本的にtadashi-aikawaが利用する機能を実装しています。ただ、全体の仕組みと`lib`配下のメソッドは流用できるので、どなたでも利用できます。
 
 ## 開発の前提環境
 
@@ -57,4 +58,6 @@ const FILES = ["main.js", "manifest.json", "styles.css"];
 [Bun]: https://bun.sh/
 [esbuild]: https://esbuild.github.io/
 [Hot Reload]: https://github.com/pjeby/hot-reload
+
+<small style="color: gray">※ ロゴ画像はAIで生成されています</small>
 
