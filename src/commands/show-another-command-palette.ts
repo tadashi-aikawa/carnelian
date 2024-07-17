@@ -71,6 +71,7 @@ class CommandQuickSwitcher extends SuggestModal<HistoricalCommand> {
       .filter(({ result }) => result.type !== "none")
       .toSorted(sorter(({ result }) => result.score, "desc"))
       .toSorted(sorter(({ command }) => command.lastUsed ?? 0, "desc"))
+      .toSorted(sorter(({ result }) => result.type === "includes", "desc"))
       .toSorted(sorter(({ result }) => result.type === "starts-with", "desc"))
       .toSorted(sorter(({ command }) => command.lastUsed != null, "desc"))
       .map(({ command }) => command);
