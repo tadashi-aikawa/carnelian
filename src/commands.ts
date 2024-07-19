@@ -12,6 +12,7 @@ import { createMINADR, createVIMADR } from "./commands/create-adr";
 import { createArticle } from "./commands/create-article";
 import { createObsidianCookbook } from "./commands/create-obsidian-cookbook";
 import { createPrimeNote } from "./commands/create-prime-note";
+import { createReportNote } from "./commands/create-report-note";
 import { createTroubleshootingNote } from "./commands/create-troubleshooting-note";
 import { formatTable } from "./commands/format-table";
 import { insertNewNotesToWeeklyNote } from "./commands/insert-inputs-to-weekly-note";
@@ -127,6 +128,11 @@ export function createCommands(settings: PluginSettings): Command[] {
       name: "Create Activity note",
       kind: "editor",
       executor: createActivityNote,
+    },
+    {
+      name: "Create Report note",
+      kind: "editor",
+      executor: createReportNote,
     },
     {
       name: "Create Troubleshooting notes",
