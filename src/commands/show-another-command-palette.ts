@@ -69,6 +69,10 @@ class CommandQuickSwitcher extends SuggestModal<HistoricalCommand> {
         result: results.reduce(maxReducer((x) => x.score)),
       }))
       .filter(({ result }) => result.type !== "none")
+      .filter(
+        ({ result }) =>
+          !query || result.type !== "fuzzy" || result.score > 0.25,
+      )
       .toSorted(sorter(({ result }) => result.score, "desc"))
       .toSorted(sorter(({ command }) => command.lastUsed ?? 0, "desc"))
       .toSorted(sorter(({ result }) => result.type === "includes", "desc"))
