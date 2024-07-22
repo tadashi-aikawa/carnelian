@@ -26,10 +26,10 @@ export async function showAnotherCommandPalette(args: {
   const unixNow = now("unixtime");
   let commandHistoryMap =
     (await loadJson<CommandHistoryMap>(args.commandHistoryPath)) ?? {};
-  // 最終コマンド利用日から3日以上経っているものは履歴から除外
+  // 最終コマンド利用日から10日以上経っているものは履歴から除外
   commandHistoryMap = omitBy(
     commandHistoryMap,
-    (_, lastUpdated: number) => unixNow - lastUpdated > 3 * 24 * 60 * 60,
+    (_, lastUpdated: number) => unixNow - lastUpdated > 10 * 24 * 60 * 60,
   );
 
   const commands: HistoricalCommand[] = getAvailableCommands().map((x) => ({
