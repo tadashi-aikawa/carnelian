@@ -65,10 +65,15 @@ export async function insertMFDIPostsToWeeklyNote() {
       continue;
     }
 
+    // YouTubeだけはカードのレイアウトが崩れるので直接URLを挿入する
+    const card = url.includes("https://youtu.be/")
+      ? `![](${url})`
+      : createHTMLCard(meta);
+
     insertToCursor(
       `## ${meta.title}
 
-${createHTMLCard(meta)}
+${card}
 
 ~~~
 ${cb.content}
