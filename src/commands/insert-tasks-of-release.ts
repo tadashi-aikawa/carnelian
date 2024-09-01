@@ -5,22 +5,33 @@ const releaseProductVars = {
   "Various Complements": {
     slug: "obsidian-various-complements-plugin",
     isCommunityPlugin: true,
-    runtime: "node",
+    releaseCommand: (version: string) => `VERSION=${version} pnpm release`,
+    kind: "Obsidian",
   },
   "Another Quick Switcher": {
     slug: "obsidian-another-quick-switcher",
     isCommunityPlugin: true,
-    runtime: "bun",
+    releaseCommand: (version: string) => `VERSION=${version} bun release`,
+    kind: "Obsidian",
   },
   "Mobile First Daily Interface": {
     slug: "mobile-first-daily-interface",
     isCommunityPlugin: false,
-    runtime: "bun",
+    releaseCommand: (version: string) => `VERSION=${version} bun release`,
+    kind: "Obsidian",
   },
   Silhouette: {
     slug: "silhouette",
     isCommunityPlugin: false,
-    runtime: "bun",
+    releaseCommand: (version: string) => `VERSION=${version} bun release`,
+    kind: "Obsidian",
+  },
+  SilhouetteNvim: {
+    slug: "silhouette.nvim",
+    isCommunityPlugin: false,
+    releaseCommand: (version: string) =>
+      `git tag ${version} && git push --tags`,
+    kind: "Neovim",
   },
 } as const;
 type Product = keyof typeof releaseProductVars;
@@ -46,10 +57,18 @@ export async function insertTasksOfRelease() {
   }
 
   const name = product;
-  const { slug, isCommunityPlugin, runtime } = releaseProductVars[product];
+  const { slug, isCommunityPlugin, kind, releaseCommand } =
+    releaseProductVars[product];
 
   insertToCursor(
-    createTemplate({ name, slug, version, isCommunityPlugin, runtime }),
+    createTemplate({
+      name,
+      slug,
+      version,
+      isCommunityPlugin,
+      kind,
+      releaseCommand,
+    }),
   );
 }
 
@@ -58,12 +77,19 @@ function createTemplate(vars: {
   slug: string;
   version: string;
   isCommunityPlugin: boolean;
-  runtime: "node" | "bun";
+  kind: "Obsidian" | "Neovim";
+  releaseCommand: (version: string) => string;
 }): string {
-  const { name, slug, version, isCommunityPlugin, runtime } = vars;
+  const { name, slug, version, isCommunityPlugin, kind, releaseCommand } = vars;
   let message = `
-- [ ] (必要なら) READMEの更新
-- [ ] ${runtime === "node" ? "taskコマンドでリリース" : "bunコマンドでリリース"}
+- [ ] (任意) READMEの更新
+
+- [ ] リリースコマンドの実行
+
+\`\`\`
+${releaseCommand(version)}
+\`\`\`
+
 - [ ] GitHubリリースノートを記入し公開
 
 \`\`\`
@@ -92,7 +118,7 @@ function createTemplate(vars: {
 - hoge
 \`\`\`
 
-- [ ] GitHub Issuesにリリースの連絡
+- [ ] (任意) GitHub Issuesにリリースの連絡
 
 \`\`\`
 @???
@@ -100,7 +126,7 @@ function createTemplate(vars: {
 Released in [v${version}](https://github.com/tadashi-aikawa/${slug}/releases/tag/${version}) 🚀
 \`\`\`
 
-${isCommunityPlugin ? "- [ ] (必要なら) Discussionを閉じる" : ""}
+${isCommunityPlugin ? "- [ ] (任意) Discussionを閉じる" : ""}
 - [ ] MFDIでBlueskyにて連絡
 
 \`\`\`
@@ -114,7 +140,7 @@ https://github.com/tadashi-aikawa/${slug}/releases/tag/${version}
 
   if (isCommunityPlugin) {
     message += `
-  - [ ] (必要なら) Discordで連絡
+  - [ ] (任意) Discordで連絡
 
 \`\`\`
 # 📦 ${name} ${version} 🚀 
