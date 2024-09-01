@@ -30,7 +30,7 @@ const releaseProductVars = {
     slug: "silhouette.nvim",
     isCommunityPlugin: false,
     releaseCommand: (version: string) =>
-      `git tag ${version} && git push --tags`,
+      `git tag v${version} && git push --tags`,
     kind: "Neovim",
   },
 } as const;
@@ -130,7 +130,7 @@ ${isCommunityPlugin ? "- [ ] (任意) Discussionを閉じる" : ""}
 - [ ] MFDIでBlueskyにて連絡
 
 \`\`\`
-📦 ${name} ${version} をリリース 🚀
+📦 ${name} v${version} をリリース 🚀
 
 コメント
 
@@ -143,7 +143,7 @@ https://github.com/tadashi-aikawa/${slug}/releases/tag/${version}
   - [ ] (任意) Discordで連絡
 
 \`\`\`
-# 📦 ${name} ${version} 🚀 
+# 📦 ${name} v${version} 🚀 
 
 https://github.com/tadashi-aikawa/${slug}/releases/tag/${version}
 
