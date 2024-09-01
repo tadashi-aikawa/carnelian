@@ -26,7 +26,7 @@ const releaseProductVars = {
     releaseCommand: (version: string) => `VERSION=${version} bun release`,
     kind: "Obsidian",
   },
-  SilhouetteNvim: {
+  "Silhouette.nvim": {
     slug: "silhouette.nvim",
     isCommunityPlugin: false,
     releaseCommand: (version: string) =>
