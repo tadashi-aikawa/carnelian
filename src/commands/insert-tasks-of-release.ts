@@ -30,7 +30,7 @@ const releaseProductVars = {
     slug: "silhouette.nvim",
     isCommunityPlugin: false,
     releaseCommand: (version: string) =>
-      `git tag v${version} && git push --tags`,
+      `git tag ${version} && git push --tags`,
     kind: "Neovim",
   },
 } as const;
@@ -81,13 +81,18 @@ function createTemplate(vars: {
   releaseCommand: (version: string) => string;
 }): string {
   const { name, slug, version, isCommunityPlugin, kind, releaseCommand } = vars;
+
+  // プラグイン対象によってvがつかなかったりついたりする部分の吸収
+  // 表示部分はvを付けるで統一しているが、URLなどtagに関与する部分は無理なので
+  const normalizedVersion = kind === "Obsidian" ? version : `v${version}`;
+
   let message = `
 - [ ] (任意) READMEの更新
 
 - [ ] リリースコマンドの実行
 
 \`\`\`
-${releaseCommand(version)}
+${releaseCommand(normalizedVersion)}
 \`\`\`
 
 - [ ] GitHubリリースノートを記入し公開
@@ -123,7 +128,7 @@ ${releaseCommand(version)}
 \`\`\`
 @???
 
-Released in [v${version}](https://github.com/tadashi-aikawa/${slug}/releases/tag/${version}) 🚀
+Released in [v${version}](https://github.com/tadashi-aikawa/${slug}/releases/tag/${normalizedVersion}) 🚀
 \`\`\`
 
 ${isCommunityPlugin ? "- [ ] (任意) Discussionを閉じる" : ""}
@@ -134,7 +139,7 @@ ${isCommunityPlugin ? "- [ ] (任意) Discussionを閉じる" : ""}
 
 コメント
 
-https://github.com/tadashi-aikawa/${slug}/releases/tag/${version}
+https://github.com/tadashi-aikawa/${slug}/releases/tag/${normalizedVersion}
 \`\`\`
 `;
 
@@ -145,7 +150,7 @@ https://github.com/tadashi-aikawa/${slug}/releases/tag/${version}
 \`\`\`
 # 📦 ${name} v${version} 🚀 
 
-https://github.com/tadashi-aikawa/${slug}/releases/tag/${version}
+https://github.com/tadashi-aikawa/${slug}/releases/tag/${normalizedVersion}
 
 あとはGitHubと同じ
 \`\`\`
@@ -156,7 +161,7 @@ https://github.com/tadashi-aikawa/${slug}/releases/tag/${version}
 - [ ] MinervaのHomeに記載してpublish
 
 \`\`\`
-- [${name} v${version}リリース](https://github.com/tadashi-aikawa/${slug}/releases/tag/${version})
+- [${name} v${version}リリース](https://github.com/tadashi-aikawa/${slug}/releases/tag/${normalizedVersion})
 \`\`\`
 `;
 
