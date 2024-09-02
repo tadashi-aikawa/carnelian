@@ -33,6 +33,13 @@ const releaseProductVars = {
       `git tag ${version} && git push --tags`,
     kind: "Neovim",
   },
+  "ghostwriter.nvim": {
+    slug: "ghostwriter.nvim",
+    isCommunityPlugin: false,
+    releaseCommand: (version: string) =>
+      `git tag ${version} && git push --tags`,
+    kind: "Neovim",
+  },
 } as const;
 type Product = keyof typeof releaseProductVars;
 
