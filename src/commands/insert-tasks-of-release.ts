@@ -4,41 +4,41 @@ import { showInputDialog, showSelectionDialog } from "src/lib/helpers/ui";
 const releaseProductVars = {
   "Various Complements": {
     slug: "obsidian-various-complements-plugin",
-    isCommunityPlugin: true,
     releaseCommand: (version: string) => `VERSION=${version} pnpm release`,
     kind: "Obsidian",
+    useSemanticRelease: false,
   },
   "Another Quick Switcher": {
     slug: "obsidian-another-quick-switcher",
-    isCommunityPlugin: true,
     releaseCommand: (version: string) => `VERSION=${version} bun release`,
     kind: "Obsidian",
+    useSemanticRelease: false,
   },
   "Mobile First Daily Interface": {
     slug: "mobile-first-daily-interface",
-    isCommunityPlugin: false,
     releaseCommand: (version: string) => `VERSION=${version} bun release`,
     kind: "Obsidian",
+    useSemanticRelease: false,
   },
   Silhouette: {
     slug: "silhouette",
-    isCommunityPlugin: false,
     releaseCommand: (version: string) => `VERSION=${version} bun release`,
     kind: "Obsidian",
+    useSemanticRelease: false,
   },
   "Silhouette.nvim": {
     slug: "silhouette.nvim",
-    isCommunityPlugin: false,
     releaseCommand: (version: string) =>
       `git tag ${version} && git push --tags`,
     kind: "Neovim",
+    useSemanticRelease: true,
   },
   "ghostwriter.nvim": {
     slug: "ghostwriter.nvim",
-    isCommunityPlugin: false,
     releaseCommand: (version: string) =>
       `git tag ${version} && git push --tags`,
     kind: "Neovim",
+    useSemanticRelease: true,
   },
 } as const;
 type Product = keyof typeof releaseProductVars;
@@ -64,7 +64,7 @@ export async function insertTasksOfRelease() {
   }
 
   const name = product;
-  const { slug, isCommunityPlugin, kind, releaseCommand } =
+  const { slug, kind, releaseCommand, useSemanticRelease } =
     releaseProductVars[product];
 
   insertToCursor(
@@ -72,9 +72,9 @@ export async function insertTasksOfRelease() {
       name,
       slug,
       version,
-      isCommunityPlugin,
       kind,
       releaseCommand,
+      useSemanticRelease,
     }),
   );
 }
@@ -83,19 +83,26 @@ function createTemplate(vars: {
   name: string;
   slug: string;
   version: string;
-  isCommunityPlugin: boolean;
   kind: "Obsidian" | "Neovim";
   releaseCommand: (version: string) => string;
+  useSemanticRelease: boolean;
 }): string {
-  const { name, slug, version, isCommunityPlugin, kind, releaseCommand } = vars;
+  const { name, slug, version, kind, releaseCommand, useSemanticRelease } =
+    vars;
 
   // プラグイン対象によってvがつかなかったりついたりする部分の吸収
   // 表示部分はvを付けるで統一しているが、URLなどtagに関与する部分は無理なので
   const normalizedVersion = kind === "Obsidian" ? version : `v${version}`;
 
-  let message = `
-- [ ] (任意) READMEの更新
+  let message = "";
+  const appendMessage = (m: string) => {
+    message += `\n${m}`;
+  };
 
+  if (useSemanticRelease) {
+    appendMessage("- [ ] GitHub Actionsでリリース");
+  } else {
+    appendMessage(`- [ ] (任意) READMEの更新
 - [ ] リリースコマンドの実行
 
 \`\`\`
@@ -137,9 +144,17 @@ ${releaseCommand(normalizedVersion)}
 
 Released in [v${version}](https://github.com/tadashi-aikawa/${slug}/releases/tag/${normalizedVersion}) 🚀
 \`\`\`
+`);
+  }
 
-${isCommunityPlugin ? "- [ ] (任意) Discussionを閉じる" : ""}
-- [ ] MFDIでBlueskyにて連絡
+  appendMessage(`- [ ] MinervaのHomeに記載してpublish
+
+\`\`\`
+- [${name} v${version}リリース](https://github.com/tadashi-aikawa/${slug}/releases/tag/${normalizedVersion})
+\`\`\`
+`);
+
+  appendMessage(`- [ ] Blueskyにて連絡
 
 \`\`\`
 📦 ${name} v${version} をリリース 🚀
@@ -148,29 +163,7 @@ ${isCommunityPlugin ? "- [ ] (任意) Discussionを閉じる" : ""}
 
 https://github.com/tadashi-aikawa/${slug}/releases/tag/${normalizedVersion}
 \`\`\`
-`;
-
-  if (isCommunityPlugin) {
-    message += `
-  - [ ] (任意) Discordで連絡
-
-\`\`\`
-# 📦 ${name} v${version} 🚀 
-
-https://github.com/tadashi-aikawa/${slug}/releases/tag/${normalizedVersion}
-
-あとはGitHubと同じ
-\`\`\`
-`;
-  }
-
-  message += `
-- [ ] MinervaのHomeに記載してpublish
-
-\`\`\`
-- [${name} v${version}リリース](https://github.com/tadashi-aikawa/${slug}/releases/tag/${normalizedVersion})
-\`\`\`
-`;
+`);
 
   return message;
 }
