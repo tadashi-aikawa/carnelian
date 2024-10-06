@@ -10,9 +10,9 @@ const releaseProductVars = {
   },
   "Another Quick Switcher": {
     slug: "obsidian-another-quick-switcher",
-    releaseCommand: (version: string) => `VERSION=${version} bun release`,
+    releaseCommand: null,
     kind: "Obsidian",
-    useSemanticRelease: false,
+    useSemanticRelease: true,
   },
   "Mobile First Daily Interface": {
     slug: "mobile-first-daily-interface",
@@ -28,15 +28,13 @@ const releaseProductVars = {
   },
   "Silhouette.nvim": {
     slug: "silhouette.nvim",
-    releaseCommand: (version: string) =>
-      `git tag ${version} && git push --tags`,
+    releaseCommand: null,
     kind: "Neovim",
     useSemanticRelease: true,
   },
   "ghostwriter.nvim": {
     slug: "ghostwriter.nvim",
-    releaseCommand: (version: string) =>
-      `git tag ${version} && git push --tags`,
+    releaseCommand: null,
     kind: "Neovim",
     useSemanticRelease: true,
   },
@@ -84,7 +82,7 @@ function createTemplate(vars: {
   slug: string;
   version: string;
   kind: "Obsidian" | "Neovim";
-  releaseCommand: (version: string) => string;
+  releaseCommand: ((version: string) => string) | null;
   useSemanticRelease: boolean;
 }): string {
   const { name, slug, version, kind, releaseCommand, useSemanticRelease } =
@@ -106,7 +104,7 @@ function createTemplate(vars: {
 - [ ] リリースコマンドの実行
 
 \`\`\`
-${releaseCommand(normalizedVersion)}
+${releaseCommand!(normalizedVersion)}
 \`\`\`
 
 - [ ] GitHubリリースノートを記入し公開
