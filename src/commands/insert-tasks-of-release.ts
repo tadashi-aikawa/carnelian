@@ -16,9 +16,9 @@ const releaseProductVars = {
   },
   "Mobile First Daily Interface": {
     slug: "mobile-first-daily-interface",
-    releaseCommand: (version: string) => `VERSION=${version} bun release`,
+    releaseCommand: null,
     kind: "Obsidian",
-    useSemanticRelease: false,
+    useSemanticRelease: true,
   },
   Silhouette: {
     slug: "silhouette",
