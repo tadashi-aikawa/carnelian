@@ -104,7 +104,9 @@ function createTemplate(vars: {
   };
 
   if (useSemanticRelease) {
-    appendMessage("- [ ] GitHub Actionsでリリース");
+    appendMessage(
+      `- [ ] [GitHub Actions](https://github.com/tadashi-aikawa/${slug}/actions/workflows/release.yaml)でリリース`,
+    );
   } else {
     appendMessage(`- [ ] (任意) READMEの更新
 - [ ] リリースコマンドの実行
