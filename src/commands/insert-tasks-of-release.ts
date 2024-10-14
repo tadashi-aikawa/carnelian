@@ -38,6 +38,12 @@ const releaseProductVars = {
     kind: "Neovim",
     useSemanticRelease: true,
   },
+  Fenice: {
+    slug: "fenice",
+    releaseCommand: null,
+    kind: "Others",
+    useSemanticRelease: true,
+  },
 } as const;
 type Product = keyof typeof releaseProductVars;
 
@@ -81,7 +87,7 @@ function createTemplate(vars: {
   name: string;
   slug: string;
   version: string;
-  kind: "Obsidian" | "Neovim";
+  kind: "Obsidian" | "Neovim" | "Others";
   releaseCommand: ((version: string) => string) | null;
   useSemanticRelease: boolean;
 }): string {
