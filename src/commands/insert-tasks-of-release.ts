@@ -32,6 +32,12 @@ const releaseProductVars = {
     kind: "Neovim",
     useSemanticRelease: true,
   },
+  "Silhouette Core": {
+    slug: "silhouette-core",
+    releaseCommand: null,
+    kind: "Others",
+    useSemanticRelease: true,
+  },
   "ghostwriter.nvim": {
     slug: "ghostwriter.nvim",
     releaseCommand: null,
