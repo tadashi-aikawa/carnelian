@@ -22,9 +22,9 @@ const releaseProductVars = {
   },
   Silhouette: {
     slug: "silhouette",
-    releaseCommand: (version: string) => `VERSION=${version} bun release`,
+    releaseCommand: null,
     kind: "Obsidian",
-    useSemanticRelease: false,
+    useSemanticRelease: true,
   },
   "Silhouette.nvim": {
     slug: "silhouette.nvim",
