@@ -10,6 +10,7 @@ import { copyUrlProperty } from "./commands/copy-url-property";
 import { createActivityNote } from "./commands/create-activity-note";
 import { createMINADR, createVIMADR } from "./commands/create-adr";
 import { createArticle } from "./commands/create-article";
+import { createHubNote } from "./commands/create-hub-note";
 import { createObsidianCookbook } from "./commands/create-obsidian-cookbook";
 import { createPrimeNote } from "./commands/create-prime-note";
 import { createReportNote } from "./commands/create-report-note";
@@ -128,6 +129,11 @@ export function createCommands(settings: PluginSettings): Command[] {
       name: "Create Activity note",
       kind: "editor",
       executor: createActivityNote,
+    },
+    {
+      name: "Create Hub note",
+      kind: "editor",
+      executor: createHubNote,
     },
     {
       name: "Create Report note",
