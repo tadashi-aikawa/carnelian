@@ -20,7 +20,7 @@
 
 ### 依存パッケージのインストール
 
-```console
+```bash
 bun i
 ```
 
@@ -36,7 +36,7 @@ bun i
 
 ## 開発コマンド
 
-```console
+```bash
 bun dev
 ```
 
@@ -46,14 +46,14 @@ bun dev
 - TypeScriptのファイルに変更があったら、[esbuild]が自動でビルドしてJavaScriptファイルを生成する
 - `esbuild.config.mjs`の`FILES`に記載されたファイルに変更があったら、`PLUGIN_DIR`で指定したディレクトリ配下に自動でコピーする
 
-```ts
+```typescript
 // FILESのデフォルト (変更は不要なはず)
 const FILES = ["main.js", "manifest.json", "styles.css"];
 ```
 
 ## Lint
 
-```console
+```bash
 bun lint
 ```
 
