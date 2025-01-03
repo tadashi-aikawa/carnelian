@@ -2,7 +2,7 @@ import type { WorkspaceLeaf } from "obsidian";
 import { parseTags } from "src/lib/obsutils/parser";
 import type { UApp, UEditor } from "src/lib/types";
 import { errorMessage } from "src/lib/utils/errors";
-import { doSinglePatternMatching, match } from "src/lib/utils/strings";
+import { match } from "src/lib/utils/strings";
 import { map, orThrow } from "src/lib/utils/types";
 import { getActiveFileContent } from "../entries";
 
@@ -181,7 +181,8 @@ export function setLinesInRange(
  * ```
  */
 export function getSelectionLines(): string[] | null {
-  return getSelectionText()?.split("\n") ?? null;
+  const text = getSelectionText();
+  return text ? text.split("\n") : null;
 }
 
 /**
