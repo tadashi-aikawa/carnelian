@@ -29,16 +29,17 @@ export class FixPropertiesService implements Service {
       if (props?.ignoreAutoFix) {
         return;
       }
-      if (!noteType.coverImagePath) {
-        return;
-      }
-      if (props?.cover === noteType.coverImagePath) {
-        // 既に設定済
-        return;
+
+      if (noteType.coverImagePath && noteType.coverImagePath !== props?.cover) {
+        updateActiveFileProperty("cover", noteType.coverImagePath);
+        notify("coverを更新しました", 3000);
       }
 
-      updateActiveFileProperty("cover", noteType.coverImagePath);
-      return notify("coverを更新しました", 3000);
+      if (noteType.name === "Troubleshooting note" && !props?.status) {
+        // 大抵解決しているので決め打ち
+        updateActiveFileProperty("status", "✅解決済");
+        notify("statusを更新しました", 3000);
+      }
     });
   }
 
