@@ -7,7 +7,7 @@ import { setOnCreateFileEvent } from "src/lib/helpers/events";
 import type { Service } from "src/services";
 
 /**
- * 新しくファイルを開いたときにテンプレのテキストを差し込むサービスです
+ * 新しくファイルを作成したときにテンプレのテキストを差し込むサービスです
  * 既にテキストが存在する場合は何もしません
  */
 export class AddDatePropertiesService implements Service {

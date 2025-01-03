@@ -20,7 +20,7 @@ function toDisplayDate(date: string): string {
 }
 
 /**
- * 新しくファイルを開いたときに特定プロパティを差し込むサービスです
+ * ファイルをアクティブにしたときに特定プロパティをヘッダーエレメントとしてを差し込むサービスです
  */
 export class AddPropertiesToHeadService implements Service {
   name = "Add properties to head";
