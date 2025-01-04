@@ -1,3 +1,4 @@
+import { getNoteType } from "src/definitions/mkms";
 import { now } from "src/lib/helpers/datetimes";
 import { insertToCursor } from "src/lib/helpers/editors/basic";
 import { createFile, openFile } from "src/lib/helpers/entries";
@@ -11,12 +12,13 @@ import { notify, showInputDialog } from "src/lib/helpers/ui";
  */
 export async function createPrimeNote() {
   const today = now("YYYY-MM-DD");
+  const nt = getNoteType("Prime note");
 
   const NOTE_BODY = `
 ---
 created: ${today}
 updated: ${today}
-cover: Notes/attachments/prime.webp
+cover: ${nt.coverImagePath}
 ---
 
 `.trim();
@@ -29,7 +31,7 @@ cover: Notes/attachments/prime.webp
     return;
   }
 
-  const title = `📕${inputTitle}`;
+  const title = `${nt.prefixEmoji}${inputTitle}`;
   const path = `Notes/${title}.md`;
   if (await exists(path)) {
     return notify(`${path} は既に存在します`);

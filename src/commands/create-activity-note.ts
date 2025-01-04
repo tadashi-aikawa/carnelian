@@ -1,3 +1,4 @@
+import { getNoteType } from "src/definitions/mkms";
 import { now } from "src/lib/helpers/datetimes";
 import { insertToCursor } from "src/lib/helpers/editors/basic";
 import { createFile, openFile } from "src/lib/helpers/entries";
@@ -11,12 +12,13 @@ import { notify, showInputDialog } from "src/lib/helpers/ui";
  */
 export async function createActivityNote() {
   const today = now("YYYY-MM-DD");
+  const nt = getNoteType("Activity note");
 
   const NOTE_BODY = `
 ---
 created: ${today}
 updated: ${today}
-cover: Notes/attachments/activity.webp
+cover: ${nt.coverImagePath}
 ---
 
 `.trim();
@@ -29,7 +31,7 @@ cover: Notes/attachments/activity.webp
     return;
   }
 
-  const title = `📜${today} ${inputTitle}`;
+  const title = `${nt.prefixEmoji}${today} ${inputTitle}`;
   const path = `Notes/${title}.md`;
   if (await exists(path)) {
     return notify(`${path} は既に存在します`);

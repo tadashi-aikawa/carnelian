@@ -46,7 +46,7 @@ status:
     return;
   }
 
-  const title = `📝${inputTitle}`;
+  const title = `${nt.prefixEmoji}${inputTitle}`;
   const path = `Notes/${title}.md`;
   if (await exists(path)) {
     return notify(`${path} は既に存在します`);
