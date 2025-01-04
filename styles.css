@@ -30,7 +30,7 @@ If your plugin does not need CSS, delete this file.
 .additional-properties__date-container::before {
   display: inline-block;
   filter: invert(0.4);
-  width: 14px;
+width: 14px;
   margin-right: 3px;
   content: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2aWV3Qm94PSIwIDAgNTEyIDUxMiI+PHBhdGggZD0iTTQ4MCAxMjhhNjQgNjQgMCAwIDAtNjQtNjRoLTE2VjQ4LjQ1YzAtOC42MS02LjYyLTE2LTE1LjIzLTE2LjQzQTE2IDE2IDAgMCAwIDM2OCA0OHYxNkgxNDRWNDguNDVjMC04LjYxLTYuNjItMTYtMTUuMjMtMTYuNDNBMTYgMTYgMCAwIDAgMTEyIDQ4djE2SDk2YTY0IDY0IDAgMCAwLTY0IDY0djEyYTQgNCAwIDAgMCA0IDRoNDQwYTQgNCAwIDAgMCA0LTR6IiBmaWxsPSJjdXJyZW50Q29sb3IiPjwvcGF0aD48cGF0aCBkPSJNMzIgNDE2YTY0IDY0IDAgMCAwIDY0IDY0aDMyMGE2NCA2NCAwIDAgMCA2NC02NFYxNzlhMyAzIDAgMCAwLTMtM0gzNWEzIDMgMCAwIDAtMyAzem0zNDQtMjA4YTI0IDI0IDAgMSAxLTI0IDI0YTI0IDI0IDAgMCAxIDI0LTI0em0wIDgwYTI0IDI0IDAgMSAxLTI0IDI0YTI0IDI0IDAgMCAxIDI0LTI0em0tODAtODBhMjQgMjQgMCAxIDEtMjQgMjRhMjQgMjQgMCAwIDEgMjQtMjR6bTAgODBhMjQgMjQgMCAxIDEtMjQgMjRhMjQgMjQgMCAwIDEgMjQtMjR6bTAgODBhMjQgMjQgMCAxIDEtMjQgMjRhMjQgMjQgMCAwIDEgMjQtMjR6bS04MC04MGEyNCAyNCAwIDEgMS0yNCAyNGEyNCAyNCAwIDAgMSAyNC0yNHptMCA4MGEyNCAyNCAwIDEgMS0yNCAyNGEyNCAyNCAwIDAgMSAyNC0yNHptLTgwLTgwYTI0IDI0IDAgMSAxLTI0IDI0YTI0IDI0IDAgMCAxIDI0LTI0em0wIDgwYTI0IDI0IDAgMSAxLTI0IDI0YTI0IDI0IDAgMCAxIDI0LTI0eiIgZmlsbD0iY3VycmVudENvbG9yIj48L3BhdGg+PC9zdmc+");
 }
@@ -162,4 +162,99 @@ If your plugin does not need CSS, delete this file.
 
 .link-card-site-name {
   font-size: 90%;
+}
+
+/****************************************
+/* カード v2
+/***************************************/
+
+/* PC */
+.link-card-v2 {
+  max-width: 512px;
+  height: auto;
+  position: relative;
+  z-index: 1;
+  border: 1px dotted #b5890077;
+  backdrop-filter: brightness(101%);
+  margin-bottom: 1em;
+  border-radius: 16px;
+
+  display: grid;
+  grid-template:
+    "image         " auto
+    ".....         " 0.5rem
+    "title         " auto
+    ".....         " 0.3rem
+    "content       " auto
+    "site          " auto;
+}
+.link-card-v2:hover {
+  cursor: pointer;
+  border: 1px solid #b58900;
+  backdrop-filter: brightness(98%);
+  transition: backdrop-filter 0.2s;
+}
+
+.link-card-v2-image {
+  grid-area: image;
+  width: 100% !important;
+  max-height: 288px;
+  object-fit: cover !important;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+}
+.link-card-v2-title{
+  grid-area: title;
+  font-weight: bold;
+  padding: 0 0.75rem;
+}
+.link-card-v2-content {
+  grid-area: content;
+  padding: 0.1rem 0.75rem;
+  font-size: 0.8rem;
+}
+.link-card-v2-site {
+  grid-area: site;
+  padding: 0.35rem 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  gap: 0.3rem;
+}
+
+.link-card-v2 a {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  text-indent: -999px;
+  z-index: 2;
+}
+
+.link-card-v2-site-icon {
+  height: 0.8rem;
+}
+
+.link-card-v2-site-name {
+  font-size: 0.75rem;
+  color: slategray;
+}
+
+
+/** カード内の画像は他のstyleを適用しない */
+.markdown-preview-view .link-card-v2 img {
+  margin: 0;
+}
+
+/** Live Previewのときは上下のmarginや枠・アイコン不要 */
+.cm-html-embed .link-card-v2 {
+  margin-left: auto;
+  margin: 0 15px;
+}
+.markdown-source-view.mod-cm6 .cm-html-embed.cm-embed-block:not(.cm-table-widget):hover {
+  box-shadow: none;
+}
+.markdown-source-view.mod-cm6 .cm-html-embed.cm-embed-block:not(.cm-table-widget):hover .edit-block-button {
+  display: none;
 }

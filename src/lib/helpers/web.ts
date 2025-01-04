@@ -155,9 +155,7 @@ function createDescriptionDOM(meta: HTMLMeta): string {
   }
 
   // 1byte文字で何文字にするか上限を決める
-  const descriptionMaxWidth =
-    300 - countCharsWidth(meta.title) * 2 - (meta.coverUrl ? 50 : 0);
-
+  const descriptionMaxWidth = 112;
   const description = stripLinks(
     stripDecoration(meta.description?.replaceAll("\n", "")),
   );
@@ -172,7 +170,9 @@ function createDescriptionDOM(meta: HTMLMeta): string {
         : `${description?.slice(0, descriptionMaxWidth)} ... `;
 
   return displayDescription
-    ? `<p class="link-card-description">${displayDescription}</p>`
+    ? `  <div class="link-card-v2-content">
+    ${displayDescription}
+  </div>`
     : "";
 }
 
@@ -193,23 +193,21 @@ export function createHTMLCard(meta: HTMLMeta): string {
   const descriptionDom = createDescriptionDOM(meta);
 
   const imageDom = isSecure(imageUrl)
-    ? `<img src="${imageUrl}" class="link-card-image" />`
+    ? `<img class="link-card-v2-image" src="${imageUrl}" />`
     : "";
   const linkDom = `<a href="${meta.originUrl}"></a>`;
 
-  return `<div class="link-card">
-	<div class="link-card-header">
-		<img src="${faviconUrl}" class="link-card-site-icon"/>
-		<span class="link-card-site-name">${siteName}</span>
-	</div>
-	<div class="link-card-body">
-		<div class="link-card-content">
-      <p class="link-card-title">${title}</p>
-      ${descriptionDom}  
-		</div>
-		${imageDom}
-	</div>
-	${linkDom}
+  return `<div class="link-card-v2">
+  <div class="link-card-v2-site">
+    <img class="link-card-v2-site-icon" src="${faviconUrl}" />
+    <span class="link-card-v2-site-name">${siteName}</span>
+  </div>
+  <div class="link-card-v2-title">
+    ${title}
+  </div>
+  ${descriptionDom}
+  ${imageDom}
+  ${linkDom}
 </div>`;
 }
 
@@ -224,28 +222,26 @@ export async function createNoteCard(
   const { domain, getResourceUrl } = await useObsidianPublishInfo();
 
   const description = getPropertiesByPath(file.path)?.description ?? "TODO";
-  const descriptionDom = `<p class="link-card-description">${description}</p>`;
+  const descriptionDom = `<div class="link-card-v2-content">${description}</div>`;
 
   const imageUrl =
     map(getPropertiesByPath(file.path)?.cover, getResourceUrl) ??
     args.defaultImageUrl;
-  const imageDom = `<img src="${imageUrl}" class="link-card-image" />`;
+  const imageDom = `<img class="link-card-v2-image" src="${imageUrl}" />`;
 
-  const linkDom = `<a class="internal-link" data-href="${file.path}"></a>`;
+  const linkDom = `<a data-href="${file.path}" class="internal-link"></a>`;
 
-  return `<div class="link-card">
-	<div class="link-card-header">
-		<img src="${args.faviconUrl}" class="link-card-site-icon"/>
-		<span class="link-card-site-name">${domain}</span>
-	</div>
-	<div class="link-card-body">
-		<div class="link-card-content">
-      <p class="link-card-title">${file.basename}</p>
-      ${descriptionDom}  
-		</div>
-		${imageDom}
-	</div>
-	${linkDom}
+  return `<div class="link-card-v2">
+  <div class="link-card-v2-site">
+    <img class="link-card-v2-site-icon" src="${args.faviconUrl}" />
+    <span class="link-card-v2-site-name">${domain}</span>
+  </div>
+  <div class="link-card-v2-title">
+    ${file.basename}
+  </div>
+  ${descriptionDom}
+  ${imageDom}
+  ${linkDom}
 </div>`;
 }
 
