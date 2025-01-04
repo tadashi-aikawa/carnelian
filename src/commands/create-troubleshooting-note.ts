@@ -1,3 +1,4 @@
+import { getNoteType } from "src/definitions/mkms";
 import { now } from "src/lib/helpers/datetimes";
 import { insertToCursor } from "src/lib/helpers/editors/basic";
 import { createFile, openFile } from "src/lib/helpers/entries";
@@ -11,18 +12,23 @@ import { notify, showInputDialog } from "src/lib/helpers/ui";
  */
 export async function createTroubleshootingNote() {
   const today = now("YYYY-MM-DD");
+  const nt = getNoteType("Troubleshooting note");
 
   const NOTE_BODY = `
 ---
 created: ${today}
 updated: ${today}
-cover: Notes/attachments/troubleshooting.webp
+cover: ${nt.coverImagePath}
 status:
   - ❌未解決
 ---
 ## 事象
 
+### 環境
 
+| 対象      | バージョン |
+| --------- | ------     |
+| ツール名  | 1.2.3      |
 
 ## 原因
 
