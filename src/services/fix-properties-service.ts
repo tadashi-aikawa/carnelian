@@ -30,6 +30,11 @@ export class FixPropertiesService implements Service {
         return;
       }
 
+      // publishプロパティがある場合はWeekly Reportなので変更しない
+      if (noteType.name === "Report note" && props?.publish != null) {
+        return;
+      }
+
       if (noteType.coverImagePath && noteType.coverImagePath !== props?.cover) {
         updateActiveFileProperty("cover", noteType.coverImagePath);
         notify("coverを更新しました", 3000);
