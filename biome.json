@@ -11,6 +11,7 @@
         "noNonNullAssertion": "off",
         "useNodejsImportProtocol": "off"
       },
+      "correctness": { "noUnusedImports": "warn" },
       "suspicious": {
         "noExplicitAny": "off"
       }
