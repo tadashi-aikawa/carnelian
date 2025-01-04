@@ -24,6 +24,7 @@ import { insertSiteCard } from "./commands/insert-site-card";
 import { insertTasksOfRelease } from "./commands/insert-tasks-of-release";
 import { insertMTG } from "./commands/insert-todays-mtg";
 import { openPropertyUrl } from "./commands/open-property-url";
+import { pasteURLToSiteLink } from "./commands/paste-url-to-site-link";
 import { showAnotherCommandPalette } from "./commands/show-another-command-palette";
 import { stripLinksAndDecorations } from "./commands/stripe-links-and-decorations";
 import { toggleLivePreview } from "./commands/toggle-live-preview";
@@ -99,6 +100,11 @@ export function createCommands(settings: PluginSettings): Command[] {
       name: "Transform URL to site link",
       kind: "editor",
       executor: transformURLToSiteLink,
+    },
+    {
+      name: "Paste URL to site link",
+      kind: "editor",
+      executor: pasteURLToSiteLink,
     },
     {
       name: "Sort selection",

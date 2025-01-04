@@ -45,10 +45,16 @@ export async function copyToClipboard(text: string): Promise<void> {
  * ```ts
  * await getClipboardText()
  * // クリップボードの中身
+ *
+ * // 改行や前後の空白を削除して貼り付け
+ * await getClipboardText({trim: true})
  * ```
  */
-export async function getClipboardText(): Promise<string> {
-  return await (navigator as any).clipboard.readText();
+export async function getClipboardText(option?: {
+  trim?: boolean;
+}): Promise<string> {
+  const txt: string = await (navigator as any).clipboard.readText();
+  return option?.trim ? txt.trim() : txt;
 }
 
 /**
