@@ -12,6 +12,7 @@ import {
 } from "../utils/meta-helper";
 import { countCharsWidth, sjis2String } from "../utils/strings";
 import { map } from "../utils/types";
+import { path2LinkText } from "./links";
 import { useObsidianPublishInfo } from "./plugins";
 import { getPropertiesByPath } from "./properties";
 
@@ -217,9 +218,9 @@ export function createHTMLCard(meta: HTMLMeta): string {
  */
 export async function createNoteCard(
   file: TFile,
-  args: { defaultImageUrl: string; faviconUrl: string },
+  args: { defaultImageUrl: string; faviconUrl: string; siteName?: string },
 ): Promise<string> {
-  const { getResourceUrl } = await useObsidianPublishInfo();
+  const { domain, getResourceUrl } = await useObsidianPublishInfo();
 
   const description = getPropertiesByPath(file.path)?.description ?? "TODO";
   const descriptionDom = `<div class="link-card-v2-content">${description}</div>`;
@@ -229,12 +230,13 @@ export async function createNoteCard(
     args.defaultImageUrl;
   const imageDom = `<img class="link-card-v2-image" src="${imageUrl}" />`;
 
-  const linkDom = `<a data-href="${file.path}" class="internal-link"></a>`;
+  const dataHref = path2LinkText(file.path)?.slice(2).slice(0, -2) ?? file.path;
+  const linkDom = `<a data-href="${dataHref}" class="internal-link"></a>`;
 
   return `<div class="link-card-v2">
   <div class="link-card-v2-site">
     <img class="link-card-v2-site-icon" src="${args.faviconUrl}" />
-    <span class="link-card-v2-site-name">Minerva</span>
+    <span class="link-card-v2-site-name">${args.siteName ?? domain}</span>
   </div>
   <div class="link-card-v2-title">
     ${file.basename}

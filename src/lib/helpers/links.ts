@@ -1,6 +1,6 @@
 import type { UApp, ULinkCache } from "../types";
 import { map } from "../utils/types";
-import { getActiveFile } from "./entries";
+import { getActiveFile, getFileByPath } from "./entries";
 import { getMetadataCache } from "./metadata";
 
 declare let app: UApp;
@@ -35,6 +35,10 @@ export function getActiveFileBacklinkPaths(): string[] {
  * ```ts
  * linkText2Path("[[Obsidian]]")
  * // "Notes/Obsidian.md"
+ * linkText2Path("Obsidian")
+ * // "Notes/Obsidian.md"
+ * linkText2Path("Obsidian.md")
+ * // "Notes/Obsidian.md"
  * ```
  */
 export function linkText2Path(linkText: string): string | null {
@@ -43,4 +47,22 @@ export function linkText2Path(linkText: string): string | null {
     (f) =>
       getMetadataCache().getFirstLinkpathDest(linkText, f.path)?.path ?? null,
   );
+}
+
+/**
+ * ファイルパスからリンクテキストを取得します
+ *
+ * ```ts
+ * path2LinkText("Notes/Obsidian.md")
+ * // "[[Obsidian]]"
+ * ```
+ */
+export function path2LinkText(path: string): string | null {
+  const dstFile = getFileByPath(path);
+  const activeFile = getActiveFile();
+  if (!dstFile || !activeFile) {
+    return null;
+  }
+
+  return app.fileManager.generateMarkdownLink(dstFile, activeFile.path);
 }

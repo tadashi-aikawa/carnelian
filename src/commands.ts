@@ -30,7 +30,7 @@ import { showAnotherCommandPalette } from "./commands/show-another-command-palet
 import { stripLinksAndDecorations } from "./commands/stripe-links-and-decorations";
 import { toggleLivePreview } from "./commands/toggle-live-preview";
 import { transformMOC } from "./commands/transform-moc";
-import { transformURLToSiteLink } from "./commands/transform-url-to-site-link";
+import { transformToV2OGPCard } from "./commands/transform-v2-card";
 import { updateChangeLog } from "./commands/update-change-log";
 import { sortSelectionLines } from "./lib/helpers/editors/advanced";
 import {
@@ -103,9 +103,9 @@ export function createCommands(settings: PluginSettings): Command[] {
       executor: insertNoteCard,
     },
     {
-      name: "Transform URL to site link",
+      name: "Transform to v2 OGP card",
       kind: "editor",
-      executor: transformURLToSiteLink,
+      executor: transformToV2OGPCard,
     },
     {
       name: "Paste URL to site link",

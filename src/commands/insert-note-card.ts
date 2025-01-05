@@ -14,11 +14,13 @@ export async function insertNoteCard() {
   try {
     const nt = notify("⏳ カードの作成に必要な情報を取得中...");
 
+    // TODO: transform-v2-card.tsと重複している...
     const html = await createNoteCard(file, {
       defaultImageUrl:
         "https://publish-01.obsidian.md/access/35d05cd1bf5cc500e11cc8ba57daaf88/Notes/attachments/minerva-image.webp",
       faviconUrl:
         "https://publish-01.obsidian.md/access/35d05cd1bf5cc500e11cc8ba57daaf88/favicon-64.png",
+      siteName: "Minerva",
     });
     insertToCursor(`\n${html}
 

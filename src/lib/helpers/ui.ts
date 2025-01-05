@@ -29,6 +29,22 @@ export function notify(
 }
 
 /**
+ * バリデーションエラーを通知します
+ * タイムアウトはあります
+ */
+export function notifyValidationError(text: string): Notice {
+  return notify(`🚫 ${text}`, 3000);
+}
+
+/**
+ * ランタイムエラーを通知します
+ * タイムアウトはありません
+ */
+export function notifyRuntimeError(text: string): Notice {
+  return notify(`⛔ ${text}`);
+}
+
+/**
  * クリップボードにテキストをコピーします
  *
  * ```ts

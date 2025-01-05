@@ -176,7 +176,7 @@ If your plugin does not need CSS, delete this file.
   z-index: 1;
   border: 1px dotted #b5890077;
   backdrop-filter: brightness(101%);
-  margin-bottom: 1em;
+  margin: 1.5em auto;
   border-radius: 16px;
 
   display: grid;
@@ -260,7 +260,7 @@ If your plugin does not need CSS, delete this file.
 
 /** Live Previewのときは上下のmarginや枠・アイコン不要 */
 .cm-html-embed .link-card-v2 {
-  margin: 0 15px;
+  margin: 0 auto;
 }
 .markdown-source-view.mod-cm6
   .cm-html-embed.cm-embed-block:not(.cm-table-widget):hover {
