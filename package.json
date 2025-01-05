@@ -4,6 +4,7 @@
   "author": "tadashi-aikawa",
   "main": "main.js",
   "dependencies": {
+    "@atproto/api": "^0.13.25",
     "dayjs": "^1.11.13",
     "encoding-japanese": "^2.2.0"
   },

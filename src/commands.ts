@@ -16,6 +16,7 @@ import { createPrimeNote } from "./commands/create-prime-note";
 import { createReportNote } from "./commands/create-report-note";
 import { createTroubleshootingNote } from "./commands/create-troubleshooting-note";
 import { formatTable } from "./commands/format-table";
+import { insertBlueskyPostsToWeeklyNote } from "./commands/insert-bluesky-posts-to-weekly-note";
 import { insertNewNotesToWeeklyNote } from "./commands/insert-inputs-to-weekly-note";
 import { insertMFDIPostsToWeeklyNote } from "./commands/insert-mfdi-posts-to-weekly-note";
 import { insertMOC } from "./commands/insert-moc";
@@ -51,6 +52,11 @@ export function createCommands(settings: PluginSettings): Command[] {
       name: "Insert MFDI posts to weekly note",
       kind: "editor",
       executor: insertMFDIPostsToWeeklyNote,
+    },
+    {
+      name: "Insert Bluesky posts to weekly note",
+      kind: "editor",
+      executor: insertBlueskyPostsToWeeklyNote,
     },
     {
       name: "Insert MTG",
