@@ -219,7 +219,7 @@ export async function createNoteCard(
   file: TFile,
   args: { defaultImageUrl: string; faviconUrl: string },
 ): Promise<string> {
-  const { domain, getResourceUrl } = await useObsidianPublishInfo();
+  const { getResourceUrl } = await useObsidianPublishInfo();
 
   const description = getPropertiesByPath(file.path)?.description ?? "TODO";
   const descriptionDom = `<div class="link-card-v2-content">${description}</div>`;
@@ -234,7 +234,7 @@ export async function createNoteCard(
   return `<div class="link-card-v2">
   <div class="link-card-v2-site">
     <img class="link-card-v2-site-icon" src="${args.faviconUrl}" />
-    <span class="link-card-v2-site-name">${domain}</span>
+    <span class="link-card-v2-site-name">Minerva</span>
   </div>
   <div class="link-card-v2-title">
     ${file.basename}
