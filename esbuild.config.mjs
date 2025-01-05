@@ -42,7 +42,7 @@ console.log(`📁 ${pluginDir}ディレクトリを作成します(既にある�
 fs.mkdirSync(pluginDir, { recursive: true });
 
 const hotreloadPath = path.join(pluginDir, ".hotreload", "");
-console.log(`🌶️ ${hotreloadPath}ファイルを作成します`);
+console.log(`🌶 ${hotreloadPath}ファイルを作成します`);
 fs.writeFileSync(hotreloadPath, "");
 
 const FILES = ["main.js", "manifest.json", "styles.css"];
@@ -91,7 +91,11 @@ if (prod) {
 } else {
   await context.watch();
 
-  const watcher = chokidar.watch(FILES, { persistent: true });
+  const watcher = chokidar.watch(FILES, {
+    persistent: true,
+    usePolling: true,
+    ignoreInitial: true,
+  });
   watcher
     .on("add", (p) => {
       fs.copyFileSync(p, path.join(pluginDir, p));
