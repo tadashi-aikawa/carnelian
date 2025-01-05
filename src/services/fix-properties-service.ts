@@ -5,6 +5,7 @@ import {
   updateActiveFileProperty,
 } from "src/lib/helpers/properties";
 import { notify } from "src/lib/helpers/ui";
+import { match } from "src/lib/utils/strings";
 import type { Service } from "src/services";
 
 /**
@@ -30,8 +31,11 @@ export class FixPropertiesService implements Service {
         return;
       }
 
-      // publishプロパティがある場合はWeekly Reportなので変更しない
-      if (noteType.name === "Report note" && props?.publish != null) {
+      // Weekly Reportは何もしない
+      if (
+        noteType.name === "Report note" &&
+        match(file.basename, /\d{4}年\d{1,2}週 Weekly Report/)
+      ) {
         return;
       }
 
