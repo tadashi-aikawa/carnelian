@@ -1,4 +1,4 @@
-import { type Command, WorkspaceLeaf } from "obsidian";
+import type { Command } from "obsidian";
 import type { UApp } from "../types";
 
 declare let app: UApp;

@@ -1,11 +1,6 @@
-import {
-  type CachedMetadata,
-  EventRef,
-  type TAbstractFile,
-  type TFile,
-} from "obsidian";
+import type { CachedMetadata, TAbstractFile, TFile } from "obsidian";
 import type { UApp } from "../types";
-import { isFile, isFolder } from "./entries";
+import { isFile } from "./entries";
 
 declare let app: UApp;
 

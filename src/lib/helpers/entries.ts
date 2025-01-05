@@ -2,7 +2,6 @@ import dayjs, { type Dayjs } from "dayjs";
 import type { Loc, TAbstractFile, TFile, TFolder } from "obsidian";
 import { toEditorPosition, toFullPath } from "../obsutils/mapper";
 import type { UApp } from "../types";
-import { sorter } from "../utils/collections";
 import { map } from "../utils/types";
 import { getActiveEditor } from "./editors/basic";
 
