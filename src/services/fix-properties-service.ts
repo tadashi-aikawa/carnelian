@@ -1,12 +1,33 @@
-import { findNoteType } from "src/definitions/mkms";
+import type { TFile } from "obsidian";
+import { type NoteType, findNoteType } from "src/definitions/mkms";
 import { setOnFileOpenEvent } from "src/lib/helpers/events";
 import {
   getPropertiesByPath,
   updateActiveFileProperty,
 } from "src/lib/helpers/properties";
 import { notify } from "src/lib/helpers/ui";
+import type { Properties } from "src/lib/types";
 import { match } from "src/lib/utils/strings";
 import type { Service } from "src/services";
+
+function shouldNotFix(
+  file: TFile,
+  noteType: NoteType,
+  props: Properties | null,
+): boolean {
+  if (props?.ignoreAutoFix) {
+    return true;
+  }
+
+  if (
+    noteType.name === "Report note" &&
+    match(file.basename, /\d{4}年\d{1,2}週 Weekly Report/)
+  ) {
+    return true;
+  }
+
+  return false;
+}
 
 /**
  * ファイルをアクティブにしたときにプロパティを自動修正するサービスです
@@ -25,17 +46,9 @@ export class FixPropertiesService implements Service {
       if (!noteType) {
         return;
       }
-
       const props = getPropertiesByPath(file.path);
-      if (props?.ignoreAutoFix) {
-        return;
-      }
 
-      // Weekly Reportは何もしない
-      if (
-        noteType.name === "Report note" &&
-        match(file.basename, /\d{4}年\d{1,2}週 Weekly Report/)
-      ) {
+      if (shouldNotFix(file, noteType, props)) {
         return;
       }
 
