@@ -24,6 +24,7 @@ import { insertSiteCard } from "./commands/insert-site-card";
 import { insertTasksOfRelease } from "./commands/insert-tasks-of-release";
 import { insertMTG } from "./commands/insert-todays-mtg";
 import { openPropertyUrl } from "./commands/open-property-url";
+import { pasteSiteCard } from "./commands/paste-site-card";
 import { pasteURLToSiteLink } from "./commands/paste-url-to-site-link";
 import { showAnotherCommandPalette } from "./commands/show-another-command-palette";
 import { stripLinksAndDecorations } from "./commands/stripe-links-and-decorations";
@@ -90,6 +91,11 @@ export function createCommands(settings: PluginSettings): Command[] {
       name: "Insert site card",
       kind: "editor",
       executor: insertSiteCard,
+    },
+    {
+      name: "Paste site card",
+      kind: "editor",
+      executor: pasteSiteCard,
     },
     {
       name: "Insert note card",
