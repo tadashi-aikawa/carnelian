@@ -203,13 +203,19 @@ If your plugin does not need CSS, delete this file.
   border-top-right-radius: 16px;
 }
 /* PC */
-@media screen and (min-width: 1024px) {
+@media screen and (min-width: 769px) {
   .link-card-v2-image {
     max-height: 288px;
   }
 }
-/* Mobile */
-@media screen and (max-width: 1024px) {
+/* タブレット */
+@media screen and (max-width: 768px) and (min-width: 481px) {
+  .link-card-v2-image {
+    max-height: 288px;
+  }
+}
+/* スマホ */
+@media screen and (max-width: 480px) {
   .link-card-v2-image {
     max-height: 192px;
   }
