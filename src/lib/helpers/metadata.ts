@@ -1,6 +1,6 @@
 import type { CachedMetadata, MetadataCache } from "obsidian";
 import type { UApp } from "../types";
-import { map } from "../utils/types";
+import { map } from "../utils/guard";
 import { getActiveFile, getFileByPath } from "./entries";
 
 declare let app: UApp;

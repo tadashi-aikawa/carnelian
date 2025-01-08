@@ -1,6 +1,6 @@
 import type { Properties, UApp, UMetadataEditor } from "../types";
 import { errorMessage } from "../utils/errors";
-import { orThrow } from "../utils/types";
+import { orThrow } from "../utils/guard";
 import { getActiveFileCache, getFileCacheByPath } from "./metadata";
 
 declare let app: UApp;

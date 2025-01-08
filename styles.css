@@ -20,6 +20,7 @@ If your plugin does not need CSS, delete this file.
   gap: 12px;
   color: gray;
   font-weight: 600;
+  order: 2;
 }
 
 .additional-properties__date-container {
@@ -38,6 +39,60 @@ If your plugin does not need CSS, delete this file.
 .additional-properties__status-container {
   display: flex;
   cursor: pointer;
+}
+
+.view-header {
+  order: 1;
+}
+.view-content {
+  order: 4;
+}
+
+.linter-inspections {
+  display: flex;
+  justify-content: end;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.25rem;
+  width: var(--file-line-width);
+  padding-right: var(--file-margins);
+  place-self: center;
+  font-size: 90%;
+  line-height: 14px;
+  order: 3;
+}
+
+.linter-inspection {
+  border-radius: 0.1rem;
+  padding: 0.1rem 0.5rem 0.1rem 0.25rem;
+  color: white;
+}
+.linter-inspection::before {
+  display: inline-block;
+  width: 20px;
+  margin-right: 3px;
+  filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(2%)
+    hue-rotate(329deg) brightness(106%) contrast(101%);
+}
+
+.linter-inspection__info {
+  background-color: skyblue;
+}
+.linter-inspection__info::before {
+  content: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2aWV3Qm94PSIwIDAgMTIgMTIiPjxnIGZpbGw9Im5vbmUiPjxwYXRoIGQ9Ik0xMSA2QTUgNSAwIDEgMSAxIDZhNSA1IDAgMCAxIDEwIDB6bS01LjUuNVY4YS41LjUgMCAwIDAgMSAwVjYuNWEuNS41IDAgMCAwLTEgMHpNNiAzLjc1YS43NS43NSAwIDEgMCAwIDEuNWEuNzUuNzUgMCAwIDAgMC0xLjV6IiBmaWxsPSJjdXJyZW50Q29sb3IiPjwvcGF0aD48L2c+PC9zdmc+");
+}
+
+.linter-inspection__warn {
+  background-color: orange;
+}
+.linter-inspection__warn::before {
+  content: url("data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IiB2aWV3Qm94PSIwIDAgNTEyIDUxMiIgZW5hYmxlLWJhY2tncm91bmQ9Im5ldyAwIDAgNTEyIDUxMiIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+PGc+PHBhdGggZD0iTTIyOC45LDc5LjlMNTEuOCw0MDMuMUM0MC42LDQyMy4zLDU1LjUsNDQ4LDc4LjksNDQ4aDM1NC4zYzIzLjMsMCwzOC4yLTI0LjcsMjcuMS00NC45TDI4My4xLDc5LjkgQzI3MS40LDU4LjcsMjQwLjYsNTguNywyMjguOSw3OS45eiBNMjczLjYsMjE0TDI3MCwzMzZoLTI4bC0zLjYtMTIySDI3My42eiBNMjU2LDQwMi40Yy0xMC43LDAtMTkuMS04LjEtMTkuMS0xOC40IHM4LjQtMTguNCwxOS4xLTE4LjRzMTkuMSw4LjEsMTkuMSwxOC40UzI2Ni43LDQwMi40LDI1Niw0MDIuNHoiPjwvcGF0aD48L2c+PC9zdmc+");
+}
+.linter-inspection__error {
+  background-color: orangered;
+}
+.linter-inspection__error::before {
+  content: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2aWV3Qm94PSIwIDAgMjAgMjAiPjxnIGZpbGw9Im5vbmUiPjxwYXRoIGQ9Ik0xMC4yNzcgMi4wODRhLjUuNSAwIDAgMC0uNTU0IDBhMTUuMDUgMTUuMDUgMCAwIDEtNi4yOTQgMi40MjFBLjUuNSAwIDAgMCAzIDV2NC41YzAgMy44OTEgMi4zMDcgNi43MyA2LjgyIDguNDY3YS41LjUgMCAwIDAgLjM2IDBDMTQuNjkzIDE2LjIzIDE3IDEzLjM5IDE3IDkuNVY1YS41LjUgMCAwIDAtLjQzLS40OTVhMTUuMDUgMTUuMDUgMCAwIDEtNi4yOTMtMi40MjF6TTEwIDUuNzVhLjc1Ljc1IDAgMCAxIC43NS43NXY1YS43NS43NSAwIDAgMS0xLjUgMHYtNWEuNzUuNzUgMCAwIDEgLjc1LS43NXptLjc1IDhhLjc1Ljc1IDAgMSAxLTEuNSAwYS43NS43NSAwIDAgMSAxLjUgMHoiIGZpbGw9ImN1cnJlbnRDb2xvciI+PC9wYXRoPjwvZz48L3N2Zz4=");
 }
 
 .carnelian-command-palette-item {

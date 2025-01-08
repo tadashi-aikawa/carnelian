@@ -2,7 +2,7 @@ import dayjs, { type Dayjs } from "dayjs";
 import type { Loc, TAbstractFile, TFile, TFolder } from "obsidian";
 import { toEditorPosition, toFullPath } from "../obsutils/mapper";
 import type { UApp } from "../types";
-import { map } from "../utils/types";
+import { map } from "../utils/guard";
 import { getActiveEditor } from "./editors/basic";
 
 declare let app: UApp;
@@ -26,6 +26,18 @@ export function isFolder(entry: TAbstractFile): entry is TFolder {
  */
 export function getActiveFile(): TFile | null {
   return app.workspace.getActiveFile();
+}
+
+/**
+ * 現在ファイルのタイトルを取得します
+ *
+ * ```ts
+ * getActiveFileTitle()
+ * // "activeFile"
+ * ```
+ */
+export function getActiveFileTitle(): string | null {
+  return map(getActiveFile(), (af) => af.basename);
 }
 
 /**

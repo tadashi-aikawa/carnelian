@@ -143,9 +143,9 @@ export async function showFileSearchDialog(): Promise<TFile | null> {
 }
 
 /**
- * 現在ファイルViewのヘッダ前に要素を差し込みます
+ * 現在ファイルViewのヘッダ後に要素を差し込みます
  */
-export function insertElementBeforeHeader(element: Element): void {
+export function insertElementAfterHeader(element: Element): void {
   app.workspace
     .getActiveFileView()
     .containerEl.find(".view-header")

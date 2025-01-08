@@ -4,6 +4,10 @@ interface Note {
   name: string;
   prefixEmoji: string | null;
   coverImagePath: string | null;
+  /**
+   * 判定条件に使う
+   */
+  pathPattern: RegExp | null;
 }
 
 function createNotes<T extends Record<string, Note>>(
@@ -15,45 +19,66 @@ function createNotes<T extends Record<string, Note>>(
 }
 
 const noteTypeByName = createNotes({
-  "Glossary note": {
-    name: "Glossary note",
-    prefixEmoji: null,
-    coverImagePath: null,
-  },
-  "Procedure note": {
-    name: "Procedure note",
-    prefixEmoji: null,
-    coverImagePath: null,
-  },
   "Prime note": {
     name: "Prime note",
     prefixEmoji: "📕",
     coverImagePath: "Notes/attachments/prime.webp",
+    pathPattern: /^Notes\/📕.+\.md$/,
   },
   "Hub note": {
     name: "Hub note",
     prefixEmoji: "📒",
     coverImagePath: "Notes/attachments/hub.webp",
+    pathPattern: /^Notes\/📒.+\.md$/,
   },
   "Activity note": {
     name: "Activity note",
     prefixEmoji: "📜",
     coverImagePath: "Notes/attachments/activity.webp",
+    pathPattern: /^Notes\/📜.+\.md$/,
   },
   "Troubleshooting note": {
     name: "Troubleshooting note",
     prefixEmoji: "📝",
     coverImagePath: "Notes/attachments/troubleshooting.webp",
-  },
-  "Article note": {
-    name: "Article note",
-    prefixEmoji: "📘",
-    coverImagePath: null,
+    pathPattern: /^Notes\/📝.+\.md$/,
   },
   "Report note": {
     name: "Report note",
     prefixEmoji: "📰",
     coverImagePath: "Notes/attachments/report.webp",
+    pathPattern: /^Notes\/📰.+\.md$/,
+  },
+  "Article note": {
+    name: "Article note",
+    prefixEmoji: "📘",
+    coverImagePath: null,
+    pathPattern: /^📘Articles\/📘.+\.md$/,
+  },
+  "Weekly report": {
+    name: "Weekly report",
+    prefixEmoji: "📰",
+    coverImagePath: null,
+    pathPattern: /^📰Weekly Report\/.+\.md$/,
+  },
+  "Daily note": {
+    name: "Daily note",
+    prefixEmoji: null,
+    coverImagePath: null,
+    pathPattern: /^_Privates\/Daily Notes\/.+\.md$/,
+  },
+  // WARN: この2つは最後に判定しないと無理
+  "Glossary note": {
+    name: "Glossary note",
+    prefixEmoji: null,
+    coverImagePath: null,
+    pathPattern: /^Notes\/[^にをすむ]+\.md$/,
+  },
+  "Procedure note": {
+    name: "Procedure note",
+    prefixEmoji: null,
+    coverImagePath: null,
+    pathPattern: /^Notes\/.+.md$/,
   },
 } as const);
 
@@ -63,10 +88,23 @@ export type NoteType = (typeof noteTypeByName)[keyof typeof noteTypeByName];
  * ファイルに適切なノートタイプを返却します。該当するものがなかった場合はnullを返します。
  */
 export function findNoteType(file: TFile): NoteType | null {
+  return findNoteTypeBy({ name: file.name, path: file.path });
+}
+
+/**
+ * ファイルに適切なノートタイプを返却します。該当するものがなかった場合はnullを返します。
+ */
+export function findNoteTypeBy(args: {
+  name: string;
+  path: string;
+}): NoteType | null {
   return (
-    Object.values(noteTypeByName).find((x) =>
-      x.prefixEmoji != null ? file.name.startsWith(x.prefixEmoji) : false,
-    ) ?? null
+    Object.values(noteTypeByName).find((x) => {
+      if (x.pathPattern != null && !args.path.match(x.pathPattern)) {
+        return false;
+      }
+      return true;
+    }) ?? null
   );
 }
 

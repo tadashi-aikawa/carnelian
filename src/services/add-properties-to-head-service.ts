@@ -6,7 +6,7 @@ import {
 } from "src/lib/helpers/events";
 import { getPropertiesByPath } from "src/lib/helpers/properties";
 import {
-  insertElementBeforeHeader,
+  insertElementAfterHeader,
   removeElementsFromContainer,
 } from "src/lib/helpers/ui";
 import { ExhaustiveError } from "src/lib/utils/errors";
@@ -111,12 +111,11 @@ export class AddPropertiesToHeadService implements Service {
     if (status) {
       propertiesEl.appendChild(this.createHeaderContainer(status, "status"));
     }
-    insertElementBeforeHeader(propertiesEl);
+    insertElementAfterHeader(propertiesEl);
   }
 
   /**
    * ファイルが表示されているViewからプロパティ要素を削除します
-   * @param path 削除するViewに表示されているファイルのpath
    */
   removePropertiesElements(): void {
     removeElementsFromContainer(`.${this.className}`);

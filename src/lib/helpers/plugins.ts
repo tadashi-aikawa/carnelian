@@ -2,7 +2,7 @@ import dayjs from "dayjs";
 import type { TFile } from "obsidian";
 import type { UApp } from "../types";
 import { getDatesInRange } from "../utils/dates";
-import { isPresent } from "../utils/types";
+import { isPresent } from "../utils/guard";
 import { getFileByPath } from "./entries";
 
 declare let app: UApp;

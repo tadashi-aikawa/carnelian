@@ -55,3 +55,7 @@ export function zipRotate<T>(matrix: T[][]): T[][] {
   const maxColRow = matrix.reduce(maxReducer((x) => x.length));
   return maxColRow.map((_col, i) => matrix.map((row) => row[i]));
 }
+
+export function uniq<T>(values: T[]): T[] {
+  return [...new Set(values)];
+}

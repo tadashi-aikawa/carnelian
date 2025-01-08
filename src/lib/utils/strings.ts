@@ -1,6 +1,6 @@
 import * as Encoding from "encoding-japanese";
 import { zipRotate } from "./collections";
-import { isPresent } from "./types";
+import { isPresent } from "./guard";
 
 type Range = { start: number; end: number };
 

@@ -1,7 +1,7 @@
 import { SuggestModal, type TFile } from "obsidian";
 import type { UApp } from "src/lib/types";
 import { sorter } from "src/lib/utils/collections";
-import { isPresent } from "src/lib/utils/types";
+import { isPresent } from "src/lib/utils/guard";
 import { getMarkdownFilesWithRecentAccessIndex } from "../entries";
 
 declare let app: UApp;

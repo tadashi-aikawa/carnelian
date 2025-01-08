@@ -1,6 +1,6 @@
 import type { CachedMetadata, TAbstractFile, TFile } from "obsidian";
 import type { UApp } from "../types";
-import { isFile } from "./entries";
+import { getActiveFile, isFile } from "./entries";
 
 declare let app: UApp;
 
@@ -59,5 +59,22 @@ export function setOnCreateFileEvent(
   );
   return () => {
     app.vault.offref(ref);
+  };
+}
+
+/**
+ * :w コマンドで保存したときに実行する処理を設定します
+ *
+ * @returns 処理の解除処理
+ */
+export function setOnExWCommandEvent(
+  handler: (activeFile: TFile) => any,
+): () => void {
+  (window as any).CodeMirrorAdapter.commands.save = () => {
+    handler(getActiveFile()!);
+  };
+
+  return () => {
+    (window as any).CodeMirrorAdapter.commands.save = () => {};
   };
 }

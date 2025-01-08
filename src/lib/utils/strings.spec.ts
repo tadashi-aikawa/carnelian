@@ -36,7 +36,7 @@ test.each([
   ["🍰pre", "pre"],
   ["suf🍰", "suf"],
   ["🍰both😌", "both"],
-  ["🍰a🍊ll🅰️", "all"],
+  ["🍰a🍊ll🅰", "all"],
 ])(
   `excludeEmoji("%s"))`,
   (

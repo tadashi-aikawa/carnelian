@@ -13,8 +13,9 @@ import type {
   Vault,
   Workspace,
 } from "obsidian";
+import type { Properties as UProperties } from "./utils/types";
 
-type CommandId = "editor:toggle-source";
+type CommandId = "editor:toggle-source" | "editor:save-file";
 
 export interface CodeBlock {
   language: string | null;
@@ -22,11 +23,8 @@ export interface CodeBlock {
   position: Pos;
 }
 
-type Properties = {
-  tags?: string | string[] | undefined | null;
-  aliases?: string | string[] | undefined | null;
-  [key: string]: any | any[] | undefined | null;
-};
+// testableにするためutilを経由
+type Properties = UProperties;
 
 // From Obsidian 1.4.x
 export interface FrontMatterLinkCache

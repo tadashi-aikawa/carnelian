@@ -5,8 +5,8 @@ import { loadJson, saveJson } from "src/lib/helpers/io";
 import type { UApp } from "src/lib/types";
 import { maxReducer } from "src/lib/utils/collections";
 import { omitBy, sorter } from "src/lib/utils/collections";
+import { isPresent } from "src/lib/utils/guard";
 import { microFuzzy } from "src/lib/utils/strings";
-import { isPresent } from "src/lib/utils/types";
 
 // XXX: 少し気持ち悪い
 declare let app: UApp;
