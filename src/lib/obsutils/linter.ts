@@ -10,6 +10,7 @@ import {
   type Linter,
   lintAll,
 } from "src/lib/utils/linter";
+import { groupBy } from "../utils/collections";
 
 /**
  * ファイルにLinterをかけます
@@ -30,14 +31,22 @@ export async function lint(file: TFile, linters: Linter[]) {
 }
 
 function addLinterInspectionElement(inspections: LintInspection[]) {
+  const summaries = Object.entries(groupBy(inspections, (x) => x.code)).map(
+    ([code, inspections]) => ({ code, inspections }),
+  );
+
   const el = createDiv({ cls: "linter-inspections" });
-  for (const inspection of inspections) {
+  for (const s of summaries) {
+    let text = s.code;
+    if (s.inspections.length > 1) {
+      text = `${text} x ${s.inspections.length}`;
+    }
     el.appendChild(
       createDiv({
-        text: inspection.code,
+        text,
         cls: [
           "linter-inspection",
-          `linter-inspection__${inspection.level.toLowerCase()}`,
+          `linter-inspection__${s.inspections[0].level.toLowerCase()}`,
         ],
         attr: {
           style: "display: flex; align-items: center",

@@ -1,6 +1,7 @@
 import { expect, test } from "bun:test";
 import {
   forceLowerCaseKeys,
+  groupBy,
   omitBy,
   orderBy,
   uniq,
@@ -108,3 +109,19 @@ test.each([
     expect(uniq(values)).toStrictEqual(expected);
   },
 );
+
+test.each<
+  [
+    Parameters<typeof groupBy<string>>[0],
+    Parameters<typeof groupBy<string>>[1],
+    ReturnType<typeof groupBy<string>>,
+  ]
+>([
+  [
+    ["a", "bb", "cc", "d"],
+    (x) => x.length.toString(),
+    { "1": ["a", "d"], "2": ["bb", "cc"] },
+  ],
+])(`groupBy("%s")`, (values, toKey, expected) => {
+  expect(groupBy(values, toKey)).toEqual(expected);
+});

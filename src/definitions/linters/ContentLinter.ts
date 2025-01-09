@@ -1,5 +1,5 @@
+import { duplicateObject } from "src/lib/utils/collections";
 import { ExhaustiveError } from "src/lib/utils/errors";
-import { isPresent } from "src/lib/utils/guard";
 import type { LintInspection, Linter } from "src/lib/utils/linter";
 import { doSinglePatternCaptureMatching } from "src/lib/utils/strings";
 import { findNoteTypeBy } from "../mkms";
@@ -13,10 +13,10 @@ export const contentLinter: Linter = {
     }
 
     return [
-      createDisallowedLinkCard(noteType, content),
-      createNoLinkComment(noteType, content),
-      createV1LinkCard(noteType, content),
-    ].filter(isPresent);
+      ...createDisallowedLinkCard(noteType, content),
+      ...createNoLinkComment(noteType, content),
+      ...createV1LinkCard(noteType, content),
+    ];
   },
 };
 
@@ -25,41 +25,47 @@ const hasV1LinkCard = (content: string): boolean =>
 const hasLinkCard = (content: string): boolean =>
   hasV1LinkCard(content) || content.includes('class="link-card-v2"');
 
+const countV1LinkCard = (content: string): number =>
+  doSinglePatternCaptureMatching(content, /class="link-card"/g).length;
+const countV2LinkCard = (content: string): number =>
+  doSinglePatternCaptureMatching(content, /class="link-card-v2"/g).length;
+
 function createDisallowedLinkCard(
   noteType: NoteType,
   content: string,
-): LintInspection | null {
+): LintInspection[] {
   const base = {
     code: "Disallowed link card",
     message: "リンクカードは許可されていません",
   };
 
-  const createInspection = (level: LintInspection["level"]) => {
-    // TODO: 複数返却する場合はcreateDisallowedLinkCardの戻り値と共に実装を変更
-    return hasLinkCard(content) ? { ...base, level } : null;
-  };
+  const createInspections = (level: LintInspection["level"]) =>
+    duplicateObject(
+      { ...base, level },
+      countV1LinkCard(content) + countV2LinkCard(content),
+    );
 
   switch (noteType.name) {
     case "Glossary note":
-      return createInspection("ERROR");
+      return createInspections("ERROR");
     case "Hub note":
-      return null;
+      return [];
     case "Procedure note":
-      return createInspection("ERROR");
+      return createInspections("ERROR");
     case "Activity note":
-      return null;
+      return [];
     case "Troubleshooting note":
-      return null;
+      return [];
     case "Prime note":
-      return null;
+      return [];
     case "Report note":
-      return null;
+      return [];
     case "Article note":
-      return null;
+      return [];
     case "Daily note":
-      return null;
+      return [];
     case "Weekly report":
-      return null;
+      return [];
     default:
       throw new ExhaustiveError(noteType);
   }
@@ -68,7 +74,7 @@ function createDisallowedLinkCard(
 function createNoLinkComment(
   noteType: NoteType,
   content: string,
-): LintInspection | null {
+): LintInspection[] {
   const base = {
     code: "No link comment",
     message: "内部リンクのリンクカードに対するリンクコメントがありません",
@@ -76,7 +82,7 @@ function createNoLinkComment(
 
   const createInspection = (level: LintInspection["level"]) => {
     if (!hasLinkCard(content)) {
-      return null;
+      return [];
     }
 
     const linkNames = doSinglePatternCaptureMatching(
@@ -86,17 +92,17 @@ function createNoLinkComment(
     const invalidLinkNames = linkNames.filter(
       (x) => !content.includes(`%[[${x}]]`),
     );
-    // TODO: 複数返却する場合はcreateDisallowedLinkCardの戻り値と共に実装を変更
-    return invalidLinkNames.length > 0 ? { ...base, level } : null;
+
+    return duplicateObject({ ...base, level }, invalidLinkNames.length);
   };
 
   switch (noteType.name) {
     case "Glossary note":
-      return null;
+      return [];
     case "Hub note":
       return createInspection("ERROR");
     case "Procedure note":
-      return null;
+      return [];
     case "Activity note":
       return createInspection("ERROR");
     case "Troubleshooting note":
@@ -108,7 +114,7 @@ function createNoLinkComment(
     case "Article note":
       return createInspection("ERROR");
     case "Daily note":
-      return null;
+      return [];
     case "Weekly report":
       return createInspection("ERROR");
     default:
@@ -119,24 +125,22 @@ function createNoLinkComment(
 function createV1LinkCard(
   noteType: NoteType,
   content: string,
-): LintInspection | null {
+): LintInspection[] {
   const base = {
     code: "V1 link card",
     message: "非推奨のv1形式カードリンクがあります",
   };
 
-  const createInspection = (level: LintInspection["level"]) => {
-    // TODO: 複数返却する場合はcreateV1LinkCardの戻り値と共に実装を変更
-    return hasV1LinkCard(content) ? { ...base, level } : null;
-  };
+  const createInspection = (level: LintInspection["level"]) =>
+    duplicateObject({ ...base, level }, countV1LinkCard(content));
 
   switch (noteType.name) {
     case "Glossary note":
-      return null;
+      return [];
     case "Hub note":
       return createInspection("WARN");
     case "Procedure note":
-      return null;
+      return [];
     case "Activity note":
       return createInspection("WARN");
     case "Troubleshooting note":
@@ -148,7 +152,7 @@ function createV1LinkCard(
     case "Article note":
       return createInspection("WARN");
     case "Daily note":
-      return null;
+      return [];
     case "Weekly report":
       return createInspection("WARN");
     default:

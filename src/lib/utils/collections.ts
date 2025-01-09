@@ -59,3 +59,22 @@ export function zipRotate<T>(matrix: T[][]): T[][] {
 export function uniq<T>(values: T[]): T[] {
   return [...new Set(values)];
 }
+
+export function duplicateObject<T>(obj: T, count: number): T[] {
+  return Array.from({ length: count }, () => ({ ...obj }));
+}
+
+export const groupBy = <T>(
+  values: T[],
+  toKey: (t: T) => string,
+): { [key: string]: T[] } => {
+  const grouped: { [key: string]: T[] } = {};
+  for (const value of values) {
+    const key = toKey(value);
+    if (!grouped[key]) {
+      grouped[key] = [];
+    }
+    grouped[key].push(value);
+  }
+  return grouped;
+};
