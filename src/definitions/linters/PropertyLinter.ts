@@ -18,6 +18,7 @@ export const propertyLinter: Linter = {
       createNoCover(noteType, properties),
       createNoUrl(noteType, properties),
       createNoStatus(noteType, properties),
+      createTags(noteType, title, properties),
     ].filter(isPresent);
   },
 };
@@ -179,6 +180,53 @@ function createNoStatus(
       return null;
     case "Weekly report":
       return null;
+    default:
+      throw new ExhaustiveError(noteType);
+  }
+}
+
+function createTags(
+  noteType: NoteType,
+  title: string,
+  properties?: Properties,
+): LintInspection | null {
+  if (!properties?.tags) {
+    return null;
+  }
+  if (
+    title.includes("JavaScript") &&
+    properties.tags.length === 1 &&
+    properties.tags.includes("TypeScript")
+  ) {
+    return null;
+  }
+
+  const base = {
+    code: "Tags",
+    message: "プロパティにtagsが存在します",
+  };
+
+  switch (noteType.name) {
+    case "Glossary note":
+      return { ...base, level: "WARN" };
+    case "Hub note":
+      return { ...base, level: "WARN" };
+    case "Procedure note":
+      return { ...base, level: "WARN" };
+    case "Activity note":
+      return { ...base, level: "WARN" };
+    case "Troubleshooting note":
+      return { ...base, level: "WARN" };
+    case "Prime note":
+      return { ...base, level: "WARN" };
+    case "Report note":
+      return { ...base, level: "WARN" };
+    case "Article note":
+      return { ...base, level: "WARN" };
+    case "Daily note":
+      return { ...base, level: "WARN" };
+    case "Weekly report":
+      return { ...base, level: "WARN" };
     default:
       throw new ExhaustiveError(noteType);
   }

@@ -72,6 +72,27 @@ lint機能のルールを記載する。
 | Daily Note           |        |         |
 | Weekly Report        |        |         |
 
+### Tags
+
+プロパティに `tags` が存在する。
+
+| ノートの種類         | レベル | 備考 |
+| -------------------- | ------ | ---- |
+| Glossary note        | WARN   |      |
+| Hub note             | WARN   |      |
+| Procedure note       | WARN   |      |
+| Activity note        | WARN   |      |
+| Troubleshooting note | WARN   |      |
+| Prime note           | WARN   |      |
+| Report note          | WARN   |      |
+| Article note         | WARN   |      |
+| Daily Note           | WARN   |      |
+| Weekly Report        | WARN   |      |
+
+いくつか例外ケースがある。
+
+- タイトルにJavaScriptが含まれている場合のTypeScriptはOK
+
 ## Content Linter
 
 ### Disallowed link card
