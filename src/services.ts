@@ -1,6 +1,5 @@
 import { AddDatePropertiesService } from "./services/add-date-properties-service";
 import { AddPropertiesToHeadService } from "./services/add-properties-to-head-service";
-import { FixPropertiesService } from "./services/fix-properties-service";
 import { LintService } from "./services/lint-service";
 import type { PluginSettings } from "./settings";
 
@@ -15,7 +14,6 @@ export interface Service {
 export function createServices(_settings: PluginSettings): Service[] {
   return [
     new AddDatePropertiesService(),
-    new FixPropertiesService(),
     new LintService(),
     new AddPropertiesToHeadService(),
   ];

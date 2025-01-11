@@ -25,21 +25,18 @@ lint機能のルールを記載する。
 
 プロパティに `cover` が存在しない。
 
-| ノートの種類         | レベル | 備考 |
-| -------------------- | ------ | ---- |
-| Glossary note        |        |      |
-| Hub note             | ERROR  |      |
-| Procedure note       |        |      |
-| Activity note        | ERROR  |      |
-| Troubleshooting note | ERROR  |      |
-| Prime note           | ERROR  |      |
-| Report note          | ERROR  |      |
-| Article note         | ERROR  |      |
-| Daily Note           |        |      |
-| Weekly Report        | ERROR  |      |
-
-> [!NOTE]
-> TODO: autofixを追加予定
+| ノートの種類         | レベル | 備考    |
+| -------------------- | ------ | ----    |
+| Glossary note        |        |         |
+| Hub note             | ERROR  | autofix |
+| Procedure note       |        |         |
+| Activity note        | ERROR  | autofix |
+| Troubleshooting note | ERROR  | autofix |
+| Prime note           | ERROR  | autofix |
+| Report note          | ERROR  | autofix |
+| Article note         | ERROR  | autofix |
+| Daily Note           |        |         |
+| Weekly Report        | ERROR  | autofix |
 
 ### No url
 
@@ -57,6 +54,30 @@ lint機能のルールを記載する。
 | Article note         |        |      |
 | Daily Note           |        |      |
 | Weekly Report        |        |      |
+
+### No status
+
+プロパティに `status` が存在しない。
+
+| ノートの種類         | レベル | 備考    |
+| -------------------- | ------ | ----    |
+| Glossary note        |        |         |
+| Hub note             |        |         |
+| Procedure note       |        |         |
+| Activity note        |        |         |
+| Troubleshooting note | ERROR  | autofix |
+| Prime note           |        |         |
+| Report note          |        |         |
+| Article note         |        |         |
+| Daily Note           |        |         |
+| Weekly Report        |        |         |
+
+## Content Linter
+
+### Disallowed link card
+
+カード型リンク(external/internal)が許可されていないのに利用されている。
+
 
 ## Content Linter
 
