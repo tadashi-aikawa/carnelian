@@ -1,3 +1,4 @@
+import { getUnresolvedLinkMap } from "src/lib/helpers/links";
 import { duplicateObject } from "src/lib/utils/collections";
 import { ExhaustiveError } from "src/lib/utils/errors";
 import type { LintInspection, Linter } from "src/lib/utils/linter";
@@ -16,14 +17,26 @@ export const contentLinter: Linter = {
       ...createDisallowedLinkCard(noteType, content),
       ...createNoLinkComment(noteType, content),
       ...createV1LinkCard(noteType, content),
+      ...createUnofficialMOCFormat(noteType, content),
+      ...createV1DatesFormat(noteType, content),
+      ...createUnresolvedInternalLink(noteType, path),
     ];
   },
 };
+
+const hasMOC = (content: string): boolean => content.includes("## MOC");
+const hasOfficalMOCFormat = (content: string): boolean =>
+  content.includes("- 📒**関連**") &&
+  content.includes("- 📜**アクティビティ**") &&
+  content.includes("- 📝**トラブルシューティング**");
 
 const hasV1LinkCard = (content: string): boolean =>
   content.includes('class="link-card"');
 const hasLinkCard = (content: string): boolean =>
   hasV1LinkCard(content) || content.includes('class="link-card-v2"');
+
+const hasV1DatesFormat = (content: string): boolean =>
+  content.includes('class="minerva-change-meta"');
 
 const countV1LinkCard = (content: string): number =>
   doSinglePatternCaptureMatching(content, /class="link-card"/g).length;
@@ -127,7 +140,7 @@ function createV1LinkCard(
   content: string,
 ): LintInspection[] {
   const base = {
-    code: "V1 link card",
+    code: "v1 link card",
     message: "非推奨のv1形式カードリンクがあります",
   };
 
@@ -151,6 +164,127 @@ function createV1LinkCard(
       return createInspection("WARN");
     case "Article note":
       return createInspection("WARN");
+    case "Daily note":
+      return [];
+    case "Weekly report":
+      return createInspection("WARN");
+    default:
+      throw new ExhaustiveError(noteType);
+  }
+}
+
+function createUnofficialMOCFormat(
+  noteType: NoteType,
+  content: string,
+): LintInspection[] {
+  const base = {
+    code: "Unofficial MOC format",
+    message: "最新仕様に従っていないMOCがあります",
+  };
+
+  const createInspection = (level: LintInspection["level"]) => {
+    if (!hasMOC(content) || hasOfficalMOCFormat(content)) {
+      return [];
+    }
+    return [{ ...base, level }];
+  };
+
+  switch (noteType.name) {
+    case "Glossary note":
+      return createInspection("ERROR");
+    case "Hub note":
+      return [];
+    case "Procedure note":
+      return createInspection("ERROR");
+    case "Activity note":
+      return [];
+    case "Troubleshooting note":
+      return [];
+    case "Prime note":
+      return createInspection("ERROR");
+    case "Report note":
+      return [];
+    case "Article note":
+      return [];
+    case "Daily note":
+      return [];
+    case "Weekly report":
+      return [];
+    default:
+      throw new ExhaustiveError(noteType);
+  }
+}
+
+function createV1DatesFormat(
+  noteType: NoteType,
+  content: string,
+): LintInspection[] {
+  const base = {
+    code: "v1 Dates format",
+    message: "ノートの作成日、最終更新日のフォーマットが古いです",
+  };
+
+  const createInspection = (level: LintInspection["level"]) =>
+    hasV1DatesFormat(content) ? [{ ...base, level }] : [];
+
+  switch (noteType.name) {
+    case "Glossary note":
+      return createInspection("ERROR");
+    case "Hub note":
+      return createInspection("ERROR");
+    case "Procedure note":
+      return createInspection("ERROR");
+    case "Activity note":
+      return createInspection("ERROR");
+    case "Troubleshooting note":
+      return createInspection("ERROR");
+    case "Prime note":
+      return createInspection("ERROR");
+    case "Report note":
+      return createInspection("ERROR");
+    case "Article note":
+      return [];
+    case "Daily note":
+      return [];
+    case "Weekly report":
+      return [];
+    default:
+      throw new ExhaustiveError(noteType);
+  }
+}
+
+function createUnresolvedInternalLink(
+  noteType: NoteType,
+  path: string,
+): LintInspection[] {
+  const base = {
+    code: "Unresolved internal link",
+  };
+
+  const createInspection = (level: LintInspection["level"]) =>
+    Object.entries(getUnresolvedLinkMap(path)).map(([name]) => ({
+      ...base,
+      level,
+      message: `[[${name}]] は未解決のリンクです`,
+    }));
+
+  switch (noteType.name) {
+    case "Glossary note":
+      return createInspection("INFO");
+    case "Hub note":
+      return createInspection("INFO");
+    case "Procedure note":
+      return createInspection("INFO");
+    case "Activity note":
+      return createInspection("INFO");
+    case "Troubleshooting note":
+      return createInspection("WARN");
+    case "Prime note":
+      return createInspection("WARN");
+    case "Report note":
+      return createInspection("WARN");
+    case "Article note":
+      return createInspection("ERROR");
     case "Daily note":
       return [];
     case "Weekly report":

@@ -34,7 +34,7 @@ lint機能のルールを記載する。
 | Troubleshooting note | ERROR  | autofix |
 | Prime note           | ERROR  | autofix |
 | Report note          | ERROR  | autofix |
-| Article note         | ERROR  | autofix |
+| Article note         | ERROR  |         |
 | Daily Note           |        |         |
 | Weekly Report        | ERROR  | autofix |
 
@@ -133,4 +133,55 @@ Link cardが非推奨のv1形式になっている。
 | Article note         | WARN   |                  |
 | Daily Note           |        | 気にしなくていい |
 | Weekly Report        | WARN   |                  |
+
+### Unofficial MOC format
+
+MOCのフォーマットがMinervaの最新仕様に従っていない。
+
+| ノートの種類         | レベル | 備考              |
+| -------------------- | ------ | ----------------  |
+| Glossary note        | ERROR  |                   |
+| Hub note             |        | Hubは例外を認める |
+| Procedure note       | ERROR  |                   |
+| Activity note        |        | 使ってないはず    |
+| Troubleshooting note |        | 使ってないはず    |
+| Prime note           | ERROR  |                   |
+| Report note          |        | 使ってないはず    |
+| Article note         |        | 使ってないはず    |
+| Daily Note           |        | 使ってないはず    |
+| Weekly Report        |        | 使ってないはず    |
+
+### v1 dates format 
+
+ノートの作成日、最終更新日の形式が古い。
+
+| ノートの種類         | レベル | 備考           |
+| -------------------- | ------ | ----           |
+| Glossary note        | ERROR  | autofix        |
+| Hub note             | ERROR  | autofix        |
+| Procedure note       | ERROR  | autofix        |
+| Activity note        | ERROR  | autofix        |
+| Troubleshooting note | ERROR  | autofix        |
+| Prime note           | ERROR  | autofix        |
+| Report note          | ERROR  | autofix        |
+| Article note         | ERROR  | 存在しないはず |
+| Daily Note           |        | 存在しないはず |
+| Weekly Report        | ERROR  | 存在しないはず         |
+
+### Unresolved internal link
+
+未解決の内部リンクが存在する。
+
+| ノートの種類         | レベル | 備考 |
+| -------------------- | ------ | ---- |
+| Glossary note        | INFO   |      |
+| Hub note             | INFO   |      |
+| Procedure note       | INFO   |      |
+| Activity note        | INFO   |      |
+| Troubleshooting note | WARN   |      |
+| Prime note           | WARN   |      |
+| Report note          | WARN   |      |
+| Article note         | ERROR  |      |
+| Daily Note           |        |      |
+| Weekly Report        | WARN   |      |
 

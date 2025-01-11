@@ -58,7 +58,7 @@ const noteTypeByName = createNotes({
   "Weekly report": {
     name: "Weekly report",
     prefixEmoji: "📰",
-    coverImagePath: null,
+    coverImagePath: "📰Weekly Report/attachments/cover.jpg",
     pathPattern: /^📰Weekly Report\/.+\.md$/,
   },
   "Daily note": {

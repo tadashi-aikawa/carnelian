@@ -30,6 +30,20 @@ export function getActiveFileBacklinkPaths(): string[] {
 }
 
 /**
+ * ファイルの未解決リンクを{ノート名: 出現数}のマッピングオブジェクトで取得します
+ *
+ * ```ts
+ * getUnresolvedLinkMap("Obsidian.md")
+ * // { "Minerva": 2, "Carnelian": 3 }
+ * ```
+ */
+export function getUnresolvedLinkMap(filePath: string): {
+  [name: string]: number;
+} {
+  return app.metadataCache.unresolvedLinks[filePath];
+}
+
+/**
  * リンクテキストからファイルパスを取得します
  *
  * ```ts
