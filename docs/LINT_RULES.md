@@ -78,13 +78,6 @@ lint機能のルールを記載する。
 
 カード型リンク(external/internal)が許可されていないのに利用されている。
 
-
-## Content Linter
-
-### Disallowed link card
-
-カード型リンク(external/internal)が許可されていないのに利用されている。
-
 | ノートの種類         | レベル | 備考             |
 | -------------------- | ------ | ---------------- |
 | Glossary note        | ERROR  |                  |
