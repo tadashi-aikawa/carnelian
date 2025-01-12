@@ -135,6 +135,21 @@ export function getSelectionText(): string | null {
 }
 
 /**
+ * エディタのオフセットを行番号に変換します
+ * @returns 行番号(1はじまり)
+ *
+ * ```ts
+ * toLineNo(10)
+ * // 2
+ * ```
+ */
+export function toLineNo(offset: number): number | null {
+  return (
+    map(getActiveEditor()?.offsetToPos(offset).line, (line) => line + 1) ?? null
+  );
+}
+
+/**
  * エディタの選択範囲のテキストを置換します
  *
  * ```ts

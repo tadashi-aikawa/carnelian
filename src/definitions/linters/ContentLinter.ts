@@ -1,3 +1,4 @@
+import { toLineNo } from "src/lib/helpers/editors/basic";
 import { getUnresolvedLinkMap } from "src/lib/helpers/links";
 import { duplicateObject } from "src/lib/utils/collections";
 import { ExhaustiveError } from "src/lib/utils/errors";
@@ -312,7 +313,7 @@ function createLinkEndsWithParenthesis(
       .map((x) => ({
         ...base,
         level,
-        message: `括弧で終わるリンクです (${x.title})`,
+        message: `L${toLineNo(x.range.start)} (${x.title})`,
       }));
 
   switch (noteType.name) {

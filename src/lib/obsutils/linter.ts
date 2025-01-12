@@ -64,6 +64,7 @@ function addLinterInspectionElement(inspections: LintInspection[]) {
           "linter-inspection",
           `linter-inspection__${s.inspections[0].level.toLowerCase()}`,
         ],
+        title: `${s.inspections.map((x) => x.message).join("\n")}`,
       }),
     );
   }
