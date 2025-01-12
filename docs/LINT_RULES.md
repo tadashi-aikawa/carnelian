@@ -199,3 +199,20 @@ MOCのフォーマットがMinervaの最新仕様に従っていない。
 | Daily Note           |        |      |
 | Weekly Report        | WARN   |      |
 
+### Link ends with parenthesis
+
+括弧 `)` で終わるリンクが存在する。
+
+| ノートの種類         | レベル | 備考 |
+| -------------------- | ------ | ---- |
+| Glossary note        | WARN   |      |
+| Hub note             | WARN   |      |
+| Procedure note       | WARN   |      |
+| Activity note        | WARN   |      |
+| Troubleshooting note | WARN   |      |
+| Prime note           | WARN   |      |
+| Report note          | WARN   |      |
+| Article note         | WARN   |      |
+| Daily Note           |        |      |
+| Weekly Report        | INFO   |      |
+

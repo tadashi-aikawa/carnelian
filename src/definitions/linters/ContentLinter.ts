@@ -2,7 +2,10 @@ import { getUnresolvedLinkMap } from "src/lib/helpers/links";
 import { duplicateObject } from "src/lib/utils/collections";
 import { ExhaustiveError } from "src/lib/utils/errors";
 import type { LintInspection, Linter } from "src/lib/utils/linter";
-import { doSinglePatternCaptureMatching } from "src/lib/utils/strings";
+import {
+  doSinglePatternCaptureMatching,
+  getWikiLinks,
+} from "src/lib/utils/strings";
 import { findNoteTypeBy } from "../mkms";
 import type { NoteType } from "../mkms";
 
@@ -20,6 +23,7 @@ export const contentLinter: Linter = {
       ...createUnofficialMOCFormat(noteType, content),
       ...createV1DatesFormat(noteType, content),
       ...createUnresolvedInternalLink(noteType, path),
+      ...createLinkEndsWithParenthesis(noteType, content),
     ];
   },
 };
@@ -289,6 +293,49 @@ function createUnresolvedInternalLink(
       return [];
     case "Weekly report":
       return createInspection("WARN");
+    default:
+      throw new ExhaustiveError(noteType);
+  }
+}
+
+function createLinkEndsWithParenthesis(
+  noteType: NoteType,
+  content: string,
+): LintInspection[] {
+  const base = {
+    code: "Link ends with parenthesis",
+  };
+
+  const createInspection = (level: LintInspection["level"]) =>
+    getWikiLinks(content)
+      .filter((x) => (x.alias ? x.alias.endsWith(")") : x.title.endsWith(")")))
+      .map((x) => ({
+        ...base,
+        level,
+        message: `括弧で終わるリンクです (${x.title})`,
+      }));
+
+  switch (noteType.name) {
+    case "Glossary note":
+      return createInspection("WARN");
+    case "Hub note":
+      return createInspection("WARN");
+    case "Procedure note":
+      return createInspection("WARN");
+    case "Activity note":
+      return createInspection("WARN");
+    case "Troubleshooting note":
+      return createInspection("WARN");
+    case "Prime note":
+      return createInspection("WARN");
+    case "Report note":
+      return createInspection("WARN");
+    case "Article note":
+      return createInspection("WARN");
+    case "Daily note":
+      return [];
+    case "Weekly report":
+      return createInspection("INFO");
     default:
       throw new ExhaustiveError(noteType);
   }
