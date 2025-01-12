@@ -80,6 +80,8 @@ function createDisallowedLinkCard(
       return [];
     case "Article note":
       return [];
+    case "My note":
+      return [];
     case "Daily note":
       return [];
     case "Weekly report":
@@ -131,6 +133,8 @@ function createNoLinkComment(
       return createInspection("ERROR");
     case "Article note":
       return createInspection("ERROR");
+    case "My note":
+      return createInspection("ERROR");
     case "Daily note":
       return [];
     case "Weekly report":
@@ -168,6 +172,8 @@ function createV1LinkCard(
     case "Report note":
       return createInspection("WARN");
     case "Article note":
+      return createInspection("WARN");
+    case "My note":
       return createInspection("WARN");
     case "Daily note":
       return [];
@@ -211,6 +217,8 @@ function createUnofficialMOCFormat(
       return [];
     case "Article note":
       return [];
+    case "My note":
+      return [];
     case "Daily note":
       return [];
     case "Weekly report":
@@ -248,7 +256,9 @@ function createV1DatesFormat(
     case "Report note":
       return createInspection("ERROR");
     case "Article note":
-      return [];
+      return createInspection("ERROR");
+    case "My note":
+      return createInspection("ERROR");
     case "Daily note":
       return [];
     case "Weekly report":
@@ -290,6 +300,8 @@ function createUnresolvedInternalLink(
       return createInspection("WARN");
     case "Article note":
       return createInspection("ERROR");
+    case "My note":
+      return createInspection("WARN");
     case "Daily note":
       return [];
     case "Weekly report":
@@ -332,6 +344,8 @@ function createLinkEndsWithParenthesis(
     case "Report note":
       return createInspection("WARN");
     case "Article note":
+      return createInspection("WARN");
+    case "My note":
       return createInspection("WARN");
     case "Daily note":
       return [];

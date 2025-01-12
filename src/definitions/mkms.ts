@@ -55,6 +55,12 @@ const noteTypeByName = createNotes({
     coverImagePath: null,
     pathPattern: /^📘Articles\/📘.+\.md$/,
   },
+  "My note": {
+    name: "My note",
+    prefixEmoji: "🦉",
+    coverImagePath: "Notes/attachments/mynote.webp",
+    pathPattern: /^.+\/🦉.+\.md$/,
+  },
   "Weekly report": {
     name: "Weekly report",
     prefixEmoji: "📰",

@@ -18,7 +18,8 @@ lint機能のルールを記載する。
 | Prime note           | ERROR  |      |
 | Report note          | ERROR  |      |
 | Article note         | ERROR  |      |
-| Daily Note           |        |      |
+| My note              | WARN   |      |
+| Daily note           |        |      |
 | Weekly Report        | ERROR  |      |
 
 ### No cover
@@ -35,7 +36,8 @@ lint機能のルールを記載する。
 | Prime note           | ERROR  | autofix |
 | Report note          | ERROR  | autofix |
 | Article note         | ERROR  |         |
-| Daily Note           |        |         |
+| My note              | ERROR  |         |
+| Daily note           |        |         |
 | Weekly Report        | ERROR  | autofix |
 
 ### No url
@@ -52,7 +54,8 @@ lint機能のルールを記載する。
 | Prime note           |        |      |
 | Report note          |        |      |
 | Article note         |        |      |
-| Daily Note           |        |      |
+| My note              |        |      |
+| Daily note           |        |      |
 | Weekly Report        |        |      |
 
 ### No status
@@ -69,7 +72,8 @@ lint機能のルールを記載する。
 | Prime note           |        |         |
 | Report note          |        |         |
 | Article note         |        |         |
-| Daily Note           |        |         |
+| My note              |        |         |
+| Daily note           |        |         |
 | Weekly Report        |        |         |
 
 ### Tags
@@ -86,7 +90,8 @@ lint機能のルールを記載する。
 | Prime note           | WARN   |      |
 | Report note          | WARN   |      |
 | Article note         | WARN   |      |
-| Daily Note           | WARN   |      |
+| My note              | WARN   |      |
+| Daily note           | WARN   |      |
 | Weekly Report        | WARN   |      |
 
 いくつか例外ケースがある。
@@ -109,7 +114,8 @@ lint機能のルールを記載する。
 | Prime note           |        |                  |
 | Report note          |        |                  |
 | Article note         |        |                  |
-| Daily Note           |        | 気にしなくていい |
+| My note              |        |                  |
+| Daily note           |        | 気にしなくていい |
 | Weekly Report        |        |                  |
 
 ### No link comment
@@ -128,7 +134,8 @@ Vault内のノートを参照するカードがあるのに、その内部リン
 | Prime note           | ERROR  |                  |
 | Report note          | ERROR  |                  |
 | Article note         | ERROR  |                  |
-| Daily Note           |        | 気にしなくていい |
+| My note              | ERROR  |                  |
+| Daily note           |        | 気にしなくていい |
 | Weekly Report        | ERROR  |                  |
 
 ### v1 link card
@@ -145,7 +152,8 @@ Link cardが非推奨のv1形式になっている。
 | Prime note           | WARN   |                  |
 | Report note          | WARN   |                  |
 | Article note         | WARN   |                  |
-| Daily Note           |        | 気にしなくていい |
+| My note              | WARN   |                  |
+| Daily note           |        | 気にしなくていい |
 | Weekly Report        | WARN   |                  |
 
 ### Unofficial MOC format
@@ -162,7 +170,8 @@ MOCのフォーマットがMinervaの最新仕様に従っていない。
 | Prime note           | ERROR  |                   |
 | Report note          |        | 使ってないはず    |
 | Article note         |        | 使ってないはず    |
-| Daily Note           |        | 使ってないはず    |
+| My note              |        | 使ってないはず    |
+| Daily note           |        | 使ってないはず    |
 | Weekly Report        |        | 使ってないはず    |
 
 ### v1 dates format 
@@ -171,16 +180,17 @@ MOCのフォーマットがMinervaの最新仕様に従っていない。
 
 | ノートの種類         | レベル | 備考           |
 | -------------------- | ------ | ----           |
-| Glossary note        | ERROR  | autofix        |
-| Hub note             | ERROR  | autofix        |
-| Procedure note       | ERROR  | autofix        |
-| Activity note        | ERROR  | autofix        |
-| Troubleshooting note | ERROR  | autofix        |
-| Prime note           | ERROR  | autofix        |
-| Report note          | ERROR  | autofix        |
-| Article note         | ERROR  | 存在しないはず |
-| Daily Note           |        | 存在しないはず |
-| Weekly Report        | ERROR  | 存在しないはず         |
+| Glossary note        | ERROR  |                |
+| Hub note             | ERROR  |                |
+| Procedure note       | ERROR  |                |
+| Activity note        | ERROR  |                |
+| Troubleshooting note | ERROR  |                |
+| Prime note           | ERROR  |                |
+| Report note          | ERROR  |                |
+| Article note         | ERROR  |                |
+| My note              | ERROR  |                |
+| Daily note           |        | 存在しないはず |
+| Weekly Report        | ERROR  |                |
 
 ### Unresolved internal link
 
@@ -196,7 +206,8 @@ MOCのフォーマットがMinervaの最新仕様に従っていない。
 | Prime note           | WARN   |      |
 | Report note          | WARN   |      |
 | Article note         | ERROR  |      |
-| Daily Note           |        |      |
+| My note              | WARN   |      |
+| Daily note           |        |      |
 | Weekly Report        | WARN   |      |
 
 ### Link ends with parenthesis
@@ -213,6 +224,7 @@ MOCのフォーマットがMinervaの最新仕様に従っていない。
 | Prime note           | WARN   |      |
 | Report note          | WARN   |      |
 | Article note         | WARN   |      |
-| Daily Note           |        |      |
+| My note              | WARN   |      |
+| Daily note           |        |      |
 | Weekly Report        | INFO   |      |
 
