@@ -64,9 +64,6 @@ function addLinterInspectionElement(inspections: LintInspection[]) {
           "linter-inspection",
           `linter-inspection__${s.inspections[0].level.toLowerCase()}`,
         ],
-        attr: {
-          style: "display: flex; align-items: center",
-        },
       }),
     );
   }
@@ -89,9 +86,6 @@ function addLinterInspectionElement(inspections: LintInspection[]) {
           "linter-inspection",
           `linter-inspection__${s.inspections[0].level.toLowerCase()}`,
         ],
-        attr: {
-          style: "display: flex; align-items: center",
-        },
       }),
     );
   }

@@ -63,14 +63,14 @@ If your plugin does not need CSS, delete this file.
 }
 
 .linter-inspection {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   border-radius: 0.1rem;
   padding: 0.1rem 0.5rem 0.1rem 0.25rem;
   color: white;
 }
 .linter-inspection::before {
-  width: 20px;
+  width: 1.5em;
   margin-right: 3px;
   filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(2%)
     hue-rotate(329deg) brightness(106%) contrast(101%);
@@ -144,14 +144,14 @@ If your plugin does not need CSS, delete this file.
 }
 
 .linter-inspections-container-title__fixed {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   font-size: 1rem;
   color: white;
   font-weight: bold;
 }
 .linter-inspections-container-title__fixed::before {
-  width: 20px;
+  height: 1.5em;
   margin-right: 5px;
   filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(2%)
     hue-rotate(329deg) brightness(106%) contrast(101%);
