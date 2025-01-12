@@ -37,7 +37,6 @@ export async function createArticle() {
   addActiveFileProperties({
     created: today,
     updated: today,
-    description: "TODO",
     cover: `📘Articles/attachments/${today}.webp`,
     publish: false,
   });
