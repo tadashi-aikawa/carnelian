@@ -1,3 +1,4 @@
+import { updateChangeLog } from "src/commands/update-change-log";
 import { toLineNo } from "src/lib/helpers/editors/basic";
 import { getUnresolvedLinkMap } from "src/lib/helpers/links";
 import { duplicateObject } from "src/lib/utils/collections";
@@ -235,6 +236,9 @@ function createV1DatesFormat(
   const base = {
     code: "v1 Dates format",
     message: "ノートの作成日、最終更新日のフォーマットが古いです",
+    fix: async () => {
+      updateChangeLog();
+    },
   };
 
   const createInspection = (level: LintInspection["level"]) =>
