@@ -350,7 +350,7 @@ function createLinkEndsWithParenthesis(
     case "Daily note":
       return [];
     case "Weekly report":
-      return createInspection("INFO");
+      return [];
     default:
       throw new ExhaustiveError(noteType);
   }
