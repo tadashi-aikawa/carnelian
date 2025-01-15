@@ -19,6 +19,8 @@ import { insertNewNotesToWeeklyNote } from "./commands/insert-inputs-to-weekly-n
 import { insertMOC } from "./commands/insert-moc";
 import { insertNoteCard } from "./commands/insert-note-card";
 import { insertSiteCard } from "./commands/insert-site-card";
+import { moveToNextInspection } from "./commands/move-to-next-inspection";
+import { moveToPreviousInspection } from "./commands/move-to-previous-inspection";
 import { openPropertyUrl } from "./commands/open-property-url";
 import { pasteSiteCard } from "./commands/paste-site-card";
 import { pasteURLToSiteLink } from "./commands/paste-url-to-site-link";
@@ -35,6 +37,16 @@ import type { PluginSettings } from "./settings";
 
 export function createCommands(settings: PluginSettings): Command[] {
   const carnelianCommands: CarnelianCommand[] = [
+    {
+      name: "Move to next inspection",
+      kind: "editor",
+      executor: moveToNextInspection,
+    },
+    {
+      name: "Move to previous inspection",
+      kind: "editor",
+      executor: moveToPreviousInspection,
+    },
     {
       name: "Insert new notes to the weekly note",
       kind: "editor",

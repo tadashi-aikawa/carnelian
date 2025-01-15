@@ -16,6 +16,16 @@ export function getActiveEditor(): UEditor | null {
 }
 
 /**
+ * カーソルを指定行に移動します
+ * @param lineNo 1はじまり
+ */
+export function moveToLine(lineNo: number): void {
+  orThrow(getActiveEditor(), (e) => {
+    e.setCursor(lineNo - 1);
+  });
+}
+
+/**
  * カーソルを最終行に移動します
  */
 export function moveToLastLine(): void {
@@ -31,6 +41,13 @@ export function getActiveLine(): string | null {
   return map(getActiveEditor(), (editor) =>
     editor.getLine(editor.getCursor().line),
   );
+}
+
+/**
+ * 現在行の行番号を取得します(1はじまり)
+ */
+export function getActiveLineNo(): number | null {
+  return map(getActiveEditor(), (editor) => editor.getCursor().line + 1);
 }
 
 /**

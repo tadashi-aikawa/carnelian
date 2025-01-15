@@ -326,11 +326,15 @@ function createLinkEndsWithParenthesis(
   const createInspection = (level: LintInspection["level"]) =>
     getWikiLinks(content)
       .filter((x) => (x.alias ? x.alias.endsWith(")") : x.title.endsWith(")")))
-      .map((x) => ({
-        ...base,
-        level,
-        message: `L${toLineNo(x.range.start)} (${x.title})`,
-      }));
+      .map((x) => {
+        const lineNo = toLineNo(x.range.start) ?? undefined;
+        return {
+          ...base,
+          level,
+          lineNo,
+          message: `L${lineNo} (${x.title})`,
+        };
+      });
 
   switch (noteType.name) {
     case "Glossary note":

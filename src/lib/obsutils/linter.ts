@@ -5,12 +5,18 @@ import {
   insertElementAfterHeader,
   removeElementsFromContainer,
 } from "src/lib/helpers/ui";
+import { notifyValidationError } from "src/lib/helpers/ui";
 import {
   type LintInspection,
   type Linter,
   lintAll,
 } from "src/lib/utils/linter";
-import { groupBy } from "../utils/collections";
+import { getActiveLineNo, moveToLine } from "../helpers/editors/basic";
+import { groupBy, orderBy } from "../utils/collections";
+import type { PartialRequired } from "../utils/types";
+
+type LintInspectionWithLineNo = PartialRequired<LintInspection, "lineNo">;
+let inspectionsOrderByLineNo: LintInspectionWithLineNo[] = [];
 
 /**
  * ファイルにLinterをかけます
@@ -31,6 +37,47 @@ export async function lint(file: TFile, linters: Linter[]) {
     await fixByInspections(inspections);
   }
   addLinterInspectionElement(inspections);
+
+  inspectionsOrderByLineNo = orderBy(
+    inspections.filter((x) => x.lineNo != null),
+    (x) => x.lineNo!,
+  ) as LintInspectionWithLineNo[];
+}
+
+export function moveToNextInspection(): void {
+  const activeLineNo = getActiveLineNo();
+  if (!activeLineNo) {
+    return;
+  }
+
+  const nextInspection = inspectionsOrderByLineNo.find(
+    (x) => x.lineNo > activeLineNo,
+  );
+  if (!nextInspection) {
+    return;
+  }
+
+  moveToLine(nextInspection.lineNo);
+  // TODO: 右下で出したい
+  notifyValidationError(nextInspection.code);
+}
+
+export function moveToPreviousInspection(): void {
+  const activeLineNo = getActiveLineNo();
+  if (!activeLineNo) {
+    return;
+  }
+
+  const previousInspection = inspectionsOrderByLineNo.findLast(
+    (x) => x.lineNo < activeLineNo,
+  );
+  if (!previousInspection) {
+    return;
+  }
+
+  moveToLine(previousInspection.lineNo);
+  // TODO: 右下で出したい
+  notifyValidationError(previousInspection.code);
 }
 
 async function fixByInspections(inspections: LintInspection[]) {

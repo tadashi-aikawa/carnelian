@@ -214,6 +214,8 @@ MOCのフォーマットがMinervaの最新仕様に従っていない。
 
 括弧 `)` で終わるリンクが存在する。
 
+- `Move to next inspection` /  `Move to previous inspection` 対応
+
 | ノートの種類         | レベル | 備考                |
 | -------------------- | ------ | ----                |
 | Glossary note        | WARN   |                     |
