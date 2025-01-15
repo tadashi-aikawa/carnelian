@@ -11,12 +11,12 @@ import {
   type Linter,
   lintAll,
 } from "src/lib/utils/linter";
-import { getActiveLineNo, moveToLine } from "../helpers/editors/basic";
+import { getActiveOffset, moveToOffset } from "../helpers/editors/basic";
 import { groupBy, orderBy } from "../utils/collections";
 import type { PartialRequired } from "../utils/types";
 
-type LintInspectionWithLineNo = PartialRequired<LintInspection, "lineNo">;
-let inspectionsOrderByLineNo: LintInspectionWithLineNo[] = [];
+type LintInspectionWithOffset = PartialRequired<LintInspection, "offset">;
+let inspectionsOrderByOffset: LintInspectionWithOffset[] = [];
 
 /**
  * ファイルにLinterをかけます
@@ -38,44 +38,44 @@ export async function lint(file: TFile, linters: Linter[]) {
   }
   addLinterInspectionElement(inspections);
 
-  inspectionsOrderByLineNo = orderBy(
-    inspections.filter((x) => x.lineNo != null),
-    (x) => x.lineNo!,
-  ) as LintInspectionWithLineNo[];
+  inspectionsOrderByOffset = orderBy(
+    inspections.filter((x) => x.offset != null),
+    (x) => x.offset!,
+  ) as LintInspectionWithOffset[];
 }
 
 export function moveToNextInspection(): void {
-  const activeLineNo = getActiveLineNo();
-  if (!activeLineNo) {
+  const offset = getActiveOffset();
+  if (!offset) {
     return;
   }
 
-  const nextInspection = inspectionsOrderByLineNo.find(
-    (x) => x.lineNo > activeLineNo,
+  const nextInspection = inspectionsOrderByOffset.find(
+    (ins) => ins.offset > offset,
   );
   if (!nextInspection) {
     return;
   }
 
-  moveToLine(nextInspection.lineNo);
+  moveToOffset(nextInspection.offset);
   // TODO: 右下で出したい
   notifyValidationError(nextInspection.code);
 }
 
 export function moveToPreviousInspection(): void {
-  const activeLineNo = getActiveLineNo();
-  if (!activeLineNo) {
+  const offset = getActiveOffset();
+  if (!offset) {
     return;
   }
 
-  const previousInspection = inspectionsOrderByLineNo.findLast(
-    (x) => x.lineNo < activeLineNo,
+  const previousInspection = inspectionsOrderByOffset.findLast(
+    (ins) => ins.offset < offset,
   );
   if (!previousInspection) {
     return;
   }
 
-  moveToLine(previousInspection.lineNo);
+  moveToOffset(previousInspection.offset);
   // TODO: 右下で出したい
   notifyValidationError(previousInspection.code);
 }

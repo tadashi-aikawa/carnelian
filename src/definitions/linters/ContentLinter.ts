@@ -332,6 +332,7 @@ function createLinkEndsWithParenthesis(
           ...base,
           level,
           lineNo,
+          offset: x.range.start,
           message: `L${lineNo} (${x.title})`,
         };
       });

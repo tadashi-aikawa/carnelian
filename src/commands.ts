@@ -13,6 +13,7 @@ import { createObsidianCookbook } from "./commands/create-obsidian-cookbook";
 import { createPrimeNote } from "./commands/create-prime-note";
 import { createReportNote } from "./commands/create-report-note";
 import { createTroubleshootingNote } from "./commands/create-troubleshooting-note";
+import { fixLink } from "./commands/fix-link";
 import { formatTable } from "./commands/format-table";
 import { insertBlueskyPostsToWeeklyNote } from "./commands/insert-bluesky-posts-to-weekly-note";
 import { insertNewNotesToWeeklyNote } from "./commands/insert-inputs-to-weekly-note";
@@ -37,6 +38,11 @@ import type { PluginSettings } from "./settings";
 
 export function createCommands(settings: PluginSettings): Command[] {
   const carnelianCommands: CarnelianCommand[] = [
+    {
+      name: "Fix link",
+      kind: "editor",
+      executor: fixLink,
+    },
     {
       name: "Move to next inspection",
       kind: "editor",

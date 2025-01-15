@@ -35,6 +35,15 @@ export function moveToLastLine(): void {
 }
 
 /**
+ * カーソルを指定オフセットに移動します
+ */
+export function moveToOffset(offset: number): void {
+  orThrow(getActiveEditor(), (e) => {
+    e.setCursor(e.offsetToPos(offset));
+  });
+}
+
+/**
  * 現在行のテキストを取得します
  */
 export function getActiveLine(): string | null {
@@ -48,6 +57,22 @@ export function getActiveLine(): string | null {
  */
 export function getActiveLineNo(): number | null {
   return map(getActiveEditor(), (editor) => editor.getCursor().line + 1);
+}
+
+/**
+ * 現在のオフセットを取得します
+ */
+export function getActiveOffset(): number | null {
+  return map(getActiveEditor(), (editor) =>
+    editor.posToOffset(editor.getCursor()),
+  );
+}
+
+/**
+ * 現在行におけるカーソルのオフセットを取得します
+ */
+export function getCursorOffsetAtActiveLine(): number | null {
+  return map(getActiveEditor(), (editor) => editor.getCursor().ch);
 }
 
 /**
@@ -197,6 +222,31 @@ export function setLinesInRange(
       text,
       { line: start, ch: 0 },
       { line: end, ch: e.getLine(end).length },
+    );
+    e.setCursor(cur);
+  });
+}
+
+/**
+ * 現在行における指定範囲にテキストを設定します
+ * @param start - 現在行における開始offset
+ * @param end - 現在行における終了offset
+ *
+ * ```ts
+ * setInActiveLineRange(2, 8, "hogehogehoge")
+ * ```
+ */
+export function setInActiveLineRange(
+  start: number,
+  end: number,
+  text: string,
+): void {
+  orThrow(getActiveEditor(), (e) => {
+    const cur = e.getCursor();
+    e.replaceRange(
+      text,
+      { line: cur.line, ch: start },
+      { line: cur.line, ch: end + 1 },
     );
     e.setCursor(cur);
   });

@@ -5,6 +5,7 @@ export interface LintInspection {
   message: string;
   level: "INFO" | "WARN" | "ERROR";
   lineNo?: number;
+  offset?: number;
   fix?: () => Promise<void>;
 }
 type LintArgs = {
