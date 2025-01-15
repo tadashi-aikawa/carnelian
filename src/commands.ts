@@ -1,10 +1,8 @@
 import type { Command } from "obsidian";
 
 import { addPropertySuitably } from "./commands/add-property-suitably";
-import { addTagsProperty } from "./commands/add-tags-property";
 import { cleanOldDailyNotes } from "./commands/clean-old-daily-notes";
 import { copyActiveFileFullPath } from "./commands/copy-active-file-full-path";
-import { copyAsConfluence } from "./commands/copy-as-confluence";
 import { copyMinervaURL } from "./commands/copy-minerva-url";
 import { copyUrlProperty } from "./commands/copy-url-property";
 import { createActivityNote } from "./commands/create-activity-note";
@@ -18,12 +16,9 @@ import { createTroubleshootingNote } from "./commands/create-troubleshooting-not
 import { formatTable } from "./commands/format-table";
 import { insertBlueskyPostsToWeeklyNote } from "./commands/insert-bluesky-posts-to-weekly-note";
 import { insertNewNotesToWeeklyNote } from "./commands/insert-inputs-to-weekly-note";
-import { insertMFDIPostsToWeeklyNote } from "./commands/insert-mfdi-posts-to-weekly-note";
 import { insertMOC } from "./commands/insert-moc";
 import { insertNoteCard } from "./commands/insert-note-card";
 import { insertSiteCard } from "./commands/insert-site-card";
-import { insertTasksOfRelease } from "./commands/insert-tasks-of-release";
-import { insertMTG } from "./commands/insert-todays-mtg";
 import { openPropertyUrl } from "./commands/open-property-url";
 import { pasteSiteCard } from "./commands/paste-site-card";
 import { pasteURLToSiteLink } from "./commands/paste-url-to-site-link";
@@ -34,10 +29,7 @@ import { transformMOC } from "./commands/transform-moc";
 import { transformToV2OGPCard } from "./commands/transform-v2-card";
 import { updateChangeLog } from "./commands/update-change-log";
 import { sortSelectionLines } from "./lib/helpers/editors/advanced";
-import {
-  toggleEditorLength,
-  toggleVimKeyBindings,
-} from "./lib/helpers/settings";
+import { toggleEditorLength } from "./lib/helpers/settings";
 import { type CarnelianCommand, createCommand } from "./lib/obsutils/commands";
 import type { PluginSettings } from "./settings";
 
@@ -49,24 +41,9 @@ export function createCommands(settings: PluginSettings): Command[] {
       executor: insertNewNotesToWeeklyNote,
     },
     {
-      name: "Insert MFDI posts to weekly note",
-      kind: "editor",
-      executor: insertMFDIPostsToWeeklyNote,
-    },
-    {
       name: "Insert Bluesky posts to weekly note",
       kind: "editor",
       executor: insertBlueskyPostsToWeeklyNote,
-    },
-    {
-      name: "Insert MTG",
-      kind: "editor",
-      executor: insertMTG,
-    },
-    {
-      name: "Insert tasks of release",
-      kind: "editor",
-      executor: insertTasksOfRelease,
     },
     {
       name: "Insert MOC",
@@ -77,11 +54,6 @@ export function createCommands(settings: PluginSettings): Command[] {
       name: "Transform MOC",
       kind: "editor",
       executor: transformMOC,
-    },
-    {
-      name: "Toggle Vim mode",
-      kind: "all",
-      executor: toggleVimKeyBindings,
     },
     {
       name: "Toggle editor length",
@@ -169,19 +141,9 @@ export function createCommands(settings: PluginSettings): Command[] {
       executor: createObsidianCookbook,
     },
     {
-      name: "Copy as Confluence",
-      kind: "editor",
-      executor: () => copyAsConfluence(settings),
-    },
-    {
       name: "Add property suitably",
       kind: "editor",
       executor: addPropertySuitably,
-    },
-    {
-      name: "Add tags property",
-      kind: "editor",
-      executor: addTagsProperty,
     },
     {
       name: "Toggle Live preview",
