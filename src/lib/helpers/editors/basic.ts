@@ -37,9 +37,16 @@ export function moveToLastLine(): void {
 /**
  * カーソルを指定オフセットに移動します
  */
-export function moveToOffset(offset: number): void {
+export function moveToOffset(
+  offset: number,
+  option?: { scrollToCenter?: boolean },
+): void {
   orThrow(getActiveEditor(), (e) => {
     e.setCursor(e.offsetToPos(offset));
+    if (option?.scrollToCenter) {
+      const pos = e.offsetToPos(offset);
+      e.scrollIntoView({ from: pos, to: pos }, true);
+    }
   });
 }
 

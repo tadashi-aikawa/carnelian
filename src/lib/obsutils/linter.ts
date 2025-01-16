@@ -57,7 +57,7 @@ export function moveToNextInspection(): void {
     return;
   }
 
-  moveToOffset(nextInspection.offset);
+  moveToOffset(nextInspection.offset, { scrollToCenter: true });
   // TODO: 右下で出したい
   notifyValidationError(nextInspection.code);
 }
@@ -75,7 +75,7 @@ export function moveToPreviousInspection(): void {
     return;
   }
 
-  moveToOffset(previousInspection.offset);
+  moveToOffset(previousInspection.offset, { scrollToCenter: true });
   // TODO: 右下で出したい
   notifyValidationError(previousInspection.code);
 }
