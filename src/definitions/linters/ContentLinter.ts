@@ -1,13 +1,9 @@
 import { updateChangeLog } from "src/commands/update-change-log";
 import { toLineNo } from "src/lib/helpers/editors/basic";
 import { getUnresolvedLinkMap } from "src/lib/helpers/links";
-import { duplicateObject } from "src/lib/utils/collections";
 import { ExhaustiveError } from "src/lib/utils/errors";
 import type { LintInspection, Linter } from "src/lib/utils/linter";
-import {
-  doSinglePatternCaptureMatching,
-  getWikiLinks,
-} from "src/lib/utils/strings";
+import { getWikiLinks } from "src/lib/utils/strings";
 import { getSinglePatternMatchingLocations } from "src/lib/utils/strings";
 import { findNoteTypeBy } from "../mkms";
 import type { NoteType } from "../mkms";
@@ -39,17 +35,13 @@ const hasOfficalMOCFormat = (content: string): boolean =>
 
 const hasV1LinkCard = (content: string): boolean =>
   content.includes('class="link-card"');
+const hasV2LinkCard = (content: string): boolean =>
+  content.includes('class="link-card-v2"');
 const hasLinkCard = (content: string): boolean =>
-  hasV1LinkCard(content) || content.includes('class="link-card-v2"');
+  hasV1LinkCard(content) || hasV2LinkCard(content);
 
 const hasV1DatesFormat = (content: string): boolean =>
   content.includes('class="minerva-change-meta"');
-
-// TODO: あとで消したい
-const countV1LinkCard = (content: string): number =>
-  doSinglePatternCaptureMatching(content, /class="link-card"/g).length;
-const countV2LinkCard = (content: string): number =>
-  doSinglePatternCaptureMatching(content, /class="link-card-v2"/g).length;
 
 function createDisallowedLinkCard(
   noteType: NoteType,
@@ -60,11 +52,22 @@ function createDisallowedLinkCard(
     message: "リンクカードは許可されていません",
   };
 
-  const createInspections = (level: LintInspection["level"]) =>
-    duplicateObject(
-      { ...base, level },
-      countV1LinkCard(content) + countV2LinkCard(content),
+  const createInspections = (level: LintInspection["level"]) => {
+    if (!hasLinkCard(content)) {
+      return [];
+    }
+
+    const cards = getSinglePatternMatchingLocations(
+      content,
+      /class="(link-card|link-card-v2)"/g,
     );
+    return cards.map((x) => ({
+      ...base,
+      level,
+      lineNo: toLineNo(x.range.start) ?? undefined,
+      offset: x.range.start,
+    }));
+  };
 
   switch (noteType.name) {
     case "Glossary note":
@@ -103,12 +106,12 @@ function createNoLinkComment(
     message: "内部リンクのリンクカードに対するリンクコメントがありません",
   };
 
-  const createInspection = (level: LintInspection["level"]) => {
+  const createInspections = (level: LintInspection["level"]) => {
     if (!hasLinkCard(content)) {
       return [];
     }
 
-    const linkNames = doSinglePatternCaptureMatching(
+    const linkNames = getSinglePatternMatchingLocations(
       content,
       /data-href="([^"]+)"/g,
     );
@@ -116,32 +119,37 @@ function createNoLinkComment(
       (x) => !content.includes(`%[[${x}]]`),
     );
 
-    return duplicateObject({ ...base, level }, invalidLinkNames.length);
+    return invalidLinkNames.map((x) => ({
+      ...base,
+      level,
+      lineNo: toLineNo(x.range.start) ?? undefined,
+      offset: x.range.start,
+    }));
   };
 
   switch (noteType.name) {
     case "Glossary note":
       return [];
     case "Hub note":
-      return createInspection("ERROR");
+      return createInspections("ERROR");
     case "Procedure note":
       return [];
     case "Activity note":
-      return createInspection("ERROR");
+      return createInspections("ERROR");
     case "Troubleshooting note":
-      return createInspection("ERROR");
+      return createInspections("ERROR");
     case "Prime note":
-      return createInspection("ERROR");
+      return createInspections("ERROR");
     case "Report note":
-      return createInspection("ERROR");
+      return createInspections("ERROR");
     case "Article note":
-      return createInspection("ERROR");
+      return createInspections("ERROR");
     case "My note":
-      return createInspection("ERROR");
+      return createInspections("ERROR");
     case "Daily note":
       return [];
     case "Weekly report":
-      return createInspection("ERROR");
+      return createInspections("ERROR");
     default:
       throw new ExhaustiveError(noteType);
   }

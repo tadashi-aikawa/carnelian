@@ -104,6 +104,8 @@ lint機能のルールを記載する。
 
 カード型リンク(external/internal)が許可されていないのに利用されている。
 
+- `Move to next inspection` /  `Move to previous inspection` 対応
+
 | ノートの種類         | レベル | 備考             |
 | -------------------- | ------ | ---------------- |
 | Glossary note        | ERROR  |                  |
@@ -123,6 +125,8 @@ lint機能のルールを記載する。
 Vault内のノートを参照するカードがあるのに、その内部リンクが存在しない。
 
 具体的には本文中に `data-href="hogehoge"` があるのに `%%[[hogehoge]]%%` がない場合。
+
+- `Move to next inspection` /  `Move to previous inspection` 対応
 
 | ノートの種類         | レベル | 備考             |
 | -------------------- | ------ | ---------------- |
