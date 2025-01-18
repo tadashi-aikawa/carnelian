@@ -37,6 +37,7 @@ export type UMetadataEditor = {
   addProperty(): void;
   focusValue(key: string): void;
   insertProperties(props: Properties): void;
+  removeProperties(entries: { entry: { key: any } }[]): void;
 };
 
 export type UEditor = Editor;

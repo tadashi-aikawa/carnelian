@@ -159,8 +159,16 @@ If your plugin does not need CSS, delete this file.
 }
 .linter-inspections-container-contents__fixed {
   display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.linter-inspections-container-contents__fixed__record {
+  display: flex;
   align-items: center;
   gap: 0.75rem;
+}
+.linter-inspections-container-contents__fixed__text {
+  color: white;
 }
 
 .carnelian-command-palette-item {

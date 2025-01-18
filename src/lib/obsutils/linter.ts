@@ -123,11 +123,15 @@ function addLinterInspectionElement(inspections: LintInspection[]) {
 
   for (const s of fixableSummaries) {
     let text = s.code;
+    // INFO: fixableなinspectionは2つ以上のは無い気がする...
     if (s.inspections.length > 1) {
       text = `${text} x ${s.inspections.length}`;
     }
 
-    fixedContentsEl.appendChild(
+    const recordDiv = createDiv({
+      cls: "linter-inspections-container-contents__fixed__record",
+    });
+    recordDiv.appendChild(
       createDiv({
         text,
         cls: [
@@ -136,6 +140,13 @@ function addLinterInspectionElement(inspections: LintInspection[]) {
         ],
       }),
     );
+    recordDiv.appendChild(
+      createDiv({
+        text: `${s.inspections[0].message}`,
+        cls: ["linter-inspections-container-contents__fixed__text"],
+      }),
+    );
+    fixedContentsEl.appendChild(recordDiv);
   }
 
   if (fixedContentsEl.hasChildNodes()) {

@@ -1,4 +1,7 @@
-import { updateActiveFileProperty } from "src/lib/helpers/properties";
+import {
+  removeActiveFileProperty,
+  updateActiveFileProperty,
+} from "src/lib/helpers/properties";
 import { ExhaustiveError } from "src/lib/utils/errors";
 import { isPresent } from "src/lib/utils/guard";
 import type { LintInspection, Linter } from "src/lib/utils/linter";
@@ -74,7 +77,7 @@ function createNoCover(
 
   const base = {
     code: "No cover",
-    message: "プロパティにcoverがありません",
+    message: "coverを割り当てました",
     fix: async () => {
       updateActiveFileProperty("cover", noteType.coverImagePath);
     },
@@ -159,7 +162,7 @@ function createNoStatus(
 
   const base = {
     code: "No status",
-    message: "プロパティにstatusがありません",
+    message: "statusに『✅解決済』を割り当てました",
     fix: async () => {
       updateActiveFileProperty("status", "✅解決済");
     },
@@ -211,32 +214,36 @@ function createTags(
 
   const base = {
     code: "Tags",
-    message: "プロパティにtagsが存在します",
+    message: `tags『${properties.tags.toString()}』を削除しました`,
+    level: "ERROR" as LintInspection["level"],
+    fix: async () => {
+      removeActiveFileProperty("tags");
+    },
   };
 
   switch (noteType.name) {
     case "Glossary note":
-      return { ...base, level: "WARN" };
+      return base;
     case "Hub note":
-      return { ...base, level: "WARN" };
+      return base;
     case "Procedure note":
-      return { ...base, level: "WARN" };
+      return base;
     case "Activity note":
-      return { ...base, level: "WARN" };
+      return base;
     case "Troubleshooting note":
-      return { ...base, level: "WARN" };
+      return base;
     case "Prime note":
-      return { ...base, level: "WARN" };
+      return base;
     case "Report note":
-      return { ...base, level: "WARN" };
+      return base;
     case "Article note":
-      return { ...base, level: "WARN" };
+      return base;
     case "My note":
-      return { ...base, level: "WARN" };
+      return base;
     case "Daily note":
-      return { ...base, level: "WARN" };
+      return base;
     case "Weekly report":
-      return { ...base, level: "WARN" };
+      return base;
     default:
       throw new ExhaustiveError(noteType);
   }
