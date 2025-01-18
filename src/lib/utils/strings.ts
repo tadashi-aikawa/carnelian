@@ -219,7 +219,7 @@ ${recordTextList.join("\n")}
 }
 
 /**
-  テキストからwikiリンクのテキストと範囲を抽出します
+ * テキストからwikiリンクのテキストと範囲を抽出します
  */
 export function getWikiLinks(text: string): {
   title: string;

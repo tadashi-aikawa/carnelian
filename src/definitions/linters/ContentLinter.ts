@@ -325,6 +325,7 @@ function createLinkEndsWithParenthesis(
 
   const createInspection = (level: LintInspection["level"]) =>
     getWikiLinks(content)
+      .map((x) => ({ ...x, title: x.title.split("#")[0] })) // ヘッダは除外
       .filter((x) => (x.alias ? x.alias.endsWith(")") : x.title.endsWith(")")))
       .map((x) => {
         const lineNo = toLineNo(x.range.start) ?? undefined;
