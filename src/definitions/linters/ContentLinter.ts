@@ -252,7 +252,7 @@ function createV1DatesFormat(
 ): LintInspection[] {
   const base = {
     code: "v1 Dates format",
-    message: "ノートの作成日、最終更新日のフォーマットが古いです",
+    message: "createdとupdatedプロパティを追加しました",
     fix: async () => {
       updateChangeLog();
     },
