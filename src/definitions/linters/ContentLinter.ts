@@ -8,6 +8,7 @@ import {
   doSinglePatternCaptureMatching,
   getWikiLinks,
 } from "src/lib/utils/strings";
+import { getSinglePatternMatchingLocations } from "src/lib/utils/strings";
 import { findNoteTypeBy } from "../mkms";
 import type { NoteType } from "../mkms";
 
@@ -24,7 +25,7 @@ export const contentLinter: Linter = {
       ...createV1LinkCard(noteType, content),
       ...createUnofficialMOCFormat(noteType, content),
       ...createV1DatesFormat(noteType, content),
-      ...createUnresolvedInternalLink(noteType, path),
+      ...createUnresolvedInternalLink(noteType, path, content),
       ...createLinkEndsWithParenthesis(noteType, content),
     ];
   },
@@ -44,6 +45,7 @@ const hasLinkCard = (content: string): boolean =>
 const hasV1DatesFormat = (content: string): boolean =>
   content.includes('class="minerva-change-meta"');
 
+// TODO: あとで消したい
 const countV1LinkCard = (content: string): number =>
   doSinglePatternCaptureMatching(content, /class="link-card"/g).length;
 const countV2LinkCard = (content: string): number =>
@@ -154,8 +156,15 @@ function createV1LinkCard(
     message: "非推奨のv1形式カードリンクがあります",
   };
 
-  const createInspection = (level: LintInspection["level"]) =>
-    duplicateObject({ ...base, level }, countV1LinkCard(content));
+  const createInspection = (level: LintInspection["level"]) => {
+    return getSinglePatternMatchingLocations(content, /class="link-card"/g).map(
+      (x) => ({
+        ...base,
+        level,
+        offset: x.range.start,
+      }),
+    );
+  };
 
   switch (noteType.name) {
     case "Glossary note":
@@ -275,17 +284,27 @@ function createV1DatesFormat(
 function createUnresolvedInternalLink(
   noteType: NoteType,
   path: string,
+  content: string,
 ): LintInspection[] {
   const base = {
     code: "Unresolved internal link",
   };
 
-  const createInspection = (level: LintInspection["level"]) =>
-    Object.entries(getUnresolvedLinkMap(path)).map(([name]) => ({
-      ...base,
-      level,
-      message: `[[${name}]] は未解決のリンクです`,
-    }));
+  const createInspection = (level: LintInspection["level"]) => {
+    return Object.keys(getUnresolvedLinkMap(path))
+      .flatMap((linkName) =>
+        getSinglePatternMatchingLocations(
+          content,
+          new RegExp(`\\[\\[${linkName}\\|?[^\\]]*\\]\\]`, "g"),
+        ),
+      )
+      .map((x) => ({
+        ...base,
+        level,
+        offset: x.range.start,
+        message: `[[${x.text}]] は未解決のリンクです`,
+      }));
+  };
 
   switch (noteType.name) {
     case "Glossary note":
