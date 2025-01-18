@@ -84,6 +84,7 @@ export function getActiveFileDescriptionProperty(): string | null {
 
 /**
  * 現在ファイルにプロパティを追加します
+ * 既にプロパティがある場合は上書きされます(以前と挙動が変わった)
  *
  * ```ts
  * addActiveFileProperty("id", 100)
@@ -123,7 +124,7 @@ export function addActiveFileProperties(properties: {
 export function removeActiveFileProperty(key: string): void {
   orThrow(
     getActiveMetadataEditor(),
-    (me) => me.insertProperties({ [key]: null }),
+    (me) => me.removeProperties([{ entry: { key } }]),
     { message: errorMessage["MetadataEditor is null"] },
   );
 }
@@ -139,7 +140,6 @@ export function updateActiveFileProperty(
   key: string,
   value: any | any[],
 ): void {
-  removeActiveFileProperty(key);
   addActiveFileProperty(key, value);
 }
 
