@@ -3,7 +3,10 @@ import { toLineNo } from "src/lib/helpers/editors/basic";
 import { getUnresolvedLinkMap } from "src/lib/helpers/links";
 import { ExhaustiveError } from "src/lib/utils/errors";
 import type { LintInspection, Linter } from "src/lib/utils/linter";
-import { getWikiLinks } from "src/lib/utils/strings";
+import {
+  getSinglePatternCaptureMatchingLocations,
+  getWikiLinks,
+} from "src/lib/utils/strings";
 import { getSinglePatternMatchingLocations } from "src/lib/utils/strings";
 import { findNoteTypeBy } from "../mkms";
 import type { NoteType } from "../mkms";
@@ -111,14 +114,17 @@ function createNoLinkComment(
       return [];
     }
 
-    const linkNames = getSinglePatternMatchingLocations(
+    const linkNames = getSinglePatternCaptureMatchingLocations(
       content,
       /data-href="([^"]+)"/g,
     );
-    const invalidLinkNames = linkNames.filter(
-      (x) => !content.includes(`%[[${x}]]`),
-    );
+    if (linkNames.length === 0) {
+      return [];
+    }
 
+    const invalidLinkNames = linkNames.filter(
+      (x) => !content.includes(`%%[[${x.captured}]]%%`),
+    );
     return invalidLinkNames.map((x) => ({
       ...base,
       level,

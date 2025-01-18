@@ -7,6 +7,7 @@ import {
   excludeSpace,
   formatTable,
   getParagraphAtLine,
+  getSinglePatternCaptureMatchingLocations,
   getSinglePatternMatchingLocations,
   getWikiLinks,
   match,
@@ -128,6 +129,44 @@ test.each([
     expected: ReturnType<typeof getSinglePatternMatchingLocations>,
   ) => {
     expect(getSinglePatternMatchingLocations(text, pattern)).toEqual(expected);
+  },
+);
+
+test.each([
+  [
+    "2023-10-12から2023-10-02",
+    /\d{4}-\d{2}-(\d{2})/g,
+    [
+      { text: "2023-10-12", captured: "12", range: { start: 0, end: 9 } },
+      { text: "2023-10-02", captured: "02", range: { start: 12, end: 21 } },
+    ],
+  ],
+  ["hoge", /h../g, [{ text: "hog", range: { start: 0, end: 2 } }]],
+  [
+    "hoge",
+    /h(..)/g,
+    [{ text: "hog", captured: "og", range: { start: 0, end: 2 } }],
+  ],
+  ["ho", /h(..)/g, []],
+  [
+    "hogehoge",
+    /h(.)./g,
+    [
+      { text: "hog", captured: "o", range: { start: 0, end: 2 } },
+      { text: "hog", captured: "o", range: { start: 4, end: 6 } },
+    ],
+  ],
+  ["aaaa", /h../g, []],
+])(
+  `getSinglePatternCaptureMatchingLocations("%s")`,
+  (
+    text: Parameters<typeof getSinglePatternCaptureMatchingLocations>[0],
+    pattern: Parameters<typeof getSinglePatternCaptureMatchingLocations>[1],
+    expected: ReturnType<typeof getSinglePatternCaptureMatchingLocations>,
+  ) => {
+    expect(getSinglePatternCaptureMatchingLocations(text, pattern)).toEqual(
+      expected,
+    );
   },
 );
 

@@ -71,6 +71,30 @@ export function getSinglePatternMatchingLocations(
 }
 
 /**
+ * 1種類のパターンでパターンマッチした結果のキャプチャを文字列と位置のリストで取得します
+ */
+export function getSinglePatternCaptureMatchingLocations(
+  text: string,
+  pattern: RegExp,
+): {
+  text: string;
+  captured?: string;
+  /**
+   * textの位置 (WARN: capturedではない)
+   */
+  range: Range;
+}[] {
+  return Array.from(text.matchAll(pattern)).map((x) => ({
+    text: x[0],
+    captured: x[1],
+    range: {
+      start: x.index!,
+      end: x.index! + x[0].length - 1,
+    },
+  }));
+}
+
+/**
  * baseのテキストからrangeの範囲をtextの文字列で置き換えます
  */
 export function replaceAt(base: string, range: Range, text: string): string {
