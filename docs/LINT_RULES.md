@@ -142,6 +142,8 @@ Vault内のノートを参照するカードがあるのに、その内部リン
 
 Link cardが非推奨のv1形式になっている。
 
+- `Move to next inspection` /  `Move to previous inspection` 対応
+
 | ノートの種類         | レベル | 備考             |
 | -------------------- | ------ | ---------------- |
 | Glossary note        |        | 使ってないはず   |
@@ -180,21 +182,23 @@ MOCのフォーマットがMinervaの最新仕様に従っていない。
 
 | ノートの種類         | レベル | 備考           |
 | -------------------- | ------ | ----           |
-| Glossary note        | ERROR  |                |
-| Hub note             | ERROR  |                |
-| Procedure note       | ERROR  |                |
-| Activity note        | ERROR  |                |
-| Troubleshooting note | ERROR  |                |
-| Prime note           | ERROR  |                |
-| Report note          | ERROR  |                |
-| Article note         | ERROR  |                |
-| My note              | ERROR  |                |
+| Glossary note        | ERROR  | autofix        |
+| Hub note             | ERROR  | autofix        |
+| Procedure note       | ERROR  | autofix        |
+| Activity note        | ERROR  | autofix        |
+| Troubleshooting note | ERROR  | autofix        |
+| Prime note           | ERROR  | autofix        |
+| Report note          | ERROR  | autofix        |
+| Article note         | ERROR  | autofix        |
+| My note              | ERROR  | autofix        |
 | Daily note           |        | 存在しないはず |
-| Weekly Report        | ERROR  |                |
+| Weekly Report        | ERROR  | autofix        |
 
 ### Unresolved internal link
 
 未解決の内部リンクが存在する。
+
+- `Move to next inspection` /  `Move to previous inspection` 対応
 
 | ノートの種類         | レベル | 備考 |
 | -------------------- | ------ | ---- |
