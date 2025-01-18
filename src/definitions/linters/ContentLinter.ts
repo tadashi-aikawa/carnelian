@@ -303,7 +303,7 @@ function createUnresolvedInternalLink(
       .flatMap((linkName) =>
         getSinglePatternMatchingLocations(
           content,
-          new RegExp(`\\[\\[${linkName}\\|?[^\\]]*\\]\\]`, "g"),
+          new RegExp(`\\[\\[${linkName}(|\\|[^\\]]*)\\]\\]`, "g"),
         ),
       )
       .map((x) => ({
