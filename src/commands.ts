@@ -12,6 +12,7 @@ import { createHubNote } from "./commands/create-hub-note";
 import { createObsidianCookbook } from "./commands/create-obsidian-cookbook";
 import { createPrimeNote } from "./commands/create-prime-note";
 import { createReportNote } from "./commands/create-report-note";
+import { createTDQ } from "./commands/create-tdq";
 import { createTroubleshootingNote } from "./commands/create-troubleshooting-note";
 import { fixLink } from "./commands/fix-link";
 import { formatTable } from "./commands/format-table";
@@ -157,6 +158,11 @@ export function createCommands(settings: PluginSettings): Command[] {
       name: "Create Obsidian逆引きレシピ",
       kind: "all",
       executor: createObsidianCookbook,
+    },
+    {
+      name: "Create TDQ",
+      kind: "editor",
+      executor: createTDQ,
     },
     {
       name: "Add property suitably",
