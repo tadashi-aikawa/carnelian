@@ -34,5 +34,5 @@ export class LintService implements Service {
 }
 
 export async function lintFile(file: TFile) {
-  await lint(file, [propertyLinter, contentLinter]);
+  await lint(file, [contentLinter, propertyLinter]);
 }
