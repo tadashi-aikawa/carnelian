@@ -8,6 +8,7 @@ import {
   getWikiLinks,
 } from "src/lib/utils/strings";
 import { getSinglePatternMatchingLocations } from "src/lib/utils/strings";
+import { match } from "src/lib/utils/strings";
 import { findNoteTypeBy } from "../mkms";
 import type { NoteType } from "../mkms";
 
@@ -359,7 +360,10 @@ function createLinkEndsWithParenthesis(
   const createInspection = (level: LintInspection["level"]) =>
     getWikiLinks(content)
       .map((x) => ({ ...x, title: x.title.split("#")[0] })) // ヘッダは除外
-      .filter((x) => (x.alias ? x.alias.endsWith(")") : x.title.endsWith(")")))
+      .filter((x) => {
+        const target = x.alias ?? x.title;
+        return match(target, /[^(]\)$/);
+      })
       .map((x) => {
         const lineNo = toLineNo(x.range.start) ?? undefined;
         return {
