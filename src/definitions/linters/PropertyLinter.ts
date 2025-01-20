@@ -58,6 +58,8 @@ function createNoDescription(
       return { ...base, level: "ERROR" };
     case "My note":
       return { ...base, level: "WARN" };
+    case "Series note":
+      return { ...base, level: "ERROR" };
     case "Daily note":
       return null;
     case "Weekly report":
@@ -102,6 +104,8 @@ function createNoCover(
       return { ...base, level: "ERROR" };
     case "My note":
       return { ...base, level: "ERROR" };
+    case "Series note":
+      return { ...base, level: "ERROR" };
     case "Daily note":
       return null;
     case "Weekly report":
@@ -142,6 +146,8 @@ function createNoUrl(
     case "Article note":
       return null;
     case "My note":
+      return null;
+    case "Series note":
       return null;
     case "Daily note":
       return null;
@@ -186,6 +192,8 @@ function createNoStatus(
     case "Article note":
       return null;
     case "My note":
+      return null;
+    case "Series note":
       return null;
     case "Daily note":
       return null;
@@ -239,6 +247,8 @@ function createTags(
     case "Article note":
       return base;
     case "My note":
+      return base;
+    case "Series note":
       return base;
     case "Daily note":
       return base;
