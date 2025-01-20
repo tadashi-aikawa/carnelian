@@ -393,21 +393,21 @@ function createLinkEndsWithParenthesis(
     case "Hub note":
       return createInspection("WARN");
     case "Procedure note":
-      return createInspection("WARN");
+      return createInspection("ERROR");
     case "Activity note":
-      return createInspection("WARN");
+      return createInspection("ERROR");
     case "Troubleshooting note":
-      return createInspection("WARN");
+      return createInspection("ERROR");
     case "Prime note":
-      return createInspection("WARN");
+      return createInspection("ERROR");
     case "Report note":
-      return createInspection("WARN");
+      return createInspection("ERROR");
     case "Article note":
-      return createInspection("WARN");
+      return createInspection("ERROR");
     case "My note":
-      return createInspection("WARN");
+      return createInspection("ERROR");
     case "Series note":
-      return createInspection("WARN");
+      return createInspection("ERROR");
     case "Daily note":
       return [];
     case "Weekly report":

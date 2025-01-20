@@ -235,18 +235,18 @@ MOCのフォーマットがMinervaの最新仕様に従っていない。
 
 - `Move to next inspection` /  `Move to previous inspection` 対応
 
-| ノートの種類         | レベル | 備考                |
-| -------------------- | ------ | ----                |
-| Glossary note        | WARN   |                     |
-| Hub note             | WARN   |                     |
-| Procedure note       | WARN   |                     |
-| Activity note        | WARN   |                     |
-| Troubleshooting note | WARN   |                     |
-| Prime note           | WARN   |                     |
-| Report note          | WARN   |                     |
-| Article note         | WARN   |                     |
-| My note              | WARN   |                     |
-| Series note          | WARN   |                     |
-| Daily note           |        |                     |
-| Weekly Report        |        | New Notesは必ず入る |
+| ノートの種類         | レベル | 備考                       |
+| -------------------- | ------ | ----                       |
+| Glossary note        | WARN   | 同名リンクで使うことがある |
+| Hub note             | WARN   | 同名リンクで使うことがある |
+| Procedure note       | ERROR  |                            |
+| Activity note        | ERROR  |                            |
+| Troubleshooting note | ERROR  |                            |
+| Prime note           | ERROR  |                            |
+| Report note          | ERROR  |                            |
+| Article note         | ERROR  |                            |
+| My note              | ERROR  |                            |
+| Series note          | ERROR  |                            |
+| Daily note           |        |                            |
+| Weekly Report        |        | New Notesは必ず入る        |
 
