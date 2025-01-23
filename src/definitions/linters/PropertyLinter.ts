@@ -80,9 +80,11 @@ function createNoCover(
   const base = {
     code: "No cover",
     message: "coverを割り当てました",
-    fix: async () => {
-      updateActiveFileProperty("cover", noteType.coverImagePath);
-    },
+    fix: noteType.coverImagePath
+      ? async () => {
+          updateActiveFileProperty("cover", noteType.coverImagePath);
+        }
+      : undefined,
   };
 
   switch (noteType.name) {
