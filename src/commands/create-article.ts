@@ -26,7 +26,7 @@ export async function createArticle() {
   const today = now("YYYY-MM-DD");
   const f = await createFile(
     fp,
-    `[[📒Articles]] > [[📒2024 Articles]]
+    `[[📒Articles]] > [[📒2025 Articles]]
 
 ![[${today}.webp|cover-picture]]
 `,
