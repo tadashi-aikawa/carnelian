@@ -101,6 +101,11 @@ if (Bun.env.ALLOW_LARGE_TEST) {
       "https://lukas.zapletalovi.com/posts/2022/wrapping-multiple-errors/",
       "https://lukas.zapletalovi.com/images/avatar_rh_256.avif",
     ],
+    [
+      'bun 1.2 (meta name="og:image" content=...)',
+      "https://bun.sh/blog/bun-v1.2",
+      "https://bun.sh/og/blog/bun-v1.2.jpg",
+    ],
   ])(
     "%s",
     async (
