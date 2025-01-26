@@ -370,7 +370,13 @@ function createLinkEndsWithParenthesis(
   };
 
   const createInspection = (level: LintInspection["level"]) =>
-    getWikiLinks(content)
+    getWikiLinks(
+      // コメント内のinternal linkは検査対象外のため
+      content
+        .split("\n")
+        .map((l) => (l.startsWith("%%") ? "" : l))
+        .join("\n"),
+    )
       .map((x) => ({ ...x, title: x.title.split("#")[0] })) // ヘッダは除外
       .filter((x) => {
         const target = x.alias ?? x.title;
