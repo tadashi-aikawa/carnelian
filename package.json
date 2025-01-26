@@ -23,7 +23,7 @@
     "tslib": "^2.8.1"
   },
   "peerDependencies": {
-    "typescript": "^5.5.0"
+    "typescript": "^5.7.3"
   },
   "description": "Obsidian Plugin for tadashi-aikawa",
   "keywords": [],
