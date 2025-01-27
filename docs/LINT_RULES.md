@@ -99,9 +99,10 @@ lint機能のルールを記載する。
 | Daily note           | ERROR  | autofix |
 | Weekly Report        | ERROR  | autofix |
 
-いくつか例外ケースがある。
+以下のケースは例外的に **タグを許容し、タグが無い場合はautofixで付与する**。
 
-- タイトルにJavaScriptが含まれている場合のTypeScriptはOK
+- タイトルに(JavaScript)が含まれている場合のTypeScriptはOK
+- タイトルに(Vim)が含まれている場合のNeovimはOK
 
 ## Content Linter
 

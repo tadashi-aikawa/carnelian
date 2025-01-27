@@ -84,7 +84,7 @@ export function getActiveFileDescriptionProperty(): string | null {
 
 /**
  * 現在ファイルにプロパティを追加します
- * 既にプロパティがある場合は上書きされます(以前と挙動が変わった)
+ * valueがanyの場合は上書き、any[]の場合は上書きせず追加します
  *
  * ```ts
  * addActiveFileProperty("id", 100)

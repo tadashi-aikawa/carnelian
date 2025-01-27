@@ -21,7 +21,7 @@ export const propertyLinter: Linter = {
       createNoCover(noteType, properties),
       createNoUrl(noteType, properties),
       createNoStatus(noteType, properties),
-      createTags(noteType, title, properties),
+      createTags(title, properties),
     ].filter(isPresent);
   },
 };
@@ -207,63 +207,49 @@ function createNoStatus(
 }
 
 function createTags(
-  noteType: NoteType,
   title: string,
   properties?: Properties,
 ): LintInspection | null {
-  if (!properties?.tags) {
-    return null;
+  const tags = properties?.tags;
+
+  if (title.endsWith("(JavaScript)")) {
+    if (tags?.includes("TypeScript")) {
+      return null;
+    }
+    return {
+      code: "Tags",
+      message: "tagsに『TypeScript』を設定しました",
+      level: "ERROR" as LintInspection["level"],
+      fix: async () => {
+        updateActiveFileProperty("tags", ["TypeScript"]);
+      },
+    };
   }
-  if (
-    title.endsWith("(JavaScript)") &&
-    properties.tags.length === 1 &&
-    properties.tags.includes("TypeScript")
-  ) {
-    return null;
+
+  if (title.endsWith("(Vim)")) {
+    if (tags?.includes("Neovim")) {
+      return null;
+    }
+    return {
+      code: "Tags",
+      message: "tagsに『Neovim』を設定しました",
+      level: "ERROR" as LintInspection["level"],
+      fix: async () => {
+        updateActiveFileProperty("tags", ["Neovim"]);
+      },
+    };
   }
-  if (
-    title.endsWith("(Vim)") &&
-    properties.tags.length === 1 &&
-    properties.tags.includes("Neovim")
-  ) {
+
+  if (!tags) {
     return null;
   }
 
-  const base = {
+  return {
     code: "Tags",
-    message: `tags『${properties.tags.toString()}』を削除しました`,
+    message: `tags『${tags.toString()}』を削除しました`,
     level: "ERROR" as LintInspection["level"],
     fix: async () => {
       removeActiveFileProperty("tags");
     },
   };
-
-  switch (noteType.name) {
-    case "Glossary note":
-      return base;
-    case "Hub note":
-      return base;
-    case "Procedure note":
-      return base;
-    case "Activity note":
-      return base;
-    case "Troubleshooting note":
-      return base;
-    case "Prime note":
-      return base;
-    case "Report note":
-      return base;
-    case "Article note":
-      return base;
-    case "My note":
-      return base;
-    case "Series note":
-      return base;
-    case "Daily note":
-      return base;
-    case "Weekly report":
-      return base;
-    default:
-      throw new ExhaustiveError(noteType);
-  }
 }
