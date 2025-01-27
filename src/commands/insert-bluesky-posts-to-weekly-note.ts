@@ -61,12 +61,14 @@ export async function insertBlueskyPostsToWeeklyNote() {
       `⏳ [${i + 1}/${relatedPosts.length}] Cardのデータを作成中...`,
     );
 
-    const html = await createCard(post.embedUri!);
+    const card = post.embedUri?.startsWith("https://www.youtube.com/")
+      ? `![](${post.embedUri})`
+      : await createCard(post.embedUri!);
 
     insertToCursor(
       `## ${post.embedTitle}
 
-${html}
+${card}
 
 ~~~
 ${post.text}
