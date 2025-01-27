@@ -215,9 +215,16 @@ function createTags(
     return null;
   }
   if (
-    title.includes("JavaScript") &&
+    title.endsWith("(JavaScript)") &&
     properties.tags.length === 1 &&
     properties.tags.includes("TypeScript")
+  ) {
+    return null;
+  }
+  if (
+    title.endsWith("(Vim)") &&
+    properties.tags.length === 1 &&
+    properties.tags.includes("Neovim")
   ) {
     return null;
   }
