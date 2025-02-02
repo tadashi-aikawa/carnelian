@@ -119,7 +119,7 @@ function createNoLinkComment(
 
     const linkNames = getSinglePatternCaptureMatchingLocations(
       content,
-      /data-href="([^"]+)"/g,
+      /<a data-href="([^"]+)"/g,
     );
     if (linkNames.length === 0) {
       return [];
