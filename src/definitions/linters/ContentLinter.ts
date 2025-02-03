@@ -369,12 +369,22 @@ function createLinkEndsWithParenthesis(
     code: "Link ends with parenthesis",
   };
 
-  const createInspection = (level: LintInspection["level"]) =>
+  const createInspection = (
+    level: LintInspection["level"],
+    option?: { ignoreInList?: boolean },
+  ) =>
     getWikiLinks(
-      // コメント内のinternal linkは検査対象外のため
       content
         .split("\n")
-        .map((l) => (l.startsWith("%%") ? "" : l))
+        // コメント内のinternal linkは検査対象外のため
+        .map((l) => (l.startsWith("%%") ? "x".repeat(l.length) : l))
+        // 箇条書き内を無視する場合の対応
+        .map((l) => {
+          if (!option?.ignoreInList) {
+            return l;
+          }
+          return l.startsWith("- ") ? "x".repeat(l.length) : l;
+        })
         .join("\n"),
     )
       .map((x) => ({ ...x, title: x.title.split("#")[0] })) // ヘッダは除外
@@ -417,7 +427,7 @@ function createLinkEndsWithParenthesis(
     case "Daily note":
       return [];
     case "Weekly report":
-      return [];
+      return createInspection("ERROR", { ignoreInList: true });
     default:
       throw new ExhaustiveError(noteType);
   }

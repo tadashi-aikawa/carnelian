@@ -249,5 +249,5 @@ MOCのフォーマットがMinervaの最新仕様に従っていない。
 | My note              | ERROR  |                            |
 | Series note          | ERROR  |                            |
 | Daily note           |        |                            |
-| Weekly Report        |        | New Notesは必ず入る        |
+| Weekly Report        | ERROR  | 箇条書き(New Notes)は除外  |
 
