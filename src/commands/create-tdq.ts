@@ -14,45 +14,6 @@ import { sorter } from "src/lib/utils/collections";
  */
 export async function createTDQ() {
   const today = now("YYYY-MM-DD");
-
-  const NOTE_BODY = `
----
-created: ${today}
-updated: ${today}
-cover: 📗TDQ/attachments/tdq.webp
----
-
-\`\`\`
----
-
-*NEXT*  >> <前回ノートの最後にここのリンクを張る>
-\`\`\`
-
-<説明文>
-
-## Lesson
-
-<必要な事前知識を記載(任意)>
-
-## Mission 1
-
-#🙂NORMAL 
-
-<ここに問題文>
-
-%%
-回答例
-
-\`\`\`js
-// TODO:
-\`\`\`
-%%
-
-> [!hint]- Hint 1
-> <ヒントの内容>
-
-`.trim();
-
   const prefix = "📗TDQ";
   const maxNumber = Number(
     getMarkdownFiles()
@@ -79,6 +40,49 @@ cover: 📗TDQ/attachments/tdq.webp
   }
 
   insertToCursor(`[[${title}]]`);
+
+  const NOTE_BODY = `
+---
+created: ${today}
+updated: ${today}
+cover: 📗TDQ/attachments/tdq.webp
+---
+
+\`\`\`
+---
+
+*NEXT*  >> [[${title}]]
+\`\`\`
+
+<説明文>
+
+## Reference
+
+<参考ページのカード or URL(Ctrl+Shift+M)>
+
+## Lesson
+
+<必要な事前知識を記載(任意)>
+
+## Mission 1
+
+#🙂NORMAL 
+
+<ここに問題文>
+
+%%
+回答例
+
+\`\`\`js
+// TODO:
+\`\`\`
+%%
+
+> [!hint]- Hint 1
+> <ヒントの内容>
+
+`.trim();
+
   const f = await createFile(filePath, NOTE_BODY);
   await openFile(f.path);
 }
