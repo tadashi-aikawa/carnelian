@@ -14,15 +14,19 @@ export default class CarnelianPlugin extends Plugin {
       this.addCommand(cmd);
     }
 
-    this.services = createServices(this.settings);
-    for (const sv of this.services) {
-      sv.onload?.();
-    }
-
-    this.app.workspace.onLayoutReady(() => {
+    // メタデータが不完全な状態での処理を防ぐため
+    const cacheResolvedRef = this.app.metadataCache.on("resolved", async () => {
+      this.services = createServices(this.settings);
       for (const sv of this.services) {
-        sv.onLayoutReady?.();
+        sv.onload?.();
       }
+      this.app.metadataCache.offref(cacheResolvedRef);
+
+      this.app.workspace.onLayoutReady(() => {
+        for (const sv of this.services) {
+          sv.onLayoutReady?.();
+        }
+      });
     });
   }
 
