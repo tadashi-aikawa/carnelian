@@ -16,6 +16,17 @@ export function getActiveEditor(): UEditor | null {
 }
 
 /**
+ * カーソルを指定位置に移動します
+ * @param lineNo 1はじまり
+ * @param ch 1はじまり
+ */
+export function moveTo(lineNo: number, ch: number): void {
+  orThrow(getActiveEditor(), (e) => {
+    e.setCursor(lineNo - 1, ch - 1);
+  });
+}
+
+/**
  * カーソルを指定行に移動します
  * @param lineNo 1はじまり
  */
@@ -64,6 +75,16 @@ export function getActiveLine(): string | null {
  */
 export function getActiveLineNo(): number | null {
   return map(getActiveEditor(), (editor) => editor.getCursor().line + 1);
+}
+
+/**
+ * 現在のカーソル位置を取得します (lineNo, chは共に1から)
+ */
+export function getActiveCursor(): { lineNo: number; ch: number } | null {
+  return map(getActiveEditor(), (editor) => {
+    const { line, ch } = editor.getCursor();
+    return { lineNo: line + 1, ch: ch + 1 };
+  });
 }
 
 /**
@@ -196,6 +217,17 @@ export function toLineNo(offset: number): number | null {
   return (
     map(getActiveEditor()?.offsetToPos(offset).line, (line) => line + 1) ?? null
   );
+}
+
+/**
+ * エディタの全テキストを置換します
+ *
+ * ```ts
+ * replaceAllText("after text")
+ * ```
+ */
+export function replaceAllText(text: string): void {
+  orThrow(getActiveEditor(), (e) => e.setValue(text));
 }
 
 /**
