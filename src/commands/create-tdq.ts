@@ -17,7 +17,7 @@ export async function createTDQ() {
   const prefix = "📗TDQ";
   const maxNumber = Number(
     getMarkdownFiles()
-      .filter((x) => x.name.startsWith(`${prefix}-`))
+      .filter((x) => x.name.match(`${prefix}-\\d+ `))
       .sort(sorter((x) => x.name))
       .pop()
       ?.name.split(" ")[0]
