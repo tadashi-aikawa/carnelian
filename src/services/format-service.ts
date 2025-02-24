@@ -30,9 +30,10 @@ function formatLineBreaks(
 ): { markdown: string; lineOffset: number } {
   const isEmptyLine = (x: string) => x.trim() === "";
 
+  const newLines = [];
+
   let lineOffset = 0;
   let firstEmptyRowNo = null;
-  const newLines = [];
   const lines = markdown.split("\n");
   for (let i = 0; i < lines.length; i++) {
     const rowNo = i + 1;
@@ -68,6 +69,9 @@ function formatLineBreaks(
     newLines.push(line);
     firstEmptyRowNo = null;
   }
+
+  // 最後は必ず空行
+  newLines.push("");
 
   return { markdown: newLines.join("\n"), lineOffset };
 }
