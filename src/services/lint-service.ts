@@ -23,7 +23,7 @@ export class LintService implements Service {
       }
       await lintFile(file);
     });
-    this.unsetExWCommandHandler = setOnExWCommandEvent(lintFile);
+    this.unsetExWCommandHandler = setOnExWCommandEvent(lintFile, this.name);
   }
 
   onunload(): void {

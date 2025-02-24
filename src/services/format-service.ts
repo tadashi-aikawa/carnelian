@@ -13,7 +13,7 @@ export class FormatService implements Service {
   unsetExWCommandHandler!: () => void;
 
   onload(): void {
-    this.unsetExWCommandHandler = setOnExWCommandEvent(formatFile);
+    this.unsetExWCommandHandler = setOnExWCommandEvent(formatFile, this.name);
   }
 
   onunload(): void {

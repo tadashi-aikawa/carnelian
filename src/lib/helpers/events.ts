@@ -62,6 +62,10 @@ export function setOnCreateFileEvent(
   };
 }
 
+const exWCommandEventHandlerMap: {
+  [name: string]: Parameters<typeof setOnExWCommandEvent>[0];
+} = {};
+
 /**
  * :w コマンドで保存したときに実行する処理を設定します
  *
@@ -69,12 +73,17 @@ export function setOnCreateFileEvent(
  */
 export function setOnExWCommandEvent(
   handler: (activeFile: TFile) => any,
+  handlerName: string,
 ): () => void {
+  exWCommandEventHandlerMap[handlerName] = handler;
+
   (window as any).CodeMirrorAdapter.commands.save = () => {
-    handler(getActiveFile()!);
+    Object.entries(exWCommandEventHandlerMap).map(([_name, handler]) => {
+      handler(getActiveFile()!);
+    });
   };
 
   return () => {
-    (window as any).CodeMirrorAdapter.commands.save = () => {};
+    delete exWCommandEventHandlerMap[handlerName];
   };
 }
