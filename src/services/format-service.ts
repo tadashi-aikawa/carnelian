@@ -1,8 +1,11 @@
 import type { TFile } from "obsidian";
-import { getActiveCursor, moveTo } from "src/lib/helpers/editors/basic";
-import { replaceAllText } from "src/lib/helpers/editors/basic";
+import {
+  getActiveCursor,
+  getActiveEditor,
+} from "src/lib/helpers/editors/basic";
 import { loadFileContentCache } from "src/lib/helpers/entries";
 import { setOnExWCommandEvent } from "src/lib/helpers/events";
+import { formatLineBreaks } from "src/lib/obsutils/formatter";
 import type { Service } from "src/services";
 
 /**
@@ -21,61 +24,6 @@ export class FormatService implements Service {
   }
 }
 
-/**
- * @param cursorLineNo カーソル行番号(1~)
- */
-function formatLineBreaks(
-  markdown: string,
-  cursorLineNo: number,
-): { markdown: string; lineOffset: number } {
-  const isEmptyLine = (x: string) => x.trim() === "";
-
-  const newLines = [];
-
-  let lineOffset = 0;
-  let firstEmptyRowNo = null;
-  const lines = markdown.split("\n");
-  for (let i = 0; i < lines.length; i++) {
-    const rowNo = i + 1;
-    const line = lines[i];
-    if (isEmptyLine(line)) {
-      if (firstEmptyRowNo == null) {
-        firstEmptyRowNo = rowNo;
-      }
-      continue;
-    }
-
-    const adjustHeaderLineBreaks = (
-      lineBreaksNum: number,
-      feRowNum: number,
-    ) => {
-      const maxOffset = cursorLineNo - feRowNum;
-      newLines.push(...Array(lineBreaksNum).fill(""));
-      if (maxOffset > 0) {
-        lineOffset += Math.min(rowNo - feRowNum - lineBreaksNum, maxOffset);
-      }
-    };
-
-    if (firstEmptyRowNo != null) {
-      if (line.startsWith("# ")) {
-        adjustHeaderLineBreaks(3, firstEmptyRowNo);
-      } else if (line.startsWith("## ")) {
-        adjustHeaderLineBreaks(2, firstEmptyRowNo);
-      } else {
-        adjustHeaderLineBreaks(1, firstEmptyRowNo);
-      }
-    }
-
-    newLines.push(line);
-    firstEmptyRowNo = null;
-  }
-
-  // 最後は必ず空行
-  newLines.push("");
-
-  return { markdown: newLines.join("\n"), lineOffset };
-}
-
 export async function formatFile(file: TFile) {
   const content = await loadFileContentCache(file.path);
   if (!content) {
@@ -87,7 +35,10 @@ export async function formatFile(file: TFile) {
     return;
   }
 
-  const { markdown, lineOffset } = formatLineBreaks(content, cursor.lineNo);
-  replaceAllText(markdown);
-  moveTo(cursor.lineNo - lineOffset, cursor.ch);
+  const changes = formatLineBreaks(content);
+
+  const editor = getActiveEditor()!;
+  editor.transaction({
+    changes: Array.from(changes),
+  });
 }
