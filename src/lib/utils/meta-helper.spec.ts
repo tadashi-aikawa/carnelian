@@ -125,23 +125,33 @@ if (Bun.env.ALLOW_LARGE_TEST) {
 
   test.each([
     [
+      "GIGAZINE (none)",
       "content-type",
       "https://gigazine.net/news/20230322-windows-11-snipping-tool-vulnerability/",
       undefined,
     ],
     [
+      "IT MEDIA (sjis)",
       "content-type",
       "https://www.itmedia.co.jp/news/articles/2307/26/news116.html",
-      "text/html;charset=shift_jis",
+      { content: "text/html;charset=shift_jis" },
     ],
     [
+      "IT MEDIA (none)",
       "content-type",
       "https://www.itmedia.co.jp/pcuser/spv/2310/18/news078.html",
       undefined,
     ],
+    [
+      "4gamer.net (EUC-JP)",
+      "content-type",
+      "https://www.4gamer.net/games/794/G079439/20250227068/",
+      { content: "text/html; charset=EUC-JP" },
+    ],
   ])(
     "%s",
     async (
+      _name: string,
       httpEquiv: string,
       url: Parameters<typeof getMetaByHttpEquiv>[1],
       expected: ReturnType<typeof getMetaByHttpEquiv>,
@@ -154,7 +164,7 @@ if (Bun.env.ALLOW_LARGE_TEST) {
       if (expected === undefined) {
         expect(actual).toBeUndefined();
       } else {
-        expect(actual).toBe(expected);
+        expect(actual).toEqual(expected);
       }
     },
   );
