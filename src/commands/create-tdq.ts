@@ -71,7 +71,7 @@ cover: 📗TDQ/attachments/tdq.webp
 <ここに問題文>
 
 %%
-回答例
+解答例
 
 \`\`\`js
 // TODO:
