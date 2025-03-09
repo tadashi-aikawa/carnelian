@@ -181,12 +181,18 @@ function createDescriptionDOM(meta: HTMLMeta): string {
 
   // 上限を考慮した最終的に表示する文言
   // TODO: 2byte文字をちゃんと考慮するようにしたい
-  const displayDescription =
-    description == null
-      ? ""
-      : countCharsWidth(description) <= descriptionMaxWidth
-        ? description
-        : `${description?.slice(0, descriptionMaxWidth)} ... `;
+  let displayDescription = "";
+  if (description != null) {
+    // TODO: Blueskyとの分岐はmetaデータ作成時に制御したい
+    if (
+      countCharsWidth(description) <= descriptionMaxWidth ||
+      meta.originUrl.startsWith("https://bsky.app")
+    ) {
+      displayDescription = description;
+    } else {
+      displayDescription = `${description?.slice(0, descriptionMaxWidth)} ... `;
+    }
+  }
 
   return displayDescription
     ? `  <div class="link-card-v2-content">
