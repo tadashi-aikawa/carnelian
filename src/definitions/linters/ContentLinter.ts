@@ -390,7 +390,7 @@ function createLinkEndsWithParenthesis(
       .map((x) => ({ ...x, title: x.title.split("#")[0] })) // ヘッダは除外
       .filter((x) => {
         const target = x.alias ?? x.title;
-        return match(target, /[^(]\)$/);
+        return match(target, / \(.+\)$/);
       })
       .map((x) => {
         const lineNo = toLineNo(x.range.start) ?? undefined;

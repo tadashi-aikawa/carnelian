@@ -232,7 +232,7 @@ MOCのフォーマットがMinervaの最新仕様に従っていない。
 
 ### Link ends with parenthesis
 
-括弧 `)` で終わるリンクが存在する。
+括弧 ` (...)` で終わるリンクが存在する。( `...` は任意の文字列 )
 
 - `Move to next inspection` /  `Move to previous inspection` 対応
 
