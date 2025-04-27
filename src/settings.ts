@@ -8,11 +8,13 @@ export const DEFAULT_COMMAND_HISTORY_PATH =
 export interface PluginSettings {
   commandHistoryPath: string;
   confluenceDomain: string;
+  openAPIKey: string;
 }
 
 export const DEFAULT_SETTINGS: PluginSettings = {
   commandHistoryPath: DEFAULT_COMMAND_HISTORY_PATH,
   confluenceDomain: "",
+  openAPIKey: "",
 };
 
 export class SettingTab extends PluginSettingTab {
@@ -46,6 +48,17 @@ export class SettingTab extends PluginSettingTab {
           this.plugin.settings.confluenceDomain = value;
           await this.plugin.saveSettings();
         }).setValue(this.plugin.settings.confluenceDomain);
+      });
+
+    new Setting(containerEl)
+      .setName("OpenAPI Key")
+      .setDesc("OpenAPI Keyを指定します")
+      .addText((cb) => {
+        cb.inputEl.setAttribute("type", "password");
+        TextComponentEvent.onChange(cb, async (value) => {
+          this.plugin.settings.openAPIKey = value;
+          await this.plugin.saveSettings();
+        }).setValue(this.plugin.settings.openAPIKey);
       });
   }
 }

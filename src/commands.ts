@@ -28,6 +28,7 @@ import { pasteSiteCard } from "./commands/paste-site-card";
 import { pasteURLToSiteLink } from "./commands/paste-url-to-site-link";
 import { showAnotherCommandPalette } from "./commands/show-another-command-palette";
 import { stripLinksAndDecorations } from "./commands/stripe-links-and-decorations";
+import { summarizeDescription } from "./commands/summarize-description";
 import { toggleLivePreview } from "./commands/toggle-live-preview";
 import { transformMOC } from "./commands/transform-moc";
 import { transformToV2OGPCard } from "./commands/transform-v2-card";
@@ -39,6 +40,11 @@ import type { PluginSettings } from "./settings";
 
 export function createCommands(settings: PluginSettings): Command[] {
   const carnelianCommands: CarnelianCommand[] = [
+    {
+      name: "Summarize description",
+      kind: "editor",
+      executor: () => summarizeDescription(settings),
+    },
     {
       name: "Fix link",
       kind: "editor",

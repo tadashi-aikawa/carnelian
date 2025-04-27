@@ -100,14 +100,13 @@ export type NoteType = (typeof noteTypeByName)[keyof typeof noteTypeByName];
  * ファイルに適切なノートタイプを返却します。該当するものがなかった場合はnullを返します。
  */
 export function findNoteType(file: TFile): NoteType | null {
-  return findNoteTypeBy({ name: file.name, path: file.path });
+  return findNoteTypeBy({ path: file.path });
 }
 
 /**
  * ファイルに適切なノートタイプを返却します。該当するものがなかった場合はnullを返します。
  */
 export function findNoteTypeBy(args: {
-  name: string;
   path: string;
 }): NoteType | null {
   return (

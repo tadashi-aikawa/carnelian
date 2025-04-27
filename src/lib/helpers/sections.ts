@@ -4,6 +4,42 @@ import { map } from "../utils/guard";
 import { getActiveFile, loadFileContentCache } from "./entries";
 import { getFileCacheByPath } from "./metadata";
 
+export type SectionType =
+  | "yaml"
+  | "paragraph"
+  | "code"
+  | "heading"
+  | "list"
+  | "html"
+  | "table";
+type Section = SectionCache & { type: SectionType };
+
+/**
+ * 現在ファイルの特定セクションを除いた内容を取得します
+ * WARNING: 改行数は忠実に再現されません
+ */
+export async function getActiveFileSectionContents(option?: {
+  excludeSectionTypes?: SectionType[];
+}): Promise<string | null> {
+  const path = getActiveFile()?.path;
+  if (!path) {
+    return null;
+  }
+
+  const excludeSectionTypes = option?.excludeSectionTypes ?? [];
+  const sections = getFileCacheByPath(path)?.sections?.filter(
+    (x) => !excludeSectionTypes.includes(x.type as SectionType),
+  ) as Section[] | null;
+  if (!sections) {
+    return null;
+  }
+
+  const sectionContents = await Promise.all(
+    sections.map((section) => loadFileContentCache(path, section.position)!),
+  );
+  return sectionContents.join("\n\n");
+}
+
 /**
  * ファイルパスからコードセクションを取得します
  */

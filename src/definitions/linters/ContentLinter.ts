@@ -13,8 +13,8 @@ import { findNoteTypeBy } from "../mkms";
 import type { NoteType } from "../mkms";
 
 export const contentLinter: Linter = {
-  lint: ({ title, content, path }) => {
-    const noteType = findNoteTypeBy({ name: title, path });
+  lint: ({ content, path }) => {
+    const noteType = findNoteTypeBy({ path });
     if (!noteType) {
       return [];
     }
