@@ -65,7 +65,6 @@ function createSystemMessage(noteType: NoteType): string | null {
   switch (noteType.name) {
     case "Prime note":
     case "Hub note":
-    case "Activity note":
     case "Report note":
     case "My note":
     case "Procedure note":
@@ -75,6 +74,17 @@ function createSystemMessage(noteType: NoteType): string | null {
     case "Series note":
       return `${base}
 - 『です・ます調』にして
+`;
+    case "Activity note":
+      // INFO: 少し特殊なのでbaseは使わない
+      return `以下の要件で本文を140文字から160文字で要約して。
+
+- OGPのdescriptionとして使う文章を想定しているので以下2点を意識して
+  - titleに含まれないけど検索されそうなキーワードは優先して入れて
+  - ただし、文章として意味が成立するようにして(単語の羅列のみは禁止)
+- 本文に記載されていない内容を推測するのは禁止
+- 『で・ある調』にして
+- このノートはアクティビティ記録でもあるため、結論だけでなくアクティビティに取り組もうとした経緯があればそれも入れて
 `;
     case "Troubleshooting note":
       // INFO: 少し特殊なのでbaseは使わない
