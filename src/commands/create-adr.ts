@@ -24,6 +24,13 @@ export async function createVIMADR() {
 }
 
 /**
+ * PROのADRを作成します
+ */
+export async function createPROADR() {
+  createADR("PRO");
+}
+
+/**
  * 指定した種類のADRノートを作成し、一覧表の最後に挿入します
  */
 async function createADR(type: "MIN" | "OBS" | "PRO" | "VIM") {

@@ -6,7 +6,11 @@ import { copyActiveFileFullPath } from "./commands/copy-active-file-full-path";
 import { copyMinervaURL } from "./commands/copy-minerva-url";
 import { copyUrlProperty } from "./commands/copy-url-property";
 import { createActivityNote } from "./commands/create-activity-note";
-import { createMINADR, createVIMADR } from "./commands/create-adr";
+import {
+  createMINADR,
+  createPROADR,
+  createVIMADR,
+} from "./commands/create-adr";
 import { createArticle } from "./commands/create-article";
 import { createHubNote } from "./commands/create-hub-note";
 import { createObsidianCookbook } from "./commands/create-obsidian-cookbook";
@@ -134,6 +138,11 @@ export function createCommands(settings: PluginSettings): Command[] {
       name: "Create VIM ADR",
       kind: "all",
       executor: createVIMADR,
+    },
+    {
+      name: "Create PRO ADR",
+      kind: "all",
+      executor: createPROADR,
     },
     {
       name: "Create Prime note",
