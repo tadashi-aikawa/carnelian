@@ -40,7 +40,7 @@ async function createADR(type: "MIN" | "OBS" | "PRO" | "VIM") {
 ---
 created: ${today}
 updated: ${today}
-cover: 💿ADR/attachments/owl.webp
+cover: Notes/attachments/${type.toLowerCase()}-adr.webp
 status:
   - 🤔Proposed
 ---
