@@ -31,6 +31,13 @@ export async function createPROADR() {
 }
 
 /**
+ * OBSのADRを作成します
+ */
+export async function createOBSADR() {
+  createADR("OBS");
+}
+
+/**
  * 指定した種類のADRノートを作成し、一覧表の最後に挿入します
  */
 async function createADR(type: "MIN" | "OBS" | "PRO" | "VIM") {

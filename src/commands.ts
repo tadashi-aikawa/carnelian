@@ -8,6 +8,7 @@ import { copyUrlProperty } from "./commands/copy-url-property";
 import { createActivityNote } from "./commands/create-activity-note";
 import {
   createMINADR,
+  createOBSADR,
   createPROADR,
   createVIMADR,
 } from "./commands/create-adr";
@@ -143,6 +144,11 @@ export function createCommands(settings: PluginSettings): Command[] {
       name: "Create PRO ADR",
       kind: "all",
       executor: createPROADR,
+    },
+    {
+      name: "Create OBS ADR",
+      kind: "all",
+      executor: createOBSADR,
     },
     {
       name: "Create Prime note",
