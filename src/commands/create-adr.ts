@@ -43,11 +43,17 @@ export async function createOBSADR() {
 async function createADR(type: "MIN" | "OBS" | "PRO" | "VIM") {
   const today = now("YYYY-MM-DD");
 
+  // WARN: min-adr.webpが404のまま動かないのでMINだけルールを変えている (いつか戻したい...)
+  const cover =
+    type === "MIN"
+      ? "💿ADR/attachments/minerva-adr.webp"
+      : `Notes/attachments/${type.toLowerCase()}-adr.webp`;
+
   const NOTE_BODY = `
 ---
 created: ${today}
 updated: ${today}
-cover: Notes/attachments/${type.toLowerCase()}-adr.webp
+cover: ${cover}
 status:
   - 🤔Proposed
 ---
