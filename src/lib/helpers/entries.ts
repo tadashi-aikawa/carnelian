@@ -29,6 +29,13 @@ export function getActiveFile(): TFile | null {
 }
 
 /**
+ * 現在ファイルのフォルダを取得します
+ */
+export function getActiveFileFolder(): TFolder | null {
+  return getActiveFile()?.parent ?? null;
+}
+
+/**
  * 現在ファイルのタイトルを取得します
  *
  * ```ts

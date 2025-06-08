@@ -29,6 +29,7 @@ import { insertSiteCard } from "./commands/insert-site-card";
 import { moveToNextInspection } from "./commands/move-to-next-inspection";
 import { moveToPreviousInspection } from "./commands/move-to-previous-inspection";
 import { openPropertyUrl } from "./commands/open-property-url";
+import { pasteClipboardAs } from "./commands/paste-clipboard-to-webp";
 import { pasteSiteCard } from "./commands/paste-site-card";
 import { pasteURLToSiteLink } from "./commands/paste-url-to-site-link";
 import { showAnotherCommandPalette } from "./commands/show-another-command-palette";
@@ -45,6 +46,16 @@ import type { PluginSettings } from "./settings";
 
 export function createCommands(settings: PluginSettings): Command[] {
   const carnelianCommands: CarnelianCommand[] = [
+    {
+      name: "Paste clipboard as WebP",
+      kind: "editor",
+      executor: () => pasteClipboardAs({ format: "webp" }),
+    },
+    {
+      name: "Paste clipboard as AVIF",
+      kind: "editor",
+      executor: () => pasteClipboardAs({ format: "avif", quality: 35 }),
+    },
     {
       name: "Summarize description",
       kind: "editor",
