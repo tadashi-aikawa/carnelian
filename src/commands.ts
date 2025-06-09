@@ -1,5 +1,6 @@
 import type { Command } from "obsidian";
 
+import { addPermalinkProperty } from "./commands/add-permalink-property";
 import { addPropertySuitably } from "./commands/add-property-suitably";
 import { cleanOldDailyNotes } from "./commands/clean-old-daily-notes";
 import { copyActiveFileFullPath } from "./commands/copy-active-file-full-path";
@@ -200,6 +201,11 @@ export function createCommands(settings: PluginSettings): Command[] {
       name: "Add property suitably",
       kind: "editor",
       executor: addPropertySuitably,
+    },
+    {
+      name: "Add permalink property",
+      kind: "editor",
+      executor: addPermalinkProperty,
     },
     {
       name: "Toggle Live preview",
