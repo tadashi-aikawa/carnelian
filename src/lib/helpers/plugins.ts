@@ -4,6 +4,7 @@ import type { UApp } from "../types";
 import { getDatesInRange } from "../utils/dates";
 import { isPresent } from "../utils/guard";
 import { getFileByPath } from "./entries";
+import { getActiveFileProperties } from "./properties";
 
 declare let app: UApp;
 
@@ -16,24 +17,34 @@ export function usePeriodicNotesSettings(): UApp["plugins"]["plugins"]["periodic
 
 /**
  * Obsidian Publishに関する情報を使用します。
- * WARN: faviconにはLogoの画像を使用します
+ *
+ * getPageUrlはpermalinkを考慮します。permalinkを考慮しない場合はgetOriginPageUrlを使用してください。
  */
 export async function useObsidianPublishInfo(): Promise<{
   id: string;
   domain: string;
   getPageUrl: (filePath: string) => string;
+  getOriginPageUrl: (filePath: string) => string;
   getResourceUrl: (filePath: string) => string;
 }> {
   const ins = app.internalPlugins.plugins.publish.instance;
   const { id, url: domain } = await ins.apiCustomUrl();
 
+  const baseUrl = `https://${domain}`;
   const resourceBaseUrl = `https://${ins.host}/access/${id}`;
+
+  const permalink = getActiveFileProperties()?.permalink;
 
   return {
     id,
     domain,
     getPageUrl(filePath) {
-      return `https://${domain}/${encodeURI(filePath.replace(".md", ""))}`;
+      return permalink
+        ? `${baseUrl}/${permalink}`
+        : `${baseUrl}/${encodeURI(filePath.replace(".md", ""))}`;
+    },
+    getOriginPageUrl(filePath) {
+      return `${baseUrl}/${encodeURI(filePath.replace(".md", ""))}`;
     },
     getResourceUrl(filePath) {
       return `${resourceBaseUrl}/${encodeURI(filePath)}`;
