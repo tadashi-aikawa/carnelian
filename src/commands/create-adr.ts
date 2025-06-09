@@ -43,17 +43,31 @@ export async function createOBSADR() {
 async function createADR(type: "MIN" | "OBS" | "PRO" | "VIM") {
   const today = now("YYYY-MM-DD");
 
+  const prefix = `💿${type}`;
+  const maxNumber = Number(
+    getMarkdownFiles()
+      .filter((x) => x.name.startsWith(`${prefix}-`))
+      .sort(sorter((x) => x.name))
+      .pop()
+      ?.name.split(" ")[0]
+      .replace(`${prefix}-`, "") ?? -1,
+  );
+
+  const newNumber = String(maxNumber + 1).padStart(4, "0");
+
   // WARN: min-adr.webpが404のまま動かないのでMINだけルールを変えている (いつか戻したい...)
   const cover =
     type === "MIN"
       ? "💿ADR/attachments/minerva-adr.webp"
       : `Notes/attachments/${type.toLowerCase()}-adr.webp`;
+  const permalink = `${type.toLocaleLowerCase()}-${newNumber}`;
 
   const NOTE_BODY = `
 ---
 created: ${today}
 updated: ${today}
 cover: ${cover}
+permalink: ${permalink}
 status:
   - 🤔Proposed
 ---
@@ -82,17 +96,6 @@ status:
 - bb
 `.trim();
 
-  const prefix = `💿${type}`;
-  const maxNumber = Number(
-    getMarkdownFiles()
-      .filter((x) => x.name.startsWith(`${prefix}-`))
-      .sort(sorter((x) => x.name))
-      .pop()
-      ?.name.split(" ")[0]
-      .replace(`${prefix}-`, "") ?? -1,
-  );
-
-  const newNumber = String(maxNumber + 1).padStart(4, "0");
   const inputTitle = await showInputDialog({
     message: `[${prefix}-${newNumber}] タイトルを入力してください`,
   });
