@@ -7,7 +7,7 @@ import { SelectionDialog } from "./components/SelectionDialog";
 declare let app: UApp;
 
 // HACK: ObsidianのNoticeはundefinedとnullで挙動が異なるが、型定義はそうなっていなかったので上書き定義
-declare class Notice {
+export declare class Notice {
   // undefinedは5000ms、nullはタイムアウトなし となっている
   constructor(message: string | DocumentFragment, duration?: number | null);
 

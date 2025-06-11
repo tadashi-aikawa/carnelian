@@ -205,7 +205,7 @@ export function createCommands(settings: PluginSettings): Command[] {
     {
       name: "Add permalink property",
       kind: "editor",
-      executor: addPermalinkProperty,
+      executor: () => addPermalinkProperty(settings),
     },
     {
       name: "Toggle Live preview",
