@@ -9,5 +9,5 @@ export function toEditorPosition(loc: Omit<Loc, "offset">): EditorPosition {
 
 export function toFullPath(path: string): string {
   const vaultRootPath = normalizePath(app.vault.adapter.basePath);
-  return `${vaultRootPath}/${path}`;
+  return `/${vaultRootPath}/${path}`;
 }

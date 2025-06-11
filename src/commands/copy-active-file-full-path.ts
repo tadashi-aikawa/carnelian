@@ -6,6 +6,6 @@ import { copyToClipboard, notify } from "src/lib/helpers/ui";
  */
 export async function copyActiveFileFullPath() {
   const path = getActiveFileFullPath()!;
-  await copyToClipboard(path);
+  await copyToClipboard(`"${path}"`);
   notify("👍現在ファイルのフルパスをコピーしました", 5000);
 }
