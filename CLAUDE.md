@@ -26,13 +26,15 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **`src/settings.ts`** - Plugin settings with Japanese UI
 
 ### Command System
-Commands are organized in `/src/commands/` with 40+ specialized functions:
+Commands are organized in `/src/commands/` with 47 specialized functions across multiple categories:
 - Note creation commands (Article, ADR, Hub, Prime, Report, etc.)
+- AI-powered content generation (summarization, permalink generation)
 - Content processing (link fixing, format transformation, MOC operations)
-- External integrations (Bluesky, Confluence, AI summarization)
+- External integrations (Bluesky, OGP metadata, AI summarization)
 - File operations (clipboard handling, image conversion, path copying)
 
 Each command follows the pattern: `export function commandName(settings: PluginSettings): Command`
+Complete command documentation available in `docs/COMMANDS.md`
 
 ### Service Architecture
 Background services in `/src/services/` handle automatic operations:
