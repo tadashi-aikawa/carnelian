@@ -21,7 +21,7 @@ export const propertyLinter: Linter = {
       createNoCover(noteType, properties),
       createNoUrl(noteType, properties),
       createNoStatus(noteType, properties),
-      createTags(title, properties),
+      createTags(title, properties, path),
     ].filter(isPresent);
   },
 };
@@ -209,6 +209,7 @@ function createNoStatus(
 function createTags(
   title: string,
   properties?: Properties,
+  path?: string,
 ): LintInspection | null {
   const tags = properties?.tags;
 
@@ -238,6 +239,24 @@ function createTags(
         updateActiveFileProperty("tags", ["Neovim"]);
       },
     };
+  }
+
+  // 📗Obsidian逆引きレシピ ディレクトリ配下のSeries noteはObsidianタグを付与
+  if (path?.startsWith("📗Obsidian逆引きレシピ/")) {
+    const noteType = findNoteTypeBy({ path });
+    if (noteType?.name === "Series note") {
+      if (tags?.includes("Obsidian")) {
+        return null;
+      }
+      return {
+        code: "Tags",
+        message: "tagsに『Obsidian』を設定しました",
+        level: "ERROR" as LintInspection["level"],
+        fix: async () => {
+          updateActiveFileProperty("tags", ["Obsidian"]);
+        },
+      };
+    }
   }
 
   if (!tags) {

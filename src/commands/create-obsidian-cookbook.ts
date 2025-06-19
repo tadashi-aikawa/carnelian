@@ -13,8 +13,6 @@ export async function createObsidianCookbook() {
   const NOTE_BODY = `---
 created: ${today}
 updated: ${today}
-tags:
-  - Obsidian
 cover: "📗Obsidian逆引きレシピ/attachments/obsidian-recipe.jpg"
 ---
 ## 概要

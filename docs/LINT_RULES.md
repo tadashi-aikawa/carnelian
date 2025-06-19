@@ -84,6 +84,7 @@ lint機能のルールを記載する。
 
 プロパティに `tags` が存在する。
 
+
 | ノートの種類         | レベル | 備考    |
 | -------------------- | ------ | ----    |
 | Glossary note        | ERROR  | autofix |
@@ -99,10 +100,16 @@ lint機能のルールを記載する。
 | Daily note           | ERROR  | autofix |
 | Weekly Report        | ERROR  | autofix |
 
+
 以下のケースは例外的に **タグを許容し、タグが無い場合はautofixで付与する**。
 
-- タイトルに(JavaScript)が含まれている場合のTypeScriptはOK
-- タイトルに(Vim)が含まれている場合のNeovimはOK
+
+| 条件                                                  | つけるタグ   |
+| ------                                                | ------       |
+| タイトルに` (JavaScript)`が含まれているノート         | `TypeScript` |
+| タイトルに` (Vim)`が含まれているノート                | `Neovim`     |
+| `📗Obsidian逆引きレシピ` ディレクトリ配下のSeris note | `Obsidian`   |
+
 
 ## Content Linter
 
