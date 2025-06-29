@@ -1,9 +1,9 @@
-interface Position {
+export interface Position {
   line: number;
   ch: number;
 }
 
-interface TextReplacement {
+export interface TextReplacement {
   from: Position;
   to: Position;
   text: string;

@@ -87,3 +87,8 @@ Property linting is implemented in `src/definitions/linters/PropertyLinter.ts` w
   - Other files with tags → removes all tags
 - **Required properties**: Validates description, cover, url, and status properties based on note type
 - All property violations are ERROR level with autofix functionality
+
+## Memory
+
+- Always ask for clarification when there are ambiguous instructions or potential risks to the project
+- lintやformatのチェックをするときは `bun pre:push` を実行してください。まとめて確認できるので便利です。そして、bunのformatによって意図した改行が失われてしまう場合は、bunのformatを無視するコメントを入れてください。
