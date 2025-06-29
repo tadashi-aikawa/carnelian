@@ -97,10 +97,7 @@ test.each([
   // H1とH2の組み合わせ
   [
     "text\n\n# Heading1\n\n## Heading2",
-    [
-      { from: { line: 1, ch: 0 }, to: { line: 1, ch: 0 }, text: "\n\n" },
-      { from: { line: 3, ch: 0 }, to: { line: 3, ch: 0 }, text: "\n" },
-    ],
+    [{ from: { line: 1, ch: 0 }, to: { line: 1, ch: 0 }, text: "\n\n" }],
   ],
 
   // H3以降は通常の空行処理
@@ -109,9 +106,65 @@ test.each([
     [{ from: { line: 1, ch: 0 }, to: { line: 2, ch: 0 }, text: "" }],
   ],
 
-  // 先頭の見出しは処理されない
-  ["# Heading\ntext", []],
-  ["## Heading\ntext", []],
+  // 先頭の見出しは処理されない（但し見出し直後の空行チェックは実行される）
+  [
+    "# Heading\ntext",
+    [{ from: { line: 1, ch: 0 }, to: { line: 1, ch: 0 }, text: "\n" }],
+  ],
+  [
+    "## Heading\ntext",
+    [{ from: { line: 1, ch: 0 }, to: { line: 1, ch: 0 }, text: "\n" }],
+  ],
+  [
+    "### Heading\ntext",
+    [{ from: { line: 1, ch: 0 }, to: { line: 1, ch: 0 }, text: "\n" }],
+  ],
+  [
+    "#### Heading\ntext",
+    [{ from: { line: 1, ch: 0 }, to: { line: 1, ch: 0 }, text: "\n" }],
+  ],
+  [
+    "##### Heading\ntext",
+    [{ from: { line: 1, ch: 0 }, to: { line: 1, ch: 0 }, text: "\n" }],
+  ],
+  [
+    "###### Heading\ntext",
+    [{ from: { line: 1, ch: 0 }, to: { line: 1, ch: 0 }, text: "\n" }],
+  ],
+
+  // 見出し直後に空行がない場合の処理
+  [
+    "text\n# Heading\ntext",
+    [{ from: { line: 2, ch: 0 }, to: { line: 2, ch: 0 }, text: "\n" }],
+  ],
+  [
+    "text\n## SubHeading\ntext",
+    [{ from: { line: 2, ch: 0 }, to: { line: 2, ch: 0 }, text: "\n" }],
+  ],
+  [
+    "text\n### Heading3\ntext",
+    [{ from: { line: 2, ch: 0 }, to: { line: 2, ch: 0 }, text: "\n" }],
+  ],
+  [
+    "text\n#### Heading4\ntext",
+    [{ from: { line: 2, ch: 0 }, to: { line: 2, ch: 0 }, text: "\n" }],
+  ],
+  [
+    "text\n##### Heading5\ntext",
+    [{ from: { line: 2, ch: 0 }, to: { line: 2, ch: 0 }, text: "\n" }],
+  ],
+  [
+    "text\n###### Heading6\ntext",
+    [{ from: { line: 2, ch: 0 }, to: { line: 2, ch: 0 }, text: "\n" }],
+  ],
+
+  // 見出し直後に既に空行がある場合は処理しない
+  ["# Heading\n\ntext", []],
+  ["## SubHeading\n\ntext", []],
+  ["### Heading3\n\ntext", []],
+  ["#### Heading4\n\ntext", []],
+  ["##### Heading5\n\ntext", []],
+  ["###### Heading6\n\ntext", []],
 ])(
   `formatLineBreaks with headings("%s")`,
   (markdown: string, expected: TextReplacement[]) => {
@@ -136,7 +189,6 @@ test.each([
     [
       { from: { line: 1, ch: 0 }, to: { line: 2, ch: 0 }, text: "" },
       { from: { line: 9, ch: 0 }, to: { line: 10, ch: 0 }, text: "\n\n" },
-      { from: { line: 12, ch: 0 }, to: { line: 12, ch: 0 }, text: "" },
       { from: { line: 14, ch: 0 }, to: { line: 15, ch: 0 }, text: "\n" },
     ],
   ],
@@ -157,8 +209,8 @@ test.each([
   [
     "# Heading1\n\n\n## Heading2\n\n\n### Heading3",
     [
-      { from: { line: 1, ch: 0 }, to: { line: 2, ch: 0 }, text: "\n" },
-      { from: { line: 4, ch: 0 }, to: { line: 5, ch: 0 }, text: "" },
+      { from: { line: 2, ch: 0 }, to: { line: 2, ch: 0 }, text: "" },
+      { from: { line: 5, ch: 0 }, to: { line: 5, ch: 0 }, text: "" },
     ],
   ],
 ])(

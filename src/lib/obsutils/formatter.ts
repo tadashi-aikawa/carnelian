@@ -11,6 +11,17 @@ export interface TextReplacement {
 
 const isEmptyLine = (x: string) => x.trim() === "";
 
+const isHeading = (line: string): boolean => {
+  return (
+    line.startsWith("# ") ||
+    line.startsWith("## ") ||
+    line.startsWith("### ") ||
+    line.startsWith("#### ") ||
+    line.startsWith("##### ") ||
+    line.startsWith("###### ")
+  );
+};
+
 function toText(line: string): string {
   if (line.startsWith("# ")) {
     return "\n\n";
@@ -36,6 +47,19 @@ export function* formatLineBreaks(markdown: string): Iterable<TextReplacement> {
       inCodeBlock = !inCodeBlock;
     }
 
+    // 見出し直後の空行チェック（見出し直前に空行があるかどうかに関係なく実行）
+    if (!inCodeBlock && isHeading(line)) {
+      const nextLineIndex = i + 1;
+      // 次の行が存在し、かつ空行でない場合に空行を挿入
+      if (nextLineIndex < lines.length && !isEmptyLine(lines[nextLineIndex])) {
+        yield {
+          from: { line: nextLineIndex, ch: 0 },
+          to: { line: nextLineIndex, ch: 0 },
+          text: "\n",
+        };
+      }
+    }
+
     // コードブロック以外の空行はformat対象になる
     if (isEmptyLine(line) && !inCodeBlock) {
       if (firstEmptyI == null) {
@@ -44,16 +68,33 @@ export function* formatLineBreaks(markdown: string): Iterable<TextReplacement> {
       continue;
     }
 
-    if (firstEmptyI == null) {
-      continue;
+    // 空行の後の処理
+    if (firstEmptyI != null) {
+      // 見出し直後の空行の場合、1つの空行のみ保持
+      const prevLineIndex = firstEmptyI - 1;
+      const isAfterHeading =
+        prevLineIndex >= 0 && !inCodeBlock && isHeading(lines[prevLineIndex]);
+
+      if (isAfterHeading) {
+        // 見出し直後の複数空行は1つに統一
+        const emptyLineCount = i - firstEmptyI;
+        if (emptyLineCount > 1) {
+          yield {
+            from: { line: firstEmptyI + 1, ch: 0 },
+            to: { line: i - 1, ch: 0 },
+            text: "",
+          };
+        }
+      } else {
+        // 通常の空行処理
+        yield {
+          from: { line: firstEmptyI, ch: 0 },
+          to: { line: i - 1, ch: 0 },
+          text: toText(line),
+        };
+      }
+
+      firstEmptyI = null;
     }
-
-    yield {
-      from: { line: firstEmptyI, ch: 0 },
-      to: { line: i - 1, ch: 0 },
-      text: toText(line),
-    };
-
-    firstEmptyI = null;
   }
 }
