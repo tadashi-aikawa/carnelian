@@ -139,6 +139,7 @@ function createSystemMessage(noteType: NoteType): string | null {
 `;
     case "Daily note":
     case "Glossary note":
+    case "Brain note":
       return null;
     default:
       throw new ExhaustiveError(noteType);

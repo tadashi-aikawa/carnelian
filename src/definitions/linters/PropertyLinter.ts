@@ -56,6 +56,8 @@ function createNoDescription(
       return { ...base, level: "ERROR" };
     case "Article note":
       return { ...base, level: "ERROR" };
+    case "Brain note":
+      return { ...base, level: "ERROR" };
     case "My note":
       return { ...base, level: "WARN" };
     case "Series note":
@@ -104,6 +106,8 @@ function createNoCover(
       return { ...base, level: "ERROR" };
     case "Article note":
       return { ...base, level: "ERROR" };
+    case "Brain note":
+      return { ...base, level: "ERROR" };
     case "My note":
       return { ...base, level: "ERROR" };
     case "Series note":
@@ -146,6 +150,8 @@ function createNoUrl(
     case "Report note":
       return null;
     case "Article note":
+      return null;
+    case "Brain note":
       return null;
     case "My note":
       return null;
@@ -192,6 +198,8 @@ function createNoStatus(
     case "Report note":
       return null;
     case "Article note":
+      return null;
+    case "Brain note":
       return null;
     case "My note":
       return null;

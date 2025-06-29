@@ -14,6 +14,7 @@ import {
   createVIMADR,
 } from "./commands/create-adr";
 import { createArticle } from "./commands/create-article";
+import { createBrainNote } from "./commands/create-brain-note";
 import { createHubNote } from "./commands/create-hub-note";
 import { createObsidianCookbook } from "./commands/create-obsidian-cookbook";
 import { createPrimeNote } from "./commands/create-prime-note";
@@ -181,6 +182,11 @@ export function createCommands(settings: PluginSettings): Command[] {
       name: "Create Report note",
       kind: "editor",
       executor: createReportNote,
+    },
+    {
+      name: "Create Brain note",
+      kind: "editor",
+      executor: createBrainNote,
     },
     {
       name: "Create Troubleshooting notes",

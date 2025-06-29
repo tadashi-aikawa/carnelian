@@ -88,6 +88,8 @@ function createDisallowedLinkCard(
       return [];
     case "Report note":
       return [];
+    case "Brain note":
+      return [];
     case "Article note":
       return [];
     case "My note":
@@ -151,6 +153,8 @@ function createNoLinkComment(
       return createInspections("ERROR");
     case "Report note":
       return createInspections("ERROR");
+    case "Brain note":
+      return createInspections("ERROR");
     case "Article note":
       return createInspections("ERROR");
     case "My note":
@@ -200,6 +204,8 @@ function createV1LinkCard(
       return createInspection("WARN");
     case "Report note":
       return createInspection("WARN");
+    case "Brain note":
+      return createInspection("WARN");
     case "Article note":
       return createInspection("WARN");
     case "My note":
@@ -246,6 +252,8 @@ function createUnofficialMOCFormat(
       return createInspection("ERROR");
     case "Report note":
       return [];
+    case "Brain note":
+      return [];
     case "Article note":
       return [];
     case "My note":
@@ -290,6 +298,8 @@ function createV1DatesFormat(
     case "Prime note":
       return createInspection("ERROR");
     case "Report note":
+      return createInspection("ERROR");
+    case "Brain note":
       return createInspection("ERROR");
     case "Article note":
       return createInspection("ERROR");
@@ -345,6 +355,8 @@ function createUnresolvedInternalLink(
     case "Prime note":
       return createInspection("WARN");
     case "Report note":
+      return createInspection("WARN");
+    case "Brain note":
       return createInspection("WARN");
     case "Article note":
       return createInspection("ERROR");
@@ -417,6 +429,8 @@ function createLinkEndsWithParenthesis(
     case "Prime note":
       return createInspection("ERROR");
     case "Report note":
+      return createInspection("ERROR");
+    case "Brain note":
       return createInspection("ERROR");
     case "Article note":
       return createInspection("ERROR");

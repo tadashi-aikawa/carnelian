@@ -17,6 +17,7 @@ lint機能のルールを記載する。
 | Troubleshooting note | ERROR  |      |
 | Prime note           | ERROR  |      |
 | Report note          | ERROR  |      |
+| Brain note           | ERROR  |      |
 | Article note         | ERROR  |      |
 | My note              | WARN   |      |
 | Series note          | ERROR  |      |
@@ -28,7 +29,7 @@ lint機能のルールを記載する。
 プロパティに `cover` が存在しない。
 
 | ノートの種類         | レベル | 備考    |
-| -------------------- | ------ | ----    |
+| -------------------- | ------ | ------- |
 | Glossary note        |        |         |
 | Hub note             | ERROR  | autofix |
 | Procedure note       |        |         |
@@ -36,6 +37,7 @@ lint機能のルールを記載する。
 | Troubleshooting note | ERROR  | autofix |
 | Prime note           | ERROR  | autofix |
 | Report note          | ERROR  | autofix |
+| Brain note           | ERROR  | autofix |
 | Article note         | ERROR  |         |
 | My note              | ERROR  |         |
 | Series note          | ERROR  |         |
@@ -55,6 +57,7 @@ lint機能のルールを記載する。
 | Troubleshooting note |        |      |
 | Prime note           |        |      |
 | Report note          |        |      |
+| Brain note           |        |      |
 | Article note         |        |      |
 | My note              |        |      |
 | Series note          |        |      |
@@ -66,7 +69,7 @@ lint機能のルールを記載する。
 プロパティに `status` が存在しない。
 
 | ノートの種類         | レベル | 備考    |
-| -------------------- | ------ | ----    |
+| -------------------- | ------ | ------- |
 | Glossary note        |        |         |
 | Hub note             |        |         |
 | Procedure note       |        |         |
@@ -74,6 +77,7 @@ lint機能のルールを記載する。
 | Troubleshooting note | ERROR  | autofix |
 | Prime note           |        |         |
 | Report note          |        |         |
+| Brain note           |        |         |
 | Article note         |        |         |
 | My note              |        |         |
 | Series note          |        |         |
@@ -86,7 +90,7 @@ lint機能のルールを記載する。
 
 
 | ノートの種類         | レベル | 備考    |
-| -------------------- | ------ | ----    |
+| -------------------- | ------ | ------- |
 | Glossary note        | ERROR  | autofix |
 | Hub note             | ERROR  | autofix |
 | Procedure note       | ERROR  | autofix |
@@ -94,6 +98,7 @@ lint機能のルールを記載する。
 | Troubleshooting note | ERROR  | autofix |
 | Prime note           | ERROR  | autofix |
 | Report note          | ERROR  | autofix |
+| Brain note           | ERROR  | autofix |
 | Article note         | ERROR  | autofix |
 | My note              | ERROR  | autofix |
 | Series note          | ERROR  | autofix |
@@ -128,6 +133,7 @@ lint機能のルールを記載する。
 | Troubleshooting note |        |                  |
 | Prime note           |        |                  |
 | Report note          |        |                  |
+| Brain note           |        |                  |
 | Article note         |        |                  |
 | My note              |        |                  |
 | Series note          |        |                  |
@@ -151,6 +157,7 @@ Vault内のノートを参照するカードがあるのに、その内部リン
 | Troubleshooting note | ERROR  |                  |
 | Prime note           | ERROR  |                  |
 | Report note          | ERROR  |                  |
+| Brain note           | ERROR  |                  |
 | Article note         | ERROR  |                  |
 | My note              | ERROR  |                  |
 | Series note          | ERROR  |                  |
@@ -172,6 +179,7 @@ Link cardが非推奨のv1形式になっている。
 | Troubleshooting note | WARN   |                  |
 | Prime note           | WARN   |                  |
 | Report note          | WARN   |                  |
+| Brain note           | WARN   |                  |
 | Article note         | WARN   |                  |
 | My note              | WARN   |                  |
 | Series note          | WARN   |                  |
@@ -183,7 +191,7 @@ Link cardが非推奨のv1形式になっている。
 MOCのフォーマットがMinervaの最新仕様に従っていない。
 
 | ノートの種類         | レベル | 備考              |
-| -------------------- | ------ | ----------------  |
+| -------------------- | ------ | ----------------- |
 | Glossary note        | ERROR  |                   |
 | Hub note             |        | Hubは例外を認める |
 | Procedure note       | ERROR  |                   |
@@ -191,6 +199,7 @@ MOCのフォーマットがMinervaの最新仕様に従っていない。
 | Troubleshooting note |        | 使ってないはず    |
 | Prime note           | ERROR  |                   |
 | Report note          |        | 使ってないはず    |
+| Brain note           |        | 使ってないはず    |
 | Article note         |        | 使ってないはず    |
 | My note              |        | 使ってないはず    |
 | Series note          |        | 使ってないはず    |
@@ -202,7 +211,7 @@ MOCのフォーマットがMinervaの最新仕様に従っていない。
 ノートの作成日、最終更新日の形式が古い。
 
 | ノートの種類         | レベル | 備考           |
-| -------------------- | ------ | ----           |
+| -------------------- | ------ | -------------- |
 | Glossary note        | ERROR  | autofix        |
 | Hub note             | ERROR  | autofix        |
 | Procedure note       | ERROR  | autofix        |
@@ -210,6 +219,7 @@ MOCのフォーマットがMinervaの最新仕様に従っていない。
 | Troubleshooting note | ERROR  | autofix        |
 | Prime note           | ERROR  | autofix        |
 | Report note          | ERROR  | autofix        |
+| Brain note           | ERROR  | autofix        |
 | Article note         | ERROR  | autofix        |
 | My note              | ERROR  | autofix        |
 | Series note          | ERROR  | autofix        |
@@ -231,6 +241,7 @@ MOCのフォーマットがMinervaの最新仕様に従っていない。
 | Troubleshooting note | WARN   |      |
 | Prime note           | WARN   |      |
 | Report note          | WARN   |      |
+| Brain note           | WARN   |      |
 | Article note         | ERROR  |      |
 | My note              | WARN   |      |
 | Series note          | ERROR  |      |
@@ -244,7 +255,7 @@ MOCのフォーマットがMinervaの最新仕様に従っていない。
 - `Move to next inspection` /  `Move to previous inspection` 対応
 
 | ノートの種類         | レベル | 備考                       |
-| -------------------- | ------ | ----                       |
+| -------------------- | ------ | -------------------------- |
 | Glossary note        | WARN   | 同名リンクで使うことがある |
 | Hub note             | WARN   | 同名リンクで使うことがある |
 | Procedure note       | ERROR  |                            |
@@ -252,6 +263,7 @@ MOCのフォーマットがMinervaの最新仕様に従っていない。
 | Troubleshooting note | ERROR  |                            |
 | Prime note           | ERROR  |                            |
 | Report note          | ERROR  |                            |
+| Brain note           | ERROR  |                            |
 | Article note         | ERROR  |                            |
 | My note              | ERROR  |                            |
 | Series note          | ERROR  |                            |
