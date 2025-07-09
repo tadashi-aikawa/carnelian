@@ -7,7 +7,7 @@ import {
   notifyRuntimeError,
   notifyValidationError,
 } from "src/lib/helpers/ui";
-import { createCard } from "src/lib/helpers/web";
+import { createCard, isYoutubeUrl } from "src/lib/helpers/web";
 import * as strings from "../lib/utils/strings";
 
 /**
@@ -61,9 +61,10 @@ export async function insertBlueskyPostsToWeeklyNote() {
       `⏳ [${i + 1}/${relatedPosts.length}] Cardのデータを作成中...`,
     );
 
-    const card = post.embedUri?.startsWith("https://www.youtube.com/")
-      ? `![](${post.embedUri})`
-      : await createCard(post.embedUri!);
+    const card =
+      post.embedUri && isYoutubeUrl(post.embedUri)
+        ? `![](${post.embedUri})`
+        : await createCard(post.embedUri!);
 
     insertToCursor(
       `## ${post.embedTitle}

@@ -3,7 +3,7 @@ import { getDailyNotes } from "src/lib/helpers/plugins";
 import { getActiveFileDescriptionProperty } from "src/lib/helpers/properties";
 import { loadCodeBlocks } from "src/lib/helpers/sections";
 import { notify } from "src/lib/helpers/ui";
-import { createHTMLCard, createMeta } from "src/lib/helpers/web";
+import { createHTMLCard, createMeta, isYoutubeUrl } from "src/lib/helpers/web";
 import type { CodeBlock } from "src/lib/types";
 import * as strings from "../lib/utils/strings";
 
@@ -66,9 +66,7 @@ export async function insertMFDIPostsToWeeklyNote() {
     }
 
     // YouTubeだけはカードのレイアウトが崩れるので直接URLを挿入する
-    const card = url.includes("https://youtu.be/")
-      ? `![](${url})`
-      : createHTMLCard(meta);
+    const card = isYoutubeUrl(url) ? `![](${url})` : createHTMLCard(meta);
 
     insertToCursor(
       `## ${meta.title}

@@ -38,6 +38,11 @@ export interface TwitterMeta {
   html: string;
 }
 
+export const isYoutubeUrl = (url: string): boolean =>
+  url.startsWith("https://www.youtube.com") ||
+  url.startsWith("https://youtu.be/") ||
+  url.startsWith("https://youtube.com");
+
 async function getTwitterMeta(
   url: string,
   type: "X" | "Twitter",
