@@ -73,6 +73,12 @@ const noteTypeByName = createNotes({
     coverImagePath: null,
     pathPattern: /^.+\/📗.+\.md$/,
   },
+  "ADR note": {
+    name: "ADR note",
+    prefixEmoji: "💿",
+    coverImagePath: null,
+    pathPattern: /^💿ADR\/💿.+\.md$/,
+  },
   "Weekly report": {
     name: "Weekly report",
     prefixEmoji: "📰",

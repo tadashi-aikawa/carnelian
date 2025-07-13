@@ -62,6 +62,8 @@ function createNoDescription(
       return { ...base, level: "WARN" };
     case "Series note":
       return { ...base, level: "ERROR" };
+    case "ADR note":
+      return { ...base, level: "ERROR" };
     case "Daily note":
       return null;
     case "Weekly report":
@@ -112,6 +114,8 @@ function createNoCover(
       return { ...base, level: "ERROR" };
     case "Series note":
       return { ...base, level: "ERROR" };
+    case "ADR note":
+      return { ...base, level: "ERROR" };
     case "Daily note":
       return null;
     case "Weekly report":
@@ -156,6 +160,8 @@ function createNoUrl(
     case "My note":
       return null;
     case "Series note":
+      return null;
+    case "ADR note":
       return null;
     case "Daily note":
       return null;
@@ -205,6 +211,12 @@ function createNoStatus(
       return null;
     case "Series note":
       return null;
+    case "ADR note":
+      return {
+        code: "No status",
+        message: "プロパティにstatusがありません",
+        level: "ERROR",
+      };
     case "Daily note":
       return null;
     case "Weekly report":
