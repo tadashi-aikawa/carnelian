@@ -59,6 +59,12 @@ export function createCommands(settings: PluginSettings): Command[] {
       executor: () => pasteClipboardAs({ format: "avif", quality: 35 }),
     },
     {
+      name: "Paste clipboard as AVIF 1920",
+      kind: "editor",
+      executor: () =>
+        pasteClipboardAs({ format: "avif", quality: 35, resize: "1920x" }),
+    },
+    {
       name: "Summarize description",
       kind: "editor",
       executor: () => summarizeDescription(settings),
