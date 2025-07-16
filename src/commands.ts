@@ -16,6 +16,7 @@ import {
 import { createArticle } from "./commands/create-article";
 import { createBrainNote } from "./commands/create-brain-note";
 import { createHubNote } from "./commands/create-hub-note";
+import { createMtgNote } from "./commands/create-mtg-note";
 import { createObsidianCookbook } from "./commands/create-obsidian-cookbook";
 import { createPrimeNote } from "./commands/create-prime-note";
 import { createReportNote } from "./commands/create-report-note";
@@ -208,6 +209,11 @@ export function createCommands(settings: PluginSettings): Command[] {
       name: "Create TDQ",
       kind: "editor",
       executor: createTDQ,
+    },
+    {
+      name: "Create MTG note",
+      kind: "editor",
+      executor: createMtgNote,
     },
     {
       name: "Add property suitably",
