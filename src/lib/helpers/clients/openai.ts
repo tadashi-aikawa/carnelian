@@ -14,8 +14,51 @@ export async function fetchOpenAIChatCompletion(args: {
   systemMessage: string;
   userMessage: string;
   apiKey: string;
+  azure?: {
+    model: string;
+    apiEndpoint: string;
+    apiVersion: string;
+  };
 }): Promise<Result> {
-  const request = {
+  // Azure
+  if (args.azure) {
+    console.log(
+      `${args.azure.apiEndpoint}/openai/deployments/${args.azure.model}/chat/completions?api-version=${args.azure.apiVersion}`,
+    );
+    const res = await requestUrl({
+      url: `${args.azure.apiEndpoint}/openai/deployments/${args.azure.model}/chat/completions?api-version=${args.azure.apiVersion}`,
+      method: "POST",
+      contentType: "application/json",
+      headers: {
+        "api-key": args.apiKey,
+      },
+      body: JSON.stringify({
+        model: args.azure.model,
+        messages: [
+          {
+            role: "developer",
+            content: args.systemMessage,
+          },
+          {
+            role: "user",
+            content: args.userMessage,
+          },
+        ],
+        temperature: 0,
+      }),
+    });
+
+    const text = res.json.choices[0].message.content as string;
+
+    const { prompt_tokens, completion_tokens } = res.json.usage;
+    const costYen =
+      (prompt_tokens / 1000000) * inputTokensDollarPerMillion * dollarRate +
+      (completion_tokens / 1000000) * outputTokensDollarPerMillion * dollarRate;
+    return { text, costYen };
+  }
+
+  // OpenAI
+  const res = await requestUrl({
     url: "https://api.openai.com/v1/responses",
     method: "POST",
     contentType: "application/json",
@@ -28,19 +71,13 @@ export async function fetchOpenAIChatCompletion(args: {
       input: args.userMessage,
       temperature: 0,
     }),
-  };
+  });
 
-  try {
-    const res = await requestUrl(request);
-    const text = res.json.output[0].content[0].text as string;
+  const text = res.json.output[0].content[0].text as string;
 
-    const { input_tokens, output_tokens } = res.json.usage;
-    const costYen =
-      (input_tokens / 1000000) * inputTokensDollarPerMillion * dollarRate +
-      (output_tokens / 1000000) * outputTokensDollarPerMillion * dollarRate;
-    return { text, costYen };
-  } catch (e) {
-    console.error(request);
-    throw e;
-  }
+  const { input_tokens, output_tokens } = res.json.usage;
+  const costYen =
+    (input_tokens / 1000000) * inputTokensDollarPerMillion * dollarRate +
+    (output_tokens / 1000000) * outputTokensDollarPerMillion * dollarRate;
+  return { text, costYen };
 }

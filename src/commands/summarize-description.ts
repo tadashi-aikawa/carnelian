@@ -41,6 +41,13 @@ export async function summarizeDescription(settings: PluginSettings) {
 
 ${content}`,
     apiKey: settings.openAPIKey,
+    azure: settings.openAPIEndpoint
+      ? {
+          model: settings.oepnAPIModel,
+          apiEndpoint: settings.openAPIEndpoint,
+          apiVersion: settings.openAPIVersion,
+        }
+      : undefined,
   });
   nt.hide();
   if (!summary) {

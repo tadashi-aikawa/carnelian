@@ -9,12 +9,20 @@ export interface PluginSettings {
   commandHistoryPath: string;
   confluenceDomain: string;
   openAPIKey: string;
+  // Azure OpenAPIの設定
+  openAPIEndpoint: string;
+  openAPIVersion: string;
+  oepnAPIModel: string;
 }
 
 export const DEFAULT_SETTINGS: PluginSettings = {
   commandHistoryPath: DEFAULT_COMMAND_HISTORY_PATH,
   confluenceDomain: "",
   openAPIKey: "",
+  // Azure OpenAPIの設定
+  openAPIEndpoint: "",
+  openAPIVersion: "",
+  oepnAPIModel: "",
 };
 
 export class SettingTab extends PluginSettingTab {
@@ -59,6 +67,34 @@ export class SettingTab extends PluginSettingTab {
           this.plugin.settings.openAPIKey = value;
           await this.plugin.saveSettings();
         }).setValue(this.plugin.settings.openAPIKey);
+      });
+
+    new Setting(containerEl)
+      .setName("Azure OpenAPI Endpoint")
+      .setDesc("Azure OpenAPI Endpointを指定します")
+      .addText((cb) => {
+        TextComponentEvent.onChange(cb, async (value) => {
+          this.plugin.settings.openAPIEndpoint = value;
+          await this.plugin.saveSettings();
+        }).setValue(this.plugin.settings.openAPIEndpoint);
+      });
+    new Setting(containerEl)
+      .setName("Azure OpenAPI Version")
+      .setDesc("Azure OpenAPI Versionを指定します")
+      .addText((cb) => {
+        TextComponentEvent.onChange(cb, async (value) => {
+          this.plugin.settings.openAPIVersion = value;
+          await this.plugin.saveSettings();
+        }).setValue(this.plugin.settings.openAPIVersion);
+      });
+    new Setting(containerEl)
+      .setName("Azure OpenAPI Model")
+      .setDesc("Azure OpenAPI Modelを指定します")
+      .addText((cb) => {
+        TextComponentEvent.onChange(cb, async (value) => {
+          this.plugin.settings.oepnAPIModel = value;
+          await this.plugin.saveSettings();
+        }).setValue(this.plugin.settings.oepnAPIModel);
       });
   }
 }
