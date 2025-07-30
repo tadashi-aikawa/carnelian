@@ -80,7 +80,7 @@ export function* formatLineBreaks(markdown: string): Iterable<TextReplacement> {
         const emptyLineCount = i - firstEmptyI;
         if (emptyLineCount > 1) {
           yield {
-            from: { line: firstEmptyI + 1, ch: 0 },
+            from: { line: firstEmptyI, ch: 0 },
             to: { line: i - 1, ch: 0 },
             text: "",
           };

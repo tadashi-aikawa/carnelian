@@ -209,8 +209,8 @@ test.each([
   [
     "# Heading1\n\n\n## Heading2\n\n\n### Heading3",
     [
-      { from: { line: 2, ch: 0 }, to: { line: 2, ch: 0 }, text: "" },
-      { from: { line: 5, ch: 0 }, to: { line: 5, ch: 0 }, text: "" },
+      { from: { line: 1, ch: 0 }, to: { line: 2, ch: 0 }, text: "" },
+      { from: { line: 4, ch: 0 }, to: { line: 5, ch: 0 }, text: "" },
     ],
   ],
 ])(
