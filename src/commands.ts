@@ -32,6 +32,7 @@ import { insertSiteCard } from "./commands/insert-site-card";
 import { moveToNextInspection } from "./commands/move-to-next-inspection";
 import { moveToPreviousInspection } from "./commands/move-to-previous-inspection";
 import { openPropertyUrl } from "./commands/open-property-url";
+import { openActiveFolderInTerminal } from "./commands/open-terminal";
 import { pasteClipboardAs } from "./commands/paste-clipboard-to-webp";
 import { pasteSiteCard } from "./commands/paste-site-card";
 import { pasteURLToSiteLink } from "./commands/paste-url-to-site-link";
@@ -254,6 +255,11 @@ export function createCommands(settings: PluginSettings): Command[] {
       name: "Open property URL",
       kind: "editor",
       executor: openPropertyUrl,
+    },
+    {
+      name: "Open active folder in terminal",
+      kind: "all",
+      executor: openActiveFolderInTerminal,
     },
     {
       name: "Copy active file full path",

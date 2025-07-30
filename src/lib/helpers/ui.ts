@@ -1,3 +1,4 @@
+import { execFile } from "child_process";
 import type { TFile } from "obsidian";
 import type { UApp } from "../types";
 import { FileSearchDialog } from "./components/FileSearchDialog";
@@ -105,6 +106,21 @@ export async function getClipboardImage(): Promise<Buffer> {
  */
 export function openUrl(url: string): void {
   activeWindow.open(url);
+}
+
+/**
+ * ターミナルで開きます
+ * WARNING: 現在はGhostty限定
+ */
+export function openTerminal(fullFolderPath: string): Promise<void> {
+  return new Promise((resolve, reject) => {
+    execFile("open", ["-a", "Ghostty", fullFolderPath], (error: any) => {
+      if (error) {
+        return reject(error);
+      }
+      resolve();
+    });
+  });
 }
 
 /**

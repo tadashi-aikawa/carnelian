@@ -8,3 +8,10 @@ declare let app: UApp;
 export function getWorkspace(): UWorkspace {
   return app.workspace;
 }
+
+/**
+ * Vaultルートのフルパスを取得します
+ */
+export function getVaultRootPath(): string {
+  return app.vault.adapter.basePath;
+}

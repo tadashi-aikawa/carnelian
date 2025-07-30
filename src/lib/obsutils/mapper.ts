@@ -1,13 +1,11 @@
 import { type EditorPosition, type Loc, normalizePath } from "obsidian";
-import type { UApp } from "../types";
-
-declare let app: UApp;
+import { getVaultRootPath } from "../helpers/workspace";
 
 export function toEditorPosition(loc: Omit<Loc, "offset">): EditorPosition {
   return { ch: loc.col, line: loc.line };
 }
 
 export function toFullPath(path: string): string {
-  const vaultRootPath = normalizePath(app.vault.adapter.basePath);
+  const vaultRootPath = normalizePath(getVaultRootPath());
   return `/${vaultRootPath}/${path}`;
 }
