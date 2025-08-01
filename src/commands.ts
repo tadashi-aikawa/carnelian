@@ -4,6 +4,7 @@ import { addPermalinkProperty } from "./commands/add-permalink-property";
 import { addPropertySuitably } from "./commands/add-property-suitably";
 import { cleanOldDailyNotes } from "./commands/clean-old-daily-notes";
 import { copyActiveFileFullPath } from "./commands/copy-active-file-full-path";
+import { copyAsConfluence } from "./commands/copy-as-confluence";
 import { copyMinervaURL } from "./commands/copy-minerva-url";
 import { copyUrlProperty } from "./commands/copy-url-property";
 import { createActivityNote } from "./commands/create-activity-note";
@@ -66,6 +67,11 @@ export function createCommands(settings: PluginSettings): Command[] {
       kind: "editor",
       executor: () =>
         pasteClipboardAs({ format: "avif", quality: 35, resize: "1920x" }),
+    },
+    {
+      name: "Copy as Confluence",
+      kind: "editor",
+      executor: () => copyAsConfluence(settings),
     },
     {
       name: "Summarize description",
