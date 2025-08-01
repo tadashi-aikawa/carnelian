@@ -36,3 +36,10 @@ export function toggleVimKeyBindings(): boolean {
   app.vault.setConfig("vimMode", next);
   return next;
 }
+
+/**
+ * 新しいノートが作成されるフォルダのパスを取得します
+ */
+export function getNewFileFolderPath(): string {
+  return app.vault.getConfig("newFileFolderPath") ?? "";
+}

@@ -1,4 +1,5 @@
 import type { TFile } from "obsidian";
+import { getNewFileFolderPath } from "src/lib/helpers/settings";
 
 interface Note {
   name: string;
@@ -18,42 +19,48 @@ function createNotes<T extends Record<string, Note>>(
   return notes;
 }
 
+// TODO:設定できるようにしたいかも?
+const docDir = getNewFileFolderPath();
+
+// 正規表現の特殊文字をエスケープ
+const escapedDocDir = docDir.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
 const noteTypeByName = createNotes({
   "Prime note": {
     name: "Prime note",
     prefixEmoji: "📕",
-    coverImagePath: "Notes/attachments/prime.webp",
-    pathPattern: /^Notes\/📕.+\.md$/,
+    coverImagePath: `${docDir}/attachments/prime.webp`,
+    pathPattern: new RegExp(`^${escapedDocDir}/📕.+\\.md$`),
   },
   "Hub note": {
     name: "Hub note",
     prefixEmoji: "📒",
-    coverImagePath: "Notes/attachments/hub.webp",
-    pathPattern: /^Notes\/📒.+\.md$/,
+    coverImagePath: `${docDir}/attachments/hub.webp`,
+    pathPattern: new RegExp(`^${escapedDocDir}/📒.+\\.md$`),
   },
   "Activity note": {
     name: "Activity note",
     prefixEmoji: "📜",
-    coverImagePath: "Notes/attachments/activity.webp",
-    pathPattern: /^Notes\/📜.+\.md$/,
+    coverImagePath: `${docDir}/attachments/activity.webp`,
+    pathPattern: new RegExp(`^${escapedDocDir}/📜.+\\.md$`),
   },
   "Troubleshooting note": {
     name: "Troubleshooting note",
     prefixEmoji: "📝",
-    coverImagePath: "Notes/attachments/troubleshooting.webp",
-    pathPattern: /^Notes\/📝.+\.md$/,
+    coverImagePath: `${docDir}/attachments/troubleshooting.webp`,
+    pathPattern: new RegExp(`^${escapedDocDir}/📝.+\\.md$`),
   },
   "Report note": {
     name: "Report note",
     prefixEmoji: "📰",
-    coverImagePath: "Notes/attachments/report.webp",
-    pathPattern: /^Notes\/📰.+\.md$/,
+    coverImagePath: `${docDir}/attachments/report.webp`,
+    pathPattern: new RegExp(`^${escapedDocDir}/📰.+\\.md$`),
   },
   "Brain note": {
     name: "Brain note",
     prefixEmoji: "🧠",
-    coverImagePath: "Notes/attachments/brain.webp",
-    pathPattern: /^Notes\/🧠.+\.md$/,
+    coverImagePath: `${docDir}/attachments/brain.webp`,
+    pathPattern: new RegExp(`^${escapedDocDir}/🧠.+\\.md$`),
   },
   "Article note": {
     name: "Article note",
@@ -64,7 +71,7 @@ const noteTypeByName = createNotes({
   "My note": {
     name: "My note",
     prefixEmoji: "🦉",
-    coverImagePath: "Notes/attachments/mynote.webp",
+    coverImagePath: `${docDir}/attachments/mynote.webp`,
     pathPattern: /^.+\/🦉.+\.md$/,
   },
   "Series note": {
@@ -96,13 +103,13 @@ const noteTypeByName = createNotes({
     name: "Glossary note",
     prefixEmoji: null,
     coverImagePath: null,
-    pathPattern: /^Notes\/[^にをすむ]+\.md$/,
+    pathPattern: new RegExp(`^${escapedDocDir}/[^にをすむ]+\\.md$`),
   },
   "Procedure note": {
     name: "Procedure note",
     prefixEmoji: null,
     coverImagePath: null,
-    pathPattern: /^Notes\/.+.md$/,
+    pathPattern: new RegExp(`^${escapedDocDir}/.+\\.md$`),
   },
 } as const);
 

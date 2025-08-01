@@ -48,6 +48,8 @@ type Config = {
   spellcheckDictionary?: string[];
   useMarkdownLinks?: boolean;
   newLinkFormat?: "shortest" | "relative" | "absolute";
+  // Folder to create new notes inに関係
+  newFileFolderPath?: string;
   readableLineLength?: boolean;
   // Default editing modeに関係
   livePreview?: boolean;
