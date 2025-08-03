@@ -136,11 +136,13 @@ export async function showInputDialog(args: {
   message: string;
   placeholder?: string;
   defaultValue?: string;
+  inputType?: "text" | "date";
 }): Promise<string | null> {
   return new InputDialog(
     args.message,
     args.placeholder,
     args.defaultValue,
+    args.inputType ?? "text",
   ).open();
 }
 

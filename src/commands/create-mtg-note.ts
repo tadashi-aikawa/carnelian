@@ -8,12 +8,20 @@ import { notify, showInputDialog } from "src/lib/helpers/ui";
  * MTG用ノートを作成し、カーソル配下にリンクを挿入します
  */
 export async function createMtgNote() {
-  const today = now("YYYY-MM-DD");
+  const date = await showInputDialog({
+    message: "MTGの日付を入力してください",
+    placeholder: "YYYY-MM-DD",
+    defaultValue: now("YYYY-MM-DD"),
+    inputType: "date",
+  });
+  if (!date) {
+    return;
+  }
 
   const NOTE_BODY = `
 ---
-created: ${today}
-updated: ${today}
+created: ${date}
+updated: ${date}
 participants:
 ---
 
@@ -21,7 +29,7 @@ participants:
 
   const inputTitle = await showInputDialog({
     message: "MTGのタイトルを入力してください",
-    defaultValue: `MTG_${now("YYYYMMDD")}_`,
+    defaultValue: `MTG_${date.replaceAll(/-/g, "")}_`,
   });
   if (!inputTitle) {
     return;

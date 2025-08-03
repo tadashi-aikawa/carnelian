@@ -12,6 +12,7 @@ export class InputDialog extends Modal {
     public title: string,
     public placeholder?: string,
     public defaultValue?: string,
+    public inputType?: "text" | "date",
   ) {
     super(app);
   }
@@ -20,7 +21,7 @@ export class InputDialog extends Modal {
     this.titleEl.setText(this.title);
 
     this.inputEl = this.contentEl.createEl("input", {
-      type: "text",
+      type: this.inputType,
       placeholder: this.placeholder ?? "",
       cls: "carnelian-input-dialog-input",
       value: this.defaultValue,
