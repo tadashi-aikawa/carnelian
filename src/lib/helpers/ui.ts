@@ -57,6 +57,62 @@ export async function copyToClipboard(text: string): Promise<void> {
 }
 
 /**
+ * クリップボード対応画像タイプ
+ */
+export const clipboardImageExtensions = [
+  "png",
+  "jpg",
+  "jpeg",
+  "gif",
+  "bmp",
+  "webp",
+  "svg",
+  "avif",
+] as const;
+export type ClipboardImageExtension = (typeof clipboardImageExtensions)[number];
+export const clipboardMimeTypesByExtension = {
+  png: "image/png",
+  jpg: "image/jpeg",
+  jpeg: "image/jpeg",
+  gif: "image/gif",
+  bmp: "image/bmp",
+  webp: "image/webp",
+  svg: "image/svg+xml",
+  avif: "image/avif",
+} as const satisfies Record<ClipboardImageExtension[number], string>;
+export function extensionToMimeType(
+  extension: (typeof clipboardImageExtensions)[number],
+): string {
+  return clipboardMimeTypesByExtension[extension];
+}
+
+/**
+ * クリップボードに画像を保存します
+ *
+ * ```ts
+ * const imageBuffer = Buffer.from(imageData);
+ * await copyImageToClipboard(imageBuffer, "image/png");
+ * ```
+ */
+export async function copyImageToClipboard(
+  imageBuffer: Buffer,
+  mimeType: (typeof clipboardMimeTypesByExtension)[keyof typeof clipboardMimeTypesByExtension],
+): Promise<void> {
+  const bitmap = await createImageBitmap(
+    new Blob([imageBuffer], { type: mimeType }),
+  );
+
+  const canvas = new OffscreenCanvas(bitmap.width, bitmap.height);
+  canvas.getContext("2d")!.drawImage(bitmap, 0, 0);
+
+  const pngBlob = await canvas.convertToBlob({ type: "image/png" });
+
+  await navigator.clipboard.write([
+    new ClipboardItem({ "image/png": pngBlob }),
+  ]);
+}
+
+/**
  * クリップボードからテキストを取得します
  *
  * ```ts
