@@ -29,15 +29,17 @@ test.each([
     "text\n\n\n## SubHeading",
     [{ from: { line: 1, ch: 0 }, to: { line: 2, ch: 0 }, text: "\n" }],
   ],
+  // 末尾の空行処理
+  [
+    "line1\n\n",
+    [{ from: { line: 1, ch: 0 }, to: { line: 2, ch: 0 }, text: "" }],
+  ],
 
   // 空のマークダウン
   ["", []],
 
   // 空行がない場合
   ["line1\nline2\nline3", []],
-
-  // 末尾の空行は処理されない
-  ["line1\n\n", []],
 ])(
   `formatLineBreaks("%s")`,
   (markdown: string, expected: TextReplacement[]) => {
@@ -200,7 +202,9 @@ test.each([
   ],
 
   // 改行のみのマークダウン
-  ["\n\n\n", []],
+  ["\n\n\n", [{ from: { line: 0, ch: 0 }, to: { line: 3, ch: 0 }, text: "" }]],
+  // 最後が改行以外のマークダウン
+  ["\n\na", [{ from: { line: 0, ch: 0 }, to: { line: 1, ch: 0 }, text: "" }]],
 
   // 単一行
   ["single line", []],

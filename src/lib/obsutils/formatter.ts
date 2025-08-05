@@ -60,12 +60,16 @@ export function* formatLineBreaks(markdown: string): Iterable<TextReplacement> {
       }
     }
 
-    // コードブロック以外の空行はformat対象になる
     if (isEmptyLine(line) && !inCodeBlock) {
-      if (firstEmptyI == null) {
-        firstEmptyI = i;
+      if (i === lines.length - 1) {
+        // 最終行の場合は次行で処理を実行するというシミュレーションで最後の改行を処理
+        i++;
+      } else {
+        if (firstEmptyI == null) {
+          firstEmptyI = i;
+        }
+        continue;
       }
-      continue;
     }
 
     // 空行の後の処理
