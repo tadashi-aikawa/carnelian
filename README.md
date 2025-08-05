@@ -15,7 +15,7 @@
 ## 開発の前提環境
 
 - Ubuntu/macOS
-- [Bun] v1.2.10
+- [Bun] v1.2.19
 - [Hot Reload]プラグイン
 
 ## 開発環境構築
