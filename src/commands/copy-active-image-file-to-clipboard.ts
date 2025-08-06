@@ -1,9 +1,11 @@
 import { readFileSync } from "fs";
-import { getActiveFile } from "src/lib/helpers/entries";
 import {
-  type ClipboardImageExtension,
-  clipboardImageExtensions,
-  clipboardMimeTypesByExtension,
+  type ImageExtension,
+  getActiveFile,
+  imageExtensions,
+  imageMimeTypesByExtension,
+} from "src/lib/helpers/entries";
+import {
   copyImageToClipboard,
   notify,
   notifyRuntimeError,
@@ -20,7 +22,7 @@ export async function copyActiveImageFileToClipboard() {
     return notifyValidationError("アクティブなファイルがありません");
   }
 
-  const isImageFile = clipboardImageExtensions.some((ext) =>
+  const isImageFile = imageExtensions.some((ext) =>
     activeFile.name.toLowerCase().endsWith(`.${ext}`),
   );
 
@@ -32,8 +34,7 @@ export async function copyActiveImageFileToClipboard() {
     const imageBuffer = readFileSync(toFullPath(activeFile.path));
     const extension = activeFile.extension.toLowerCase();
     const mimeType =
-      clipboardMimeTypesByExtension[extension as ClipboardImageExtension] ||
-      "image/png";
+      imageMimeTypesByExtension[extension as ImageExtension] || "image/png";
 
     await copyImageToClipboard(imageBuffer, mimeType);
     notify(

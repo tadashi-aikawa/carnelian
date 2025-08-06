@@ -40,6 +40,7 @@ import { pasteClipboardAs } from "./commands/paste-clipboard-to-webp";
 import { pasteSiteCard } from "./commands/paste-site-card";
 import { pasteURLToSiteLink } from "./commands/paste-url-to-site-link";
 import { showAnotherCommandPalette } from "./commands/show-another-command-palette";
+import { showFileInfo } from "./commands/show-file-info";
 import { stripLinksAndDecorations } from "./commands/stripe-links-and-decorations";
 import { summarizeDescription } from "./commands/summarize-description";
 import { toggleLivePreview } from "./commands/toggle-live-preview";
@@ -288,6 +289,11 @@ export function createCommands(settings: PluginSettings): Command[] {
       name: "Update change log",
       kind: "editor",
       executor: updateChangeLog,
+    },
+    {
+      name: "Show File info",
+      kind: "file",
+      executor: showFileInfo,
     },
     {
       name: "Show another command palette",

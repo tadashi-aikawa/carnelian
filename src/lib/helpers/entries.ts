@@ -8,6 +8,36 @@ import { getActiveEditor } from "./editors/basic";
 declare let app: UApp;
 
 /**
+ * 対応画像タイプ
+ */
+export const imageExtensions = [
+  "png",
+  "jpg",
+  "jpeg",
+  "gif",
+  "bmp",
+  "webp",
+  "svg",
+  "avif",
+] as const;
+export type ImageExtension = (typeof imageExtensions)[number];
+export const imageMimeTypesByExtension = {
+  png: "image/png",
+  jpg: "image/jpeg",
+  jpeg: "image/jpeg",
+  gif: "image/gif",
+  bmp: "image/bmp",
+  webp: "image/webp",
+  svg: "image/svg+xml",
+  avif: "image/avif",
+} as const satisfies Record<ImageExtension[number], string>;
+export function extensionToMimeType(
+  extension: (typeof imageExtensions)[number],
+): string {
+  return imageMimeTypesByExtension[extension];
+}
+
+/**
  * entryがファイルであるかを判定します
  */
 export function isFile(entry: TAbstractFile): entry is TFile {
