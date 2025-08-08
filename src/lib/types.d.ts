@@ -38,6 +38,12 @@ export type UMetadataEditor = {
   focusValue(key: string): void;
   insertProperties(props: Properties): void;
   removeProperties(entries: { entry: { key: any } }[]): void;
+  /** 現在のプロパティを取得する */
+  serialize(): UProperties;
+  /** エディタに反映する (ファイルは保存されない) */
+  synchronize(props: UProperties): void;
+  /** ファイルに反映する */
+  save(): void;
 };
 
 export type UEditor = Editor;

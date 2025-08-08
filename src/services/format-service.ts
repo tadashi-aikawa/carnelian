@@ -5,6 +5,7 @@ import {
 } from "src/lib/helpers/editors/basic";
 import { loadFileContentCache } from "src/lib/helpers/entries";
 import { setOnExWCommandEvent } from "src/lib/helpers/events";
+import { sortActiveFileProperties } from "src/lib/helpers/properties";
 import { formatLineBreaks } from "src/lib/obsutils/formatter";
 import type { Service } from "src/services";
 
@@ -25,6 +26,10 @@ export class FormatService implements Service {
 }
 
 export async function formatFile(file: TFile) {
+  sortActiveFileProperties(["title", "created", "updated"], {
+    removeIfEmpty: true,
+  });
+
   const content = await loadFileContentCache(file.path);
   if (!content) {
     return;
