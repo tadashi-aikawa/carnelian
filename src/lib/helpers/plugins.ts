@@ -3,6 +3,7 @@ import type { TFile } from "obsidian";
 import type { UApp } from "../types";
 import { getDatesInRange } from "../utils/dates";
 import { isPresent } from "../utils/guard";
+import { encodeToUrl } from "../utils/strings";
 import { getFileByPath } from "./entries";
 import { getActiveFileProperties } from "./properties";
 
@@ -41,13 +42,13 @@ export async function useObsidianPublishInfo(): Promise<{
     getPageUrl(filePath) {
       return permalink
         ? `${baseUrl}/${permalink}`
-        : `${baseUrl}/${encodeURI(filePath.replace(".md", ""))}`;
+        : `${baseUrl}/${encodeToUrl(filePath.replace(".md", ""))}`;
     },
     getOriginPageUrl(filePath) {
-      return `${baseUrl}/${encodeURI(filePath.replace(".md", ""))}`;
+      return `${baseUrl}/${encodeToUrl(filePath.replace(".md", ""))}`;
     },
     getResourceUrl(filePath) {
-      return `${resourceBaseUrl}/${encodeURI(filePath)}`;
+      return `${resourceBaseUrl}/${encodeToUrl(filePath)}`;
     },
   };
 }

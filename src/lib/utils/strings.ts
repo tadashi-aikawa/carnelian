@@ -282,6 +282,14 @@ export function isUrl(text: string): boolean {
   return text.startsWith("http://") || text.startsWith("https://");
 }
 
+/**
+ * ファイルパスが入力されることを想定してURLをエンコードします
+ *
+ */
+export function encodeToUrl(filePath: string): string {
+  return encodeURI(filePath).replaceAll(/\+/g, "%2B");
+}
+
 export type FuzzyResult =
   | { type: "starts-with"; score: number }
   | { type: "includes"; score: number }

@@ -3,6 +3,7 @@ import {
   countCharsWidth,
   doSinglePatternCaptureMatching,
   doSinglePatternMatching,
+  encodeToUrl,
   excludeEmoji,
   excludeSpace,
   formatTable,
@@ -419,6 +420,21 @@ test.each([
     expected: ReturnType<typeof getWikiLinks>,
   ) => {
     expect(getWikiLinks(text)).toStrictEqual(expected);
+  },
+);
+
+test.each([
+  ["Notes/Obsidian", "Notes/Obsidian"],
+  ["Notes/Obsidian.md", "Notes/Obsidian.md"],
+  ["Notes/Obsidian.png", "Notes/Obsidian.png"],
+  ["Notes/Obsidian++.md", "Notes/Obsidian%2B%2B.md"],
+])(
+  `encodeToUrl("%s")`,
+  (
+    filePath: Parameters<typeof encodeToUrl>[0],
+    expected: ReturnType<typeof encodeToUrl>,
+  ) => {
+    expect(encodeToUrl(filePath)).toBe(expected);
   },
 );
 
