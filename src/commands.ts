@@ -6,6 +6,7 @@ import { cleanOldDailyNotes } from "./commands/clean-old-daily-notes";
 import { copyActiveFileFullPath } from "./commands/copy-active-file-full-path";
 import { copyActiveImageFileToClipboard } from "./commands/copy-active-image-file-to-clipboard";
 import { copyAsConfluence } from "./commands/copy-as-confluence";
+import { copyAsSlack } from "./commands/copy-as-slack";
 import { copyMinervaURL } from "./commands/copy-minerva-url";
 import { copyUrlProperty } from "./commands/copy-url-property";
 import { createActivityNote } from "./commands/create-activity-note";
@@ -74,6 +75,11 @@ export function createCommands(settings: PluginSettings): Command[] {
       name: "Copy as Confluence",
       kind: "editor",
       executor: () => copyAsConfluence(settings),
+    },
+    {
+      name: "Copy as Slack",
+      kind: "editor",
+      executor: () => copyAsSlack(settings),
     },
     {
       name: "Summarize description",

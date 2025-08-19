@@ -13,6 +13,9 @@ export interface PluginSettings {
   openAPIEndpoint: string;
   openAPIVersion: string;
   oepnAPIModel: string;
+  slack?: {
+    replaceMapping?: { [before: string]: string };
+  };
 }
 
 export const DEFAULT_SETTINGS: PluginSettings = {
