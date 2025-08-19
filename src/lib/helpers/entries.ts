@@ -45,6 +45,13 @@ export function isFile(entry: TAbstractFile): entry is TFile {
 }
 
 /**
+ * entryがMarkdownファイルであるかを判定します
+ */
+export function isMarkdownFile(entry: TAbstractFile): entry is TFile {
+  return isFile(entry) && entry.extension === "md";
+}
+
+/**
  * entryがフォルダであるかを判定します
  */
 export function isFolder(entry: TAbstractFile): entry is TFolder {
