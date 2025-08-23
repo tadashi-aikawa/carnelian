@@ -31,7 +31,6 @@ import { insertBlueskyPostsToWeeklyNote } from "./commands/insert-bluesky-posts-
 import { insertNewNotesToWeeklyNote } from "./commands/insert-inputs-to-weekly-note";
 import { insertMOC } from "./commands/insert-moc";
 import { insertNoteCard } from "./commands/insert-note-card";
-import { insertSiteCard } from "./commands/insert-site-card";
 import { moveToNextInspection } from "./commands/move-to-next-inspection";
 import { moveToPreviousInspection } from "./commands/move-to-previous-inspection";
 import { openActiveFolderInTerminal } from "./commands/open-active-folder-in-terminal";
@@ -48,7 +47,6 @@ import { toggleLivePreview } from "./commands/toggle-live-preview";
 import { transformMOC } from "./commands/transform-moc";
 import { transformToV2OGPCard } from "./commands/transform-v2-card";
 import { updateChangeLog } from "./commands/update-change-log";
-import { sortSelectionLines } from "./lib/helpers/editors/advanced";
 import { toggleEditorLength } from "./lib/helpers/settings";
 import { type CarnelianCommand, createCommand } from "./lib/obsutils/commands";
 import type { PluginSettings } from "./settings";
@@ -58,19 +56,19 @@ function createCarnelianCommands(settings: PluginSettings) {
     {
       name: "Paste clipboard as WebP",
       kind: "editor",
-      enabled: false,
+      enabled: settings.editor?.image?.webp?.paste,
       executor: () => pasteClipboardAs({ format: "webp" }),
     },
     {
       name: "Paste clipboard as AVIF",
       kind: "editor",
-      enabled: false,
+      enabled: settings.editor?.image?.avif?.paste,
       executor: () => pasteClipboardAs({ format: "avif", quality: 35 }),
     },
     {
       name: "Paste clipboard as AVIF 1920",
       kind: "editor",
-      enabled: false,
+      enabled: settings.editor?.image?.avif?.paste,
       executor: () =>
         pasteClipboardAs({ format: "avif", quality: 35, resize: "1920x" }),
     },
@@ -95,181 +93,169 @@ function createCarnelianCommands(settings: PluginSettings) {
     {
       name: "Fix link",
       kind: "editor",
-      enabled: false,
+      enabled: settings.editor?.link?.fix,
       executor: fixLink,
     },
     {
       name: "Move to next inspection",
       kind: "editor",
-      enabled: false,
+      enabled: settings.linter,
       executor: moveToNextInspection,
     },
     {
       name: "Move to previous inspection",
       kind: "editor",
-      enabled: false,
+      enabled: settings.linter,
       executor: moveToPreviousInspection,
     },
     {
       name: "Insert new notes to the weekly note",
       kind: "editor",
-      enabled: false,
+      enabled: settings.editor?.weeklyNote?.newNotes,
       executor: insertNewNotesToWeeklyNote,
     },
     {
       name: "Insert Bluesky posts to weekly note",
       kind: "editor",
-      enabled: false,
+      enabled: settings.editor?.weeklyNote?.blueskyPosts,
       executor: insertBlueskyPostsToWeeklyNote,
     },
     {
       name: "Insert MOC",
       kind: "editor",
-      enabled: false,
+      enabled: settings.editor?.moc?.insert,
       executor: insertMOC,
     },
     {
       name: "Transform MOC",
       kind: "editor",
-      enabled: false,
+      enabled: settings.editor?.moc?.fix,
       executor: transformMOC,
     },
     {
       name: "Toggle editor length",
       kind: "all",
-      enabled: false,
+      enabled: settings.editor?.toggle?.length,
       executor: toggleEditorLength,
     },
     {
       name: "Create an Article",
       kind: "all",
-      enabled: false,
+      enabled: settings.file?.create?.article,
       executor: createArticle,
-    },
-    {
-      name: "Insert site card",
-      kind: "editor",
-      enabled: false,
-      executor: insertSiteCard,
     },
     {
       name: "Paste site card",
       kind: "editor",
-      enabled: false,
+      enabled: settings.editor?.card?.site?.paste,
       executor: pasteSiteCard,
     },
     {
       name: "Insert note card",
       kind: "editor",
-      enabled: false,
+      enabled: settings.editor?.card?.note?.insert,
       executor: insertNoteCard,
     },
     {
       name: "Transform to v2 OGP card",
       kind: "editor",
-      enabled: false,
+      enabled: settings.editor?.card?.fix,
       executor: transformToV2OGPCard,
     },
     {
       name: "Paste URL to site link",
       kind: "editor",
-      enabled: false,
+      enabled: settings.editor?.link?.paste,
       executor: pasteURLToSiteLink,
-    },
-    {
-      name: "Sort selection",
-      kind: "editor",
-      enabled: false,
-      executor: sortSelectionLines,
     },
     {
       name: "Clean old daily notes",
       kind: "all",
-      enabled: false,
+      enabled: settings.file?.delete?.oldDailyNotes,
       executor: cleanOldDailyNotes,
     },
     {
       name: "Create MIN ADR",
       kind: "all",
-      enabled: false,
+      enabled: settings.file?.create?.adr?.min,
       executor: createMINADR,
     },
     {
       name: "Create VIM ADR",
       kind: "all",
-      enabled: false,
+      enabled: settings.file?.create?.adr?.vim,
       executor: createVIMADR,
     },
     {
       name: "Create PRO ADR",
       kind: "all",
-      enabled: false,
+      enabled: settings.file?.create?.adr?.pro,
       executor: createPROADR,
     },
     {
       name: "Create OBS ADR",
       kind: "all",
-      enabled: false,
+      enabled: settings.file?.create?.adr?.obs,
       executor: createOBSADR,
     },
     {
       name: "Create Prime note",
       kind: "editor",
-      enabled: false,
+      enabled: settings.file?.create?.prime,
       executor: createPrimeNote,
     },
     {
       name: "Create Activity note",
       kind: "editor",
-      enabled: false,
+      enabled: settings.file?.create?.article,
       executor: createActivityNote,
     },
     {
       name: "Create Hub note",
       kind: "editor",
-      enabled: false,
+      enabled: settings.file?.create?.hub,
       executor: createHubNote,
     },
     {
       name: "Create Report note",
       kind: "editor",
-      enabled: false,
+      enabled: settings.file?.create?.report,
       executor: createReportNote,
     },
     {
       name: "Create Brain note",
       kind: "editor",
-      enabled: false,
+      enabled: settings.file?.create?.brain,
       executor: createBrainNote,
     },
     {
       name: "Create Troubleshooting notes",
       kind: "editor",
-      enabled: false,
+      enabled: settings.file?.create?.troubleShooting,
       executor: createTroubleshootingNote,
     },
     {
       name: "Create Obsidian逆引きレシピ",
       kind: "all",
-      enabled: false,
+      enabled: settings.file?.create?.obsidianCookbook,
       executor: createObsidianCookbook,
     },
     {
       name: "Create TDQ",
       kind: "editor",
-      enabled: false,
+      enabled: settings.file?.create?.tdq,
       executor: createTDQ,
     },
     {
       name: "Create MTG note",
       kind: "editor",
-      enabled: false,
+      enabled: settings.file?.create?.mtg,
       executor: createMtgNote,
     },
     {
       name: "Add property suitably",
       kind: "editor",
-      enabled: false,
+      enabled: settings.editor?.property?.suitably,
       executor: addPropertySuitably,
     },
     {
@@ -281,13 +267,13 @@ function createCarnelianCommands(settings: PluginSettings) {
     {
       name: "Toggle Live preview",
       kind: "all",
-      enabled: false,
+      enabled: settings.editor?.toggle?.livePreview,
       executor: toggleLivePreview,
     },
     {
       name: "Format table",
       kind: "editor",
-      enabled: false,
+      enabled: settings.editor?.table?.format,
       executor: formatTable,
     },
     {
@@ -299,55 +285,55 @@ function createCarnelianCommands(settings: PluginSettings) {
     {
       name: "Copy Minerva URL",
       kind: "editor",
-      enabled: false,
+      enabled: settings.file?.copy?.minervaUrl,
       executor: copyMinervaURL,
     },
     {
       name: "Copy url property",
       kind: "editor",
-      enabled: false,
+      enabled: settings.editor?.property?.url?.copy,
       executor: copyUrlProperty,
     },
     {
       name: "Open property URL",
       kind: "editor",
-      enabled: false,
+      enabled: settings.editor?.property?.url?.open,
       executor: openPropertyUrl,
     },
     {
       name: "Open active folder in terminal",
       kind: "all",
-      enabled: false,
+      enabled: settings.external?.terminal,
       executor: openActiveFolderInTerminal,
     },
     {
       name: "Open vault in terminal",
       kind: "all",
-      enabled: false,
+      enabled: settings.external?.terminal,
       executor: openVaultInTerminal,
     },
     {
       name: "Copy active file full path",
       kind: "file",
-      enabled: false,
+      enabled: settings.file?.copy?.fullPath,
       executor: copyActiveFileFullPath,
     },
     {
       name: "Copy active image file to clipboard",
       kind: "file",
-      enabled: false,
+      enabled: settings.file?.copy?.image,
       executor: copyActiveImageFileToClipboard,
     },
     {
       name: "Update change log",
       kind: "editor",
-      enabled: false,
+      enabled: settings.editor?.property?.url,
       executor: updateChangeLog,
     },
     {
       name: "Show File info",
       kind: "file",
-      enabled: false,
+      enabled: settings.file?.show?.info,
       executor: showFileInfo,
     },
     {

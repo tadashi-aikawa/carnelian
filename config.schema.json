@@ -4,11 +4,11 @@
   "definitions": {
     "Config": {
       "additionalProperties": false,
-      "description": "data.jsonの設定ファイルを定義するインターフェース JSON Schemaを生成するためもに使用される",
+      "description": "data.jsonの設定ファイルを定義するインターフェース JSON Schemaを生成するためにも使用される",
       "properties": {
         "ai": {
           "additionalProperties": false,
-          "description": "AIに関係する機能の設定",
+          "description": "AIに関係する機能",
           "properties": {
             "property": {
               "additionalProperties": false,
@@ -162,7 +162,7 @@
         },
         "confluence": {
           "additionalProperties": false,
-          "description": "Confluenceに関係する機能の設定",
+          "description": "Confluenceに関係する機能",
           "properties": {
             "domain": {
               "description": "Confluenceのドメイン 例: `example.atlassian.net`",
@@ -171,9 +171,285 @@
           },
           "type": "object"
         },
+        "editor": {
+          "additionalProperties": false,
+          "description": "エディタ本文の機能",
+          "properties": {
+            "card": {
+              "additionalProperties": false,
+              "description": "カード",
+              "properties": {
+                "fix": {
+                  "description": "v1カードをv2に変換",
+                  "type": "boolean"
+                },
+                "note": {
+                  "additionalProperties": false,
+                  "description": "Vault内のノート",
+                  "properties": {
+                    "insert": {
+                      "description": "Vault内のノートから挿入",
+                      "type": "boolean"
+                    }
+                  },
+                  "type": "object"
+                },
+                "site": {
+                  "additionalProperties": false,
+                  "description": "外部サイト",
+                  "properties": {
+                    "paste": {
+                      "description": "クリップボードのURLから貼り付け",
+                      "type": "boolean"
+                    }
+                  },
+                  "type": "object"
+                }
+              },
+              "type": "object"
+            },
+            "image": {
+              "additionalProperties": false,
+              "description": "画像関連",
+              "properties": {
+                "avif": {
+                  "additionalProperties": false,
+                  "description": "AVIFに変換",
+                  "properties": {
+                    "paste": {
+                      "type": "boolean"
+                    }
+                  },
+                  "type": "object"
+                },
+                "webp": {
+                  "additionalProperties": false,
+                  "description": "Webpに変換",
+                  "properties": {
+                    "paste": {
+                      "type": "boolean"
+                    }
+                  },
+                  "type": "object"
+                }
+              },
+              "type": "object"
+            },
+            "link": {
+              "additionalProperties": false,
+              "description": "リンク",
+              "properties": {
+                "fix": {
+                  "type": "boolean"
+                },
+                "paste": {
+                  "description": "クリップボードのURLから貼り付け",
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "moc": {
+              "additionalProperties": false,
+              "description": "MOC",
+              "properties": {
+                "fix": {
+                  "type": "boolean"
+                },
+                "insert": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "property": {
+              "additionalProperties": false,
+              "description": "プロパティ",
+              "properties": {
+                "changeLog": {
+                  "description": "created/updatedの更新",
+                  "type": "boolean"
+                },
+                "suitably": {
+                  "description": "カーソル行の内容からよしなに追加",
+                  "type": "boolean"
+                },
+                "url": {
+                  "additionalProperties": false,
+                  "description": "urlプロパティ",
+                  "properties": {
+                    "copy": {
+                      "type": "boolean"
+                    },
+                    "open": {
+                      "type": "boolean"
+                    }
+                  },
+                  "type": "object"
+                }
+              },
+              "type": "object"
+            },
+            "table": {
+              "additionalProperties": false,
+              "description": "テーブル",
+              "properties": {
+                "format": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "toggle": {
+              "additionalProperties": false,
+              "description": "切り替え",
+              "properties": {
+                "length": {
+                  "description": "エディタの長さ(横幅)",
+                  "type": "boolean"
+                },
+                "livePreview": {
+                  "description": "Live Previewの切り替え",
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "weeklyNote": {
+              "additionalProperties": false,
+              "description": "Weekly Report に対する機能",
+              "properties": {
+                "blueskyPosts": {
+                  "description": "BlueSkyで投稿したポストの挿入",
+                  "type": "boolean"
+                },
+                "newNotes": {
+                  "description": "新しく作成したノートの挿入",
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "type": "object"
+        },
+        "external": {
+          "additionalProperties": false,
+          "description": "外部連携",
+          "properties": {
+            "terminal": {
+              "description": "ターミナルで開く",
+              "type": "boolean"
+            }
+          },
+          "type": "object"
+        },
+        "file": {
+          "additionalProperties": false,
+          "description": "ファイル作成/削除に関する機能",
+          "properties": {
+            "copy": {
+              "additionalProperties": false,
+              "description": "ファイルの情報をコピー",
+              "properties": {
+                "fullPath": {
+                  "description": "現在ファイルのパスをクリップボードにコピー",
+                  "type": "boolean"
+                },
+                "image": {
+                  "description": "現在画像ファイルをクリップボードにコピー",
+                  "type": "boolean"
+                },
+                "minervaUrl": {
+                  "description": "現在ファイルのMinerva URLをクリップボードにコピー",
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "create": {
+              "additionalProperties": false,
+              "description": "作成",
+              "properties": {
+                "adr": {
+                  "additionalProperties": false,
+                  "description": "ADR関連",
+                  "properties": {
+                    "min": {
+                      "type": "boolean"
+                    },
+                    "obs": {
+                      "type": "boolean"
+                    },
+                    "pro": {
+                      "type": "boolean"
+                    },
+                    "vim": {
+                      "type": "boolean"
+                    }
+                  },
+                  "type": "object"
+                },
+                "article": {
+                  "type": "boolean"
+                },
+                "brain": {
+                  "type": "boolean"
+                },
+                "hub": {
+                  "type": "boolean"
+                },
+                "mtg": {
+                  "type": "boolean"
+                },
+                "obsidianCookbook": {
+                  "type": "boolean"
+                },
+                "prime": {
+                  "type": "boolean"
+                },
+                "report": {
+                  "type": "boolean"
+                },
+                "tdq": {
+                  "type": "boolean"
+                },
+                "troubleShooting": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "delete": {
+              "additionalProperties": false,
+              "description": "削除",
+              "properties": {
+                "oldDailyNotes": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "show": {
+              "additionalProperties": false,
+              "description": "ファイル情報の表示",
+              "properties": {
+                "info": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "type": "object"
+        },
+        "linter": {
+          "description": "リンターに関する機能",
+          "type": "boolean"
+        },
         "slack": {
           "additionalProperties": false,
-          "description": "Slackに関係する機能の設定",
+          "description": "Slackに関係する機能",
           "properties": {
             "copy": {
               "additionalProperties": false,
