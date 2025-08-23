@@ -15,6 +15,13 @@ import type { PluginSettings } from "src/settings";
  * OpenAI APIで本文を要約し、descriptionプロパティに挿入します
  */
 export async function summarizeDescription(settings: PluginSettings) {
+  const vendor = settings.ai?.property?.summarize?.vendor;
+  if (!vendor) {
+    return notifyValidationError(
+      "ai.property.summarize.vendorが設定されていません",
+    );
+  }
+
   const content = await getActiveFileSectionContents({
     excludeSectionTypes: ["yaml"],
   });
@@ -40,14 +47,15 @@ export async function summarizeDescription(settings: PluginSettings) {
 { title: ${getActiveFileTitle()}}
 
 ${content}`,
-    apiKey: settings.openAPIKey,
-    azure: settings.openAPIEndpoint
-      ? {
-          model: settings.oepnAPIModel,
-          apiEndpoint: settings.openAPIEndpoint,
-          apiVersion: settings.openAPIVersion,
-        }
-      : undefined,
+    apiKey: vendor.apiKey,
+    azure:
+      vendor.type === "azure"
+        ? {
+            model: vendor.apiModel,
+            apiEndpoint: vendor.apiEndpoint,
+            apiVersion: vendor.apiVersion,
+          }
+        : undefined,
   });
   nt.hide();
   if (!summary) {
@@ -58,7 +66,10 @@ ${content}`,
     `価格: ${Math.round(summary.costYen * 100) / 100}円 / 文字数: ${summary.text.length}`,
     3000,
   );
-  addActiveFileProperty("description", summary.text);
+  addActiveFileProperty(
+    settings.ai?.property?.summarize?.property ?? "description",
+    summary.text,
+  );
 }
 
 function createSystemMessage(noteType: NoteType): string | null {

@@ -19,6 +19,13 @@ import type { PluginSettings } from "src/settings";
  * - それ以外はADRとして
  */
 export async function addPermalinkProperty(settings: PluginSettings) {
+  const vendor = settings.ai?.property?.permalink?.vendor;
+  if (vendor?.type !== "openai") {
+    return notifyValidationError(
+      "ai.property.permalink.vendorがopenaiに設定されていません",
+    );
+  }
+
   const file = getActiveFile();
   if (!file) {
     return notifyValidationError("No active file found");
@@ -29,7 +36,7 @@ export async function addPermalinkProperty(settings: PluginSettings) {
     return notifyValidationError("ノートタイプが取得できませんでした");
   }
   if (noteType?.name === "Article note") {
-    const permalink = await createArticlePermalink(settings.openAPIKey);
+    const permalink = await createArticlePermalink(vendor.apiKey);
     if (permalink) {
       addActiveFileProperty("permalink", permalink);
     }

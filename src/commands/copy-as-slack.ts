@@ -3,11 +3,7 @@ import { getActiveFileContent } from "src/lib/helpers/entries";
 import { linkText2Path } from "src/lib/helpers/links";
 import { getActiveFileCache } from "src/lib/helpers/metadata";
 import { getPropertiesByPath } from "src/lib/helpers/properties";
-import {
-  copyToClipboard,
-  notify,
-  notifyValidationError,
-} from "src/lib/helpers/ui";
+import { copyToClipboard, notify } from "src/lib/helpers/ui";
 import { sorter } from "src/lib/utils/collections";
 import { getWikiLinks, replaceAt } from "src/lib/utils/strings";
 import type { PluginSettings } from "src/settings";
@@ -52,12 +48,7 @@ function replacePattern(
  * Slackに貼り付ける形式でクリップボードにコピーします
  */
 export async function copyAsSlack(settings: PluginSettings) {
-  const replaceMapping = settings.slack?.replaceMapping;
-  if (!replaceMapping) {
-    notifyValidationError("slack.replaceMappingが指定されていません");
-    return;
-  }
-
+  const replaceMapping = settings.slack?.copy.replaceMapping ?? {};
   let target = getSelectionText();
   if (!target) {
     const startOffset =

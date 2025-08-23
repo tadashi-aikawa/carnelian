@@ -1,0 +1,206 @@
+{
+  "$ref": "#/definitions/Config",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "Config": {
+      "additionalProperties": false,
+      "description": "data.jsonの設定ファイルを定義するインターフェース JSON Schemaを生成するためもに使用される",
+      "properties": {
+        "ai": {
+          "additionalProperties": false,
+          "description": "AIに関係する機能の設定",
+          "properties": {
+            "property": {
+              "additionalProperties": false,
+              "description": "プロパティに関する機能",
+              "properties": {
+                "permalink": {
+                  "additionalProperties": false,
+                  "description": "パーマリンク",
+                  "properties": {
+                    "vendor": {
+                      "anyOf": [
+                        {
+                          "additionalProperties": false,
+                          "properties": {
+                            "apiKey": {
+                              "description": "OpenAI APIキー",
+                              "type": "string"
+                            },
+                            "type": {
+                              "const": "openai",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "type",
+                            "apiKey"
+                          ],
+                          "type": "object"
+                        },
+                        {
+                          "additionalProperties": false,
+                          "properties": {
+                            "apiEndpoint": {
+                              "description": "Azure OpenAIのエンドポイント",
+                              "type": "string"
+                            },
+                            "apiKey": {
+                              "description": "Azure OpenAIのAPIキー",
+                              "type": "string"
+                            },
+                            "apiModel": {
+                              "description": "Azure OpenAIのモデル名",
+                              "type": "string"
+                            },
+                            "apiVersion": {
+                              "description": "Azure OpenAIのAPIバージョン",
+                              "type": "string"
+                            },
+                            "type": {
+                              "const": "azure",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "type",
+                            "apiKey",
+                            "apiEndpoint",
+                            "apiVersion",
+                            "apiModel"
+                          ],
+                          "type": "object"
+                        }
+                      ],
+                      "description": "利用するAIベンダー"
+                    }
+                  },
+                  "required": [
+                    "vendor"
+                  ],
+                  "type": "object"
+                },
+                "summarize": {
+                  "additionalProperties": false,
+                  "description": "要約",
+                  "properties": {
+                    "property": {
+                      "description": "要約を保存するプロパティ名 (default: description)",
+                      "type": "string"
+                    },
+                    "vendor": {
+                      "anyOf": [
+                        {
+                          "additionalProperties": false,
+                          "properties": {
+                            "apiKey": {
+                              "description": "OpenAI APIキー",
+                              "type": "string"
+                            },
+                            "type": {
+                              "const": "openai",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "type",
+                            "apiKey"
+                          ],
+                          "type": "object"
+                        },
+                        {
+                          "additionalProperties": false,
+                          "properties": {
+                            "apiEndpoint": {
+                              "description": "Azure OpenAIのエンドポイント",
+                              "type": "string"
+                            },
+                            "apiKey": {
+                              "description": "Azure OpenAIのAPIキー",
+                              "type": "string"
+                            },
+                            "apiModel": {
+                              "description": "Azure OpenAIのモデル名",
+                              "type": "string"
+                            },
+                            "apiVersion": {
+                              "description": "Azure OpenAIのAPIバージョン",
+                              "type": "string"
+                            },
+                            "type": {
+                              "const": "azure",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "type",
+                            "apiKey",
+                            "apiEndpoint",
+                            "apiVersion",
+                            "apiModel"
+                          ],
+                          "type": "object"
+                        }
+                      ],
+                      "description": "利用するAIベンダー情報"
+                    }
+                  },
+                  "required": [
+                    "vendor"
+                  ],
+                  "type": "object"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "type": "object"
+        },
+        "commandHistoryPath": {
+          "description": "コマンド履歴の保存先パス デフォルトはプラグインフォルダ内の `command-histories.json` FIXME: 多分プラグインに分離するのでこのままにする",
+          "type": "string"
+        },
+        "confluence": {
+          "additionalProperties": false,
+          "description": "Confluenceに関係する機能の設定",
+          "properties": {
+            "domain": {
+              "description": "Confluenceのドメイン 例: `example.atlassian.net`",
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "slack": {
+          "additionalProperties": false,
+          "description": "Slackに関係する機能の設定",
+          "properties": {
+            "copy": {
+              "additionalProperties": false,
+              "description": "Slackのメッセージ形式に変換してクリップボードにコピーする",
+              "properties": {
+                "replaceMapping": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "description": "Slackのメッセージを置換するためのマッピング",
+                  "type": "object"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "required": [
+            "copy"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "commandHistoryPath"
+      ],
+      "type": "object"
+    }
+  }
+}
+

@@ -50,7 +50,15 @@ bun dev
 
 ```typescript
 // FILESのデフォルト (変更は不要なはず)
-const FILES = ["main.js", "manifest.json", "styles.css"];
+const FILES = ["main.js", "manifest.json", "styles.css",  "config.schema.json"];
+```
+
+## Schemaの更新
+
+設定ファイルをJSON Schemaファイル `config.schema.json` に変換します。
+
+```bash
+bun schema
 ```
 
 ## Lint
