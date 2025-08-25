@@ -7,6 +7,11 @@ export interface Config {
    * エディタ本文の機能
    */
   editor?: {
+    /** 装飾 */
+    decoration?: {
+      strip?: boolean;
+    };
+
     /** 切り替え */
     toggle?: {
       /** エディタの長さ(横幅) */

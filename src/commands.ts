@@ -279,7 +279,7 @@ function createCarnelianCommands(settings: PluginSettings) {
     {
       name: "Strip links and decorations",
       kind: "editor",
-      enabled: false,
+      enabled: settings.editor?.decoration?.strip,
       executor: stripLinksAndDecorations,
     },
     {
