@@ -28,7 +28,7 @@ function toSlackLink(link: Link): string {
     return `[${link.alias}](${url})`;
   }
 
-  return ` ${url} `;
+  return `[${link.title}](${url})`;
 }
 
 /**
