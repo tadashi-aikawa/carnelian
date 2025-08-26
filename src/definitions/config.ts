@@ -111,6 +111,7 @@ export interface Config {
     /** 作成 */
     create?: {
       article?: boolean;
+      activity?: boolean;
       brain?: boolean;
       hub?: boolean;
       mtg?: boolean;

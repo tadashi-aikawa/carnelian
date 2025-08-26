@@ -381,6 +381,9 @@
               "additionalProperties": false,
               "description": "作成",
               "properties": {
+                "activity": {
+                  "type": "boolean"
+                },
                 "adr": {
                   "additionalProperties": false,
                   "description": "ADR関連",

@@ -207,7 +207,7 @@ function createCarnelianCommands(settings: PluginSettings) {
     {
       name: "Create Activity note",
       kind: "editor",
-      enabled: settings.file?.create?.article,
+      enabled: settings.file?.create?.activity,
       executor: createActivityNote,
     },
     {
