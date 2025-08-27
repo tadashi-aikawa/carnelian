@@ -47,6 +47,7 @@ import { toggleLivePreview } from "./commands/toggle-live-preview";
 import { transformMOC } from "./commands/transform-moc";
 import { transformToV2OGPCard } from "./commands/transform-v2-card";
 import { updateChangeLog } from "./commands/update-change-log";
+import { updateMOCSuitably } from "./commands/update-moc-suitably";
 import { toggleEditorLength } from "./lib/helpers/settings";
 import { type CarnelianCommand, createCommand } from "./lib/obsutils/commands";
 import type { PluginSettings } from "./settings";
@@ -131,6 +132,12 @@ function createCarnelianCommands(settings: PluginSettings) {
       kind: "editor",
       enabled: settings.editor?.moc?.fix,
       executor: transformMOC,
+    },
+    {
+      name: "Update MOC suitably",
+      kind: "editor",
+      enabled: settings.editor?.moc?.suitably,
+      executor: updateMOCSuitably,
     },
     {
       name: "Toggle editor length",

@@ -29,6 +29,7 @@ export interface Config {
     moc?: {
       fix?: boolean;
       insert?: boolean;
+      suitably?: boolean;
     };
 
     /** リンク */
