@@ -33,6 +33,7 @@ function toSlackLink(link: Link): string {
 
 /**
  * 文字列をSlack形式に変換します
+ *  FIXME: utilsに移動したい
  */
 function replacePattern(
   text: string,
@@ -40,6 +41,17 @@ function replacePattern(
 ): string {
   return Object.entries(mapping).reduce(
     (acc, [before, after]) => acc.replaceAll(new RegExp(before, "g"), after),
+    text,
+  );
+}
+
+// FIXME: utilsに移動したい
+function replaceTexts(
+  text: string,
+  mapping: { [beforeRegExp: string]: string },
+) {
+  return Object.entries(mapping).reduce(
+    (acc, [before, after]) => acc.replaceAll(before, after),
     text,
   );
 }
@@ -65,6 +77,7 @@ export async function copyAsSlack(settings: PluginSettings) {
   text = text
     .split("\n")
     .map((x) => replacePattern(x, replaceMapping))
+    .map((x) => replaceTexts(x, { "**": "*", __: "_", "~~": "~" }))
     .join("\n");
 
   copyToClipboard(text);
