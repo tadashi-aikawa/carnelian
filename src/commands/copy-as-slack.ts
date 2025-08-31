@@ -5,7 +5,12 @@ import { getActiveFileCache } from "src/lib/helpers/metadata";
 import { getPropertiesByPath } from "src/lib/helpers/properties";
 import { copyToClipboard, notify } from "src/lib/helpers/ui";
 import { sorter } from "src/lib/utils/collections";
-import { getWikiLinks, replaceAt } from "src/lib/utils/strings";
+import {
+  getWikiLinks,
+  replaceAt,
+  replaceWithRegExpMapping,
+  replaceWithStringMapping,
+} from "src/lib/utils/strings";
 import type { PluginSettings } from "src/settings";
 
 type Link = ReturnType<typeof getWikiLinks>[number];
@@ -32,31 +37,6 @@ function toSlackLink(link: Link): string {
 }
 
 /**
- * 文字列をSlack形式に変換します
- *  FIXME: utilsに移動したい
- */
-function replacePattern(
-  text: string,
-  mapping: { [beforeRegExp: string]: string },
-): string {
-  return Object.entries(mapping).reduce(
-    (acc, [before, after]) => acc.replaceAll(new RegExp(before, "g"), after),
-    text,
-  );
-}
-
-// FIXME: utilsに移動したい
-function replaceTexts(
-  text: string,
-  mapping: { [beforeRegExp: string]: string },
-) {
-  return Object.entries(mapping).reduce(
-    (acc, [before, after]) => acc.replaceAll(before, after),
-    text,
-  );
-}
-
-/**
  * Slackに貼り付ける形式でクリップボードにコピーします
  */
 export async function copyAsSlack(settings: PluginSettings) {
@@ -76,8 +56,8 @@ export async function copyAsSlack(settings: PluginSettings) {
   }
   text = text
     .split("\n")
-    .map((x) => replacePattern(x, replaceMapping))
-    .map((x) => replaceTexts(x, { "**": "*", __: "_", "~~": "~" }))
+    .map((x) => replaceWithRegExpMapping(x, replaceMapping))
+    .map((x) => replaceWithStringMapping(x, { "**": "*", __: "_", "~~": "~" }))
     .join("\n");
 
   copyToClipboard(text);

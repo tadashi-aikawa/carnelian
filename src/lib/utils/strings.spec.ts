@@ -11,10 +11,13 @@ import {
   getSinglePatternCaptureMatchingLocations,
   getSinglePatternMatchingLocations,
   getWikiLinks,
+  isUrl,
   match,
   microFuzzy,
   pad,
   replaceAt,
+  replaceWithRegExpMapping,
+  replaceWithStringMapping,
 } from "./strings";
 
 test.each([
@@ -170,6 +173,36 @@ test.each([
     );
   },
 );
+
+test.each<
+  [
+    Parameters<typeof replaceWithRegExpMapping>[0],
+    Parameters<typeof replaceWithRegExpMapping>[1],
+    ReturnType<typeof replaceWithRegExpMapping>,
+  ]
+>([
+  ["abc-123-def-456", { "\\d+": "#" }, "abc-#-def-#"],
+  ["abc-123-def", { "a|b": "X", def: "ZZ" }, "XXc-123-ZZ"],
+  ["abc abc", { abc: "ABC", ABC: "Z" }, "Z Z"],
+  ["a+b+c", { "\\+": "PLUS" }, "aPLUSbPLUSc"],
+])("replaceWithRegExpMapping(%s, mapping)", (text, mapping, expected) => {
+  expect(replaceWithRegExpMapping(text, mapping)).toBe(expected);
+});
+
+test.each<
+  [
+    Parameters<typeof replaceWithStringMapping>[0],
+    Parameters<typeof replaceWithStringMapping>[1],
+    ReturnType<typeof replaceWithStringMapping>,
+  ]
+>([
+  ["foo bar", { foo: "baz" }, "baz bar"],
+  ["a + b ++ c", { "++": "PLUS", " ": "_" }, "a_+_b_PLUS_c"],
+  ["abb", { ab: "X", Xb: "Y" }, "Y"],
+  ["hello", { x: "y" }, "hello"],
+])("replaceWithStringMapping(%s, mapping)", (text, mapping, expected) => {
+  expect(replaceWithStringMapping(text, mapping)).toBe(expected);
+});
 
 test.each([["0123456789", { start: 3, end: 6 }, "---", "012---789"]])(
   `replaceAt("%s")`,
@@ -422,6 +455,18 @@ test.each([
     expect(getWikiLinks(text)).toStrictEqual(expected);
   },
 );
+
+test.each<[Parameters<typeof isUrl>[0], ReturnType<typeof isUrl>]>([
+  ["http://example.com", true],
+  ["https://example.com/path?x=1", true],
+  ["ftp://example.com", false],
+  ["mailto:user@example.com", false],
+  ["www.example.com", false],
+  ["example", false],
+  ["[[internal|link]]", false],
+])("isUrl(%s)", (text, expected) => {
+  expect(isUrl(text)).toBe(expected);
+});
 
 test.each([
   ["Notes/Obsidian", "Notes/Obsidian"],

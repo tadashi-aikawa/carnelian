@@ -95,6 +95,32 @@ export function getSinglePatternCaptureMatchingLocations(
 }
 
 /**
+ * mappingに従って複数の正規表現置換パターンで文字列を置換します
+ */
+export function replaceWithRegExpMapping(
+  text: string,
+  mapping: { [beforeRegExp: string]: string },
+): string {
+  return Object.entries(mapping).reduce(
+    (acc, [before, after]) => acc.replaceAll(new RegExp(before, "g"), after),
+    text,
+  );
+}
+
+/**
+ * mappingに従って複数の置換パターンで文字列を置換します
+ */
+export function replaceWithStringMapping(
+  text: string,
+  mapping: { [beforeString: string]: string },
+) {
+  return Object.entries(mapping).reduce(
+    (acc, [before, after]) => acc.replaceAll(before, after),
+    text,
+  );
+}
+
+/**
  * baseのテキストからrangeの範囲をtextの文字列で置き換えます
  */
 export function replaceAt(base: string, range: Range, text: string): string {
