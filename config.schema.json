@@ -76,9 +76,6 @@
             "Toggle Live preview": {
               "description": "『Toggle Live Preview/Source mode』との違いは全エディタが対象になること",
               "type": "boolean"
-            },
-            "Toggle editor length": {
-              "type": "boolean"
             }
           },
           "type": "object"

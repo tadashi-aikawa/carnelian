@@ -7,7 +7,6 @@
 export interface Config {
   all?: {
     // Appearance
-    "Toggle editor length"?: boolean;
     /** 『Toggle Live Preview/Source mode』との違いは全エディタが対象になること */
     "Toggle Live preview"?: boolean;
 
