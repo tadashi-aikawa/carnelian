@@ -1,3 +1,4 @@
+import type { AIVendor } from "src/definitions/config";
 import { type NoteType, findNoteType } from "src/definitions/mkms";
 import { fetchOpenAIChatCompletion } from "src/lib/helpers/clients/openai";
 import { getActiveFile, getActiveFileTitle } from "src/lib/helpers/entries";
@@ -9,13 +10,16 @@ import {
   notifyValidationError,
 } from "src/lib/helpers/ui";
 import { ExhaustiveError } from "src/lib/utils/errors";
-import type { PluginSettings } from "src/settings";
 
 /**
  * OpenAI APIで本文を要約し、descriptionプロパティに挿入します
  */
-export async function summarizeDescription(settings: PluginSettings) {
-  const vendor = settings.ai?.property?.summarize?.vendor;
+export async function summarizeDescription(options: {
+  property?: string;
+  vendor?: AIVendor;
+}) {
+  const { property = "description", vendor } = options;
+
   if (!vendor) {
     return notifyValidationError(
       "ai.property.summarize.vendorが設定されていません",
@@ -66,10 +70,7 @@ ${content}`,
     `価格: ${Math.round(summary.costYen * 100) / 100}円 / 文字数: ${summary.text.length}`,
     3000,
   );
-  addActiveFileProperty(
-    settings.ai?.property?.summarize?.property ?? "description",
-    summary.text,
-  );
+  addActiveFileProperty(property, summary.text);
 }
 
 function createSystemMessage(noteType: NoteType): string | null {

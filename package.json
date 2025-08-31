@@ -38,6 +38,6 @@
     "version": "node version-bump.mjs && git add manifest.json versions.json",
     "prepare": "husky",
     "pre:push": "tsc -noEmit -skipLibCheck && bun lint && bun run test",
-    "schema": "ts-json-schema-generator --path src/definitions/config.ts --tsconfig tsconfig.schema.json > config.schema.json"
+    "schema": "ts-json-schema-generator --path src/definitions/config.ts --type Config --tsconfig tsconfig.schema.json > config.schema.json"
   }
 }

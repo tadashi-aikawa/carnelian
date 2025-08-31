@@ -10,7 +10,6 @@ import {
 } from "src/lib/helpers/ui";
 import { sorter } from "src/lib/utils/collections";
 import { getWikiLinks, replaceAt } from "src/lib/utils/strings";
-import type { PluginSettings } from "src/settings";
 
 type Link = ReturnType<typeof getWikiLinks>[number];
 
@@ -39,8 +38,10 @@ function getReplacedText(link: Link, confluenceDomain: string): string {
 /**
  * Confluenceに貼り付ける形式でクリップボードにコピーします
  */
-export async function copyAsConfluence(settings: PluginSettings) {
-  if (!settings.confluence?.domain) {
+export async function copyAsConfluence(options: { domain?: string }) {
+  const { domain } = options;
+
+  if (!domain) {
     return notifyValidationError("Confluenceのドメインが設定されていません");
   }
 
@@ -58,7 +59,7 @@ export async function copyAsConfluence(settings: PluginSettings) {
     text = replaceAt(
       text,
       link.range,
-      getReplacedText(link, `https://${settings.confluence.domain}/wiki`),
+      getReplacedText(link, `https://${domain}/wiki`),
     );
   }
 

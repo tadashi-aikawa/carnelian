@@ -1,3 +1,4 @@
+import type { OpenAIVendor } from "src/definitions/config";
 import { findNoteType } from "src/definitions/mkms";
 import { fetchOpenAIChatCompletion } from "src/lib/helpers/clients/openai";
 import { getActiveFile, getActiveFileTitle } from "src/lib/helpers/entries";
@@ -10,7 +11,6 @@ import {
   notifyRuntimeError,
   notifyValidationError,
 } from "src/lib/helpers/ui";
-import type { PluginSettings } from "src/settings";
 
 /**
  * パーマネントリンクプロパティを追加します
@@ -18,12 +18,11 @@ import type { PluginSettings } from "src/settings";
  * - Article noteの場合はタイトルから作成
  * - それ以外はADRとして
  */
-export async function addPermalinkProperty(settings: PluginSettings) {
-  const vendor = settings.ai?.property?.permalink?.vendor;
-  if (vendor?.type !== "openai") {
-    return notifyValidationError(
-      "ai.property.permalink.vendorがopenaiに設定されていません",
-    );
+export async function addPermalinkProperty(options: { vendor?: OpenAIVendor }) {
+  const { vendor } = options;
+
+  if (!vendor) {
+    return notifyValidationError("vendor情報が設定されていません");
   }
 
   const file = getActiveFile();

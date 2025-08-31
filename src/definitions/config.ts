@@ -1,198 +1,119 @@
 /**
  * data.jsonの設定ファイルを定義するインターフェース
  * JSON Schemaを生成するためにも使用される
+ *
+ * INFO: ここではrequiredになっていても、設定ミスでnullishな値は入る可能性があるので、処理するときは例外処理が必要
  */
 export interface Config {
-  /**
-   * エディタ本文の機能
-   */
-  editor?: {
-    /** 装飾 */
-    decoration?: {
-      strip?: boolean;
-    };
+  all?: {
+    // Appearance
+    "Toggle editor length"?: boolean;
+    /** 『Toggle Live Preview/Source mode』との違いは全エディタが対象になること */
+    "Toggle Live preview"?: boolean;
 
-    /** 切り替え */
-    toggle?: {
-      /** エディタの長さ(横幅) */
-      length?: boolean;
-      /** Live Previewの切り替え */
-      livePreview?: boolean;
-    };
+    // Notes(MKMS)
+    "Create an Article"?: boolean;
 
-    /** テーブル */
-    table?: {
-      format?: boolean;
-    };
+    // Notes(not MKMS)
+    "Create MIN ADR"?: boolean;
+    "Create VIM ADR"?: boolean;
+    "Create PRO ADR"?: boolean;
+    "Create OBS ADR"?: boolean;
 
-    /** MOC */
-    moc?: {
-      fix?: boolean;
-      insert?: boolean;
-      suitably?: boolean;
-    };
+    // Others
+    "Clean old daily notes"?: boolean;
 
-    /** リンク */
-    link?: {
-      fix?: boolean;
-      /** クリップボードのURLから貼り付け */
-      paste?: boolean;
-    };
-
-    /** プロパティ */
-    property?: {
-      /** カーソル行の内容からよしなに追加 */
-      suitably?: boolean;
-      /** created/updatedの更新 */
-      changeLog?: boolean;
-
-      /** urlプロパティ */
-      url?: {
-        copy?: boolean;
-        open?: boolean;
-      };
-    };
-
-    /** カード */
-    card?: {
-      /** v1カードをv2に変換 */
-      fix?: boolean;
-      /** 外部サイト */
-      site?: {
-        /** クリップボードのURLから貼り付け */
-        paste?: boolean;
-      };
-      /** Vault内のノート */
-      note?: {
-        /** Vault内のノートから挿入 */
-        insert?: boolean;
-      };
-    };
-
-    /**
-     * 画像関連
-     */
-    image?: {
-      /** Webpに変換 */
-      webp?: {
-        paste?: boolean;
-      };
-      /** AVIFに変換 */
-      avif?: {
-        paste?: boolean;
-      };
-    };
-
-    /** Weekly Report に対する機能 */
-    weeklyNote?: {
-      /** 新しく作成したノートの挿入 */
-      newNotes?: boolean;
-      /** BlueSkyで投稿したポストの挿入 */
-      blueskyPosts?: boolean;
-    };
+    // External
+    "Open active folder in terminal"?: boolean;
+    "Open vault in terminal"?: boolean;
   };
 
-  /**
-   * 外部連携
-   */
-  external?: {
-    /** ターミナルで開く */
-    terminal?: boolean;
+  file?: {
+    "Copy active file full path"?: boolean;
+    "Copy active image file to clipboard"?: boolean;
+    "Show File info"?: boolean;
   };
 
-  /**
-   * リンターに関する機能
-   */
+  /** Linterを有効にするかどうか */
   linter?: boolean;
 
-  /**
-   * ファイル作成/削除に関する機能
-   */
-  file?: {
-    /** 作成 */
-    create?: {
-      article?: boolean;
-      activity?: boolean;
-      brain?: boolean;
-      hub?: boolean;
-      mtg?: boolean;
-      obsidianCookbook?: boolean;
-      prime?: boolean;
-      report?: boolean;
-      tdq?: boolean;
-      troubleShooting?: boolean;
+  editor?: {
+    // Notes(MKMS)
+    "Create Prime note"?: boolean;
+    "Create Activity note"?: boolean;
+    "Create Hub note"?: boolean;
+    "Create Report note"?: boolean;
+    "Create Brain note"?: boolean;
+    "Create Trouble Shooting note"?: boolean;
 
-      /** ADR関連 */
-      adr?: {
-        min?: boolean;
-        vim?: boolean;
-        pro?: boolean;
-        obs?: boolean;
-      };
+    // Notes(Not MKMS)
+    "Create Obsidian逆引きレシピ"?: boolean;
+    "Create TDQ"?: boolean;
+    "Create MTG note"?: boolean;
+
+    // Images
+    "Paste clipboard as WebP"?: boolean;
+    "Paste clipboard as AVIF"?: {
+      /** AVIFの品質 (default: 35) */
+      quality?: number;
     };
 
-    /** 削除 */
-    delete?: {
-      oldDailyNotes?: boolean;
+    // Copy
+    "Copy as Confluence"?: {
+      /**
+       * Confluenceのドメイン
+       * 例: `example.atlassian.net`
+       */
+      domain: `${string}.atlassian.net`;
+    };
+    "Copy as Slack"?: {
+      /** Slackのメッセージを置換するための正規表現マッピング */
+      replaceRegExpMapping?: { [before: string]: string };
+    };
+    "Copy Minerva URL"?: boolean;
+    "Copy url property"?: boolean;
+
+    "Summarize description"?: {
+      /** 要約を保存するプロパティ名 (default: description) */
+      property?: string;
+      /** 利用するAIベンダー情報 */
+      vendor: AIVendor;
     };
 
-    /** ファイルの情報をコピー */
-    copy?: {
-      /** 現在ファイルのパスをクリップボードにコピー */
-      fullPath?: boolean;
-      /** 現在画像ファイルをクリップボードにコピー */
-      image?: boolean;
-      /** 現在ファイルのMinerva URLをクリップボードにコピー */
-      minervaUrl?: boolean;
-    };
+    // Linter
+    "Fix link"?: boolean;
+    "Move to next inspection"?: boolean;
+    "Move to previous inspection"?: boolean;
 
-    /** ファイル情報の表示 */
-    show?: {
-      info?: boolean;
-    };
-  };
+    // Weekly Report
+    "Insert new notes to the weekly note"?: boolean;
+    "Insert Bluesky posts to weekly note"?: boolean;
 
-  /**
-   * AIに関係する機能
-   */
-  ai?: {
-    /** プロパティに関する機能 */
-    property?: {
-      /** 要約 */
-      summarize?: {
-        /** 要約を保存するプロパティ名 (default: description) */
-        property?: string;
-        /** 利用するAIベンダー情報 */
-        vendor: AIVendor;
-      };
-      /** パーマリンク */
-      permalink?: {
-        /** 利用するAIベンダー */
-        vendor: AIVendor;
-      };
-    };
-  };
+    // Link/Card
+    "Paste site card"?: boolean;
+    "Insert note card"?: boolean;
+    "Transform to v2 OGP card"?: boolean;
+    "Paste URL to site link"?: boolean;
 
-  /**
-   * Confluenceに関係する機能
-   */
-  confluence?: {
-    /**
-     * Confluenceのドメイン
-     * 例: `example.atlassian.net`
-     */
-    domain?: `${string}.atlassian.net`;
-  };
+    // MOC
+    "Insert MOC"?: boolean;
+    "Transform MOC"?: boolean;
+    "Update MOC suitably"?: boolean;
 
-  /**
-   * Slackに関係する機能
-   */
-  slack?: {
-    /** Slackのメッセージ形式に変換してクリップボードにコピーする */
-    copy: {
-      /** Slackのメッセージを置換するためのマッピング */
-      replaceMapping?: { [before: string]: string };
+    // Property
+    "Add property suitably"?: boolean;
+    "Add permalink property"?: {
+      /** 利用するAIベンダー情報 */
+      vendor: AIVendor & { type: "openai" };
     };
+    "Update change log"?: boolean;
+
+    // Format
+    "Format table"?: boolean;
+    "Strip links and decorations"?: boolean;
+
+    // External
+    "Open property URL"?: boolean;
   };
 
   /**
@@ -203,20 +124,22 @@ export interface Config {
   commandHistoryPath: string;
 }
 
-type AIVendor =
-  | {
-      type: "openai";
-      /** OpenAI APIキー */
-      apiKey: string;
-    }
-  | {
-      type: "azure";
-      /** Azure OpenAIのAPIキー */
-      apiKey: string;
-      /** Azure OpenAIのエンドポイント */
-      apiEndpoint: string;
-      /** Azure OpenAIのAPIバージョン */
-      apiVersion: string;
-      /** Azure OpenAIのモデル名 */
-      apiModel: string;
-    };
+export type OpenAIVendor = {
+  type: "openai";
+  /** OpenAI APIキー */
+  apiKey: string;
+};
+
+type AzureVendor = {
+  type: "azure";
+  /** Azure OpenAIのAPIキー */
+  apiKey: string;
+  /** Azure OpenAIのエンドポイント */
+  apiEndpoint: string;
+  /** Azure OpenAIのAPIバージョン */
+  apiVersion: string;
+  /** Azure OpenAIのモデル名 */
+  apiModel: string;
+};
+
+export type AIVendor = OpenAIVendor | AzureVendor;

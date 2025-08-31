@@ -11,7 +11,6 @@ import {
   replaceWithRegExpMapping,
   replaceWithStringMapping,
 } from "src/lib/utils/strings";
-import type { PluginSettings } from "src/settings";
 
 type Link = ReturnType<typeof getWikiLinks>[number];
 
@@ -39,8 +38,11 @@ function toSlackLink(link: Link): string {
 /**
  * Slackに貼り付ける形式でクリップボードにコピーします
  */
-export async function copyAsSlack(settings: PluginSettings) {
-  const replaceMapping = settings.slack?.copy.replaceMapping ?? {};
+export async function copyAsSlack(options: {
+  replaceRegExpMapping?: { [before: string]: string };
+}) {
+  const { replaceRegExpMapping = {} } = options;
+
   let target = getSelectionText();
   if (!target) {
     const startOffset =
@@ -56,7 +58,7 @@ export async function copyAsSlack(settings: PluginSettings) {
   }
   text = text
     .split("\n")
-    .map((x) => replaceWithRegExpMapping(x, replaceMapping))
+    .map((x) => replaceWithRegExpMapping(x, replaceRegExpMapping))
     .map((x) => replaceWithStringMapping(x, { "**": "*", __: "_", "~~": "~" }))
     .join("\n");
 

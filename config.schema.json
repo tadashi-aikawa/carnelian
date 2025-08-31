@@ -2,156 +2,83 @@
   "$ref": "#/definitions/Config",
   "$schema": "http://json-schema.org/draft-07/schema#",
   "definitions": {
+    "AIVendor": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/OpenAIVendor"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "apiEndpoint": {
+              "description": "Azure OpenAIのエンドポイント",
+              "type": "string"
+            },
+            "apiKey": {
+              "description": "Azure OpenAIのAPIキー",
+              "type": "string"
+            },
+            "apiModel": {
+              "description": "Azure OpenAIのモデル名",
+              "type": "string"
+            },
+            "apiVersion": {
+              "description": "Azure OpenAIのAPIバージョン",
+              "type": "string"
+            },
+            "type": {
+              "const": "azure",
+              "type": "string"
+            }
+          },
+          "required": [
+            "type",
+            "apiKey",
+            "apiEndpoint",
+            "apiVersion",
+            "apiModel"
+          ],
+          "type": "object"
+        }
+      ]
+    },
     "Config": {
       "additionalProperties": false,
-      "description": "data.jsonの設定ファイルを定義するインターフェース JSON Schemaを生成するためにも使用される",
+      "description": "data.jsonの設定ファイルを定義するインターフェース JSON Schemaを生成するためにも使用される\n\nINFO: ここではrequiredになっていても、設定ミスでnullishな値は入る可能性があるので、処理するときは例外処理が必要",
       "properties": {
-        "ai": {
+        "all": {
           "additionalProperties": false,
-          "description": "AIに関係する機能",
           "properties": {
-            "property": {
-              "additionalProperties": false,
-              "description": "プロパティに関する機能",
-              "properties": {
-                "permalink": {
-                  "additionalProperties": false,
-                  "description": "パーマリンク",
-                  "properties": {
-                    "vendor": {
-                      "anyOf": [
-                        {
-                          "additionalProperties": false,
-                          "properties": {
-                            "apiKey": {
-                              "description": "OpenAI APIキー",
-                              "type": "string"
-                            },
-                            "type": {
-                              "const": "openai",
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "type",
-                            "apiKey"
-                          ],
-                          "type": "object"
-                        },
-                        {
-                          "additionalProperties": false,
-                          "properties": {
-                            "apiEndpoint": {
-                              "description": "Azure OpenAIのエンドポイント",
-                              "type": "string"
-                            },
-                            "apiKey": {
-                              "description": "Azure OpenAIのAPIキー",
-                              "type": "string"
-                            },
-                            "apiModel": {
-                              "description": "Azure OpenAIのモデル名",
-                              "type": "string"
-                            },
-                            "apiVersion": {
-                              "description": "Azure OpenAIのAPIバージョン",
-                              "type": "string"
-                            },
-                            "type": {
-                              "const": "azure",
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "type",
-                            "apiKey",
-                            "apiEndpoint",
-                            "apiVersion",
-                            "apiModel"
-                          ],
-                          "type": "object"
-                        }
-                      ],
-                      "description": "利用するAIベンダー"
-                    }
-                  },
-                  "required": [
-                    "vendor"
-                  ],
-                  "type": "object"
-                },
-                "summarize": {
-                  "additionalProperties": false,
-                  "description": "要約",
-                  "properties": {
-                    "property": {
-                      "description": "要約を保存するプロパティ名 (default: description)",
-                      "type": "string"
-                    },
-                    "vendor": {
-                      "anyOf": [
-                        {
-                          "additionalProperties": false,
-                          "properties": {
-                            "apiKey": {
-                              "description": "OpenAI APIキー",
-                              "type": "string"
-                            },
-                            "type": {
-                              "const": "openai",
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "type",
-                            "apiKey"
-                          ],
-                          "type": "object"
-                        },
-                        {
-                          "additionalProperties": false,
-                          "properties": {
-                            "apiEndpoint": {
-                              "description": "Azure OpenAIのエンドポイント",
-                              "type": "string"
-                            },
-                            "apiKey": {
-                              "description": "Azure OpenAIのAPIキー",
-                              "type": "string"
-                            },
-                            "apiModel": {
-                              "description": "Azure OpenAIのモデル名",
-                              "type": "string"
-                            },
-                            "apiVersion": {
-                              "description": "Azure OpenAIのAPIバージョン",
-                              "type": "string"
-                            },
-                            "type": {
-                              "const": "azure",
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "type",
-                            "apiKey",
-                            "apiEndpoint",
-                            "apiVersion",
-                            "apiModel"
-                          ],
-                          "type": "object"
-                        }
-                      ],
-                      "description": "利用するAIベンダー情報"
-                    }
-                  },
-                  "required": [
-                    "vendor"
-                  ],
-                  "type": "object"
-                }
-              },
-              "type": "object"
+            "Clean old daily notes": {
+              "type": "boolean"
+            },
+            "Create MIN ADR": {
+              "type": "boolean"
+            },
+            "Create OBS ADR": {
+              "type": "boolean"
+            },
+            "Create PRO ADR": {
+              "type": "boolean"
+            },
+            "Create VIM ADR": {
+              "type": "boolean"
+            },
+            "Create an Article": {
+              "type": "boolean"
+            },
+            "Open active folder in terminal": {
+              "type": "boolean"
+            },
+            "Open vault in terminal": {
+              "type": "boolean"
+            },
+            "Toggle Live preview": {
+              "description": "『Toggle Live Preview/Source mode』との違いは全エディタが対象になること",
+              "type": "boolean"
+            },
+            "Toggle editor length": {
+              "type": "boolean"
             }
           },
           "type": "object"
@@ -160,198 +87,212 @@
           "description": "コマンド履歴の保存先パス デフォルトはプラグインフォルダ内の `command-histories.json` FIXME: 多分プラグインに分離するのでこのままにする",
           "type": "string"
         },
-        "confluence": {
-          "additionalProperties": false,
-          "description": "Confluenceに関係する機能",
-          "properties": {
-            "domain": {
-              "description": "Confluenceのドメイン 例: `example.atlassian.net`",
-              "type": "string"
-            }
-          },
-          "type": "object"
-        },
         "editor": {
           "additionalProperties": false,
-          "description": "エディタ本文の機能",
           "properties": {
-            "card": {
+            "Add permalink property": {
               "additionalProperties": false,
-              "description": "カード",
               "properties": {
-                "fix": {
-                  "description": "v1カードをv2に変換",
-                  "type": "boolean"
-                },
-                "note": {
-                  "additionalProperties": false,
-                  "description": "Vault内のノート",
-                  "properties": {
-                    "insert": {
-                      "description": "Vault内のノートから挿入",
-                      "type": "boolean"
-                    }
-                  },
-                  "type": "object"
-                },
-                "site": {
-                  "additionalProperties": false,
-                  "description": "外部サイト",
-                  "properties": {
-                    "paste": {
-                      "description": "クリップボードのURLから貼り付け",
-                      "type": "boolean"
-                    }
-                  },
-                  "type": "object"
-                }
-              },
-              "type": "object"
-            },
-            "decoration": {
-              "additionalProperties": false,
-              "description": "装飾",
-              "properties": {
-                "strip": {
-                  "type": "boolean"
-                }
-              },
-              "type": "object"
-            },
-            "image": {
-              "additionalProperties": false,
-              "description": "画像関連",
-              "properties": {
-                "avif": {
-                  "additionalProperties": false,
-                  "description": "AVIFに変換",
-                  "properties": {
-                    "paste": {
-                      "type": "boolean"
-                    }
-                  },
-                  "type": "object"
-                },
-                "webp": {
-                  "additionalProperties": false,
-                  "description": "Webpに変換",
-                  "properties": {
-                    "paste": {
-                      "type": "boolean"
-                    }
-                  },
-                  "type": "object"
-                }
-              },
-              "type": "object"
-            },
-            "link": {
-              "additionalProperties": false,
-              "description": "リンク",
-              "properties": {
-                "fix": {
-                  "type": "boolean"
-                },
-                "paste": {
-                  "description": "クリップボードのURLから貼り付け",
-                  "type": "boolean"
-                }
-              },
-              "type": "object"
-            },
-            "moc": {
-              "additionalProperties": false,
-              "description": "MOC",
-              "properties": {
-                "fix": {
-                  "type": "boolean"
-                },
-                "insert": {
-                  "type": "boolean"
-                },
-                "suitably": {
-                  "type": "boolean"
-                }
-              },
-              "type": "object"
-            },
-            "property": {
-              "additionalProperties": false,
-              "description": "プロパティ",
-              "properties": {
-                "changeLog": {
-                  "description": "created/updatedの更新",
-                  "type": "boolean"
-                },
-                "suitably": {
-                  "description": "カーソル行の内容からよしなに追加",
-                  "type": "boolean"
-                },
-                "url": {
-                  "additionalProperties": false,
-                  "description": "urlプロパティ",
-                  "properties": {
-                    "copy": {
-                      "type": "boolean"
+                "vendor": {
+                  "anyOf": [
+                    {
+                      "additionalProperties": false,
+                      "properties": {
+                        "apiKey": {
+                          "description": "OpenAI APIキー",
+                          "type": "string"
+                        },
+                        "type": {
+                          "const": "openai",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "apiKey",
+                        "type"
+                      ],
+                      "type": "object"
                     },
-                    "open": {
-                      "type": "boolean"
+                    {
+                      "additionalProperties": false,
+                      "properties": {
+                        "apiEndpoint": {
+                          "description": "Azure OpenAIのエンドポイント",
+                          "type": "string"
+                        },
+                        "apiKey": {
+                          "description": "Azure OpenAIのAPIキー",
+                          "type": "string"
+                        },
+                        "apiModel": {
+                          "description": "Azure OpenAIのモデル名",
+                          "type": "string"
+                        },
+                        "apiVersion": {
+                          "description": "Azure OpenAIのAPIバージョン",
+                          "type": "string"
+                        },
+                        "type": {
+                          "enum": [],
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "apiEndpoint",
+                        "apiKey",
+                        "apiModel",
+                        "apiVersion",
+                        "type"
+                      ],
+                      "type": "object"
                     }
+                  ],
+                  "description": "利用するAIベンダー情報"
+                }
+              },
+              "required": [
+                "vendor"
+              ],
+              "type": "object"
+            },
+            "Add property suitably": {
+              "type": "boolean"
+            },
+            "Copy Minerva URL": {
+              "type": "boolean"
+            },
+            "Copy as Confluence": {
+              "additionalProperties": false,
+              "properties": {
+                "domain": {
+                  "description": "Confluenceのドメイン 例: `example.atlassian.net`",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "domain"
+              ],
+              "type": "object"
+            },
+            "Copy as Slack": {
+              "additionalProperties": false,
+              "properties": {
+                "replaceRegExpMapping": {
+                  "additionalProperties": {
+                    "type": "string"
                   },
+                  "description": "Slackのメッセージを置換するための正規表現マッピング",
                   "type": "object"
                 }
               },
               "type": "object"
             },
-            "table": {
+            "Copy url property": {
+              "type": "boolean"
+            },
+            "Create Activity note": {
+              "type": "boolean"
+            },
+            "Create Brain note": {
+              "type": "boolean"
+            },
+            "Create Hub note": {
+              "type": "boolean"
+            },
+            "Create MTG note": {
+              "type": "boolean"
+            },
+            "Create Obsidian逆引きレシピ": {
+              "type": "boolean"
+            },
+            "Create Prime note": {
+              "type": "boolean"
+            },
+            "Create Report note": {
+              "type": "boolean"
+            },
+            "Create TDQ": {
+              "type": "boolean"
+            },
+            "Create Trouble Shooting note": {
+              "type": "boolean"
+            },
+            "Fix link": {
+              "type": "boolean"
+            },
+            "Format table": {
+              "type": "boolean"
+            },
+            "Insert Bluesky posts to weekly note": {
+              "type": "boolean"
+            },
+            "Insert MOC": {
+              "type": "boolean"
+            },
+            "Insert new notes to the weekly note": {
+              "type": "boolean"
+            },
+            "Insert note card": {
+              "type": "boolean"
+            },
+            "Move to next inspection": {
+              "type": "boolean"
+            },
+            "Move to previous inspection": {
+              "type": "boolean"
+            },
+            "Open property URL": {
+              "type": "boolean"
+            },
+            "Paste URL to site link": {
+              "type": "boolean"
+            },
+            "Paste clipboard as AVIF": {
               "additionalProperties": false,
-              "description": "テーブル",
               "properties": {
-                "format": {
-                  "type": "boolean"
+                "quality": {
+                  "description": "AVIFの品質 (default: 35)",
+                  "type": "number"
                 }
               },
               "type": "object"
             },
-            "toggle": {
+            "Paste clipboard as WebP": {
+              "type": "boolean"
+            },
+            "Paste site card": {
+              "type": "boolean"
+            },
+            "Strip links and decorations": {
+              "type": "boolean"
+            },
+            "Summarize description": {
               "additionalProperties": false,
-              "description": "切り替え",
               "properties": {
-                "length": {
-                  "description": "エディタの長さ(横幅)",
-                  "type": "boolean"
+                "property": {
+                  "description": "要約を保存するプロパティ名 (default: description)",
+                  "type": "string"
                 },
-                "livePreview": {
-                  "description": "Live Previewの切り替え",
-                  "type": "boolean"
+                "vendor": {
+                  "$ref": "#/definitions/AIVendor",
+                  "description": "利用するAIベンダー情報"
                 }
               },
+              "required": [
+                "vendor"
+              ],
               "type": "object"
             },
-            "weeklyNote": {
-              "additionalProperties": false,
-              "description": "Weekly Report に対する機能",
-              "properties": {
-                "blueskyPosts": {
-                  "description": "BlueSkyで投稿したポストの挿入",
-                  "type": "boolean"
-                },
-                "newNotes": {
-                  "description": "新しく作成したノートの挿入",
-                  "type": "boolean"
-                }
-              },
-              "type": "object"
-            }
-          },
-          "type": "object"
-        },
-        "external": {
-          "additionalProperties": false,
-          "description": "外部連携",
-          "properties": {
-            "terminal": {
-              "description": "ターミナルで開く",
+            "Transform MOC": {
+              "type": "boolean"
+            },
+            "Transform to v2 OGP card": {
+              "type": "boolean"
+            },
+            "Update MOC suitably": {
+              "type": "boolean"
+            },
+            "Update change log": {
               "type": "boolean"
             }
           },
@@ -359,137 +300,44 @@
         },
         "file": {
           "additionalProperties": false,
-          "description": "ファイル作成/削除に関する機能",
           "properties": {
-            "copy": {
-              "additionalProperties": false,
-              "description": "ファイルの情報をコピー",
-              "properties": {
-                "fullPath": {
-                  "description": "現在ファイルのパスをクリップボードにコピー",
-                  "type": "boolean"
-                },
-                "image": {
-                  "description": "現在画像ファイルをクリップボードにコピー",
-                  "type": "boolean"
-                },
-                "minervaUrl": {
-                  "description": "現在ファイルのMinerva URLをクリップボードにコピー",
-                  "type": "boolean"
-                }
-              },
-              "type": "object"
+            "Copy active file full path": {
+              "type": "boolean"
             },
-            "create": {
-              "additionalProperties": false,
-              "description": "作成",
-              "properties": {
-                "activity": {
-                  "type": "boolean"
-                },
-                "adr": {
-                  "additionalProperties": false,
-                  "description": "ADR関連",
-                  "properties": {
-                    "min": {
-                      "type": "boolean"
-                    },
-                    "obs": {
-                      "type": "boolean"
-                    },
-                    "pro": {
-                      "type": "boolean"
-                    },
-                    "vim": {
-                      "type": "boolean"
-                    }
-                  },
-                  "type": "object"
-                },
-                "article": {
-                  "type": "boolean"
-                },
-                "brain": {
-                  "type": "boolean"
-                },
-                "hub": {
-                  "type": "boolean"
-                },
-                "mtg": {
-                  "type": "boolean"
-                },
-                "obsidianCookbook": {
-                  "type": "boolean"
-                },
-                "prime": {
-                  "type": "boolean"
-                },
-                "report": {
-                  "type": "boolean"
-                },
-                "tdq": {
-                  "type": "boolean"
-                },
-                "troubleShooting": {
-                  "type": "boolean"
-                }
-              },
-              "type": "object"
+            "Copy active image file to clipboard": {
+              "type": "boolean"
             },
-            "delete": {
-              "additionalProperties": false,
-              "description": "削除",
-              "properties": {
-                "oldDailyNotes": {
-                  "type": "boolean"
-                }
-              },
-              "type": "object"
-            },
-            "show": {
-              "additionalProperties": false,
-              "description": "ファイル情報の表示",
-              "properties": {
-                "info": {
-                  "type": "boolean"
-                }
-              },
-              "type": "object"
+            "Show File info": {
+              "type": "boolean"
             }
           },
           "type": "object"
         },
         "linter": {
-          "description": "リンターに関する機能",
+          "description": "Linterを有効にするかどうか",
           "type": "boolean"
-        },
-        "slack": {
-          "additionalProperties": false,
-          "description": "Slackに関係する機能",
-          "properties": {
-            "copy": {
-              "additionalProperties": false,
-              "description": "Slackのメッセージ形式に変換してクリップボードにコピーする",
-              "properties": {
-                "replaceMapping": {
-                  "additionalProperties": {
-                    "type": "string"
-                  },
-                  "description": "Slackのメッセージを置換するためのマッピング",
-                  "type": "object"
-                }
-              },
-              "type": "object"
-            }
-          },
-          "required": [
-            "copy"
-          ],
-          "type": "object"
         }
       },
       "required": [
         "commandHistoryPath"
+      ],
+      "type": "object"
+    },
+    "OpenAIVendor": {
+      "additionalProperties": false,
+      "properties": {
+        "apiKey": {
+          "description": "OpenAI APIキー",
+          "type": "string"
+        },
+        "type": {
+          "const": "openai",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "apiKey"
       ],
       "type": "object"
     }
