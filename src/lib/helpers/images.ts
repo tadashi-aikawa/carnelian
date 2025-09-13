@@ -20,9 +20,7 @@ export async function pasteClipboardAs(options: Options) {
   // WARNING: attachmentsのディレクトリは `Default location for new attachments` を考慮する必要があるが、面倒なので決め打ち
   const folder = getActiveFileFolder();
   if (!folder) {
-    return notifyRuntimeError(
-      "アクティブなファイルのフォルダが取得できませんでした",
-    );
+    throw new Error("アクティブなファイルのフォルダが取得できませんでした");
   }
 
   const fileName = `${now("YYYY-MM-DD-HH-mm-ss")}.${options.format}`;

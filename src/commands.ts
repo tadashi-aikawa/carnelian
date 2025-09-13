@@ -36,7 +36,8 @@ import { moveToPreviousInspection } from "./commands/move-to-previous-inspection
 import { openActiveFolderInTerminal } from "./commands/open-active-folder-in-terminal";
 import { openPropertyUrl } from "./commands/open-property-url";
 import { openVaultInTerminal } from "./commands/open-vault-in-terminal";
-import { pasteClipboardAs } from "./commands/paste-clipboard-to-webp";
+import { pasteClipboardAsAVIF } from "./commands/paste-clipboard-as-avif";
+import { pasteClipboardAsWebp } from "./commands/paste-clipboard-as-webp";
 import { pasteSiteCard } from "./commands/paste-site-card";
 import { pasteURLToSiteLink } from "./commands/paste-url-to-site-link";
 import { showAnotherCommandPalette } from "./commands/show-another-command-palette";
@@ -67,16 +68,15 @@ function createCarnelianCommands(settings: PluginSettings) {
       name: "Paste clipboard as WebP",
       kind: "editor",
       enabled: se?.["Paste clipboard as WebP"],
-      executor: () => pasteClipboardAs({ format: "webp" }),
+      executor: pasteClipboardAsWebp,
     },
     {
       name: "Paste clipboard as AVIF",
       kind: "editor",
       enabled: se?.["Paste clipboard as AVIF"],
       executor: () =>
-        pasteClipboardAs({
-          format: "avif",
-          quality: se?.["Paste clipboard as AVIF"]?.quality ?? 35,
+        pasteClipboardAsAVIF({
+          quality: se?.["Paste clipboard as AVIF"]?.quality,
         }),
     },
     {
