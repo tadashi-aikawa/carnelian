@@ -1,13 +1,9 @@
-import { spawn } from "child_process";
+import { execSync } from "child_process";
 import path from "path";
 import { now } from "src/lib/helpers/datetimes";
 import { insertToCursor } from "src/lib/helpers/editors/basic";
 import { getActiveFileFolder } from "src/lib/helpers/entries";
-import {
-  getClipboardImage,
-  notifyRuntimeError,
-  notifyValidationError,
-} from "src/lib/helpers/ui";
+import { notifyRuntimeError } from "src/lib/helpers/ui";
 import { toFullPath } from "src/lib/obsutils/mapper";
 
 type Options = {
@@ -21,13 +17,6 @@ type Options = {
  * ImageMagickを利用して変換します
  */
 export async function pasteClipboardAs(options: Options) {
-  let buffer: Buffer;
-  try {
-    buffer = await getClipboardImage();
-  } catch (e: any) {
-    return notifyValidationError(e);
-  }
-
   // WARNING: attachmentsのディレクトリは `Default location for new attachments` を考慮する必要があるが、面倒なので決め打ち
   const folder = getActiveFileFolder();
   if (!folder) {
@@ -40,7 +29,7 @@ export async function pasteClipboardAs(options: Options) {
   const dstPath = toFullPath(path.join(folder.path, "attachments", fileName));
 
   try {
-    await execMagick(buffer, dstPath, options);
+    execMagickFromClipboard(dstPath, options);
   } catch (error: any) {
     notifyRuntimeError(error.message);
   }
@@ -48,34 +37,21 @@ export async function pasteClipboardAs(options: Options) {
   insertToCursor(`![[${fileName}]]`);
 }
 
-const execMagick = (buffer: Buffer, dstPath: string, options: Options) => {
-  return new Promise((resolve, reject) => {
-    // WARNING: homebrewでインストールした場合のみ動作する
-    const magickProcess = spawn("/opt/homebrew/bin/magick", [
-      "-",
-      ...(options?.resize ? ["-resize", options.resize] : []),
-      ...(options?.quality ? ["-quality", `${options.quality}`] : []),
-      dstPath,
-    ]);
-    let stderr = "";
+const execMagickFromClipboard = (dstPath: string, options: Options) => {
+  const _magick = "/opt/homebrew/bin/magick";
+  const _pngpaste = "/opt/homebrew/bin/pngpaste";
 
-    magickProcess.stderr.on("data", (data) => {
-      stderr += data.toString();
-    });
+  const optionStr = [
+    options.resize ? `-resize ${options.resize}` : "",
+    options.quality ? `-quality ${options.quality}` : "",
+  ].join(" ");
 
-    magickProcess.on("close", (code) => {
-      if (code === 0) {
-        resolve(dstPath);
-      } else {
-        reject(new Error(`ImageMagick エラー (code ${code}): ${stderr}`));
-      }
-    });
-
-    magickProcess.on("error", (error) => {
-      reject(new Error(`ImageMagick 実行エラー: ${error.message}`));
-    });
-
-    magickProcess.stdin.write(buffer);
-    magickProcess.stdin.end();
-  });
+  try {
+    execSync(`${_pngpaste} - | ${_magick} - ${optionStr} ${dstPath}`);
+    return dstPath;
+  } catch (e: any) {
+    const stderr =
+      e?.stderr instanceof Buffer ? e.stderr.toString() : e.message;
+    throw new Error(`ImageMagick 実行エラー: ${stderr}`);
+  }
 };

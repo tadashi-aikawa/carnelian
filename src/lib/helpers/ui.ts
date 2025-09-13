@@ -102,28 +102,6 @@ export async function getClipboardText(option?: {
 }
 
 /**
- * クリップボードから画像を取得します
- */
-export async function getClipboardImage(): Promise<Buffer> {
-  const clipboardItem = (await navigator.clipboard.read()).at(0);
-  if (!clipboardItem) {
-    throw new Error("クリップボードの中身が取得できませんでした");
-  }
-
-  const imageType = clipboardItem.types.find((t) => t.startsWith("image/"));
-  if (!imageType) {
-    throw new Error("クリップボードの中身が画像形式ではありません");
-  }
-
-  const imageBlob = await clipboardItem.getType(imageType);
-  if (!imageBlob) {
-    throw new Error("クリップボードの画像データが取得できませんでした");
-  }
-
-  return Buffer.from(await imageBlob.arrayBuffer());
-}
-
-/**
  * URLを開きます
  *
  * ```ts
