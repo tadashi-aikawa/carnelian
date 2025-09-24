@@ -12,10 +12,10 @@
 > [!NOTE]
 > 基本的にtadashi-aikawaが利用する機能を実装しています。ただ、全体の仕組みと`lib`配下のメソッドは流用できるので、どなたでも利用できます。
 
-## 開発の前提環境
+## 前提環境
 
-- Ubuntu/macOS
-- [Bun] v1.2.21
+- macOS
+- [Bun] v1.2.22
 - [Hot Reload]プラグイン
 
 ## 開発環境構築
@@ -66,6 +66,19 @@ bun schema
 ```bash
 bun lint
 ```
+
+## 秘密情報の管理
+
+Keychainを使って管理しています。以下のコマンドで必要な秘密情報を登録してください。
+
+```
+security add-generic-password \
+  -s net.mamansoft.Obsidian.Carnelian \
+  -a <設定のキー名> \
+  -w <秘密情報>
+```
+
+`<設定のキー名>` は `data.json` に設定します。`src/definitions/config.ts` で `KeyChainAccountName` 型として割り当てられている項目に利用できます。
 
 ## 機能追加要望
 

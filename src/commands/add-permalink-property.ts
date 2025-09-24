@@ -1,5 +1,6 @@
 import type { OpenAIVendor } from "src/definitions/config";
 import { findNoteType } from "src/definitions/mkms";
+import { resolveOpenAI } from "src/envs";
 import { fetchOpenAIChatCompletion } from "src/lib/helpers/clients/openai";
 import { getActiveFile, getActiveFileTitle } from "src/lib/helpers/entries";
 import {
@@ -35,7 +36,12 @@ export async function addPermalinkProperty(options: { vendor?: OpenAIVendor }) {
     return notifyValidationError("ノートタイプが取得できませんでした");
   }
   if (noteType?.name === "Article note") {
-    const permalink = await createArticlePermalink(vendor.apiKey);
+    const { apiKey, error } = await resolveOpenAI(vendor.apiKeyEnvName);
+    if (error != null) {
+      return notifyValidationError(error);
+    }
+
+    const permalink = await createArticlePermalink(apiKey);
     if (permalink) {
       addActiveFileProperty("permalink", permalink);
     }

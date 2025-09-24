@@ -6,13 +6,15 @@
   "dependencies": {
     "@atproto/api": "^0.13.25",
     "dayjs": "^1.11.13",
-    "encoding-japanese": "^2.2.0"
+    "encoding-japanese": "^2.2.0",
+    "ts-pattern": "^5.8.0"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
     "@types/bun": "^1.2.0",
     "@types/encoding-japanese": "^2.2.1",
     "@types/jsdom": "^21.1.7",
+    "@types/node": "^24.5.2",
     "@types/web": "^0.0.188",
     "builtin-modules": "^4.0.0",
     "chokidar": "^4.0.3",

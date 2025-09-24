@@ -123,18 +123,20 @@ export interface Config {
   commandHistoryPath: string;
 }
 
+type KeyChainAccountName = string;
+
 export type OpenAIVendor = {
   type: "openai";
-  /** OpenAI APIキー */
-  apiKey: string;
+  /** OpenAI APIキーを格納するKeychainのアカウント名 */
+  apiKeyEnvName: KeyChainAccountName;
 };
 
 type AzureVendor = {
   type: "azure";
-  /** Azure OpenAIのAPIキー */
-  apiKey: string;
-  /** Azure OpenAIのエンドポイント */
-  apiEndpoint: string;
+  /** Azure OpenAIのApiKeyを格納するKeychainのアカウント名 */
+  apiKeyEnvName: KeyChainAccountName;
+  /** Azure OpenAIのエンドポイントを格納するKeychainのアカウント名 */
+  apiEndpointEnvName: KeyChainAccountName;
   /** Azure OpenAIのAPIバージョン */
   apiVersion: string;
   /** Azure OpenAIのモデル名 */

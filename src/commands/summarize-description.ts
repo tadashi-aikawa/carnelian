@@ -1,5 +1,6 @@
 import type { AIVendor } from "src/definitions/config";
 import { type NoteType, findNoteType } from "src/definitions/mkms";
+import { resolveAzure, resolveOpenAI } from "src/envs";
 import { fetchOpenAIChatCompletion } from "src/lib/helpers/clients/openai";
 import { getActiveFile, getActiveFileTitle } from "src/lib/helpers/entries";
 import { addActiveFileProperty } from "src/lib/helpers/properties";
@@ -10,6 +11,7 @@ import {
   notifyValidationError,
 } from "src/lib/helpers/ui";
 import { ExhaustiveError } from "src/lib/utils/errors";
+import { match } from "ts-pattern";
 
 /**
  * OpenAI APIで本文を要約し、descriptionプロパティに挿入します
@@ -24,6 +26,17 @@ export async function summarizeDescription(options: {
     return notifyValidationError(
       "ai.property.summarize.vendorが設定されていません",
     );
+  }
+
+  const vendorSecrets = await match(vendor)
+    .with({ type: "openai" }, async (v) => {
+      const a = await resolveOpenAI(v.apiKeyEnvName);
+      return { ...a, apiEndpoint: null };
+    })
+    .with({ type: "azure" }, async (v) => await resolveAzure(v))
+    .exhaustive();
+  if (vendorSecrets.error != null) {
+    return notifyValidationError(vendorSecrets.error);
   }
 
   const content = await getActiveFileSectionContents({
@@ -51,12 +64,13 @@ export async function summarizeDescription(options: {
 { title: ${getActiveFileTitle()}}
 
 ${content}`,
-    apiKey: vendor.apiKey,
+    apiKey: vendorSecrets.apiKey,
+    // WARN: 型安全ではないが。。。
     azure:
       vendor.type === "azure"
         ? {
             model: vendor.apiModel,
-            apiEndpoint: vendor.apiEndpoint,
+            apiEndpoint: vendorSecrets.apiEndpoint!,
             apiVersion: vendor.apiVersion,
           }
         : undefined,
