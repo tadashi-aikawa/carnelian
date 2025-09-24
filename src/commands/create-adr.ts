@@ -112,7 +112,7 @@ status:
 
   const adrListPath = `💿ADR/${prefix}.md`;
   await openFile(adrListPath);
-  appendLine(`| [[${adrTitle}]]       | #🤔Proposed |`);
+  appendLine(`| [[${adrTitle}]]       |  |`);
 
   const f = await createFile(adrFilePath, NOTE_BODY);
   await openFile(f.path);
