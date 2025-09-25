@@ -1,4 +1,4 @@
-import { execFile } from "child_process";
+import { exec, execFile } from "child_process";
 import { Modal, type TFile } from "obsidian";
 import type { UApp } from "../types";
 import { FileSearchDialog } from "./components/FileSearchDialog";
@@ -125,6 +125,24 @@ export function openTerminal(fullFolderPath: string): Promise<void> {
       }
       resolve();
     });
+  });
+}
+
+/**
+ * yaziで対象パスを開きます
+ * WARNING: yazi, Ghostty, zshが必要
+ */
+export function openYazi(path: string): Promise<void> {
+  return new Promise((resolve, reject) => {
+    exec(
+      `open -na Ghostty --args -e zsh -lic 'yazi "${path}"'`,
+      (error: any) => {
+        if (error) {
+          return reject(error);
+        }
+        resolve();
+      },
+    );
   });
 }
 

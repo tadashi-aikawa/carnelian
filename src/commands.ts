@@ -1,5 +1,4 @@
 import type { Command } from "obsidian";
-
 import { addPermalinkProperty } from "./commands/add-permalink-property";
 import { addPropertySuitably } from "./commands/add-property-suitably";
 import { cleanOldDailyNotes } from "./commands/clean-old-daily-notes";
@@ -33,6 +32,7 @@ import { insertMOC } from "./commands/insert-moc";
 import { insertNoteCard } from "./commands/insert-note-card";
 import { moveToNextInspection } from "./commands/move-to-next-inspection";
 import { moveToPreviousInspection } from "./commands/move-to-previous-inspection";
+import { openActiveFileInYazi } from "./commands/open-active-file-in-yazi";
 import { openActiveFolderInTerminal } from "./commands/open-active-folder-in-terminal";
 import { openPropertyUrl } from "./commands/open-property-url";
 import { openVaultInTerminal } from "./commands/open-vault-in-terminal";
@@ -326,6 +326,12 @@ function createCarnelianCommands(settings: PluginSettings) {
       kind: "all",
       enabled: sa?.["Open vault in terminal"],
       executor: openVaultInTerminal,
+    },
+    {
+      name: "Open active file in yazi",
+      kind: "all",
+      enabled: sa?.["Open active file in yazi"],
+      executor: openActiveFileInYazi,
     },
     {
       name: "Copy active file full path",

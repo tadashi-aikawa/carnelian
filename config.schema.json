@@ -67,6 +67,9 @@
             "Create an Article": {
               "type": "boolean"
             },
+            "Open active file in yazi": {
+              "type": "boolean"
+            },
             "Open active folder in terminal": {
               "type": "boolean"
             },
