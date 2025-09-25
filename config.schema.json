@@ -73,6 +73,9 @@
             "Open active folder in terminal": {
               "type": "boolean"
             },
+            "Open vault in lazygit": {
+              "type": "boolean"
+            },
             "Open vault in terminal": {
               "type": "boolean"
             },

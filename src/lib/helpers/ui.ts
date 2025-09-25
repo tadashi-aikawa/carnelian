@@ -119,12 +119,9 @@ export function openUrl(url: string): void {
  */
 export function openTerminal(fullFolderPath: string): Promise<void> {
   return new Promise((resolve, reject) => {
-    execFile("open", ["-a", "Ghostty", fullFolderPath], (error: any) => {
-      if (error) {
-        return reject(error);
-      }
-      resolve();
-    });
+    execFile("open", ["-a", "Ghostty", fullFolderPath], (error: any) =>
+      error ? reject(error) : resolve(),
+    );
   });
 }
 
@@ -136,12 +133,20 @@ export function openYazi(path: string): Promise<void> {
   return new Promise((resolve, reject) => {
     exec(
       `open -na Ghostty --args -e zsh -lic 'yazi "${path}"'`,
-      (error: any) => {
-        if (error) {
-          return reject(error);
-        }
-        resolve();
-      },
+      (error: any) => (error ? reject(error) : resolve()),
+    );
+  });
+}
+
+/**
+ * Lazygitで対象パスを開きます
+ * WARNING: Lazygit, Ghostty, zshが必要
+ */
+export function openLazygit(path: string): Promise<void> {
+  return new Promise((resolve, reject) => {
+    exec(
+      `open -na Ghostty --args -e zsh -lic 'cd "${path}" && lazygit'`,
+      (error: any) => (error ? reject(error) : resolve()),
     );
   });
 }

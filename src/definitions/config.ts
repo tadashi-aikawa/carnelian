@@ -25,6 +25,7 @@ export interface Config {
     // External
     "Open active folder in terminal"?: boolean;
     "Open vault in terminal"?: boolean;
+    "Open vault in lazygit"?: boolean;
     "Open active file in yazi"?: boolean;
   };
 

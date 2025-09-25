@@ -35,6 +35,7 @@ import { moveToPreviousInspection } from "./commands/move-to-previous-inspection
 import { openActiveFileInYazi } from "./commands/open-active-file-in-yazi";
 import { openActiveFolderInTerminal } from "./commands/open-active-folder-in-terminal";
 import { openPropertyUrl } from "./commands/open-property-url";
+import { openVaultInLazygit } from "./commands/open-vault-in-lazygit";
 import { openVaultInTerminal } from "./commands/open-vault-in-terminal";
 import { pasteClipboardAsAVIF } from "./commands/paste-clipboard-as-avif";
 import { pasteClipboardAsWebp } from "./commands/paste-clipboard-as-webp";
@@ -326,6 +327,12 @@ function createCarnelianCommands(settings: PluginSettings) {
       kind: "all",
       enabled: sa?.["Open vault in terminal"],
       executor: openVaultInTerminal,
+    },
+    {
+      name: "Open vault in Lazygit",
+      kind: "all",
+      enabled: sa?.["Open vault in lazygit"],
+      executor: openVaultInLazygit,
     },
     {
       name: "Open active file in yazi",
