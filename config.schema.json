@@ -164,6 +164,9 @@
             "Copy Minerva URL": {
               "type": "boolean"
             },
+            "Copy Strip links and decorations": {
+              "type": "boolean"
+            },
             "Copy as Confluence": {
               "additionalProperties": false,
               "properties": {

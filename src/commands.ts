@@ -7,6 +7,7 @@ import { copyActiveImageFileToClipboard } from "./commands/copy-active-image-fil
 import { copyAsConfluence } from "./commands/copy-as-confluence";
 import { copyAsSlack } from "./commands/copy-as-slack";
 import { copyMinervaURL } from "./commands/copy-minerva-url";
+import { copyStripLinksAndDecorations } from "./commands/copy-strip-links-and-decorations";
 import { copyUrlProperty } from "./commands/copy-url-property";
 import { createActivityNote } from "./commands/create-activity-note";
 import {
@@ -43,7 +44,7 @@ import { pasteSiteCard } from "./commands/paste-site-card";
 import { pasteURLToSiteLink } from "./commands/paste-url-to-site-link";
 import { showAnotherCommandPalette } from "./commands/show-another-command-palette";
 import { showFileInfo } from "./commands/show-file-info";
-import { stripLinksAndDecorations } from "./commands/stripe-links-and-decorations";
+import { stripLinksAndDecorations } from "./commands/strip-links-and-decorations";
 import { summarizeDescription } from "./commands/summarize-description";
 import { toggleLivePreview } from "./commands/toggle-live-preview";
 import { transformMOC } from "./commands/transform-moc";
@@ -296,7 +297,12 @@ function createCarnelianCommands(settings: PluginSettings) {
       enabled: se?.["Strip links and decorations"],
       executor: stripLinksAndDecorations,
     },
-
+    {
+      name: "Copy Strip links and decorations",
+      kind: "editor",
+      enabled: se?.["Copy Strip links and decorations"],
+      executor: copyStripLinksAndDecorations,
+    },
     {
       name: "Copy Minerva URL",
       kind: "editor",

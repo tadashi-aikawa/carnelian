@@ -1,4 +1,5 @@
 import { stripLinksAndDecorationsFromSelection } from "src/lib/helpers/editors/advanced";
+import { replaceSelection } from "src/lib/helpers/editors/basic";
 
 /**
  * 選択範囲のリンクや装飾を無効化します
@@ -6,5 +7,5 @@ import { stripLinksAndDecorationsFromSelection } from "src/lib/helpers/editors/a
  * WARN: このメソッドはObsidian MobileのiPhone/iPadでは動作しない可能性があります
  */
 export function stripLinksAndDecorations() {
-  stripLinksAndDecorationsFromSelection();
+  replaceSelection(stripLinksAndDecorationsFromSelection());
 }

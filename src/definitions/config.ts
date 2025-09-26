@@ -73,6 +73,7 @@ export interface Config {
     };
     "Copy Minerva URL"?: boolean;
     "Copy url property"?: boolean;
+    "Copy Strip links and decorations"?: boolean;
 
     "Summarize description"?: {
       /** 要約を保存するプロパティ名 (default: description) */

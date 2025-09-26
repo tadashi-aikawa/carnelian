@@ -123,16 +123,13 @@ export function stripLinksFromSelection(): void {
  * WARN: 1文字のリンクには対応していません
  * WARN: このメソッドはObsidian MobileのiPhone/iPadでは動作しない可能性があります
  *
- * ◆実行後のbefore/after例
- * ```diff
- * - [hoge] [huga](xxx) **[[fuga]]**
- * + hoge huga fuga
+ * ```ts
+ * stripLinksAndDecorationFromSelection("[hoge] [huga](xxx) **[[fuga]]**")
+ * // hoge huga fuga
  * ```
  */
-export function stripLinksAndDecorationsFromSelection(): void {
-  orThrow(getSelectionText(), (sl) => {
-    replaceSelection(stripLinks(stripDecoration(sl)));
-  });
+export function stripLinksAndDecorationsFromSelection(): string {
+  return orThrow(getSelectionText(), (sl) => stripLinks(stripDecoration(sl)));
 }
 
 /**
