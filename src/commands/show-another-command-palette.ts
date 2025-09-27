@@ -1,11 +1,14 @@
-import { type Command, SuggestModal } from "obsidian";
+import type { Command } from "obsidian";
 import { getAvailableCommands } from "src/lib/helpers/commands";
+import { AbstractSuggestionModal } from "src/lib/helpers/components/AbstractSuggestionModal";
 import { now } from "src/lib/helpers/datetimes";
 import { loadJson, saveJson } from "src/lib/helpers/io";
+import { copyToClipboard, notify } from "src/lib/helpers/ui";
 import type { UApp } from "src/lib/types";
 import { maxReducer } from "src/lib/utils/collections";
 import { omitBy, sorter } from "src/lib/utils/collections";
 import { isPresent } from "src/lib/utils/guard";
+import { isMod } from "src/lib/utils/keys";
 import { microFuzzy } from "src/lib/utils/strings";
 
 // XXX: 少し気持ち悪い
@@ -45,13 +48,29 @@ export async function showAnotherCommandPalette(args: {
   }).open();
 }
 
-class CommandQuickSwitcher extends SuggestModal<HistoricalCommand> {
+class CommandQuickSwitcher extends AbstractSuggestionModal<HistoricalCommand> {
   constructor(
     app: UApp,
     private commands: HistoricalCommand[],
     private handleChooseItem: (item: HistoricalCommand) => any,
   ) {
     super(app);
+
+    this.registerKeyMap(["Mod"], "enter", async (evt) => {
+      const item = this.getSelectedItem();
+      if (!item) {
+        return;
+      }
+      if (isMod(evt)) {
+        await copyToClipboard(item.id);
+        notify(`Copied command ID to clipboard: ${item.id}`);
+        this.close();
+      }
+    });
+  }
+
+  toKey(item: HistoricalCommand): string {
+    return item.id;
   }
 
   getSuggestions(query: string): HistoricalCommand[] {
