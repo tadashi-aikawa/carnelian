@@ -45,7 +45,7 @@ const execMagickFromClipboard = (dstPath: string, options: Options) => {
   ].join(" ");
 
   try {
-    execSync(`${_pngpaste} - | ${_magick} - ${optionStr} ${dstPath}`);
+    execSync(`${_pngpaste} - | ${_magick} - ${optionStr} "${dstPath}"`);
     return dstPath;
   } catch (e: any) {
     const stderr =
