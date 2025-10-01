@@ -2,8 +2,9 @@ import dayjs, { type Dayjs } from "dayjs";
 import type { Loc, TAbstractFile, TFile, TFolder } from "obsidian";
 import { toEditorPosition, toFullPath } from "../obsutils/mapper";
 import type { UApp } from "../types";
-import { map } from "../utils/guard";
+import { map, orThrow } from "../utils/guard";
 import { getActiveEditor } from "./editors/basic";
+import { getActiveLeaf } from "./leaves";
 
 declare let app: UApp;
 
@@ -212,6 +213,26 @@ export async function renameFileWithoutLinkModified(
   dst: string,
 ): Promise<void> {
   await app.vault.adapter.rename(path, dst);
+}
+
+/**
+ * 現在のファイルを削除します
+ * タブグループが空になった場合はタブグループも閉じます
+ */
+export async function deleteActiveFile(): Promise<void> {
+  await orThrow(
+    getActiveFilePath(),
+    async (path) => {
+      await app.vault.adapter.remove(path);
+    },
+    { message: "ActiveFile is null" },
+  );
+
+  // リーフの親はタブグループ想定なので、子が1つだけなら閉じる
+  const parent = getActiveLeaf()?.parent ?? null;
+  if (parent?.children?.length === 1) {
+    parent.detach();
+  }
 }
 
 /**

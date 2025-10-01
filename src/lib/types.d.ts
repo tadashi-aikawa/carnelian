@@ -7,11 +7,13 @@ import type {
   FileView,
   LinkCache,
   MarkdownView,
+  PaneType,
   Pos,
   ReferenceCache,
   TFile,
   Vault,
-  Workspace,
+  Workspace
+  WorkspaceLeaf,,
 } from "obsidian";
 import type { Properties as UProperties } from "./utils/types";
 
@@ -76,9 +78,16 @@ export type UVault = Vault & {
   setConfig<K extends keyof Config>(key: K, value: Config[K]): void;
 };
 
+export type UWorkspaceLeaf = WorkspaceLeaf & {
+  parent?: UWorkspaceLeaf | null;
+  children?: UWorkspaceLeaf[];
+  detach?: () => void;
+};
+
 export type UWorkspace = Workspace & {
   getActiveFileView(): UFileView;
 };
+
 
 export type UApp = App & {
   workspace: UWorkspace;

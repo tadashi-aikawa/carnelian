@@ -33,6 +33,7 @@ export interface Config {
     "Copy active file full path"?: boolean;
     "Copy active image file to clipboard"?: boolean;
     "Show File info"?: boolean;
+    "Delete active file"?: boolean;
   };
 
   /** Linterを有効にするかどうか */

@@ -1,18 +1,17 @@
-import type { WorkspaceLeaf } from "obsidian";
-import type { UApp } from "../types";
+import type { UApp, UWorkspaceLeaf } from "../types";
 
 declare let app: UApp;
 
 /**
  * アクティブなMarkdownリーフを返却します
  */
-export function getActiveLeaf(): WorkspaceLeaf | null {
+export function getActiveLeaf(): UWorkspaceLeaf | null {
   return app.workspace.getLeaf();
 }
 
 /**
  * すべてのMarkdownリーフを返却します
  */
-export function getAllMarkdownLeaves(): WorkspaceLeaf[] {
+export function getAllMarkdownLeaves(): UWorkspaceLeaf[] {
   return app.workspace.getLeavesOfType("markdown");
 }

@@ -25,6 +25,7 @@ import { createPrimeNote } from "./commands/create-prime-note";
 import { createReportNote } from "./commands/create-report-note";
 import { createTDQ } from "./commands/create-tdq";
 import { createTroubleshootingNote } from "./commands/create-troubleshooting-note";
+import { deleteActiveFile } from "./commands/delete-active-file";
 import { fixLink } from "./commands/fix-link";
 import { formatTable } from "./commands/format-table";
 import { insertBlueskyPostsToWeeklyNote } from "./commands/insert-bluesky-posts-to-weekly-note";
@@ -60,6 +61,12 @@ function createCarnelianCommands(settings: PluginSettings) {
   const sf = settings.file;
 
   return [
+    {
+      name: "Delete active file",
+      kind: "file",
+      enabled: sf?.["Delete active file"],
+      executor: deleteActiveFile,
+    },
     {
       name: "Toggle Live preview",
       kind: "all",

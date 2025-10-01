@@ -313,6 +313,9 @@
             "Copy active image file to clipboard": {
               "type": "boolean"
             },
+            "Delete active file": {
+              "type": "boolean"
+            },
             "Show File info": {
               "type": "boolean"
             }
