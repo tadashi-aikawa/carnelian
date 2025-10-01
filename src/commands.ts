@@ -25,6 +25,7 @@ import { createPrimeNote } from "./commands/create-prime-note";
 import { createReportNote } from "./commands/create-report-note";
 import { createTDQ } from "./commands/create-tdq";
 import { createTroubleshootingNote } from "./commands/create-troubleshooting-note";
+import { cycleBulletCheckbox } from "./commands/cycle-bullet-checkbox";
 import { deleteActiveFile } from "./commands/delete-active-file";
 import { fixLink } from "./commands/fix-link";
 import { formatTable } from "./commands/format-table";
@@ -61,6 +62,12 @@ function createCarnelianCommands(settings: PluginSettings) {
   const sf = settings.file;
 
   return [
+    {
+      name: "Cycle bullet/checkbox",
+      kind: "editor",
+      enabled: se?.["Cycle bullet/checkbox"],
+      executor: cycleBulletCheckbox,
+    },
     {
       name: "Delete active file",
       kind: "file",

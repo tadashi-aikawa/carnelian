@@ -223,6 +223,9 @@
             "Create Trouble Shooting note": {
               "type": "boolean"
             },
+            "Cycle bullet/checkbox": {
+              "type": "boolean"
+            },
             "Fix link": {
               "type": "boolean"
             },

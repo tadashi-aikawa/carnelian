@@ -7,17 +7,20 @@ import type {
   FileView,
   LinkCache,
   MarkdownView,
-  PaneType,
   Pos,
   ReferenceCache,
   TFile,
   Vault,
-  Workspace
-  WorkspaceLeaf,,
+  Workspace,
+  WorkspaceLeaf,
 } from "obsidian";
 import type { Properties as UProperties } from "./utils/types";
 
-type CommandId = "editor:toggle-source" | "editor:save-file";
+type CommandId =
+  | "editor:toggle-source"
+  | "editor:save-file"
+  | "editor:cycle-list-checklist" // Cycle bullet/checkbox
+  | "obsidian-silhouette:cycle-bullet-checkbox";
 
 export interface CodeBlock {
   language: string | null;
@@ -87,7 +90,6 @@ export type UWorkspaceLeaf = WorkspaceLeaf & {
 export type UWorkspace = Workspace & {
   getActiveFileView(): UFileView;
 };
-
 
 export type UApp = App & {
   workspace: UWorkspace;

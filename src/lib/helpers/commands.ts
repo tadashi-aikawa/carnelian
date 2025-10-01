@@ -16,8 +16,8 @@ export function getAvailableCommands(): Command[] {
 /**
  * コマンドIDからコマンドを取得します
  */
-export function findCommandById(commandId: CommandId): Command {
-  return app.commands.commands[commandId];
+export function findCommandById(commandId: CommandId): Command | null {
+  return app.commands.commands[commandId] ?? null;
 }
 
 /**

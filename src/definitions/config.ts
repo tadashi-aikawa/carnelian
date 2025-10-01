@@ -98,6 +98,9 @@ export interface Config {
     "Transform to v2 OGP card"?: boolean;
     "Paste URL to site link"?: boolean;
 
+    // Wrapper
+    "Cycle bullet/checkbox"?: boolean;
+
     // MOC
     "Insert MOC"?: boolean;
     "Transform MOC"?: boolean;
