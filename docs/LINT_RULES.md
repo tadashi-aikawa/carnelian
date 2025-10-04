@@ -21,6 +21,7 @@ lint機能のルールを記載する。
 | Article note         | ERROR  |      |
 | My note              | WARN   |      |
 | Series note          | ERROR  |      |
+| Rule note            | ERROR  |      |
 | ADR note             | ERROR  |      |
 | Daily note           |        |      |
 | Weekly Report        | ERROR  |      |
@@ -42,6 +43,7 @@ lint機能のルールを記載する。
 | Article note         | ERROR  |         |
 | My note              | ERROR  |         |
 | Series note          | ERROR  |         |
+| Rule note            | ERROR  |         |
 | ADR note             | ERROR  |         |
 | Daily note           |        |         |
 | Weekly Report        | ERROR  | autofix |
@@ -63,6 +65,7 @@ lint機能のルールを記載する。
 | Article note         |        |      |
 | My note              |        |      |
 | Series note          |        |      |
+| Rule note            |        |      |
 | ADR note             |        |      |
 | Daily note           |        |      |
 | Weekly Report        |        |      |
@@ -84,6 +87,7 @@ lint機能のルールを記載する。
 | Article note         |        |         |
 | My note              |        |         |
 | Series note          |        |         |
+| Rule note            |        |         |
 | ADR note             | ERROR  |         |
 | Daily note           |        |         |
 | Weekly Report        |        |         |
@@ -106,6 +110,7 @@ lint機能のルールを記載する。
 | Article note         | ERROR  | autofix |
 | My note              | ERROR  | autofix |
 | Series note          | ERROR  | autofix |
+| Rule note            | ERROR  | autofix |
 | ADR note             | ERROR  | autofix |
 | Daily note           | ERROR  | autofix |
 | Weekly Report        | ERROR  | autofix |
@@ -142,6 +147,7 @@ lint機能のルールを記載する。
 | Article note         |        |                  |
 | My note              |        |                  |
 | Series note          |        |                  |
+| Rule note            |        |                  |
 | ADR note             |        |                  |
 | Daily note           |        | 気にしなくていい |
 | Weekly Report        |        |                  |
@@ -167,6 +173,7 @@ Vault内のノートを参照するカードがあるのに、その内部リン
 | Article note         | ERROR  |                  |
 | My note              | ERROR  |                  |
 | Series note          | ERROR  |                  |
+| Rule note            | ERROR  |                  |
 | ADR note             | ERROR  |                  |
 | Daily note           |        | 気にしなくていい |
 | Weekly Report        | ERROR  |                  |
@@ -190,6 +197,7 @@ Link cardが非推奨のv1形式になっている。
 | Article note         | WARN   |                  |
 | My note              | WARN   |                  |
 | Series note          | WARN   |                  |
+| Rule note            | WARN   |                  |
 | ADR note             | WARN   |                  |
 | Daily note           |        | 気にしなくていい |
 | Weekly Report        | WARN   |                  |
@@ -211,6 +219,7 @@ MOCのフォーマットがMinervaの最新仕様に従っていない。
 | Article note         |        | 使ってないはず    |
 | My note              |        | 使ってないはず    |
 | Series note          |        | 使ってないはず    |
+| Rule note            |        | 使ってないはず    |
 | ADR note             |        | 使ってないはず    |
 | Daily note           |        | 使ってないはず    |
 | Weekly Report        |        | 使ってないはず    |
@@ -232,6 +241,7 @@ MOCのフォーマットがMinervaの最新仕様に従っていない。
 | Article note         | ERROR  | autofix        |
 | My note              | ERROR  | autofix        |
 | Series note          | ERROR  | autofix        |
+| Rule note            | ERROR  | autofix        |
 | ADR note             | ERROR  | autofix        |
 | Daily note           |        | 存在しないはず |
 | Weekly Report        | ERROR  | autofix        |
@@ -255,6 +265,7 @@ MOCのフォーマットがMinervaの最新仕様に従っていない。
 | Article note         | ERROR  |      |
 | My note              | WARN   |      |
 | Series note          | ERROR  |      |
+| Rule note            | ERROR  |      |
 | ADR note             | ERROR  |      |
 | Daily note           |        |      |
 | Weekly Report        | WARN   |      |
@@ -278,6 +289,7 @@ MOCのフォーマットがMinervaの最新仕様に従っていない。
 | Article note         | ERROR  |                            |
 | My note              | ERROR  |                            |
 | Series note          | ERROR  |                            |
+| Rule note            | ERROR  |                            |
 | ADR note             | ERROR  |                            |
 | Daily note           |        |                            |
 | Weekly Report        | ERROR  | 箇条書き(New Notes)は除外  |

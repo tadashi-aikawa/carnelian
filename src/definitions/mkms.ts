@@ -80,6 +80,12 @@ const noteTypeByName = createNotes({
     coverImagePath: null,
     pathPattern: /^.+\/📗.+\.md$/,
   },
+  "Rule note": {
+    name: "Rule note",
+    prefixEmoji: "📓",
+    coverImagePath: `${docDir}/attachments/rule.webp`,
+    pathPattern: new RegExp(`^${escapedDocDir}/📓.+\\.md$`),
+  },
   "ADR note": {
     name: "ADR note",
     prefixEmoji: "💿",

@@ -96,6 +96,8 @@ function createDisallowedLinkCard(
       return [];
     case "Series note":
       return [];
+    case "Rule note":
+      return [];
     case "ADR note":
       return [];
     case "Daily note":
@@ -163,6 +165,8 @@ function createNoLinkComment(
       return createInspections("ERROR");
     case "Series note":
       return createInspections("ERROR");
+    case "Rule note":
+      return createInspections("ERROR");
     case "ADR note":
       return createInspections("ERROR");
     case "Daily note":
@@ -216,6 +220,8 @@ function createV1LinkCard(
       return createInspection("WARN");
     case "Series note":
       return createInspection("WARN");
+    case "Rule note":
+      return createInspection("WARN");
     case "ADR note":
       return createInspection("WARN");
     case "Daily note":
@@ -266,6 +272,8 @@ function createUnofficialMOCFormat(
       return [];
     case "Series note":
       return [];
+    case "Rule note":
+      return [];
     case "ADR note":
       return [];
     case "Daily note":
@@ -314,6 +322,8 @@ function createV1DatesFormat(
     case "My note":
       return createInspection("ERROR");
     case "Series note":
+      return createInspection("ERROR");
+    case "Rule note":
       return createInspection("ERROR");
     case "ADR note":
       return createInspection("ERROR");
@@ -373,6 +383,8 @@ function createUnresolvedInternalLink(
     case "My note":
       return createInspection("WARN");
     case "Series note":
+      return createInspection("ERROR");
+    case "Rule note":
       return createInspection("ERROR");
     case "ADR note":
       return createInspection("ERROR");
@@ -449,6 +461,8 @@ function createLinkEndsWithParenthesis(
     case "My note":
       return createInspection("ERROR");
     case "Series note":
+      return createInspection("ERROR");
+    case "Rule note":
       return createInspection("ERROR");
     case "ADR note":
       return createInspection("ERROR");
