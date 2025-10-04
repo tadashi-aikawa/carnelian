@@ -27,6 +27,9 @@ export interface Config {
     "Open vault in terminal"?: boolean;
     "Open vault in lazygit"?: boolean;
     "Open active file in yazi"?: boolean;
+
+    // Workspaces
+    "Move to next workspace"?: boolean;
   };
 
   file?: {

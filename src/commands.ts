@@ -34,6 +34,7 @@ import { insertNewNotesToWeeklyNote } from "./commands/insert-inputs-to-weekly-n
 import { insertMOC } from "./commands/insert-moc";
 import { insertNoteCard } from "./commands/insert-note-card";
 import { moveToNextInspection } from "./commands/move-to-next-inspection";
+import { moveToNextWorkspace } from "./commands/move-to-next-workspace";
 import { moveToPreviousInspection } from "./commands/move-to-previous-inspection";
 import { openActiveFileInYazi } from "./commands/open-active-file-in-yazi";
 import { openActiveFolderInTerminal } from "./commands/open-active-folder-in-terminal";
@@ -62,6 +63,12 @@ function createCarnelianCommands(settings: PluginSettings) {
   const sf = settings.file;
 
   return [
+    {
+      name: "Move to next workspace",
+      kind: "all",
+      enabled: sa?.["Move to next workspace"],
+      executor: moveToNextWorkspace,
+    },
     {
       name: "Cycle bullet/checkbox",
       kind: "editor",

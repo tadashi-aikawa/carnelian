@@ -67,6 +67,9 @@
             "Create an Article": {
               "type": "boolean"
             },
+            "Move to next workspace": {
+              "type": "boolean"
+            },
             "Open active file in yazi": {
               "type": "boolean"
             },

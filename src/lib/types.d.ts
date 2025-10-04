@@ -91,6 +91,8 @@ export type UWorkspace = Workspace & {
   getActiveFileView(): UFileView;
 };
 
+type WorkspaceName = string;
+
 export type UApp = App & {
   workspace: UWorkspace;
   isMobile: boolean;
@@ -101,7 +103,17 @@ export type UApp = App & {
   internalPlugins: {
     plugins: {
       [key: string]: any;
+      workspaces: {
+        enabled: boolean;
+        instance: {
+          workspaces: { [name: WorkspaceName]: any };
+          activeWorkspace: WorkspaceName;
+          saveWorkspace(name: WorkspaceName): Promise<void>;
+          loadWorkspace(name: WorkspaceName): Promise<void>;
+        };
+      };
       publish: {
+        enabled: boolean;
         instance: {
           // 独自ドメインではない
           host: `publish-${string}.obsidian.md`;
