@@ -17,6 +17,18 @@ export function getVaultRootPath(): string {
 }
 
 /**
+ * 現在のワークスペース名を取得します
+ */
+export function getActiveWorkspaceName(): string {
+  const ws = app.internalPlugins.plugins.workspaces;
+  if (!ws.enabled) {
+    throw Error("Workspacesプラグインが有効化されていません");
+  }
+
+  return ws.instance.activeWorkspace;
+}
+
+/**
  * 次のワークスペースに移動します(循環)
  * @param opts
  * - saveActiveWorkspace: 現在のワークスペースを保存するかどうか(デフォルト: false)

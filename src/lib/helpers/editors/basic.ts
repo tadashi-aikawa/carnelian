@@ -5,6 +5,7 @@ import { errorMessage } from "src/lib/utils/errors";
 import { map, orThrow } from "src/lib/utils/guard";
 import { match } from "src/lib/utils/strings";
 import { getActiveFileContent } from "../entries";
+import { getAllMarkdownLeaves } from "../leaves";
 
 declare let app: UApp;
 
@@ -13,6 +14,13 @@ declare let app: UApp;
  */
 export function getActiveEditor(): UEditor | null {
   return app.workspace.activeEditor?.editor ?? null;
+}
+
+/**
+ * ワークスペースのすべてのエディタを取得します
+ */
+export function getAllEditors(): UEditor[] {
+  return getAllMarkdownLeaves().map((leaf) => leaf.view.editor);
 }
 
 /**

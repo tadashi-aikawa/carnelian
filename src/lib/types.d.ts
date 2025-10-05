@@ -87,6 +87,10 @@ export type UWorkspaceLeaf = WorkspaceLeaf & {
   detach?: () => void;
 };
 
+export type UWorkspaceMarkdownLeaf = UWorkspaceLeaf & {
+  view: UMarkdownView;
+};
+
 export type UWorkspace = Workspace & {
   getActiveFileView(): UFileView;
 };

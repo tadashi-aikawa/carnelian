@@ -1,4 +1,4 @@
-import type { UApp, UWorkspaceLeaf } from "../types";
+import type { UApp, UWorkspaceLeaf, UWorkspaceMarkdownLeaf } from "../types";
 
 declare let app: UApp;
 
@@ -12,6 +12,6 @@ export function getActiveLeaf(): UWorkspaceLeaf | null {
 /**
  * すべてのMarkdownリーフを返却します
  */
-export function getAllMarkdownLeaves(): UWorkspaceLeaf[] {
-  return app.workspace.getLeavesOfType("markdown");
+export function getAllMarkdownLeaves(): UWorkspaceMarkdownLeaf[] {
+  return app.workspace.getLeavesOfType("markdown") as UWorkspaceMarkdownLeaf[];
 }
