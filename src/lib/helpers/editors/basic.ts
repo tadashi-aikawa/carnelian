@@ -18,8 +18,9 @@ export function getActiveEditor(): UEditor | null {
 
 /**
  * ワークスペースのすべてのエディタを取得します
+ * FIXME: 微妙。。
  */
-export function getAllEditors(): UEditor[] {
+export function getAllEditors(): (UEditor | null)[] {
   return getAllMarkdownLeaves().map((leaf) => leaf.view.editor);
 }
 

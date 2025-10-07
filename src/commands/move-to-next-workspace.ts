@@ -18,13 +18,14 @@ const workspaceEditorState: {
 
 /**
  * 次のワークスペースに移動する(循環)
+ * FIXME: 表示されていないeditor情報はアクティブになっていない
  */
 export async function moveToNextWorkspace() {
   workspaceEditorState[getActiveWorkspaceName()] = getAllEditors().map(
     (editor) => ({
-      scrollTop: editor.getScrollInfo().top,
-      scrollLeft: editor.getScrollInfo().left,
-      cursor: editor.getCursor(),
+      scrollTop: editor?.getScrollInfo().top ?? 0,
+      scrollLeft: editor?.getScrollInfo().left ?? 0,
+      cursor: editor?.getCursor() ?? { line: 0, ch: 0 },
     }),
   );
 
@@ -34,6 +35,9 @@ export async function moveToNextWorkspace() {
     const states = workspaceEditorState[getActiveWorkspaceName()];
     if (states) {
       for (const [i, editor] of getAllEditors().entries()) {
+        if (!editor) {
+          continue;
+        }
         editor.scrollTo(states[i].scrollLeft, states[i].scrollTop);
         editor.setCursor(states[i].cursor);
       }
