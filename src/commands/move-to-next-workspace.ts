@@ -1,32 +1,26 @@
-import type { EditorPosition } from "obsidian";
-import { getAllEditors } from "src/lib/helpers/editors/basic";
+import type { ViewState } from "obsidian";
+import { getAllMarkdownLeaves } from "src/lib/helpers/leaves";
 import { notifyRuntimeError } from "src/lib/helpers/ui";
 import {
   moveNextWorkspace as _moveToNextWorkspace,
   getActiveWorkspaceName,
 } from "src/lib/helpers/workspace";
 
-type EditorState = {
-  scrollTop: number;
-  scrollLeft: number;
-  cursor: EditorPosition;
-};
-
 const workspaceEditorState: {
-  [workspaceName: string]: EditorState[] | undefined;
+  [workspaceName: string]: { vState: ViewState; eState: any }[] | undefined;
 } = {};
 
 /**
  * 次のワークスペースに移動する(循環)
- * FIXME: 表示されていないeditor情報はアクティブになっていない
  */
 export async function moveToNextWorkspace() {
-  workspaceEditorState[getActiveWorkspaceName()] = getAllEditors().map(
-    (editor) => ({
-      scrollTop: editor?.getScrollInfo().top ?? 0,
-      scrollLeft: editor?.getScrollInfo().left ?? 0,
-      cursor: editor?.getCursor() ?? { line: 0, ch: 0 },
-    }),
+  workspaceEditorState[getActiveWorkspaceName()] = getAllMarkdownLeaves().map(
+    (leaf) => {
+      return {
+        vState: { ...leaf.getViewState() },
+        eState: { ...leaf.getEphemeralState() },
+      };
+    },
   );
 
   try {
@@ -34,12 +28,8 @@ export async function moveToNextWorkspace() {
 
     const states = workspaceEditorState[getActiveWorkspaceName()];
     if (states) {
-      for (const [i, editor] of getAllEditors().entries()) {
-        if (!editor) {
-          continue;
-        }
-        editor.scrollTo(states[i].scrollLeft, states[i].scrollTop);
-        editor.setCursor(states[i].cursor);
+      for (const [i, leaf] of getAllMarkdownLeaves().entries()) {
+        leaf.setViewState(states[i].vState, states[i].eState);
       }
     }
   } catch (error: any) {
