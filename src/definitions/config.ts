@@ -123,6 +123,9 @@ export interface Config {
 
     // External
     "Open property URL"?: boolean;
+
+    // 保存
+    "Save with"?: boolean;
   };
 
   /**

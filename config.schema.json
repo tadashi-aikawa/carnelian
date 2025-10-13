@@ -275,6 +275,9 @@
             "Paste site card": {
               "type": "boolean"
             },
+            "Save with": {
+              "type": "boolean"
+            },
             "Strip links and decorations": {
               "type": "boolean"
             },

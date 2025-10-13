@@ -45,6 +45,7 @@ import { pasteClipboardAsAVIF } from "./commands/paste-clipboard-as-avif";
 import { pasteClipboardAsWebp } from "./commands/paste-clipboard-as-webp";
 import { pasteSiteCard } from "./commands/paste-site-card";
 import { pasteURLToSiteLink } from "./commands/paste-url-to-site-link";
+import { saveWith } from "./commands/save-with";
 import { showAnotherCommandPalette } from "./commands/show-another-command-palette";
 import { showFileInfo } from "./commands/show-file-info";
 import { stripLinksAndDecorations } from "./commands/strip-links-and-decorations";
@@ -63,6 +64,14 @@ function createCarnelianCommands(settings: PluginSettings) {
   const sf = settings.file;
 
   return [
+    {
+      name: "Save with",
+      kind: "all",
+      enabled: se?.["Save with"],
+      executor: () => {
+        saveWith({ lint: settings.linter, format: true });
+      },
+    },
     {
       name: "Move to next workspace",
       kind: "all",
