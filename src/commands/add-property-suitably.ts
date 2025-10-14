@@ -3,7 +3,6 @@ import { addActiveFileProperty } from "src/lib/helpers/properties";
 import { getClipboardText } from "src/lib/helpers/ui";
 import { isUrl } from "src/lib/utils/strings";
 import { addDescriptionProperty } from "./add-description-property";
-import { addTagsProperty } from "./add-tags-property";
 import { addUrlProperty } from "./add-url-property";
 
 /**
@@ -17,11 +16,6 @@ export async function addPropertySuitably() {
     return;
   }
 
-  if (line.startsWith("#")) {
-    addTagsProperty();
-    return;
-  }
-
   if (line) {
     addDescriptionProperty();
     return;
@@ -32,6 +26,4 @@ export async function addPropertySuitably() {
     addActiveFileProperty("url", text);
     return;
   }
-
-  addTagsProperty();
 }
