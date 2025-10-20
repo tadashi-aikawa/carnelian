@@ -16,9 +16,15 @@ declare let app: UApp;
 
 type HistoricalCommand = Command & {
   lastUsed?: number;
+  /* 最優先で上位に表示するか */
+  topPriority?: boolean;
 };
 
-type CommandHistoryMap = { [id: string]: number };
+type CommandId = string;
+interface CommandHistoryMap {
+  lastUsedMap: { [id: CommandId]: number };
+  queryUsedMap: { [query: string]: CommandId };
+}
 
 /**
  * もう1つのコマンドパレットを表示
@@ -27,32 +33,42 @@ export async function showAnotherCommandPalette(args: {
   commandHistoryPath: string;
 }): Promise<void> {
   const unixNow = now("unixtime");
-  let commandHistoryMap =
+  const { lastUsedMap: _lastUsedMap = {}, queryUsedMap = {} } =
     (await loadJson<CommandHistoryMap>(args.commandHistoryPath)) ?? {};
+
   // 最終コマンド利用日から10日以上経っているものは履歴から除外
-  commandHistoryMap = omitBy(
-    commandHistoryMap,
+  const lastUsedMap = omitBy(
+    _lastUsedMap,
     (_, lastUpdated: number) => unixNow - lastUpdated > 10 * 24 * 60 * 60,
   );
 
   const commands: HistoricalCommand[] = getAvailableCommands().map((x) => ({
     ...x,
-    lastUsed: commandHistoryMap[x.id],
+    lastUsed: lastUsedMap[x.id],
   }));
 
-  new CommandQuickSwitcher(app, commands, async (item) => {
-    commandHistoryMap[item.id] = now("unixtime");
-    await saveJson(args.commandHistoryPath, commandHistoryMap, {
-      overwrite: true,
-    });
+  new CommandQuickSwitcher(app, commands, queryUsedMap, async (item, query) => {
+    lastUsedMap[item.id] = now("unixtime");
+    queryUsedMap[query] = item.id;
+
+    await saveJson(
+      args.commandHistoryPath,
+      { lastUsedMap, queryUsedMap },
+      {
+        overwrite: true,
+      },
+    );
   }).open();
 }
 
 class CommandQuickSwitcher extends AbstractSuggestionModal<HistoricalCommand> {
+  query = "";
+
   constructor(
     app: UApp,
     private commands: HistoricalCommand[],
-    private handleChooseItem: (item: HistoricalCommand) => any,
+    private queryUsedMap: CommandHistoryMap["queryUsedMap"],
+    private handleChooseItem: (item: HistoricalCommand, query: string) => any,
   ) {
     super(app);
 
@@ -74,9 +90,13 @@ class CommandQuickSwitcher extends AbstractSuggestionModal<HistoricalCommand> {
   }
 
   getSuggestions(query: string): HistoricalCommand[] {
+    this.query = query;
     return this.commands
       .map((command) => ({
-        command,
+        command:
+          this.queryUsedMap[query] === command.id
+            ? { ...command, topPriority: true }
+            : command,
         results: query
           .split(" ")
           .filter(isPresent)
@@ -102,6 +122,7 @@ class CommandQuickSwitcher extends AbstractSuggestionModal<HistoricalCommand> {
         ),
       )
       .toSorted(sorter(({ command }) => command.lastUsed != null, "desc"))
+      .toSorted(sorter(({ command }) => command.topPriority ?? false, "desc"))
       .map(({ command }) => command);
   }
 
@@ -110,6 +131,7 @@ class CommandQuickSwitcher extends AbstractSuggestionModal<HistoricalCommand> {
       cls: [
         "carnelian-command-palette-item",
         item.lastUsed ? "carnelian-command-palette-item-lastused" : "",
+        item.topPriority ? "carnelian-command-palette-item-top-priority" : "",
       ],
     });
 
@@ -130,6 +152,6 @@ class CommandQuickSwitcher extends AbstractSuggestionModal<HistoricalCommand> {
 
   onChooseSuggestion(item: HistoricalCommand, evt: MouseEvent | KeyboardEvent) {
     item.callback?.() ?? item.checkCallback?.(false);
-    this.handleChooseItem(item);
+    this.handleChooseItem(item, this.query);
   }
 }

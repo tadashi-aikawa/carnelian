@@ -1,11 +1,7 @@
-/*
-
-This CSS file will be included with your plugin, and
-available in the app when your plugin is enabled.
-
-If your plugin does not need CSS, delete this file.
-
-*/
+* {
+  --first-rank-color: goldenrod;
+  --second-rank-color: var(--interactive-accent);
+}
 
 .carnelian-input-dialog-input {
   width: 95%;
@@ -182,7 +178,7 @@ If your plugin does not need CSS, delete this file.
 }
 
 .carnelian-command-palette-item-lastused {
-  color: goldenrod;
+  color: var(--second-rank-color);
   font-weight: bold;
 }
 
@@ -191,8 +187,26 @@ If your plugin does not need CSS, delete this file.
   width: 18px;
   height: 18px;
   margin-right: 2px;
-  filter: invert(0.5) hue-rotate(180deg);
-  content: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2aWV3Qm94PSIwIDAgMzIgMzIiPjxwYXRoIGQ9Ik0yMC41OSAyMkwxNSAxNi40MVY3aDJ2OC41OGw1IDUuMDFMMjAuNTkgMjJ6IiBmaWxsPSJjdXJyZW50Q29sb3IiPjwvcGF0aD48cGF0aCBkPSJNMTYgMkExMy45NCAxMy45NCAwIDAgMCA2IDYuMjNWMkg0djhoOFY4SDcuMDhBMTIgMTIgMCAxIDEgNCAxNkgyQTE0IDE0IDAgMSAwIDE2IDJ6IiBmaWxsPSJjdXJyZW50Q29sb3IiPjwvcGF0aD48L3N2Zz4=");
+  display: inline-block;
+  content: "";
+  background-color: var(--second-rank-color);
+  mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' stroke='currentColor' fill='none' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='lucide lucide-history-icon lucide-history'><path d='M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8'/><path d='M3 3v5h5'/><path d='M12 7v5l4 2'/></svg>");
+}
+
+.carnelian-command-palette-item-top-priority {
+  color: var(--first-rank-color);
+  font-weight: bold;
+}
+
+.carnelian-command-palette-item-top-priority::before {
+  background-size: 18px 18px;
+  width: 18px;
+  height: 18px;
+  margin-right: 2px;
+  display: inline-block;
+  content: "";
+  background-color: var(--first-rank-color);
+  mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 32 32' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='lucide lucide-crown-icon lucide-crown'><path d='M11.562 3.266a.5.5 0 0 1 .876 0L15.39 8.87a1 1 0 0 0 1.516.294L21.183 5.5a.5.5 0 0 1 .798.519l-2.834 10.246a1 1 0 0 1-.956.734H5.81a1 1 0 0 1-.957-.734L2.02 6.02a.5.5 0 0 1 .798-.519l4.276 3.664a1 1 0 0 0 1.516-.294z'/><path d='M5 21h14'/></svg>");
 }
 
 /****************************************
