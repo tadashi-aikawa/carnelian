@@ -1,6 +1,6 @@
 * {
-  --first-rank-color: goldenrod;
-  --second-rank-color: var(--interactive-accent);
+  --first-rank-color: var(--interactive-accent);
+  --second-rank-color: var(--text-normal);
 }
 
 .carnelian-input-dialog-input {
