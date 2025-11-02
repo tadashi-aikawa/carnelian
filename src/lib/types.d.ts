@@ -82,6 +82,7 @@ export type UVault = Vault & {
 };
 
 export type UWorkspaceLeaf = WorkspaceLeaf & {
+  id: string;
   parent?: UWorkspaceLeaf | null;
   children?: UWorkspaceLeaf[];
   detach?: () => void;
