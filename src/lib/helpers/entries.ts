@@ -255,7 +255,7 @@ export function openFile(
 
 /**
  * タイトルからファイルを作成します
- * ファイル作成フォルダは設定に準拠します
+ * ファイル作成フォルダはrootになります
  *
  * ```ts
  * await createNewFile("title") // title.mdで作成
@@ -265,6 +265,19 @@ export function openFile(
 export function createNewFile(title?: string): Promise<TFile> {
   // TODO: 例外処理
   return app.fileManager.createNewFile(title);
+}
+
+/**
+ * タイトルから新しいMarkdownファイルを作成して開きます
+ * ファイル作成フォルダは設定に準拠します
+ *
+ * ```ts
+ * await openNewMarkdownFile("title") // title.mdで作成して開く
+ * await openNewMarkdownFile() // デフォルトタイトルで作成して開く
+ * ```
+ */
+export function openNewMarkdownFile(title?: string): Promise<TFile> {
+  return app.fileManager.createAndOpenMarkdownFile(title);
 }
 
 /**

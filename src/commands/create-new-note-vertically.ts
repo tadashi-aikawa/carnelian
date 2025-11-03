@@ -1,15 +1,13 @@
 import { focusTitle } from "src/lib/helpers/editors/basic";
-import { createNewFile } from "src/lib/helpers/entries";
-import { setActiveLeaf } from "src/lib/helpers/leaves";
+import { openNewMarkdownFile } from "src/lib/helpers/entries";
 import { splitTabGroup } from "src/lib/helpers/tabgroups";
 
 /**
  * 垂直方向に新しいノートを作成します
  */
 export async function createNewNoteVertically() {
-  const leaf = splitTabGroup("vertical");
-  const file = await createNewFile();
-  await leaf.openFile(file);
-  setActiveLeaf(leaf);
+  await sleep(0);
+  splitTabGroup("vertical");
+  await openNewMarkdownFile();
   focusTitle();
 }
