@@ -4,7 +4,7 @@
     </h1>
     <img src="./carnelian.webp" width="256" />
     <p>
-      <div>InvisibleなObsidian体験を実現するための機能を提供する宝石、紅玉髄(カーネリアン)。</div>
+      <div>IncredibleなObsidian体験を実現するための機能を提供する宝石、紅玉髄(カーネリアン)。</div>
       <div>プラグインの機構を使って自分だけの最強のObsidianを構築する。</div>
     </p>
 </div>
