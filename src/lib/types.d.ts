@@ -4,6 +4,7 @@ import type {
   Command,
   DataAdapter,
   Editor,
+  FileManager,
   FileView,
   LinkCache,
   MarkdownView,
@@ -20,6 +21,7 @@ type CommandId =
   | "editor:toggle-source"
   | "editor:save-file"
   | "editor:cycle-list-checklist" // Cycle bullet/checkbox
+  | "workspace:edit-file-title"
   | "obsidian-silhouette:cycle-bullet-checkbox";
 
 export interface CodeBlock {
@@ -96,12 +98,17 @@ export type UWorkspace = Workspace & {
   getActiveFileView(): UFileView;
 };
 
+export type UFileManager = FileManager & {
+  createNewFile: (title?: string) => Promise<TFile>;
+};
+
 type WorkspaceName = string;
 
 export type UApp = App & {
   workspace: UWorkspace;
   isMobile: boolean;
   vault: UVault;
+  fileManager: UFileManager;
   metadataCache: {
     getBacklinksForFile(file: TFile): { data: Record<string, ULinkCache[]> };
   };

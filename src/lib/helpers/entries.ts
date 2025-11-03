@@ -254,6 +254,20 @@ export function openFile(
 }
 
 /**
+ * タイトルからファイルを作成します
+ * ファイル作成フォルダは設定に準拠します
+ *
+ * ```ts
+ * await createNewFile("title") // title.mdで作成
+ * await createNewFile() // デフォルトタイトルで作成
+ * ```
+ */
+export function createNewFile(title?: string): Promise<TFile> {
+  // TODO: 例外処理
+  return app.fileManager.createNewFile(title);
+}
+
+/**
  * ファイルの最後にテキストを追記します
  *
  * ```ts

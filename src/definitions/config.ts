@@ -30,6 +30,10 @@ export interface Config {
 
     // Workspaces
     "Move to next workspace"?: boolean;
+
+    // Tab groups
+    "Create new note horizontally"?: boolean;
+    "Create new note vertically"?: boolean;
   };
 
   file?: {

@@ -20,6 +20,8 @@ import { createArticle } from "./commands/create-article";
 import { createBrainNote } from "./commands/create-brain-note";
 import { createHubNote } from "./commands/create-hub-note";
 import { createMtgNote } from "./commands/create-mtg-note";
+import { createNewNoteHorizontally } from "./commands/create-new-note-horizontally";
+import { createNewNoteVertically } from "./commands/create-new-note-vertically";
 import { createObsidianCookbook } from "./commands/create-obsidian-cookbook";
 import { createPrimeNote } from "./commands/create-prime-note";
 import { createReportNote } from "./commands/create-report-note";
@@ -64,6 +66,18 @@ function createCarnelianCommands(settings: PluginSettings) {
   const sf = settings.file;
 
   return [
+    {
+      name: "Create new note horizontally",
+      kind: "all",
+      enabled: sa?.["Create new note horizontally"],
+      executor: createNewNoteHorizontally,
+    },
+    {
+      name: "Create new note vertically",
+      kind: "all",
+      enabled: sa?.["Create new note vertically"],
+      executor: createNewNoteVertically,
+    },
     {
       name: "Save with",
       kind: "all",

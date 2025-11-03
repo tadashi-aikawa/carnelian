@@ -4,6 +4,7 @@ import type { UApp, UEditor } from "src/lib/types";
 import { errorMessage } from "src/lib/utils/errors";
 import { map, orThrow } from "src/lib/utils/guard";
 import { match } from "src/lib/utils/strings";
+import { runCommandById } from "../commands";
 import { getActiveFileContent } from "../entries";
 
 declare let app: UApp;
@@ -336,4 +337,11 @@ export function findLineIndex(pattern: RegExp): number {
   return orThrow(getActiveFileContent(), (content) =>
     content.split("\n").findIndex((line) => match(line, pattern)),
   );
+}
+
+/**
+ * タイトルにフォーカスを移します
+ */
+export function focusTitle() {
+  runCommandById("workspace:edit-file-title");
 }

@@ -67,6 +67,12 @@
             "Create an Article": {
               "type": "boolean"
             },
+            "Create new note horizontally": {
+              "type": "boolean"
+            },
+            "Create new note vertically": {
+              "type": "boolean"
+            },
             "Move to next workspace": {
               "type": "boolean"
             },
