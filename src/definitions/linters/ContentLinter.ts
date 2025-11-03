@@ -346,7 +346,13 @@ function createUnresolvedInternalLink(
   };
 
   const createInspection = (level: LintInspection["level"]) => {
-    return Object.keys(getUnresolvedLinkMap(path))
+    const unresolvedLinkMap = getUnresolvedLinkMap(path);
+    // 新規ファイル作成時はタイミングによってキャッシュが間に合わずnullになることがある
+    if (!unresolvedLinkMap) {
+      return [];
+    }
+
+    return Object.keys(unresolvedLinkMap)
       .flatMap((linkName) =>
         getSinglePatternMatchingLocations(
           content,
