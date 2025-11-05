@@ -11,11 +11,10 @@ export interface Service {
   onunload?(): void;
 }
 
-// INFO: _settingsは使ってないけど、設定を使いたい場合はここで渡すべし
 export function createServices(settings: PluginSettings): Service[] {
   return [
     new AddDatePropertiesService(),
-    settings.linter ? new LintService() : [],
+    settings.linter ? new LintService(settings.linter) : [],
     new FormatService(),
     new AddPropertiesToHeadService(),
   ].flat();

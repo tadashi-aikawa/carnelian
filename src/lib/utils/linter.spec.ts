@@ -45,13 +45,23 @@ const properiesLinter: Linter = {
 
 test("Lint検査なしだと空配列が返る(単一Linter))", () => {
   const linters = [titleLinter] as Linter[];
-  const actual = lintAll(linters, { title: "123456", content: "", path: "" });
+  const actual = lintAll(linters, {
+    title: "123456",
+    content: "",
+    path: "",
+    settings: {},
+  });
   expect(actual).toStrictEqual([]);
 });
 
 test("Lint検査ありだと結果配列が返る(単一Linter/単一結果))", () => {
   const linters = [titleLinter] as Linter[];
-  const actual = lintAll(linters, { title: "1234", content: "", path: "" });
+  const actual = lintAll(linters, {
+    title: "1234",
+    content: "",
+    path: "",
+    settings: {},
+  });
   expect(actual).toStrictEqual([
     {
       code: "TLL002",
@@ -63,7 +73,12 @@ test("Lint検査ありだと結果配列が返る(単一Linter/単一結果))", 
 
 test("Lint検査ありだと結果が返る(単一Linter/複数結果))", () => {
   const linters = [titleLinter] as Linter[];
-  const actual = lintAll(linters, { title: " ", content: "", path: "" });
+  const actual = lintAll(linters, {
+    title: " ",
+    content: "",
+    path: "",
+    settings: {},
+  });
   expect(actual).toStrictEqual([
     {
       code: "TLL001",
@@ -85,6 +100,7 @@ test("Lint検査ありだと結果が返る(複数Linter/複数結果))", () => 
     content: "",
     path: "",
     properties: { aliases: ["hoge"], tags: [] },
+    settings: {},
   });
   expect(actual).toStrictEqual([
     {
@@ -107,7 +123,12 @@ test("Lint検査ありだと結果が返る(複数Linter/複数結果))", () => 
 
 test("Lint検査が重複していてもユニークにはならない", () => {
   const linters = [titleLinter, titleLinter] as Linter[];
-  const actual = lintAll(linters, { title: "ab", content: "", path: "" });
+  const actual = lintAll(linters, {
+    title: "ab",
+    content: "",
+    path: "",
+    settings: {},
+  });
   expect(actual).toStrictEqual([
     {
       code: "TLL002",

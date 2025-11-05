@@ -13,20 +13,33 @@ import { findNoteTypeBy } from "../mkms";
 import type { NoteType } from "../mkms";
 
 export const contentLinter: Linter = {
-  lint: ({ content, path }) => {
+  lint: ({ content, path, settings }) => {
     const noteType = findNoteTypeBy({ path });
     if (!noteType) {
       return [];
     }
 
+    const rules = settings?.rules?.content;
     return [
-      ...createDisallowedLinkCard(noteType, content),
-      ...createNoLinkComment(noteType, content),
-      ...createV1LinkCard(noteType, content),
-      ...createUnofficialMOCFormat(noteType, content),
-      ...createV1DatesFormat(noteType, content),
-      ...createUnresolvedInternalLink(noteType, path, content),
-      ...createLinkEndsWithParenthesis(noteType, content),
+      ...(rules?.["Disallowed link card"]
+        ? createDisallowedLinkCard(noteType, content)
+        : []),
+      ...(rules?.["No link comment"]
+        ? createNoLinkComment(noteType, content)
+        : []),
+      ...(rules?.["v1 link card"] ? createV1LinkCard(noteType, content) : []),
+      ...(rules?.["Unofficial MOC format"]
+        ? createUnofficialMOCFormat(noteType, content)
+        : []),
+      ...(rules?.["v1 dates format"]
+        ? createV1DatesFormat(noteType, content)
+        : []),
+      ...(rules?.["Unresolved internal link"]
+        ? createUnresolvedInternalLink(noteType, path, content)
+        : []),
+      ...(rules?.["Link ends with parenthesis"]
+        ? createLinkEndsWithParenthesis(noteType, content)
+        : []),
     ];
   },
 };

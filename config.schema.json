@@ -338,8 +338,64 @@
           "type": "object"
         },
         "linter": {
-          "description": "Linterを有効にするかどうか",
-          "type": "boolean"
+          "additionalProperties": false,
+          "properties": {
+            "rules": {
+              "additionalProperties": false,
+              "properties": {
+                "content": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "Disallowed link card": {
+                      "type": "boolean"
+                    },
+                    "Link ends with parenthesis": {
+                      "type": "boolean"
+                    },
+                    "No link comment": {
+                      "type": "boolean"
+                    },
+                    "Unofficial MOC format": {
+                      "type": "boolean"
+                    },
+                    "Unresolved internal link": {
+                      "type": "boolean"
+                    },
+                    "v1 dates format": {
+                      "type": "boolean"
+                    },
+                    "v1 link card": {
+                      "type": "boolean"
+                    }
+                  },
+                  "type": "object"
+                },
+                "propery": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "No cover": {
+                      "type": "boolean"
+                    },
+                    "No description": {
+                      "type": "boolean"
+                    },
+                    "No status": {
+                      "type": "boolean"
+                    },
+                    "No url": {
+                      "type": "boolean"
+                    },
+                    "Tags": {
+                      "type": "boolean"
+                    }
+                  },
+                  "type": "object"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "type": "object"
         }
       },
       "required": [

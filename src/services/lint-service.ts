@@ -7,6 +7,7 @@ import {
 } from "src/lib/helpers/events";
 import { lint, removeLinterInspectionElements } from "src/lib/obsutils/linter";
 import type { Service } from "src/services";
+import type { PluginSettings } from "src/settings";
 
 /**
  * ファイルをアクティブにしたときにLint(検査)をするサービスです
@@ -16,14 +17,19 @@ export class LintService implements Service {
   unsetFileOpenHandler!: () => void;
   unsetExWCommandHandler!: () => void;
 
+  constructor(public settings: PluginSettings["linter"]) {}
+
   onload(): void {
     this.unsetFileOpenHandler = setOnFileOpenEvent(async (file) => {
       if (!file) {
         return;
       }
-      await lintFile(file);
+      await lintFile(file, this.settings);
     });
-    this.unsetExWCommandHandler = setOnExWCommandEvent(lintFile, this.name);
+    this.unsetExWCommandHandler = setOnExWCommandEvent(
+      (file) => lintFile(file, this.settings),
+      this.name,
+    );
   }
 
   onunload(): void {
@@ -33,6 +39,9 @@ export class LintService implements Service {
   }
 }
 
-export async function lintFile(file: TFile) {
-  await lint(file, [contentLinter, propertyLinter]);
+export async function lintFile(
+  file: TFile,
+  settings: PluginSettings["linter"],
+) {
+  await lint(file, [contentLinter, propertyLinter], settings);
 }

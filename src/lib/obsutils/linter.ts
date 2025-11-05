@@ -11,6 +11,7 @@ import {
   type Linter,
   lintAll,
 } from "src/lib/utils/linter";
+import type { PluginSettings } from "src/settings";
 import { getActiveOffset, moveToOffset } from "../helpers/editors/basic";
 import { groupBy, orderBy } from "../utils/collections";
 import type { PartialRequired } from "../utils/types";
@@ -22,7 +23,11 @@ let inspectionsOrderByOffset: LintInspectionWithOffset[] = [];
  * ファイルにLinterをかけます
  * Lintの結果はヘッダ下部にDOMとして追加されます
  */
-export async function lint(file: TFile, linters: Linter[]) {
+export async function lint(
+  file: TFile,
+  linters: Linter[],
+  settings: PluginSettings["linter"],
+) {
   const content = await loadFileContentCache(file.path);
   const properties = getPropertiesByPath(file.path) ?? undefined;
   const inspections = lintAll(linters, {
@@ -30,6 +35,7 @@ export async function lint(file: TFile, linters: Linter[]) {
     content: content ?? "",
     path: file.path,
     properties,
+    settings,
   });
 
   removeLinterInspectionElements();

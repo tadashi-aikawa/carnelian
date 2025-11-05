@@ -43,8 +43,26 @@ export interface Config {
     "Delete active file"?: boolean;
   };
 
-  /** Linterを有効にするかどうか */
-  linter?: boolean;
+  linter?: {
+    rules?: {
+      propery?: {
+        "No description"?: boolean;
+        "No cover"?: boolean;
+        "No url"?: boolean;
+        "No status"?: boolean;
+        Tags?: boolean;
+      };
+      content?: {
+        "Disallowed link card"?: boolean;
+        "No link comment"?: boolean;
+        "v1 link card"?: boolean;
+        "Unofficial MOC format"?: boolean;
+        "v1 dates format"?: boolean;
+        "Unresolved internal link"?: boolean;
+        "Link ends with parenthesis"?: boolean;
+      };
+    };
+  };
 
   editor?: {
     // Notes(MKMS)

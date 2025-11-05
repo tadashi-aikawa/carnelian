@@ -10,18 +10,21 @@ import { findNoteTypeBy } from "../mkms";
 import type { NoteType } from "../mkms";
 
 export const propertyLinter: Linter = {
-  lint: ({ title, properties, path }) => {
+  lint: ({ title, properties, path, settings }) => {
     const noteType = findNoteTypeBy({ path });
     if (!noteType) {
       return [];
     }
 
+    const rules = settings?.rules?.propery;
     return [
-      createNoDescription(noteType, properties),
-      createNoCover(noteType, properties),
-      createNoUrl(noteType, properties),
-      createNoStatus(noteType, properties),
-      createTags(title, properties, path),
+      rules?.["No description"]
+        ? createNoDescription(noteType, properties)
+        : null,
+      rules?.["No cover"] ? createNoCover(noteType, properties) : null,
+      rules?.["No url"] ? createNoUrl(noteType, properties) : null,
+      rules?.["No status"] ? createNoStatus(noteType, properties) : null,
+      rules?.Tags ? createTags(title, properties, path) : null,
     ].filter(isPresent);
   },
 };

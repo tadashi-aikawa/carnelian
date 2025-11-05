@@ -1,3 +1,4 @@
+import type { PluginSettings } from "src/settings";
 import type { Properties } from "./types";
 
 export interface LintInspection {
@@ -16,6 +17,7 @@ type LintArgs = {
    */
   path: string;
   properties?: Properties;
+  settings: PluginSettings["linter"];
 };
 type LintFunction = (args: LintArgs) => LintInspection[];
 
