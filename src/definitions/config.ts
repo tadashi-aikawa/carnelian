@@ -51,6 +51,7 @@ export interface Config {
         "No url"?: boolean;
         "No status"?: boolean;
         Tags?: boolean;
+        "MkDocs title"?: boolean;
       };
       content?: {
         "Disallowed link card"?: boolean;

@@ -373,6 +373,9 @@
                 "propery": {
                   "additionalProperties": false,
                   "properties": {
+                    "MkDocs title": {
+                      "type": "boolean"
+                    },
                     "No cover": {
                       "type": "boolean"
                     },

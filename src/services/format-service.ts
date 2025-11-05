@@ -1,11 +1,10 @@
-import type { TFile } from "obsidian";
+import { formatProperties } from "src/definitions/formatter";
 import {
   getActiveCursor,
   getActiveEditor,
 } from "src/lib/helpers/editors/basic";
-import { loadFileContentCache } from "src/lib/helpers/entries";
+import { getActiveFileContent } from "src/lib/helpers/entries";
 import { setOnExWCommandEvent } from "src/lib/helpers/events";
-import { sortActiveFileProperties } from "src/lib/helpers/properties";
 import { formatLineBreaks } from "src/lib/obsutils/formatter";
 import type { Service } from "src/services";
 
@@ -25,12 +24,13 @@ export class FormatService implements Service {
   }
 }
 
-export async function formatFile(file: TFile) {
-  sortActiveFileProperties(["title", "created", "updated"], {
-    removeIfEmpty: true,
-  });
+export async function formatFile() {
+  // lintのfixでプロパティが変わった場合にcacheが更新されるまでの猶予が必要なため
+  await sleep(10);
 
-  const content = await loadFileContentCache(file.path);
+  formatProperties();
+
+  const content = getActiveFileContent();
   if (!content) {
     return;
   }

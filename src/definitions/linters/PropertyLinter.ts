@@ -5,6 +5,7 @@ import {
 import { ExhaustiveError } from "src/lib/utils/errors";
 import { isPresent } from "src/lib/utils/guard";
 import type { LintInspection, Linter } from "src/lib/utils/linter";
+import { match } from "src/lib/utils/strings";
 import type { Properties } from "src/lib/utils/types";
 import { findNoteTypeBy } from "../mkms";
 import type { NoteType } from "../mkms";
@@ -25,6 +26,7 @@ export const propertyLinter: Linter = {
       rules?.["No url"] ? createNoUrl(noteType, properties) : null,
       rules?.["No status"] ? createNoStatus(noteType, properties) : null,
       rules?.Tags ? createTags(title, properties, path) : null,
+      rules?.["MkDocs title"] ? createMkDocsTitle(title, properties) : null,
     ].filter(isPresent);
   },
 };
@@ -300,6 +302,46 @@ function createTags(
     level: "ERROR" as LintInspection["level"],
     fix: async () => {
       removeActiveFileProperty("tags");
+    },
+  };
+}
+
+function createMkDocsTitle(
+  title: string,
+  properties?: Properties,
+): LintInspection | null {
+  // TODO: 設定を反映させるようにしたい
+  if (title === "nav") {
+    return null;
+  }
+
+  const propsTitle = properties?.title;
+  if (title === propsTitle) {
+    return null;
+  }
+
+  const needTitle =
+    title.includes("_") || title.includes("-") || match(title, /^[a-z]/);
+  if (!needTitle) {
+    if (propsTitle) {
+      return {
+        code: "MkDocs Title",
+        message: "titleを削除しました",
+        level: "ERROR" as LintInspection["level"],
+        fix: async () => {
+          removeActiveFileProperty("title");
+        },
+      };
+    }
+    return null;
+  }
+
+  return {
+    code: "MkDocs Title",
+    message: "titleを修正しました",
+    level: "ERROR" as LintInspection["level"],
+    fix: async () => {
+      updateActiveFileProperty("title", title);
     },
   };
 }
