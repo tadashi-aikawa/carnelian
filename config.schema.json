@@ -388,6 +388,9 @@
                     "No url": {
                       "type": "boolean"
                     },
+                    "Sync fixme": {
+                      "type": "boolean"
+                    },
                     "Tags": {
                       "type": "boolean"
                     }

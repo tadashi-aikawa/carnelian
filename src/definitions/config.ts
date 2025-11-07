@@ -52,6 +52,7 @@ export interface Config {
         "No status"?: boolean;
         Tags?: boolean;
         "MkDocs title"?: boolean;
+        "Sync fixme"?: boolean;
       };
       content?: {
         "Disallowed link card"?: boolean;

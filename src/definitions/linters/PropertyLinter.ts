@@ -7,11 +7,12 @@ import { isPresent } from "src/lib/utils/guard";
 import type { LintInspection, Linter } from "src/lib/utils/linter";
 import { match } from "src/lib/utils/strings";
 import type { Properties } from "src/lib/utils/types";
+import { P, match as tsmatch } from "ts-pattern";
 import { findNoteTypeBy } from "../mkms";
 import type { NoteType } from "../mkms";
 
 export const propertyLinter: Linter = {
-  lint: ({ title, properties, path, settings }) => {
+  lint: ({ title, properties, content, path, settings }) => {
     const noteType = findNoteTypeBy({ path });
     if (!noteType) {
       return [];
@@ -27,6 +28,7 @@ export const propertyLinter: Linter = {
       rules?.["No status"] ? createNoStatus(noteType, properties) : null,
       rules?.Tags ? createTags(title, properties, path) : null,
       rules?.["MkDocs title"] ? createMkDocsTitle(title, properties) : null,
+      rules?.["Sync fixme"] ? createSyncFixme(properties, content) : null,
     ].filter(isPresent);
   },
 };
@@ -344,4 +346,39 @@ function createMkDocsTitle(
       updateActiveFileProperty("title", title);
     },
   };
+}
+
+function createSyncFixme(
+  properties?: Properties,
+  content?: string,
+): LintInspection | null {
+  const fixmeInContent = !content
+    ? false
+    : content.includes("!FIXME") || match(content, /==.+?==/);
+  const fixmeInProperties = properties?.fixme as boolean | undefined;
+
+  return tsmatch([fixmeInContent, fixmeInProperties])
+    .with([true, true], () => null)
+    .with([false, undefined], () => null)
+    .with([true, P.union(false, undefined)], () => {
+      return {
+        code: "Sync fixme",
+        message: "fixmeプロパティをtrueにしました",
+        level: "ERROR" as LintInspection["level"],
+        fix: async () => {
+          updateActiveFileProperty("fixme", true);
+        },
+      };
+    })
+    .with([false, P.union(true, false)], () => {
+      return {
+        code: "Sync fixme",
+        message: "fixmeプロパティを削除しました",
+        level: "ERROR" as LintInspection["level"],
+        fix: async () => {
+          removeActiveFileProperty("fixme");
+        },
+      };
+    })
+    .exhaustive();
 }
