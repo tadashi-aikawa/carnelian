@@ -48,7 +48,6 @@ import { pasteClipboardAsWebp } from "./commands/paste-clipboard-as-webp";
 import { pasteSiteCard } from "./commands/paste-site-card";
 import { pasteURLToSiteLink } from "./commands/paste-url-to-site-link";
 import { saveWith } from "./commands/save-with";
-import { showAnotherCommandPalette } from "./commands/show-another-command-palette";
 import { showFileInfo } from "./commands/show-file-info";
 import { stripLinksAndDecorations } from "./commands/strip-links-and-decorations";
 import { summarizeDescription } from "./commands/summarize-description";
@@ -413,12 +412,6 @@ function createCarnelianCommands(settings: PluginSettings) {
       kind: "editor",
       enabled: se?.["Update change log"],
       executor: updateChangeLog,
-    },
-    {
-      name: "Show another command palette",
-      kind: "all",
-      enabled: true,
-      executor: () => showAnotherCommandPalette(settings),
     },
   ] as const satisfies (CarnelianCommand & { enabled: unknown })[];
 }

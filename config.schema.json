@@ -95,10 +95,6 @@
           },
           "type": "object"
         },
-        "commandHistoryPath": {
-          "description": "コマンド履歴の保存先パス デフォルトはプラグインフォルダ内の `command-histories.json` FIXME: 多分プラグインに分離するのでこのままにする",
-          "type": "string"
-        },
         "editor": {
           "additionalProperties": false,
           "properties": {
@@ -404,9 +400,6 @@
           "type": "object"
         }
       },
-      "required": [
-        "commandHistoryPath"
-      ],
       "type": "object"
     },
     "OpenAIVendor": {

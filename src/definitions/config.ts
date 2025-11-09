@@ -151,13 +151,6 @@ export interface Config {
     // 保存
     "Save with"?: boolean;
   };
-
-  /**
-   * コマンド履歴の保存先パス
-   * デフォルトはプラグインフォルダ内の `command-histories.json`
-   * FIXME: 多分プラグインに分離するのでこのままにする
-   */
-  commandHistoryPath: string;
 }
 
 type KeyChainAccountName = string;

@@ -3,14 +3,9 @@ import type { Config } from "./definitions/config";
 import { getVaultRootPath } from "./lib/helpers/workspace";
 import type CarnelianPlugin from "./main";
 
-export const DEFAULT_COMMAND_HISTORY_PATH =
-  ".obsidian/plugins/carnelian/command-histories.json";
-
 export type PluginSettings = Config;
 
-export const DEFAULT_SETTINGS: PluginSettings = {
-  commandHistoryPath: DEFAULT_COMMAND_HISTORY_PATH,
-};
+export const DEFAULT_SETTINGS: PluginSettings = {};
 
 export class SettingTab extends PluginSettingTab {
   plugin: CarnelianPlugin;
