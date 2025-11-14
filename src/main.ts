@@ -1,11 +1,13 @@
-import { Plugin } from "obsidian";
+import { type EventRef, Plugin } from "obsidian";
 import { createCommands } from "./commands";
+import type { UApp } from "./lib/types";
 import { type Service, createServices } from "./services";
 import { DEFAULT_SETTINGS, type PluginSettings, SettingTab } from "./settings";
 
 export default class CarnelianPlugin extends Plugin {
   settings!: PluginSettings;
   services: Service[] = [];
+  declare app: UApp;
 
   async onload() {
     await this.loadSettings();
@@ -14,20 +16,30 @@ export default class CarnelianPlugin extends Plugin {
       this.addCommand(cmd);
     }
 
-    // メタデータが不完全な状態での処理を防ぐため
-    const cacheResolvedRef = this.app.metadataCache.on("resolved", async () => {
+    const init = (cacheResolvedRef?: EventRef) => {
       this.services = createServices(this.settings);
       for (const sv of this.services) {
         sv.onload?.();
       }
-      this.app.metadataCache.offref(cacheResolvedRef);
+      if (cacheResolvedRef) {
+        this.app.metadataCache.offref(cacheResolvedRef);
+      }
 
       this.app.workspace.onLayoutReady(() => {
         for (const sv of this.services) {
           sv.onLayoutReady?.();
         }
       });
-    });
+    };
+
+    if (this.app.metadataCache.initialized) {
+      init();
+    } else {
+      // メタデータが不完全な状態での処理を防ぐため
+      const cacheResolvedRef = this.app.metadataCache.on("resolved", () => {
+        init(cacheResolvedRef);
+      });
+    }
   }
 
   onunload() {

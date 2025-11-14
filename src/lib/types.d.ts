@@ -112,6 +112,7 @@ export type UApp = App & {
   fileManager: UFileManager;
   metadataCache: {
     getBacklinksForFile(file: TFile): { data: Record<string, ULinkCache[]> };
+    initialized: boolean;
   };
   internalPlugins: {
     plugins: {
