@@ -18,6 +18,6 @@ export function createServices(settings: PluginSettings): Service[] {
     settings.linter ? new LintService(settings.linter) : [],
     new FormatService(),
     new AddPropertiesToHeadService(),
-    new LinkClickService(),
+    settings.click?.["Open link vertically"] ? new LinkClickService() : [],
   ].flat();
 }

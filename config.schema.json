@@ -95,6 +95,15 @@
           },
           "type": "object"
         },
+        "click": {
+          "additionalProperties": false,
+          "properties": {
+            "Open link vertically": {
+              "type": "boolean"
+            }
+          },
+          "type": "object"
+        },
         "editor": {
           "additionalProperties": false,
           "properties": {

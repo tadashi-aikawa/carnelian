@@ -43,6 +43,10 @@ export interface Config {
     "Delete active file"?: boolean;
   };
 
+  click?: {
+    "Open link vertically"?: boolean;
+  };
+
   linter?: {
     rules?: {
       propery?: {
