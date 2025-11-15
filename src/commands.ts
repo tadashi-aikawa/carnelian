@@ -56,6 +56,7 @@ import { transformMOC } from "./commands/transform-moc";
 import { transformToV2OGPCard } from "./commands/transform-v2-card";
 import { updateChangeLog } from "./commands/update-change-log";
 import { updateMOCSuitably } from "./commands/update-moc-suitably";
+import { path2LinkText } from "./lib/helpers/links";
 import { type CarnelianCommand, createCommand } from "./lib/obsutils/commands";
 import type { PluginSettings } from "./settings";
 
@@ -412,6 +413,14 @@ function createCarnelianCommands(settings: PluginSettings) {
       kind: "editor",
       enabled: se?.["Update change log"],
       executor: updateChangeLog,
+    },
+    {
+      name: "test",
+      kind: "editor",
+      enabled: true,
+      executor: () => {
+        console.log(path2LinkText("Notes/TypeScript.md")!);
+      },
     },
   ] as const satisfies (CarnelianCommand & { enabled: unknown })[];
 }

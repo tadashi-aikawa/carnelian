@@ -1,8 +1,7 @@
-import type { TFile } from "obsidian";
-import type { UApp, ULinkCache } from "../types";
+import type { LinkToken, UApp, ULinkCache } from "../types";
 import { map } from "../utils/guard";
 import { getActiveEditor, offsetToPos } from "./editors/basic";
-import { getActiveFile, getActiveFilePath, getFileByPath } from "./entries";
+import { getActiveFile, getFileByPath } from "./entries";
 import { getMetadataCache } from "./metadata";
 
 declare let app: UApp;
@@ -50,8 +49,6 @@ export function getUnresolvedLinkMap(filePath: string): {
  * リンクテキストからファイルパスを取得します
  *
  * ```ts
- * linkText2Path("[[Obsidian]]")
- * // "Notes/Obsidian.md"
  * linkText2Path("Obsidian")
  * // "Notes/Obsidian.md"
  * linkText2Path("Obsidian.md")
@@ -85,41 +82,15 @@ export function path2LinkText(path: string): string | null {
 }
 
 /**
- * 現在のエディタのオフセット位置にあるリンク先のファイルを取得します
+ * 現在のエディタのオフセット位置にあるリンクトークンを取得します
  *
  * ```ts
- * getLinkFileAtOffset(100)
- * // TFile | null
+ * getlinkTokenAtOffset(10)
+ * // { type: "internal-link", text: "内部リンク (Obsidian)", displayText: "内部リンク" }
  * ```
  */
-export function getLinkFileAtOffset(offset: number): TFile | null {
+export function getLinkTokenAtOffset(offset: number): LinkToken | null {
   const editor = getActiveEditor();
-  if (!editor) {
-    return null;
-  }
-
   const position = offsetToPos(offset);
-  if (!position) {
-    return null;
-  }
-
-  const token = editor.getClickableTokenAt(position);
-  if (!token) {
-    return null;
-  }
-
-  const activePath = getActiveFilePath();
-  if (!activePath) {
-    return null;
-  }
-
-  const dstFile = app.metadataCache.getFirstLinkpathDest(
-    token.text,
-    activePath,
-  );
-  if (!dstFile) {
-    return null;
-  }
-
-  return dstFile;
+  return position && editor ? editor.getClickableTokenAt(position) : null;
 }

@@ -32,6 +32,18 @@ export interface CodeBlock {
   position: Pos;
 }
 
+export interface LinkToken {
+  type: "internal-link" | "external-link";
+  /**
+   * リンク先を判定するために利用する文字列
+   */
+  text: string;
+  /**
+   * 表示上の文字列. 指定ない場合undefinedか空文字
+   */
+  displayText?: string | "";
+}
+
 // testableにするためutilを経由
 type Properties = UProperties;
 
@@ -63,7 +75,7 @@ export type UCodeMirror = {
 };
 export type UCodeMirrorEditor = Editor & {
   cm: UCodeMirror;
-  getClickableTokenAt(position: EditorPosition): { text: string } | null;
+  getClickableTokenAt(position: EditorPosition): LinkToken | null;
 };
 export type UMarkdownFileInfo = MarkdownFileInfo & {
   editor: UCodeMirrorEditor;
