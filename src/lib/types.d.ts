@@ -4,9 +4,11 @@ import type {
   Command,
   DataAdapter,
   Editor,
+  EditorPosition,
   FileManager,
   FileView,
   LinkCache,
+  MarkdownFileInfo,
   MarkdownView,
   Pos,
   ReferenceCache,
@@ -53,7 +55,19 @@ export type UMetadataEditor = {
   save(): void;
 };
 
-export type UEditor = Editor;
+export type UCodeMirror = {
+  /**
+   * offsetを取得します
+   */
+  posAtDOM(dom: any): number;
+};
+export type UCodeMirrorEditor = Editor & {
+  cm: UCodeMirror;
+  getClickableTokenAt(position: EditorPosition): { text: string } | null;
+};
+export type UMarkdownFileInfo = MarkdownFileInfo & {
+  editor: UCodeMirrorEditor;
+};
 export type UFileView = FileView;
 export type UMarkdownView = MarkdownView;
 
@@ -96,6 +110,7 @@ export type UWorkspaceMarkdownLeaf = UWorkspaceLeaf & {
 
 export type UWorkspace = Workspace & {
   getActiveFileView(): UFileView;
+  activeEditor: UMarkdownFileInfo | null;
 };
 
 export type UFileManager = FileManager & {

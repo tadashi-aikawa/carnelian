@@ -1,5 +1,6 @@
 import dayjs, { type Dayjs } from "dayjs";
 import type { Loc, TAbstractFile, TFile, TFolder } from "obsidian";
+import { match } from "ts-pattern";
 import { toEditorPosition, toFullPath } from "../obsutils/mapper";
 import type { UApp } from "../types";
 import { map, orThrow } from "../utils/guard";
@@ -239,18 +240,24 @@ export async function deleteActiveFile(): Promise<void> {
  * ファイルを開きます
  *
  * ```ts
- * // 現在のLeafで開く
+ * // 現在のLeaf(タブ)で開く
  * await openFile("Notes/hoge.md")
- * // 新しいLeafで開く
- * await openFile("Notes/hoge.md", {newLeaf})
+ * // 新しいLeaf(タブ)で開く
+ * await openFile("Notes/hoge.md", { newLeaf: true })
+ * // 垂直分割で新しいLeaf(タブ)で開く
+ * await openFile("Notes/hoge.md", { splitVertical: true })
  * ```
  */
 export function openFile(
   path: string,
-  option?: { newLeaf: boolean },
+  option?: { newLeaf?: boolean; splitVertical?: boolean },
 ): Promise<void> {
-  const newLeaf = option?.newLeaf ?? false;
-  return app.workspace.openLinkText("", path, newLeaf);
+  const leaf = match(option)
+    .with({ newLeaf: true }, () => "tab" as const)
+    .with({ splitVertical: true }, () => "split" as const)
+    .otherwise(() => false);
+
+  return app.workspace.openLinkText("", path, leaf);
 }
 
 /**

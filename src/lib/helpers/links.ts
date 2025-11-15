@@ -1,6 +1,8 @@
+import type { TFile } from "obsidian";
 import type { UApp, ULinkCache } from "../types";
 import { map } from "../utils/guard";
-import { getActiveFile, getFileByPath } from "./entries";
+import { getActiveEditor, offsetToPos } from "./editors/basic";
+import { getActiveFile, getActiveFilePath, getFileByPath } from "./entries";
 import { getMetadataCache } from "./metadata";
 
 declare let app: UApp;
@@ -80,4 +82,44 @@ export function path2LinkText(path: string): string | null {
   }
 
   return app.fileManager.generateMarkdownLink(dstFile, activeFile.path);
+}
+
+/**
+ * 現在のエディタのオフセット位置にあるリンク先のファイルを取得します
+ *
+ * ```ts
+ * getLinkFileAtOffset(100)
+ * // TFile | null
+ * ```
+ */
+export function getLinkFileAtOffset(offset: number): TFile | null {
+  const editor = getActiveEditor();
+  if (!editor) {
+    return null;
+  }
+
+  const position = offsetToPos(offset);
+  if (!position) {
+    return null;
+  }
+
+  const token = editor.getClickableTokenAt(position);
+  if (!token) {
+    return null;
+  }
+
+  const activePath = getActiveFilePath();
+  if (!activePath) {
+    return null;
+  }
+
+  const dstFile = app.metadataCache.getFirstLinkpathDest(
+    token.text,
+    activePath,
+  );
+  if (!dstFile) {
+    return null;
+  }
+
+  return dstFile;
 }

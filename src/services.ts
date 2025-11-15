@@ -1,6 +1,7 @@
 import { AddDatePropertiesService } from "./services/add-date-properties-service";
 import { AddPropertiesToHeadService } from "./services/add-properties-to-head-service";
 import { FormatService } from "./services/format-service";
+import { LinkClickService } from "./services/link-click-service";
 import { LintService } from "./services/lint-service";
 import type { PluginSettings } from "./settings";
 
@@ -17,5 +18,6 @@ export function createServices(settings: PluginSettings): Service[] {
     settings.linter ? new LintService(settings.linter) : [],
     new FormatService(),
     new AddPropertiesToHeadService(),
+    new LinkClickService(),
   ].flat();
 }

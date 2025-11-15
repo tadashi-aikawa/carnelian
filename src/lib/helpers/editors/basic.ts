@@ -1,6 +1,6 @@
-import type { WorkspaceLeaf } from "obsidian";
+import type { EditorPosition, WorkspaceLeaf } from "obsidian";
 import { parseTags } from "src/lib/obsutils/parser";
-import type { UApp, UEditor } from "src/lib/types";
+import type { UApp, UCodeMirrorEditor } from "src/lib/types";
 import { errorMessage } from "src/lib/utils/errors";
 import { map, orThrow } from "src/lib/utils/guard";
 import { match } from "src/lib/utils/strings";
@@ -12,8 +12,15 @@ declare let app: UApp;
 /**
  * エディタを取得します
  */
-export function getActiveEditor(): UEditor | null {
+export function getActiveEditor(): UCodeMirrorEditor | null {
   return app.workspace.activeEditor?.editor ?? null;
+}
+
+/**
+ * offsetをEditorPostionに変換します
+ */
+export function offsetToPos(offset: number): EditorPosition | null {
+  return map(getActiveEditor(), (editor) => editor.offsetToPos(offset));
 }
 
 /**
