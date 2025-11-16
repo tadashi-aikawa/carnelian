@@ -23,7 +23,7 @@ export const propertyLinter: Linter = {
       rules?.["No description"]
         ? createNoDescription(noteType, properties)
         : null,
-      rules?.["No cover"] ? createNoCover(noteType, properties) : null,
+      rules?.["No cover"] ? createNoCover(noteType, path, properties) : null,
       rules?.["No url"] ? createNoUrl(noteType, properties) : null,
       rules?.["No status"] ? createNoStatus(noteType, properties) : null,
       rules?.Tags ? createTags(title, properties, path) : null,
@@ -84,6 +84,7 @@ function createNoDescription(
 
 function createNoCover(
   noteType: NoteType,
+  path: string,
   properties?: Properties,
 ): LintInspection | null {
   if (properties?.cover) {
@@ -97,7 +98,14 @@ function createNoCover(
       ? async () => {
           updateActiveFileProperty("cover", noteType.coverImagePath);
         }
-      : undefined,
+      : path.startsWith("📗Productivityを上げるために大切な100のこと/")
+        ? async () => {
+            updateActiveFileProperty(
+              "cover",
+              "📗Productivityを上げるために大切な100のこと/attachments/productivity100.webp",
+            );
+          }
+        : undefined,
   };
 
   switch (noteType.name) {
