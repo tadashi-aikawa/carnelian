@@ -1,4 +1,4 @@
-import type { UApp } from "../types";
+import type { Config, UApp } from "../types";
 
 declare let app: UApp;
 
@@ -42,4 +42,11 @@ export function toggleVimKeyBindings(): boolean {
  */
 export function getNewFileFolderPath(): string {
   return app.vault.getConfig("newFileFolderPath") ?? "";
+}
+
+/**
+ * ファイル削除時の挙動を取得します
+ */
+export function getFileDeleteMode(): NonNullable<Config["trashOption"]> {
+  return app.vault.getConfig("trashOption") ?? "system";
 }

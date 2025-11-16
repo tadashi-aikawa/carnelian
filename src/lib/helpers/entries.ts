@@ -6,6 +6,7 @@ import type { UApp } from "../types";
 import { map, orThrow } from "../utils/guard";
 import { getActiveEditor } from "./editors/basic";
 import { getActiveLeaf } from "./leaves";
+import { getFileDeleteMode } from "./settings";
 
 declare let app: UApp;
 
@@ -217,17 +218,26 @@ export async function renameFileWithoutLinkModified(
 }
 
 /**
+ * Trash > Deleted files の設定に従ってファイルを削除します
+ * ```ts
+ * await deleteFile(getFileByPath("Notes/hoge.md")!)
+ * ```
+ */
+export async function deleteFile(file: TFile): Promise<void> {
+  await match(getFileDeleteMode())
+    .with("system", () => app.vault.trash(file, true))
+    .with("local", () => app.vault.trash(file, false))
+    .with("none", () => app.vault.delete(file))
+    .exhaustive();
+}
+
+/**
  * 現在のファイルを削除します
  * タブグループが空になった場合はタブグループも閉じます
+ * TODO: deleteFileと統一する?
  */
 export async function deleteActiveFile(): Promise<void> {
-  await orThrow(
-    getActiveFilePath(),
-    async (path) => {
-      await app.vault.adapter.remove(path);
-    },
-    { message: "ActiveFile is null" },
-  );
+  await orThrow(getActiveFile(), deleteFile, { message: "ActiveFile is null" });
 
   // リーフの親はタブグループ想定なので、子が1つだけなら閉じる
   const parent = getActiveLeaf()?.parent ?? null;

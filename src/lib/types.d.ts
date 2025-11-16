@@ -83,7 +83,7 @@ export type UMarkdownFileInfo = MarkdownFileInfo & {
 export type UFileView = FileView;
 export type UMarkdownView = MarkdownView;
 
-type Config = {
+export type Config = {
   spellcheckDictionary?: string[];
   useMarkdownLinks?: boolean;
   newLinkFormat?: "shortest" | "relative" | "absolute";
@@ -96,6 +96,13 @@ type Config = {
   defaultViewMode?: "preview" | "source";
   // Vim key bindingsに関係
   vimMode?: boolean;
+  /**
+   * ファイル削除時の挙動に関係
+   * system: システムのゴミ箱
+   * local: Obsidianの .trash
+   * none: 完全削除
+   */
+  trashOption?: "system" | "local" | "none";
 };
 
 export type UAdapter = DataAdapter & {
