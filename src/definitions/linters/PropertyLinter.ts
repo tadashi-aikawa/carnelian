@@ -321,7 +321,7 @@ function createMkDocsTitle(
   properties?: Properties,
 ): LintInspection | null {
   // TODO: 設定を反映させるようにしたい
-  if (title === "nav") {
+  if (title === "nav" || title === "index") {
     return null;
   }
 
