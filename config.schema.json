@@ -278,6 +278,23 @@
               },
               "type": "object"
             },
+            "Open as remote MkDocs site": {
+              "additionalProperties": false,
+              "properties": {
+                "baseUrl": {
+                  "description": "ex: http://your-mkdocs-domain",
+                  "type": "string"
+                },
+                "docsRootPath": {
+                  "description": "ex: notes (default: docs)",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "baseUrl"
+              ],
+              "type": "object"
+            },
             "Open property URL": {
               "type": "boolean"
             },

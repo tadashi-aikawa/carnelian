@@ -161,6 +161,16 @@ export interface Config {
        */
       docsRootPath?: string;
     };
+    "Open as remote MkDocs site"?: {
+      /**
+       * ex: http://your-mkdocs-domain
+       */
+      baseUrl: string;
+      /**
+       * ex: notes (default: docs)
+       */
+      docsRootPath?: string;
+    };
 
     // 保存
     "Save with"?: boolean;
