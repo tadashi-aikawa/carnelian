@@ -151,11 +151,23 @@ export interface Config {
 
     // External
     "Open property URL"?: boolean;
+    "Open as local MkDocs site"?: {
+      /**
+       * ex: http://localhost:8081 (default: http://localhost:8000)
+       */
+      baseUrl?: string;
+      /**
+       * ex: notes (default: docs)
+       */
+      docsRootPath?: string;
+    };
 
     // 保存
     "Save with"?: boolean;
   };
 }
+
+export type EditorConfig = NonNullable<Config["editor"]>;
 
 type KeyChainAccountName = string;
 

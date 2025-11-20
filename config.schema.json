@@ -264,6 +264,20 @@
             "Move to previous inspection": {
               "type": "boolean"
             },
+            "Open as local MkDocs site": {
+              "additionalProperties": false,
+              "properties": {
+                "baseUrl": {
+                  "description": "ex: http://localhost:8081 (default: http://localhost:8000)",
+                  "type": "string"
+                },
+                "docsRootPath": {
+                  "description": "ex: notes (default: docs)",
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
             "Open property URL": {
               "type": "boolean"
             },

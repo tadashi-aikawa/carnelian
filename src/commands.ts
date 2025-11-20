@@ -40,6 +40,7 @@ import { moveToNextWorkspace } from "./commands/move-to-next-workspace";
 import { moveToPreviousInspection } from "./commands/move-to-previous-inspection";
 import { openActiveFileInYazi } from "./commands/open-active-file-in-yazi";
 import { openActiveFolderInTerminal } from "./commands/open-active-folder-in-terminal";
+import { openAsLocalMkDocsSite } from "./commands/open-as-local-mkdocs-site";
 import { openPropertyUrl } from "./commands/open-property-url";
 import { openVaultInLazygit } from "./commands/open-vault-in-lazygit";
 import { openVaultInTerminal } from "./commands/open-vault-in-terminal";
@@ -66,6 +67,14 @@ function createCarnelianCommands(settings: PluginSettings) {
   const sf = settings.file;
 
   return [
+    {
+      name: "Open as local MkDocs site",
+      kind: "editor",
+      enabled: se?.["Open as local MkDocs site"],
+      executor: () => {
+        openAsLocalMkDocsSite(se?.["Open as local MkDocs site"]);
+      },
+    },
     {
       name: "Create new note horizontally",
       kind: "all",
