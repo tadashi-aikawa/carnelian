@@ -23,7 +23,7 @@
 ### 依存パッケージのインストール
 
 ```bash
-bun i
+bun install --frozen-lockfile --ignore-scripts
 ```
 
 ### 設定ファイルの作成
