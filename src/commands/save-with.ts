@@ -1,7 +1,7 @@
 import { runCommandById } from "src/lib/helpers/commands";
 import { getActiveFile } from "src/lib/helpers/entries";
 import { notifyValidationError } from "src/lib/helpers/ui";
-import { formatFile } from "src/services/format-service";
+import { formatActiveFile } from "src/services/format-service";
 import { lintFile } from "src/services/lint-service";
 import type { PluginSettings } from "src/settings";
 
@@ -22,7 +22,7 @@ export async function saveWith(options: {
     await lintFile(file, options.lint);
   }
   if (format) {
-    await formatFile(format);
+    await formatActiveFile(format);
   }
 
   runCommandById("editor:save-file");

@@ -1,4 +1,5 @@
 import * as Encoding from "encoding-japanese";
+import { minimatch } from "minimatch";
 import { zipRotate } from "./collections";
 import { isPresent } from "./guard";
 
@@ -360,4 +361,23 @@ export function microFuzzy(value: string, query: string): FuzzyResult {
   }
 
   return { type: "none", score: 0 };
+}
+
+/**
+ * pathがpatternsのいずれかのglobパターンにマッチするかどうかを返却します
+ */
+export function isMatchedGlobPatterns(
+  path: string,
+  patterns: string[],
+): boolean {
+  if (patterns.length === 0) {
+    return false;
+  }
+
+  try {
+    return patterns.some((p) => minimatch(path, p));
+  } catch (error) {
+    console.warn(`Invalid glob pattern detected: ${error}`);
+    return false;
+  }
 }

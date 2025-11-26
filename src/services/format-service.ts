@@ -3,9 +3,10 @@ import {
   getActiveCursor,
   getActiveEditor,
 } from "src/lib/helpers/editors/basic";
-import { getActiveFileContent } from "src/lib/helpers/entries";
+import { getActiveFile, getActiveFileContent } from "src/lib/helpers/entries";
 import { setOnExWCommandEvent } from "src/lib/helpers/events";
 import { formatLineBreaks } from "src/lib/obsutils/formatter";
+import { isMatchedGlobPatterns } from "src/lib/utils/strings";
 import type { Service } from "src/services";
 import type { PluginSettings } from "src/settings";
 
@@ -20,7 +21,7 @@ export class FormatService implements Service {
 
   onload(): void {
     this.unsetExWCommandHandler = setOnExWCommandEvent(async (file) => {
-      await formatFile(this.settings);
+      await formatActiveFile(this.settings);
     }, this.name);
   }
 
@@ -29,7 +30,23 @@ export class FormatService implements Service {
   }
 }
 
-export async function formatFile(settings: PluginSettings["formatter"]) {
+/**
+ * 現在ファイルをフォーマットします
+ */
+export async function formatActiveFile(settings: PluginSettings["formatter"]) {
+  const activeFile = getActiveFile();
+  if (!activeFile) {
+    return;
+  }
+
+  const shouldIgnored = isMatchedGlobPatterns(
+    activeFile.path,
+    settings?.ignoreFiles ?? [],
+  );
+  if (shouldIgnored) {
+    return;
+  }
+
   // lintのfixでプロパティが変わった場合にcacheが更新されるまでの猶予が必要なため
   await sleep(10);
 

@@ -48,8 +48,12 @@ export interface Config {
   };
 
   formatter?: {
-    /** 変換を無視するファイルパスの配列 (globパターン可) */
-    // ignoreFiles?: string[];
+    /**
+     * 変換を無視するファイルパスのglobパターン配列
+     * default: []
+     * ex: ["Templates/**", "Notes/Untitled.md"]
+     */
+    ignoreFiles?: string[];
     /** プロパティの並び順を指定する配列 (default: ["title", "created", "updated"]) */
     propertyOrder?: string[];
     /** 空のプロパティを削除するかどうか (default: true) */

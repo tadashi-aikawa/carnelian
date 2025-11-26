@@ -10,7 +10,6 @@ export function formatProperties(settings: Config["formatter"]) {
     removeIfEmpty = true,
   } = settings ?? {};
 
-  console.log(propertyOrder);
   sortActiveFileProperties(propertyOrder, {
     removeIfEmpty,
   });

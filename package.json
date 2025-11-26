@@ -7,6 +7,7 @@
     "@atproto/api": "0.13.25",
     "dayjs": "1.11.13",
     "encoding-japanese": "2.2.0",
+    "minimatch": "10.1.1",
     "ts-pattern": "5.8.0"
   },
   "devDependencies": {

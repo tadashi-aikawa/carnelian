@@ -376,6 +376,13 @@
         "formatter": {
           "additionalProperties": false,
           "properties": {
+            "ignoreFiles": {
+              "description": "変換を無視するファイルパスのglobパターン配列 default: [] ex: [\"Templates/**\", \"Notes/Untitled.md\"]",
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
             "propertyOrder": {
               "description": "プロパティの並び順を指定する配列 (default: [\"title\", \"created\", \"updated\"])",
               "items": {
