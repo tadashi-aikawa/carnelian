@@ -1,11 +1,17 @@
 import { sortActiveFileProperties } from "src/lib/helpers/properties";
+import type { Config } from "./config";
 
 /**
  * Carnelianのフォーマットルールに沿ってフォーマットする
- * TODO: 設定で変更できてもいいかも?
  */
-export function formatProperties() {
-  sortActiveFileProperties(["title", "created", "updated"], {
-    removeIfEmpty: true,
+export function formatProperties(settings: Config["formatter"]) {
+  const {
+    propertyOrder = ["title", "created", "updated"],
+    removeIfEmpty = true,
+  } = settings ?? {};
+
+  console.log(propertyOrder);
+  sortActiveFileProperties(propertyOrder, {
+    removeIfEmpty,
   });
 }

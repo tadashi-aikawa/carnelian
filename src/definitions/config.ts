@@ -47,24 +47,47 @@ export interface Config {
     "Open link vertically"?: boolean;
   };
 
+  formatter?: {
+    /** 変換を無視するファイルパスの配列 (globパターン可) */
+    // ignoreFiles?: string[];
+    /** プロパティの並び順を指定する配列 (default: ["title", "created", "updated"]) */
+    propertyOrder?: string[];
+    /** 空のプロパティを削除するかどうか (default: true) */
+    removeIfEmpty?: boolean;
+  };
+
   linter?: {
     rules?: {
       propery?: {
+        /** descriptionプロパティが必須のノートで未設定を検出する */
         "No description"?: boolean;
+        /** ノート種別に応じてcoverを自動付与・必須チェックする */
         "No cover"?: boolean;
+        /** urlプロパティが必要なノートで未設定を検出する */
         "No url"?: boolean;
+        /** statusの未設定を検出し、必要に応じて既定値を割り当てる */
         "No status"?: boolean;
+        /** タイトルやパスに応じて所定のタグ付与/削除を行う */
         Tags?: boolean;
+        /** MkDocs向けのtitleプロパティをファイル名と同期させる */
         "MkDocs title"?: boolean;
+        /** 本文の!FIXMEや==強調とfixmeプロパティの状態を同期させる */
         "Sync fixme"?: boolean;
       };
       content?: {
+        /** リンクカードの利用を禁止しているノート種別で検出する */
         "Disallowed link card"?: boolean;
+        /** リンクカードに対応するリンクコメントの欠如を検出する */
         "No link comment"?: boolean;
+        /** 旧形式(v1)のリンクカード使用を警告する */
         "v1 link card"?: boolean;
+        /** 最新仕様に従っていないMOCセクションを検出する */
         "Unofficial MOC format"?: boolean;
+        /** 旧形式の投稿日/更新日ブロックを検出し、created/updatedを付与する */
         "v1 dates format"?: boolean;
+        /** 未解決の内部リンクを検出する */
         "Unresolved internal link"?: boolean;
+        /** 末尾に括弧を含む内部リンクを検出する（必要に応じ箇条書きを除外） */
         "Link ends with parenthesis"?: boolean;
       };
     };

@@ -10,7 +10,7 @@ import type { PluginSettings } from "src/settings";
  */
 export async function saveWith(options: {
   lint?: PluginSettings["linter"];
-  format?: boolean;
+  format?: PluginSettings["formatter"];
 }) {
   const { lint, format } = options;
   const file = getActiveFile();
@@ -22,7 +22,7 @@ export async function saveWith(options: {
     await lintFile(file, options.lint);
   }
   if (format) {
-    await formatFile();
+    await formatFile(format);
   }
 
   runCommandById("editor:save-file");

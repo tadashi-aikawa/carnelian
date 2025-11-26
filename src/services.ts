@@ -16,7 +16,7 @@ export function createServices(settings: PluginSettings): Service[] {
   return [
     new AddDatePropertiesService(),
     settings.linter ? new LintService(settings.linter) : [],
-    new FormatService(),
+    new FormatService(settings.formatter),
     new AddPropertiesToHeadService(),
     settings.click?.["Open link vertically"] ? new LinkClickService() : [],
   ].flat();

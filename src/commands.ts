@@ -101,7 +101,7 @@ function createCarnelianCommands(settings: PluginSettings) {
       kind: "all",
       enabled: se?.["Save with"],
       executor: () => {
-        saveWith({ lint: settings.linter, format: true });
+        saveWith({ lint: settings.linter, format: settings.formatter });
       },
     },
     {

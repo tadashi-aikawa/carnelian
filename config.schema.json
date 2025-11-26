@@ -373,6 +373,23 @@
           },
           "type": "object"
         },
+        "formatter": {
+          "additionalProperties": false,
+          "properties": {
+            "propertyOrder": {
+              "description": "プロパティの並び順を指定する配列 (default: [\"title\", \"created\", \"updated\"])",
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "removeIfEmpty": {
+              "description": "空のプロパティを削除するかどうか (default: true)",
+              "type": "boolean"
+            }
+          },
+          "type": "object"
+        },
         "linter": {
           "additionalProperties": false,
           "properties": {
@@ -383,24 +400,31 @@
                   "additionalProperties": false,
                   "properties": {
                     "Disallowed link card": {
+                      "description": "リンクカードの利用を禁止しているノート種別で検出する",
                       "type": "boolean"
                     },
                     "Link ends with parenthesis": {
+                      "description": "末尾に括弧を含む内部リンクを検出する（必要に応じ箇条書きを除外）",
                       "type": "boolean"
                     },
                     "No link comment": {
+                      "description": "リンクカードに対応するリンクコメントの欠如を検出する",
                       "type": "boolean"
                     },
                     "Unofficial MOC format": {
+                      "description": "最新仕様に従っていないMOCセクションを検出する",
                       "type": "boolean"
                     },
                     "Unresolved internal link": {
+                      "description": "未解決の内部リンクを検出する",
                       "type": "boolean"
                     },
                     "v1 dates format": {
+                      "description": "旧形式の投稿日/更新日ブロックを検出し、created/updatedを付与する",
                       "type": "boolean"
                     },
                     "v1 link card": {
+                      "description": "旧形式(v1)のリンクカード使用を警告する",
                       "type": "boolean"
                     }
                   },
@@ -410,24 +434,31 @@
                   "additionalProperties": false,
                   "properties": {
                     "MkDocs title": {
+                      "description": "MkDocs向けのtitleプロパティをファイル名と同期させる",
                       "type": "boolean"
                     },
                     "No cover": {
+                      "description": "ノート種別に応じてcoverを自動付与・必須チェックする",
                       "type": "boolean"
                     },
                     "No description": {
+                      "description": "descriptionプロパティが必須のノートで未設定を検出する",
                       "type": "boolean"
                     },
                     "No status": {
+                      "description": "statusの未設定を検出し、必要に応じて既定値を割り当てる",
                       "type": "boolean"
                     },
                     "No url": {
+                      "description": "urlプロパティが必要なノートで未設定を検出する",
                       "type": "boolean"
                     },
                     "Sync fixme": {
+                      "description": "本文の!FIXMEや==強調とfixmeプロパティの状態を同期させる",
                       "type": "boolean"
                     },
                     "Tags": {
+                      "description": "タイトルやパスに応じて所定のタグ付与/削除を行う",
                       "type": "boolean"
                     }
                   },
