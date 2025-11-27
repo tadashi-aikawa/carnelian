@@ -1,6 +1,6 @@
 import type { EditorPosition, WorkspaceLeaf } from "obsidian";
 import { parseTags } from "src/lib/obsutils/parser";
-import type { UApp, UCodeMirrorEditor } from "src/lib/types";
+import type { UApp, UCodeMirror, UCodeMirrorEditor } from "src/lib/types";
 import { errorMessage } from "src/lib/utils/errors";
 import { map, orThrow } from "src/lib/utils/guard";
 import { match } from "src/lib/utils/strings";
@@ -14,6 +14,20 @@ declare let app: UApp;
  */
 export function getActiveEditor(): UCodeMirrorEditor | null {
   return app.workspace.activeEditor?.editor ?? null;
+}
+
+/**
+ * CodeMirrorエディタを取得します
+ */
+export function getActiveCMEditor(): UCodeMirror | null {
+  return map(getActiveEditor(), (editor) => editor.cm);
+}
+
+/**
+ * エディタにフォーカスを移します
+ */
+export function focusEditor() {
+  getActiveCMEditor()?.focus();
 }
 
 /**

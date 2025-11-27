@@ -68,10 +68,10 @@ export type UMetadataEditor = {
 };
 
 export type UCodeMirror = {
-  /**
-   * offsetを取得します
-   */
+  /** 現在のカーソル位置のoffsetを取得します */
   posAtDOM(dom: any): number;
+  /** CodeMirrorエディタにフォーカスします */
+  focus(): void;
 };
 export type UCodeMirrorEditor = Editor & {
   cm: UCodeMirror;

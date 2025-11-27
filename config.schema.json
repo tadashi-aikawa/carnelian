@@ -243,6 +243,10 @@
             "Fix link": {
               "type": "boolean"
             },
+            "Focus editor content": {
+              "description": "エディタの本文にフォーカスを移す",
+              "type": "boolean"
+            },
             "Format table": {
               "type": "boolean"
             },

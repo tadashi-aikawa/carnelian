@@ -30,6 +30,7 @@ import { createTroubleshootingNote } from "./commands/create-troubleshooting-not
 import { cycleBulletCheckbox } from "./commands/cycle-bullet-checkbox";
 import { deleteActiveFile } from "./commands/delete-active-file";
 import { fixLink } from "./commands/fix-link";
+import { focusEditorContent } from "./commands/focus-content";
 import { formatTable } from "./commands/format-table";
 import { insertBlueskyPostsToWeeklyNote } from "./commands/insert-bluesky-posts-to-weekly-note";
 import { insertNewNotesToWeeklyNote } from "./commands/insert-inputs-to-weekly-note";
@@ -68,6 +69,12 @@ function createCarnelianCommands(settings: PluginSettings) {
   const sf = settings.file;
 
   return [
+    {
+      name: "Focus editor content",
+      kind: "editor",
+      enabled: se?.["Focus editor content"],
+      executor: focusEditorContent,
+    },
     {
       name: "Open as local MkDocs site",
       kind: "editor",

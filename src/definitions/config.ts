@@ -118,6 +118,9 @@ export interface Config {
       quality?: number;
     };
 
+    /** エディタの本文にフォーカスを移す */
+    "Focus editor content"?: boolean;
+
     // Copy
     "Copy as Confluence"?: {
       /**
