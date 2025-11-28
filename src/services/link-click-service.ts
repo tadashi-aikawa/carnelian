@@ -1,5 +1,5 @@
 import { getActiveEditor } from "src/lib/helpers/editors/basic";
-import { openFile } from "src/lib/helpers/entries";
+import { createNewMarkdownFile, openFile } from "src/lib/helpers/entries";
 import { getLinkTokenAtOffset, linkText2Path } from "src/lib/helpers/links";
 import { map } from "src/lib/utils/guard";
 import type { Service } from "src/services";
@@ -38,6 +38,8 @@ export class LinkClickService implements Service {
 
       const path = linkText2Path(linkText);
       if (!path) {
+        const f = await createNewMarkdownFile(linkText);
+        await openFile(f.path, { splitVertical: true });
         return;
       }
 

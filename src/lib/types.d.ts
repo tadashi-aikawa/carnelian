@@ -135,6 +135,7 @@ export type UWorkspace = Workspace & {
 export type UFileManager = FileManager & {
   createNewFile: (title?: string) => Promise<TFile>;
   createAndOpenMarkdownFile: (title?: string) => Promise<TFile>;
+  createNewMarkdownFileFromLinktext: (linkText: string) => Promise<TFile>;
 };
 
 type WorkspaceName = string;

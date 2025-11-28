@@ -203,6 +203,17 @@ export function createFile(path: string, data = ""): Promise<TFile> {
 }
 
 /**
+ * リンクテキストからMarkdownファイルを作成します。作成フォルダは設定に準拠します。
+ *
+ * ```ts
+ * await createNewMarkdownFile("title") // title.mdで作成
+ * ```
+ */
+export function createNewMarkdownFile(linkText: string): Promise<TFile> {
+  return app.fileManager.createNewMarkdownFileFromLinktext(linkText);
+}
+
+/**
  * 関連リンクを変更せずに関連ファイルをリネームします
  *
  * ```ts
@@ -268,20 +279,6 @@ export function openFile(
     .otherwise(() => false);
 
   return app.workspace.openLinkText("", path, leaf);
-}
-
-/**
- * タイトルからファイルを作成します
- * ファイル作成フォルダはrootになります
- *
- * ```ts
- * await createNewFile("title") // title.mdで作成
- * await createNewFile() // デフォルトタイトルで作成
- * ```
- */
-export function createNewFile(title?: string): Promise<TFile> {
-  // TODO: 例外処理
-  return app.fileManager.createNewFile(title);
 }
 
 /**
