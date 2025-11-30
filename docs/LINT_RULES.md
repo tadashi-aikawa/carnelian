@@ -126,6 +126,17 @@ lint機能のルールを記載する。
 | `📗Obsidian逆引きレシピ` ディレクトリ配下のSeris note | `Obsidian`   |
 
 
+### Inconsistent fixme
+
+本文の `!FIXME` / `!fixme` / `==ハイライト==` 有無と `fixme` プロパティの有無が不整合である。
+
+| 対象   | レベル | 備考    |
+| ------ | ------ | ------- |
+| 全ノート | ERROR  | autofix |
+
+
+
+
 ## Content Linter
 
 ### Disallowed link card
@@ -294,3 +305,11 @@ MOCのフォーマットがMinervaの最新仕様に従っていない。
 | Daily note           |        |                            |
 | Weekly Report        | ERROR  | 箇条書き(New Notes)は除外  |
 
+
+### Disallow fixme
+
+本文に `!FIXME` / `!fixme` / `==ハイライト==` が含まれている。`fixme` プロパティの有無は問わない。
+
+| 対象     | レベル |
+| -------- | ------ |
+| 全ノート | WARN   |
