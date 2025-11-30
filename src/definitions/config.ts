@@ -76,7 +76,7 @@ export interface Config {
         /** MkDocs向けのtitleプロパティをファイル名と同期させる */
         "MkDocs title"?: boolean;
         /** 本文の!FIXMEや==強調とfixmeプロパティの状態を同期させる */
-        "Sync fixme"?: boolean;
+        "Inconsistent fixme"?: boolean;
       };
       content?: {
         /** リンクカードの利用を禁止しているノート種別で検出する */

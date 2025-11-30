@@ -448,6 +448,10 @@
                 "propery": {
                   "additionalProperties": false,
                   "properties": {
+                    "Inconsistent fixme": {
+                      "description": "本文の!FIXMEや==強調とfixmeプロパティの状態を同期させる",
+                      "type": "boolean"
+                    },
                     "MkDocs title": {
                       "description": "MkDocs向けのtitleプロパティをファイル名と同期させる",
                       "type": "boolean"
@@ -466,10 +470,6 @@
                     },
                     "No url": {
                       "description": "urlプロパティが必要なノートで未設定を検出する",
-                      "type": "boolean"
-                    },
-                    "Sync fixme": {
-                      "description": "本文の!FIXMEや==強調とfixmeプロパティの状態を同期させる",
                       "type": "boolean"
                     },
                     "Tags": {

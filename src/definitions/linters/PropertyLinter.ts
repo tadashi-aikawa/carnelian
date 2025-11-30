@@ -29,7 +29,9 @@ export const propertyLinter: Linter = {
       rules?.["No status"] ? createNoStatus(noteType, properties) : null,
       rules?.Tags ? createTags(title, properties, path) : null,
       rules?.["MkDocs title"] ? createMkDocsTitle(title, properties) : null,
-      rules?.["Sync fixme"] ? createSyncFixme(properties, content) : null,
+      rules?.["Inconsistent fixme"]
+        ? createInconsistentFixme(properties, content)
+        : null,
     ].filter(isPresent);
   },
 };
@@ -357,7 +359,7 @@ function createMkDocsTitle(
   };
 }
 
-function createSyncFixme(
+function createInconsistentFixme(
   properties?: Properties,
   content?: string,
 ): LintInspection | null {
@@ -374,7 +376,7 @@ function createSyncFixme(
     .with([false, undefined], () => null)
     .with([true, P.union(false, undefined)], () => {
       return {
-        code: "Sync fixme",
+        code: "Inconsistent fixme",
         message: "fixmeプロパティをtrueにしました",
         level: "ERROR" as LintInspection["level"],
         fix: async () => {
@@ -384,7 +386,7 @@ function createSyncFixme(
     })
     .with([false, P.union(true, false)], () => {
       return {
-        code: "Sync fixme",
+        code: "Inconsistent fixme",
         message: "fixmeプロパティを削除しました",
         level: "ERROR" as LintInspection["level"],
         fix: async () => {
