@@ -410,6 +410,10 @@
                 "content": {
                   "additionalProperties": false,
                   "properties": {
+                    "Disallow fixme": {
+                      "description": "本文のFIXME記述を禁止する",
+                      "type": "boolean"
+                    },
                     "Disallowed link card": {
                       "description": "リンクカードの利用を禁止しているノート種別で検出する",
                       "type": "boolean"

@@ -93,6 +93,9 @@ export interface Config {
         "Unresolved internal link"?: boolean;
         /** 末尾に括弧を含む内部リンクを検出する（必要に応じ箇条書きを除外） */
         "Link ends with parenthesis"?: boolean;
+
+        /** 本文のFIXME記述を禁止する */
+        "Disallow fixme"?: boolean;
       };
     };
   };

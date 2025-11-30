@@ -1,6 +1,7 @@
 import { updateChangeLog } from "src/commands/update-change-log";
 import { toLineNo } from "src/lib/helpers/editors/basic";
 import { getUnresolvedLinkMap } from "src/lib/helpers/links";
+import { stripCodeAndHtmlBlocks } from "src/lib/obsutils/parser";
 import { ExhaustiveError } from "src/lib/utils/errors";
 import type { LintInspection, Linter } from "src/lib/utils/linter";
 import {
@@ -40,6 +41,7 @@ export const contentLinter: Linter = {
       ...(rules?.["Link ends with parenthesis"]
         ? createLinkEndsWithParenthesis(noteType, content)
         : []),
+      ...(rules?.["Disallow fixme"] ? createDisallowFixme(content) : []),
     ];
   },
 };
@@ -492,4 +494,24 @@ function createLinkEndsWithParenthesis(
     default:
       throw new ExhaustiveError(noteType);
   }
+}
+
+function createDisallowFixme(content?: string): LintInspection[] {
+  const normalizedContent = content ? stripCodeAndHtmlBlocks(content) : content;
+  const fixmeInContent = !normalizedContent
+    ? false
+    : normalizedContent.includes("!FIXME") ||
+      normalizedContent.includes("!fixme") ||
+      match(normalizedContent, /==.+?==/);
+  if (!fixmeInContent) {
+    return [];
+  }
+
+  return [
+    {
+      code: "Disallow fixme",
+      message: "本文にFIXME相当の記述が残っています",
+      level: "WARN" as const,
+    },
+  ];
 }
