@@ -2,6 +2,7 @@ import { expect, test } from "bun:test";
 import {
   parseMarkdownList,
   parseTags,
+  stripCodeAndHtmlBlocks,
   stripDecoration,
   stripLinks,
 } from "./parser";
@@ -132,5 +133,46 @@ test.each([
   `stripLinks("%s")`,
   (text: string, expected: ReturnType<typeof stripLinks>) => {
     expect(stripLinks(text)).toEqual(expected);
+  },
+);
+
+test.each([
+  [
+    ["text", "```", "code", "```", "text2"].join("\n"),
+    ["text", "text2"].join("\n"),
+  ],
+  [
+    ["text", "~~~ts", "code", "~~~", "text2"].join("\n"),
+    ["text", "text2"].join("\n"),
+  ],
+  [
+    ["text", "<pre><code>abc</code></pre>", "text2"].join("\n"),
+    ["text", "", "text2"].join("\n"),
+  ],
+  [
+    ["text", "<code>abc</code>", "text2"].join("\n"),
+    ["text", "", "text2"].join("\n"),
+  ],
+  [
+    ["text", "```", "code", "```", "", "```", "more code", "```", "text2"].join(
+      "\n",
+    ),
+    ["text", "", "text2"].join("\n"),
+  ],
+  ["text `abc` text2", "text  text2"],
+  [
+    ["text", "<div>==a==</div>", "text2"].join("\n"),
+    ["text", "", "text2"].join("\n"),
+  ],
+  [
+    'text <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA=="> text2',
+    "text  text2",
+  ],
+  [["> ```", "> const a = 1;", "> ```", "text"].join("\n"), "text"],
+  [["> <div>==a==</div>", "text"].join("\n"), ["> ", "text"].join("\n")],
+])(
+  `stripCodeAndHtmlBlocks("%s")`,
+  (text: string, expected: ReturnType<typeof stripCodeAndHtmlBlocks>) => {
+    expect(stripCodeAndHtmlBlocks(text)).toEqual(expected);
   },
 );

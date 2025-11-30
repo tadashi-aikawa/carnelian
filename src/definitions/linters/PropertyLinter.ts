@@ -2,6 +2,7 @@ import {
   removeActiveFileProperty,
   updateActiveFileProperty,
 } from "src/lib/helpers/properties";
+import { stripCodeAndHtmlBlocks } from "src/lib/obsutils/parser";
 import { ExhaustiveError } from "src/lib/utils/errors";
 import { isPresent } from "src/lib/utils/guard";
 import type { LintInspection, Linter } from "src/lib/utils/linter";
@@ -360,9 +361,12 @@ function createSyncFixme(
   properties?: Properties,
   content?: string,
 ): LintInspection | null {
-  const fixmeInContent = !content
+  const normalizedContent = content ? stripCodeAndHtmlBlocks(content) : content;
+  const fixmeInContent = !normalizedContent
     ? false
-    : content.includes("!FIXME") || match(content, /==.+?==/);
+    : normalizedContent.includes("!FIXME") ||
+      normalizedContent.includes("!fixme") ||
+      match(normalizedContent, /==.+?==/);
   const fixmeInProperties = properties?.fixme as boolean | undefined;
 
   return tsmatch([fixmeInContent, fixmeInProperties])

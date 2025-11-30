@@ -60,3 +60,48 @@ export function stripLinks(text: string): string {
     )
     .join("\n");
 }
+
+/**
+ * コードブロック/HTMLブロック/インラインコードを除外します
+ */
+export function stripCodeAndHtmlBlocks(text: string): string {
+  const lines = text.split("\n");
+  const strippedLines: string[] = [];
+
+  let inFence = false;
+  let fenceMarker: "`" | "~" | null = null;
+
+  for (const line of lines) {
+    const fenceMatch = line.match(/^(\s{0,3}>\s*)?([`~]{3,})(.*)$/);
+    if (fenceMatch) {
+      if (!inFence) {
+        inFence = true;
+        fenceMarker = fenceMatch[2][0] as "`" | "~";
+      } else if (fenceMarker && fenceMatch[2].startsWith(fenceMarker)) {
+        inFence = false;
+        fenceMarker = null;
+      }
+      continue;
+    }
+
+    if (inFence) {
+      continue;
+    }
+
+    strippedLines.push(line);
+  }
+
+  let withoutHtml = strippedLines.join("\n");
+
+  // ネストしたHTMLブロックを除去するため、マッチが無くなるまで反復
+  let previous: string;
+  do {
+    previous = withoutHtml;
+    withoutHtml = withoutHtml.replace(
+      /<([A-Za-z][^\s/>]*)(?:[^>]*?)>[\s\S]*?<\/\1>/g,
+      "",
+    );
+  } while (previous !== withoutHtml);
+
+  return withoutHtml.replace(/<[^>]+>/g, "").replace(/`[^`]*`/g, "");
+}
