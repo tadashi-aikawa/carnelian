@@ -11,40 +11,55 @@ export class LinkClickService implements Service {
   name = "LinkClick";
   handler?: (ev: MouseEvent) => void;
 
+  async createDstPath(ev: MouseEvent): Promise<string | null> {
+    const linkEl = (ev.target as HTMLElement).closest(
+      ".cm-hmd-internal-link,.internal-link",
+    );
+    if (!linkEl) {
+      return null;
+    }
+
+    const linkText =
+      linkEl.getAttribute("data-href") ??
+      linkEl.getAttribute("href") ??
+      map(
+        getActiveEditor()?.cm,
+        (cm) => getLinkTokenAtOffset(cm.posAtDOM(linkEl))?.text,
+      );
+    if (!linkText) {
+      return null;
+    }
+
+    const path = linkText2Path(linkText);
+    if (path) {
+      return path;
+    }
+
+    const f = await createNewMarkdownFile(linkText);
+    return f.path;
+  }
+
   onload(): void {
     this.handler = async (ev: MouseEvent) => {
-      if (!ev.metaKey || ev.button !== 0) {
+      const { metaKey, shiftKey, button } = ev;
+      if (button !== 0) {
         return;
       }
-
-      const linkEl = (ev.target as HTMLElement).closest(
-        ".cm-hmd-internal-link,.internal-link",
-      );
-      if (!linkEl) {
+      if (!metaKey && !shiftKey) {
         return;
       }
 
       ev.stopPropagation();
-
-      const linkText =
-        linkEl.getAttribute("data-href") ??
-        linkEl.getAttribute("href") ??
-        map(
-          getActiveEditor()?.cm,
-          (cm) => getLinkTokenAtOffset(cm.posAtDOM(linkEl))?.text,
-        );
-      if (!linkText) {
-        return;
-      }
-
-      const path = linkText2Path(linkText);
+      const path = await this.createDstPath(ev);
       if (!path) {
-        const f = await createNewMarkdownFile(linkText);
-        await openFile(f.path, { splitVertical: true });
         return;
       }
 
-      await openFile(path, { splitVertical: true });
+      if (metaKey) {
+        await openFile(path, { splitVertical: true });
+      } else if (shiftKey) {
+        await openFile(path, { newLeaf: true });
+      }
     };
 
     document.addEventListener("click", this.handler, true);
