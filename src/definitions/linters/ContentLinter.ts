@@ -498,20 +498,22 @@ function createLinkEndsWithParenthesis(
 
 function createDisallowFixme(content?: string): LintInspection[] {
   const normalizedContent = content ? stripCodeAndHtmlBlocks(content) : content;
-  const fixmeInContent = !normalizedContent
-    ? false
-    : normalizedContent.includes("!FIXME") ||
-      normalizedContent.includes("!fixme") ||
-      match(normalizedContent, /==.+?==/);
-  if (!fixmeInContent) {
+  if (!normalizedContent) {
     return [];
   }
 
-  return [
-    {
-      code: "Disallow fixme",
-      message: "本文にFIXME相当の記述が残っています",
-      level: "WARN" as const,
-    },
-  ];
+  const patterns = getSinglePatternMatchingLocations(
+    normalizedContent,
+    /(==.+?==|!fixme)/gi,
+  );
+  if (patterns.length === 0) {
+    return [];
+  }
+
+  // normalizedContentでは元の位置が特定できないので位置情報は入れない
+  return patterns.map((x) => ({
+    code: "Disallow fixme",
+    message: "本文にFIXME相当の記述が残っています",
+    level: "WARN" as const,
+  }));
 }
