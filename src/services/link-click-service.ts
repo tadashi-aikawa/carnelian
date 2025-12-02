@@ -28,6 +28,7 @@ export class LinkClickService implements Service {
 
       const linkText =
         linkEl.getAttribute("data-href") ??
+        linkEl.getAttribute("href") ??
         map(
           getActiveEditor()?.cm,
           (cm) => getLinkTokenAtOffset(cm.posAtDOM(linkEl))?.text,
