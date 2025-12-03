@@ -381,3 +381,24 @@ export function isMatchedGlobPatterns(
     return false;
   }
 }
+
+/**
+ * 行が見出しかどうかを返却します
+ */
+export function isHeading(line: string): boolean {
+  return (
+    line.startsWith("# ") ||
+    line.startsWith("## ") ||
+    line.startsWith("### ") ||
+    line.startsWith("#### ") ||
+    line.startsWith("##### ") ||
+    line.startsWith("###### ")
+  );
+}
+
+/**
+ * 行がコードブロックの開始または終了かどうかを返却します
+ */
+export function isCodeBlockStartOrEnd(line: string): boolean {
+  return line.trim().startsWith("```") || line.trim().startsWith("~~~");
+}

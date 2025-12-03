@@ -10,7 +10,12 @@ import {
 import { ExhaustiveError } from "src/lib/utils/errors";
 import { isPresent } from "src/lib/utils/guard";
 import type { LintInspection, Linter } from "src/lib/utils/linter";
-import { isMatchedGlobPatterns, match } from "src/lib/utils/strings";
+import {
+  isCodeBlockStartOrEnd,
+  isHeading,
+  isMatchedGlobPatterns,
+  match,
+} from "src/lib/utils/strings";
 import type { Properties } from "src/lib/utils/types";
 import { P, match as tsmatch } from "ts-pattern";
 import type { PropertyLinterConfig } from "../config";
@@ -451,24 +456,40 @@ function createInconsistentDescription(
     return null;
   }
 
-  const firstLine = body.split("\n").at(0) || undefined;
-  const strippedFirstLine = firstLine
-    ? stripLinks(stripDecoration(firstLine))
-    : firstLine;
+  const createNewDescription = () => {
+    const line = body.split("\n").at(0)?.trim();
+    if (!line) {
+      return null;
+    }
+
+    const strippedLine = stripLinks(stripDecoration(line));
+    if (!strippedLine) {
+      return null;
+    }
+
+    if (isHeading(strippedLine)) {
+      return null;
+    }
+    if (isCodeBlockStartOrEnd(strippedLine)) {
+      return null;
+    }
+
+    return strippedLine;
+  };
 
   const description = properties?.description as string | undefined;
 
-  return tsmatch([strippedFirstLine, description])
-    .with([undefined, undefined], () => null)
-    .with([P.string, undefined], () => ({
+  return tsmatch([createNewDescription(), description])
+    .with([null, undefined], () => null)
+    .with([P.string, undefined], ([newDescription]) => ({
       code: "Inconsistent description",
       message: "descriptionプロパティを追加しました",
       level: "ERROR" as LintInspection["level"],
       fix: async () => {
-        updateActiveFileProperty("description", strippedFirstLine);
+        updateActiveFileProperty("description", newDescription);
       },
     }))
-    .with([undefined, P.string], () => ({
+    .with([null, P.string], () => ({
       code: "Inconsistent description",
       message: "descriptionプロパティを削除しました",
       level: "ERROR" as LintInspection["level"],
@@ -476,15 +497,15 @@ function createInconsistentDescription(
         removeActiveFileProperty("description");
       },
     }))
-    .with([P.string, P.string], ([first, desc]) =>
-      first === desc
+    .with([P.string, P.string], ([newDescription, description]) =>
+      newDescription === description
         ? null
         : {
             code: "Inconsistent description",
             message: "descriptionプロパティを更新しました",
             level: "ERROR" as LintInspection["level"],
             fix: async () => {
-              updateActiveFileProperty("description", strippedFirstLine);
+              updateActiveFileProperty("description", newDescription);
             },
           },
     )

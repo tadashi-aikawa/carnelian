@@ -1,3 +1,5 @@
+import { isHeading } from "../utils/strings";
+
 export interface Position {
   line: number;
   ch: number;
@@ -10,17 +12,6 @@ export interface TextReplacement {
 }
 
 const isEmptyLine = (x: string) => x.trim() === "";
-
-const isHeading = (line: string): boolean => {
-  return (
-    line.startsWith("# ") ||
-    line.startsWith("## ") ||
-    line.startsWith("### ") ||
-    line.startsWith("#### ") ||
-    line.startsWith("##### ") ||
-    line.startsWith("###### ")
-  );
-};
 
 function toText(line: string): string {
   if (line.startsWith("# ")) {

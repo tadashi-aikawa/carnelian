@@ -11,6 +11,7 @@ import {
   getSinglePatternCaptureMatchingLocations,
   getSinglePatternMatchingLocations,
   getWikiLinks,
+  isHeading,
   isMatchedGlobPatterns,
   isUrl,
   match,
@@ -589,3 +590,24 @@ describe("isMatchedGlobPatterns", () => {
     expect(result).toBe(true);
   });
 });
+
+test.each([
+  ["# Heading 1", true],
+  ["## Heading 2", true],
+  ["### Heading 3", true],
+  ["#### Heading 4", true],
+  ["##### Heading 5", true],
+  ["###### Heading 6", true],
+  ["####### Not a heading", false],
+  ["No heading here", false],
+  [" ## Invalid heading", false],
+  ["#tag", false],
+])(
+  `isHeading("%s"))`,
+  (
+    text: Parameters<typeof isHeading>[0],
+    expected: ReturnType<typeof isHeading>,
+  ) => {
+    expect(isHeading(text)).toBe(expected);
+  },
+);
