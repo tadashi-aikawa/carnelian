@@ -11,6 +11,7 @@ import { ExhaustiveError } from "src/lib/utils/errors";
 import { isPresent } from "src/lib/utils/guard";
 import type { LintInspection, Linter } from "src/lib/utils/linter";
 import {
+  isBlockquote,
   isCodeBlockStartOrEnd,
   isHeading,
   isMatchedGlobPatterns,
@@ -471,6 +472,9 @@ function createInconsistentDescription(
       return null;
     }
     if (isCodeBlockStartOrEnd(strippedLine)) {
+      return null;
+    }
+    if (isBlockquote(strippedLine)) {
       return null;
     }
 

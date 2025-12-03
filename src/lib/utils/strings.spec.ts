@@ -11,6 +11,8 @@ import {
   getSinglePatternCaptureMatchingLocations,
   getSinglePatternMatchingLocations,
   getWikiLinks,
+  isBlockquote,
+  isCodeBlockStartOrEnd,
   isHeading,
   isMatchedGlobPatterns,
   isUrl,
@@ -609,5 +611,45 @@ test.each([
     expected: ReturnType<typeof isHeading>,
   ) => {
     expect(isHeading(text)).toBe(expected);
+  },
+);
+
+// isCodeBlockStartOrEnd のテスト
+test.each([
+  ["```", true],
+  ["~~~", true],
+  ["   ```", true],
+  ["> ```", true],
+  ["```javascript", true],
+  ["~~~html", true],
+  ["Not a code block", false],
+  ["`Inline code`", false],
+  ["~~~~", true],
+])(
+  `isCodeBlockStartOrEnd("%s"))`,
+  (
+    text: Parameters<typeof isCodeBlockStartOrEnd>[0],
+    expected: ReturnType<typeof isCodeBlockStartOrEnd>,
+  ) => {
+    expect(isCodeBlockStartOrEnd(text)).toBe(expected);
+  },
+);
+
+// isBlockquote のテスト
+test.each([
+  ["> This is a blockquote", true],
+  [">> Nested blockquote", true],
+  ["> > Another nested blockquote", true],
+  ["Not a blockquote", false],
+  [">", true],
+  ["> ", true],
+  [">> ", true],
+])(
+  `isBlockquote("%s"))`,
+  (
+    text: Parameters<typeof isBlockquote>[0],
+    expected: ReturnType<typeof isBlockquote>,
+  ) => {
+    expect(isBlockquote(text)).toBe(expected);
   },
 );

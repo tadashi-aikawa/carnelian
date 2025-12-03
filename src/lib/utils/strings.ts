@@ -400,5 +400,13 @@ export function isHeading(line: string): boolean {
  * 行がコードブロックの開始または終了かどうかを返却します
  */
 export function isCodeBlockStartOrEnd(line: string): boolean {
-  return line.trim().startsWith("```") || line.trim().startsWith("~~~");
+  const trimmed = line.replace(/^[ >]+\s*/, "");
+  return trimmed.startsWith("```") || trimmed.startsWith("~~~");
+}
+
+/**
+ * 行が引用かどうかを返却します
+ */
+export function isBlockquote(line: string): boolean {
+  return line.trim().startsWith(">");
 }
