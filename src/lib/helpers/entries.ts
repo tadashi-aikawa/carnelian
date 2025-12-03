@@ -6,6 +6,7 @@ import type { UApp } from "../types";
 import { map, orThrow } from "../utils/guard";
 import { getActiveEditor } from "./editors/basic";
 import { getActiveLeaf } from "./leaves";
+import { getActiveFileCache, getFileCacheByPath } from "./metadata";
 import { getFileDeleteMode } from "./settings";
 
 declare let app: UApp;
@@ -338,6 +339,31 @@ export async function loadFileContentCache(
 }
 
 /**
+ * ファイルキャッシュの本文(frontmatter以外)を取得します
+ *
+ * ```ts
+ * await loadFileBodyCache("Notes/Obsidian.md")
+ * // "Obsidianは最高のマークダウンエディタである\n完"
+ * ```
+ */
+export async function loadFileBodyCache(path: string): Promise<string | null> {
+  const cache = getFileCacheByPath(path);
+  if (!cache) {
+    return null;
+  }
+
+  const content = await loadFileContentCache(path);
+  if (content == null) {
+    return null;
+  }
+
+  const frontmatterEndOffset = cache.frontmatterPosition?.end.offset;
+  return frontmatterEndOffset
+    ? content.slice(frontmatterEndOffset + 1)
+    : content;
+}
+
+/**
  * 現在ファイルの中身を取得します
  *
  * ```ts
@@ -364,6 +390,21 @@ export function getActiveFileContent(position?: {
     toEditorPosition(position.start),
     toEditorPosition(position.end),
   );
+}
+
+/**
+ * 現在ファイルの本文(frontmatter以外)を取得します
+ */
+export function getActiveFileBody(): string | null {
+  const content = getActiveFileContent();
+  if (content == null) {
+    return null;
+  }
+
+  const frontmatterEndOffset =
+    getActiveFileCache()?.frontmatterPosition?.end.offset ?? 0;
+
+  return content.slice(frontmatterEndOffset);
 }
 
 /**

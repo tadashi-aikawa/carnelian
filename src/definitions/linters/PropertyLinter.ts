@@ -2,18 +2,23 @@ import {
   removeActiveFileProperty,
   updateActiveFileProperty,
 } from "src/lib/helpers/properties";
-import { stripCodeAndHtmlBlocks } from "src/lib/obsutils/parser";
+import {
+  stripCodeAndHtmlBlocks,
+  stripDecoration,
+  stripLinks,
+} from "src/lib/obsutils/parser";
 import { ExhaustiveError } from "src/lib/utils/errors";
 import { isPresent } from "src/lib/utils/guard";
 import type { LintInspection, Linter } from "src/lib/utils/linter";
-import { match } from "src/lib/utils/strings";
+import { isMatchedGlobPatterns, match } from "src/lib/utils/strings";
 import type { Properties } from "src/lib/utils/types";
 import { P, match as tsmatch } from "ts-pattern";
+import type { PropertyLinterConfig } from "../config";
 import { findNoteTypeBy } from "../mkms";
 import type { NoteType } from "../mkms";
 
 export const propertyLinter: Linter = {
-  lint: ({ title, properties, content, path, settings }) => {
+  lint: ({ title, properties, body, path, settings }) => {
     const noteType = findNoteTypeBy({ path });
     if (!noteType) {
       return [];
@@ -30,7 +35,16 @@ export const propertyLinter: Linter = {
       rules?.Tags ? createTags(title, properties, path) : null,
       rules?.["MkDocs title"] ? createMkDocsTitle(title, properties) : null,
       rules?.["Inconsistent fixme"]
-        ? createInconsistentFixme(properties, content)
+        ? createInconsistentFixme(properties, body)
+        : null,
+      rules?.["Inconsistent description"]
+        ? createInconsistentDescription(
+            noteType,
+            path,
+            body,
+            properties,
+            rules["Inconsistent description"],
+          )
         : null,
     ].filter(isPresent);
   },
@@ -361,9 +375,9 @@ function createMkDocsTitle(
 
 function createInconsistentFixme(
   properties?: Properties,
-  content?: string,
+  body?: string,
 ): LintInspection | null {
-  const normalizedContent = content ? stripCodeAndHtmlBlocks(content) : content;
+  const normalizedContent = body ? stripCodeAndHtmlBlocks(body) : body;
   const fixmeInContent = !normalizedContent
     ? false
     : normalizedContent.includes("!FIXME") ||
@@ -394,5 +408,85 @@ function createInconsistentFixme(
         },
       };
     })
+    .exhaustive();
+}
+
+function createInconsistentDescription(
+  noteType: NoteType,
+  path: string,
+  body: string,
+  properties?: Properties,
+  settings?: NonNullable<PropertyLinterConfig>["Inconsistent description"],
+): LintInspection | null {
+  const shouldIgnored = isMatchedGlobPatterns(
+    path,
+    settings?.ignoreFiles ?? [],
+  );
+  if (shouldIgnored) {
+    return null;
+  }
+
+  const supported = tsmatch(noteType.name)
+    .with(P.union("Glossary note", "My note"), () => true)
+    .with(
+      P.union(
+        "Hub note",
+        "Procedure note",
+        "Activity note",
+        "Troubleshooting note",
+        "Prime note",
+        "Report note",
+        "Article note",
+        "Brain note",
+        "Series note",
+        "Rule note",
+        "ADR note",
+        "Daily note",
+        "Weekly report",
+      ),
+      () => false,
+    )
+    .exhaustive();
+  if (!supported) {
+    return null;
+  }
+
+  const firstLine = body.split("\n").at(0) || undefined;
+  const strippedFirstLine = firstLine
+    ? stripLinks(stripDecoration(firstLine))
+    : firstLine;
+
+  const description = properties?.description as string | undefined;
+
+  return tsmatch([strippedFirstLine, description])
+    .with([undefined, undefined], () => null)
+    .with([P.string, undefined], () => ({
+      code: "Inconsistent description",
+      message: "descriptionプロパティを追加しました",
+      level: "ERROR" as LintInspection["level"],
+      fix: async () => {
+        updateActiveFileProperty("description", strippedFirstLine);
+      },
+    }))
+    .with([undefined, P.string], () => ({
+      code: "Inconsistent description",
+      message: "descriptionプロパティを削除しました",
+      level: "ERROR" as LintInspection["level"],
+      fix: async () => {
+        removeActiveFileProperty("description");
+      },
+    }))
+    .with([P.string, P.string], ([first, desc]) =>
+      first === desc
+        ? null
+        : {
+            code: "Inconsistent description",
+            message: "descriptionプロパティを更新しました",
+            level: "ERROR" as LintInspection["level"],
+            fix: async () => {
+              updateActiveFileProperty("description", strippedFirstLine);
+            },
+          },
+    )
     .exhaustive();
 }

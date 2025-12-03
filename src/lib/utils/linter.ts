@@ -11,10 +11,11 @@ export interface LintInspection {
 }
 type LintArgs = {
   title: string;
+  /** プロパティ含む全文 */
   content: string;
-  /**
-   * Vault rootからの相対パス (ex: Notes/hoge.md)
-   */
+  /** プロパティ除く本文 */
+  body: string;
+  /** Vault rootからの相対パス (ex: Notes/hoge.md) */
   path: string;
   properties?: Properties;
   settings: PluginSettings["linter"];

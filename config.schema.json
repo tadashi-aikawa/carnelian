@@ -448,6 +448,19 @@
                 "propery": {
                   "additionalProperties": false,
                   "properties": {
+                    "Inconsistent description": {
+                      "additionalProperties": false,
+                      "description": "descriptionプロパティと本文の内容を比較し、不一致を検出する",
+                      "properties": {
+                        "ignoreFiles": {
+                          "items": {
+                            "type": "string"
+                          },
+                          "type": "array"
+                        }
+                      },
+                      "type": "object"
+                    },
                     "Inconsistent fixme": {
                       "description": "本文の!FIXMEや==強調とfixmeプロパティの状態を同期させる",
                       "type": "boolean"

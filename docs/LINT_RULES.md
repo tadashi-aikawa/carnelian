@@ -135,6 +135,28 @@ lint機能のルールを記載する。
 | 全ノート | ERROR  | autofix |
 
 
+### Inconsistent description
+
+本文1行目の内容と `description` の内容に不整合がある。
+
+
+| ノートの種類         | レベル | 備考    |
+| -------------------- | ------ | ------- |
+| Glossary note        | ERROR  | autofix |
+| Hub note             |        | autofix |
+| Procedure note       |        | autofix |
+| Activity note        |        | autofix |
+| Troubleshooting note |        | autofix |
+| Prime note           |        | autofix |
+| Report note          |        | autofix |
+| Brain note           |        | autofix |
+| Article note         |        | autofix |
+| My note              | ERROR  | autofix |
+| Series note          |        | autofix |
+| Rule note            |        | autofix |
+| ADR note             |        | autofix |
+| Daily note           |        | autofix |
+| Weekly Report        |        | autofix |
 
 
 ## Content Linter

@@ -77,6 +77,10 @@ export interface Config {
         "MkDocs title"?: boolean;
         /** 本文の!FIXMEや==強調とfixmeプロパティの状態を同期させる */
         "Inconsistent fixme"?: boolean;
+        /** descriptionプロパティと本文の内容を比較し、不一致を検出する */
+        "Inconsistent description"?: {
+          ignoreFiles?: string[];
+        };
       };
       content?: {
         /** リンクカードの利用を禁止しているノート種別で検出する */
@@ -211,6 +215,11 @@ export interface Config {
 }
 
 export type EditorConfig = NonNullable<Config["editor"]>;
+
+type LinterConfig = NonNullable<Config["linter"]>;
+export type PropertyLinterConfig = NonNullable<
+  LinterConfig["rules"]
+>["propery"];
 
 type KeyChainAccountName = string;
 

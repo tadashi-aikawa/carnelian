@@ -1,5 +1,8 @@
 import type { TFile } from "obsidian";
-import { loadFileContentCache } from "src/lib/helpers/entries";
+import {
+  loadFileBodyCache,
+  loadFileContentCache,
+} from "src/lib/helpers/entries";
 import { getPropertiesByPath } from "src/lib/helpers/properties";
 import {
   insertElementAfterHeader,
@@ -29,10 +32,12 @@ export async function lint(
   settings: PluginSettings["linter"],
 ) {
   const content = await loadFileContentCache(file.path);
+  const body = await loadFileBodyCache(file.path);
   const properties = getPropertiesByPath(file.path) ?? undefined;
   const inspections = lintAll(linters, {
     title: file.basename,
     content: content ?? "",
+    body: body ?? "",
     path: file.path,
     properties,
     settings,
