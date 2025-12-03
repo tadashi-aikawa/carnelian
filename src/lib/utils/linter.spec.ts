@@ -48,6 +48,7 @@ test("Lint検査なしだと空配列が返る(単一Linter))", () => {
   const actual = lintAll(linters, {
     title: "123456",
     content: "",
+    body: "",
     path: "",
     settings: {},
   });
@@ -59,6 +60,7 @@ test("Lint検査ありだと結果配列が返る(単一Linter/単一結果))", 
   const actual = lintAll(linters, {
     title: "1234",
     content: "",
+    body: "",
     path: "",
     settings: {},
   });
@@ -76,6 +78,7 @@ test("Lint検査ありだと結果が返る(単一Linter/複数結果))", () => 
   const actual = lintAll(linters, {
     title: " ",
     content: "",
+    body: "",
     path: "",
     settings: {},
   });
@@ -98,6 +101,7 @@ test("Lint検査ありだと結果が返る(複数Linter/複数結果))", () => 
   const actual = lintAll(linters, {
     title: "ab",
     content: "",
+    body: "",
     path: "",
     properties: { aliases: ["hoge"], tags: [] },
     settings: {},
@@ -126,6 +130,7 @@ test("Lint検査が重複していてもユニークにはならない", () => {
   const actual = lintAll(linters, {
     title: "ab",
     content: "",
+    body: "",
     path: "",
     settings: {},
   });
