@@ -14,6 +14,7 @@ import {
   isBlockquote,
   isCodeBlockStartOrEnd,
   isHeading,
+  isHtmlTag,
   isMatchedGlobPatterns,
   match,
 } from "src/lib/utils/strings";
@@ -475,6 +476,9 @@ function createInconsistentDescription(
       return null;
     }
     if (isBlockquote(strippedLine)) {
+      return null;
+    }
+    if (isHtmlTag(strippedLine)) {
       return null;
     }
 

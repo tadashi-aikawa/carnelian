@@ -14,6 +14,7 @@ import {
   isBlockquote,
   isCodeBlockStartOrEnd,
   isHeading,
+  isHtmlTag,
   isMatchedGlobPatterns,
   isUrl,
   match,
@@ -651,5 +652,25 @@ test.each([
     expected: ReturnType<typeof isBlockquote>,
   ) => {
     expect(isBlockquote(text)).toBe(expected);
+  },
+);
+
+// isHTMLTag のテスト
+test.each([
+  ["<div>", true],
+  ["</div>", true],
+  ["<img src='image.png' />", true],
+  ["<a href='link'>", true],
+  ["Not an HTML tag", false],
+  ["< invalid >", false],
+  ["<br>", true],
+  ["<input type='text'>", true],
+])(
+  `isHtmlTag("%s"))`,
+  (
+    text: Parameters<typeof isHtmlTag>[0],
+    expected: ReturnType<typeof isHtmlTag>,
+  ) => {
+    expect(isHtmlTag(text)).toBe(expected);
   },
 );

@@ -410,3 +410,15 @@ export function isCodeBlockStartOrEnd(line: string): boolean {
 export function isBlockquote(line: string): boolean {
   return line.trim().startsWith(">");
 }
+
+/**
+ * 行がHTMLタグかどうかを返却します
+ */
+export function isHtmlTag(line: string): boolean {
+  const trimmed = line.trim();
+  return (
+    /^<([a-zA-Z][\w-]*)(\s+[^<>]*)?>/.test(trimmed) ||
+    /^<\/([a-zA-Z][\w-]*)>/.test(trimmed) ||
+    /^<([a-zA-Z][\w-]*)(\s+[^<>]*)?\/>/.test(trimmed)
+  );
+}
