@@ -49,12 +49,12 @@ export class LinkClickService implements Service {
         return;
       }
 
-      ev.stopPropagation();
       const path = await this.createDstPath(ev);
       if (!path) {
         return;
       }
 
+      ev.stopPropagation();
       if (metaKey) {
         await openFile(path, { splitVertical: true });
       } else if (shiftKey) {
