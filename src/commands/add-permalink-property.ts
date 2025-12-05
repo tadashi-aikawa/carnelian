@@ -73,14 +73,16 @@ async function createArticlePermalink(
     systemMessage: `ページのタイトルを渡します。それを元にパーマリンクを作成してください。
 
 - パーセントエンコードは禁止
-- 重要と思われる語句(日本語の場合は英語に訳したもの)を含めてハイフンでつなげる
+- 重要と思われる語句(英語でない場合は英語に訳したもの)を含めてハイフンでつなげる
 - あまり長くなりすぎないように
 - 結果だけ返して. 解説などは一切不要
   - 例: "2023年のMKMSの振り返り" -> "mkms-2023-review"
+- 英語以外の語句は必ず英訳する。英訳できない場合はローマ字化し、日本語のまま残すことは禁止
     `,
     userMessage: getActiveFileTitle()!,
     apiKey: openAPIKey,
   });
+
   nt.hide();
   if (!summary) {
     notifyRuntimeError("パーマリンクの作成に失敗しました");
