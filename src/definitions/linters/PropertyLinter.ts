@@ -7,7 +7,6 @@ import {
   stripDecoration,
   stripLinks,
 } from "src/lib/obsutils/parser";
-import { ExhaustiveError } from "src/lib/utils/errors";
 import { isPresent } from "src/lib/utils/guard";
 import type { LintInspection, Linter } from "src/lib/utils/linter";
 import {
@@ -32,6 +31,9 @@ export const propertyLinter: Linter = {
     }
 
     const rules = settings?.rules?.propery;
+
+    // FIXME: プロパティに変更が入るものから先に実行する
+
     return [
       rules?.["No description"]
         ? createNoDescription(noteType, properties)
@@ -70,40 +72,30 @@ function createNoDescription(
     message: "プロパティにdescriptionがありません",
   };
 
-  switch (noteType.name) {
-    case "Glossary note":
-      return { ...base, level: "ERROR" };
-    case "Hub note":
-      return null;
-    case "Procedure note":
-      return { ...base, level: "WARN" };
-    case "Activity note":
-      return { ...base, level: "ERROR" };
-    case "Troubleshooting note":
-      return { ...base, level: "ERROR" };
-    case "Prime note":
-      return { ...base, level: "ERROR" };
-    case "Report note":
-      return { ...base, level: "ERROR" };
-    case "Article note":
-      return { ...base, level: "ERROR" };
-    case "Brain note":
-      return { ...base, level: "ERROR" };
-    case "My note":
-      return { ...base, level: "WARN" };
-    case "Series note":
-      return { ...base, level: "ERROR" };
-    case "Rule note":
-      return { ...base, level: "ERROR" };
-    case "ADR note":
-      return { ...base, level: "ERROR" };
-    case "Daily note":
-      return null;
-    case "Weekly report":
-      return { ...base, level: "ERROR" };
-    default:
-      throw new ExhaustiveError(noteType);
-  }
+  return tsmatch(noteType.name)
+    .returnType<LintInspection | null>()
+    .with(
+      P.union(
+        "Glossary note",
+        "Activity note",
+        "Troubleshooting note",
+        "Prime note",
+        "Report note",
+        "Article note",
+        "Brain note",
+        "Series note",
+        "Rule note",
+        "ADR note",
+        "Weekly report",
+      ),
+      () => ({ ...base, level: "ERROR" }),
+    )
+    .with(P.union("Hub note", "Daily note"), () => null)
+    .with(P.union("Procedure note", "My note"), () => ({
+      ...base,
+      level: "WARN",
+    }))
+    .exhaustive();
 }
 
 function createNoCover(
@@ -132,40 +124,27 @@ function createNoCover(
         : undefined,
   };
 
-  switch (noteType.name) {
-    case "Glossary note":
-      return null;
-    case "Hub note":
-      return { ...base, level: "ERROR" };
-    case "Procedure note":
-      return null;
-    case "Activity note":
-      return { ...base, level: "ERROR" };
-    case "Troubleshooting note":
-      return { ...base, level: "ERROR" };
-    case "Prime note":
-      return { ...base, level: "ERROR" };
-    case "Report note":
-      return { ...base, level: "ERROR" };
-    case "Article note":
-      return { ...base, level: "ERROR" };
-    case "Brain note":
-      return { ...base, level: "ERROR" };
-    case "My note":
-      return { ...base, level: "ERROR" };
-    case "Series note":
-      return { ...base, level: "ERROR" };
-    case "Rule note":
-      return { ...base, level: "ERROR" };
-    case "ADR note":
-      return { ...base, level: "ERROR" };
-    case "Daily note":
-      return null;
-    case "Weekly report":
-      return { ...base, level: "ERROR" };
-    default:
-      throw new ExhaustiveError(noteType);
-  }
+  return tsmatch(noteType.name)
+    .returnType<LintInspection | null>()
+    .with(
+      P.union(
+        "Hub note",
+        "Activity note",
+        "Troubleshooting note",
+        "Prime note",
+        "Report note",
+        "Article note",
+        "Brain note",
+        "My note",
+        "Series note",
+        "Rule note",
+        "ADR note",
+        "Weekly report",
+      ),
+      () => ({ ...base, level: "ERROR" }),
+    )
+    .with(P.union("Glossary note", "Procedure note", "Daily note"), () => null)
+    .exhaustive();
 }
 
 function createNoUrl(
@@ -181,40 +160,29 @@ function createNoUrl(
     message: "プロパティにurlがありません",
   };
 
-  switch (noteType.name) {
-    case "Glossary note":
-      return { ...base, level: "WARN" };
-    case "Hub note":
-      return null;
-    case "Procedure note":
-      return { ...base, level: "INFO" };
-    case "Activity note":
-      return null;
-    case "Troubleshooting note":
-      return null;
-    case "Prime note":
-      return null;
-    case "Report note":
-      return null;
-    case "Article note":
-      return null;
-    case "Brain note":
-      return null;
-    case "My note":
-      return null;
-    case "Series note":
-      return null;
-    case "Rule note":
-      return null;
-    case "ADR note":
-      return null;
-    case "Daily note":
-      return null;
-    case "Weekly report":
-      return null;
-    default:
-      throw new ExhaustiveError(noteType);
-  }
+  return tsmatch(noteType.name)
+    .returnType<LintInspection | null>()
+    .with("Glossary note", () => ({ ...base, level: "WARN" }))
+    .with("Procedure note", () => ({ ...base, level: "INFO" }))
+    .with(
+      P.union(
+        "Hub note",
+        "Activity note",
+        "Troubleshooting note",
+        "Prime note",
+        "Report note",
+        "Article note",
+        "Brain note",
+        "My note",
+        "Series note",
+        "Rule note",
+        "ADR note",
+        "Daily note",
+        "Weekly report",
+      ),
+      () => null,
+    )
+    .exhaustive();
 }
 
 function createNoStatus(
@@ -233,44 +201,29 @@ function createNoStatus(
     },
   };
 
-  switch (noteType.name) {
-    case "Glossary note":
-      return null;
-    case "Hub note":
-      return null;
-    case "Procedure note":
-      return null;
-    case "Activity note":
-      return null;
-    case "Troubleshooting note":
-      return { ...base, level: "ERROR" };
-    case "Prime note":
-      return null;
-    case "Report note":
-      return null;
-    case "Article note":
-      return null;
-    case "Brain note":
-      return null;
-    case "My note":
-      return null;
-    case "Series note":
-      return null;
-    case "Rule note":
-      return null;
-    case "ADR note":
-      return {
-        code: "No status",
-        message: "プロパティにstatusがありません",
-        level: "ERROR",
-      };
-    case "Daily note":
-      return null;
-    case "Weekly report":
-      return null;
-    default:
-      throw new ExhaustiveError(noteType);
-  }
+  return tsmatch(noteType.name)
+    .returnType<LintInspection | null>()
+    .with("Troubleshooting note", () => ({ ...base, level: "ERROR" }))
+    .with(
+      P.union(
+        "Glossary note",
+        "Hub note",
+        "Procedure note",
+        "Activity note",
+        "Prime note",
+        "Report note",
+        "Article note",
+        "Brain note",
+        "My note",
+        "Series note",
+        "Rule note",
+        "ADR note",
+        "Daily note",
+        "Weekly report",
+      ),
+      () => null,
+    )
+    .exhaustive();
 }
 
 function createTags(
