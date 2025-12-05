@@ -1,9 +1,9 @@
 import { requestUrl } from "obsidian";
 
 const dollarRate = 145;
-// GPT-4.1
-const inputTokensDollarPerMillion = 2;
-const outputTokensDollarPerMillion = 8;
+// GPT-5.1
+const inputTokensDollarPerMillion = 1.25;
+const outputTokensDollarPerMillion = 10;
 
 interface Result {
   text: string;
@@ -63,7 +63,7 @@ export async function fetchOpenAIChatCompletion(args: {
       Authorization: `Bearer ${args.apiKey}`,
     },
     body: JSON.stringify({
-      model: "gpt-4.1",
+      model: "gpt-5.1",
       instructions: args.systemMessage,
       input: args.userMessage,
       temperature: 0,
