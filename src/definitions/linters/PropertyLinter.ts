@@ -23,6 +23,10 @@ import type { PropertyLinterConfig } from "../config";
 import { findNoteTypeBy } from "../mkms";
 import type { NoteType } from "../mkms";
 
+type PropertyLintInspection = LintInspection & {
+  propertyCommand?: { [key: string]: any | null };
+};
+
 export const propertyLinter: Linter = {
   lint: ({ title, properties, body, path, settings }) => {
     const noteType = findNoteTypeBy({ path });
@@ -32,29 +36,49 @@ export const propertyLinter: Linter = {
 
     const rules = settings?.rules?.propery;
 
-    // FIXME: プロパティに変更が入るものから先に実行する
+    // autofixでプロパティに修正が加わるものは、vpに反映させてから他のルールを評価する
+    let vp = properties || {};
+    const vpUpdateWrapper = (
+      mutableLintInspection: PropertyLintInspection | null,
+    ): LintInspection | null => {
+      if (!mutableLintInspection) {
+        return null;
+      }
+
+      if (mutableLintInspection.propertyCommand) {
+        vp = { ...vp, ...mutableLintInspection.propertyCommand };
+      }
+      return mutableLintInspection;
+    };
 
     return [
-      rules?.["No description"]
-        ? createNoDescription(noteType, properties)
-        : null,
-      rules?.["No cover"] ? createNoCover(noteType, path, properties) : null,
-      rules?.["No url"] ? createNoUrl(noteType, properties) : null,
-      rules?.["No status"] ? createNoStatus(noteType, properties) : null,
-      rules?.Tags ? createTags(title, properties, path) : null,
-      rules?.["MkDocs title"] ? createMkDocsTitle(title, properties) : null,
-      rules?.["Inconsistent fixme"]
-        ? createInconsistentFixme(properties, body)
-        : null,
       rules?.["Inconsistent description"]
-        ? createInconsistentDescription(
-            noteType,
-            path,
-            body,
-            properties,
-            rules["Inconsistent description"],
+        ? vpUpdateWrapper(
+            createInconsistentDescription(
+              noteType,
+              path,
+              body,
+              vp,
+              rules["Inconsistent description"],
+            ),
           )
         : null,
+      rules?.["Inconsistent fixme"]
+        ? vpUpdateWrapper(createInconsistentFixme(vp, body))
+        : null,
+      rules?.["No cover"]
+        ? vpUpdateWrapper(createNoCover(noteType, path, vp))
+        : null,
+      rules?.["No status"]
+        ? vpUpdateWrapper(createNoStatus(noteType, vp))
+        : null,
+      rules?.Tags ? vpUpdateWrapper(createTags(title, vp, path)) : null,
+      rules?.["MkDocs title"]
+        ? vpUpdateWrapper(createMkDocsTitle(title, vp))
+        : null,
+
+      rules?.["No description"] ? createNoDescription(noteType, vp) : null,
+      rules?.["No url"] ? createNoUrl(noteType, vp) : null,
     ].filter(isPresent);
   },
 };
@@ -98,6 +122,7 @@ function createNoDescription(
     .exhaustive();
 }
 
+// PropertyLintInspectionは不要
 function createNoCover(
   noteType: NoteType,
   path: string,
@@ -125,7 +150,7 @@ function createNoCover(
   };
 
   return tsmatch(noteType.name)
-    .returnType<LintInspection | null>()
+    .returnType<ReturnType<typeof createNoCover>>()
     .with(
       P.union(
         "Hub note",
@@ -188,7 +213,7 @@ function createNoUrl(
 function createNoStatus(
   noteType: NoteType,
   properties?: Properties,
-): LintInspection | null {
+): PropertyLintInspection | null {
   if (properties?.status) {
     return null;
   }
@@ -199,10 +224,11 @@ function createNoStatus(
     fix: async () => {
       updateActiveFileProperty("status", "✅解決済");
     },
+    propertyCommand: { status: "✅解決済" },
   };
 
   return tsmatch(noteType.name)
-    .returnType<LintInspection | null>()
+    .returnType<ReturnType<typeof createNoStatus> | null>()
     .with("Troubleshooting note", () => ({ ...base, level: "ERROR" }))
     .with(
       P.union(
@@ -230,7 +256,7 @@ function createTags(
   title: string,
   properties?: Properties,
   path?: string,
-): LintInspection | null {
+): PropertyLintInspection | null {
   const tags = properties?.tags;
 
   if (title.endsWith("(JavaScript)")) {
@@ -244,6 +270,7 @@ function createTags(
       fix: async () => {
         updateActiveFileProperty("tags", ["TypeScript"]);
       },
+      propertyCommand: { tags: ["TypeScript"] },
     };
   }
 
@@ -258,6 +285,7 @@ function createTags(
       fix: async () => {
         updateActiveFileProperty("tags", ["Neovim"]);
       },
+      propertyCommand: { tags: ["Neovim"] },
     };
   }
 
@@ -275,6 +303,7 @@ function createTags(
         fix: async () => {
           updateActiveFileProperty("tags", ["Obsidian"]);
         },
+        propertyCommand: { tags: ["Obsidian"] },
       };
     }
   }
@@ -290,13 +319,14 @@ function createTags(
     fix: async () => {
       removeActiveFileProperty("tags");
     },
+    propertyCommand: { tags: null },
   };
 }
 
 function createMkDocsTitle(
   title: string,
   properties?: Properties,
-): LintInspection | null {
+): PropertyLintInspection | null {
   // TODO: 設定を反映させるようにしたい
   if (title === "nav" || title === "index") {
     return null;
@@ -318,6 +348,7 @@ function createMkDocsTitle(
         fix: async () => {
           removeActiveFileProperty("title");
         },
+        propertyCommand: { title: null },
       };
     }
     return null;
@@ -330,13 +361,14 @@ function createMkDocsTitle(
     fix: async () => {
       updateActiveFileProperty("title", title);
     },
+    propertyCommand: { title },
   };
 }
 
 function createInconsistentFixme(
   properties?: Properties,
   body?: string,
-): LintInspection | null {
+): PropertyLintInspection | null {
   const normalizedContent = body ? stripCodeAndHtmlBlocks(body) : body;
   const fixmeInContent = !normalizedContent
     ? false
@@ -346,28 +378,27 @@ function createInconsistentFixme(
   const fixmeInProperties = properties?.fixme as boolean | undefined;
 
   return tsmatch([fixmeInContent, fixmeInProperties])
+    .returnType<ReturnType<typeof createInconsistentFixme> | null>()
     .with([true, true], () => null)
     .with([false, undefined], () => null)
-    .with([true, P.union(false, undefined)], () => {
-      return {
-        code: "Inconsistent fixme",
-        message: "fixmeプロパティをtrueにしました",
-        level: "ERROR" as LintInspection["level"],
-        fix: async () => {
-          updateActiveFileProperty("fixme", true);
-        },
-      };
-    })
-    .with([false, P.union(true, false)], () => {
-      return {
-        code: "Inconsistent fixme",
-        message: "fixmeプロパティを削除しました",
-        level: "ERROR" as LintInspection["level"],
-        fix: async () => {
-          removeActiveFileProperty("fixme");
-        },
-      };
-    })
+    .with([true, P.union(false, undefined)], () => ({
+      code: "Inconsistent fixme",
+      message: "fixmeプロパティをtrueにしました",
+      level: "ERROR" as LintInspection["level"],
+      fix: async () => {
+        updateActiveFileProperty("fixme", true);
+      },
+      propertyCommand: { fixme: true },
+    }))
+    .with([false, P.union(true, false)], () => ({
+      code: "Inconsistent fixme",
+      message: "fixmeプロパティを削除しました",
+      level: "ERROR" as LintInspection["level"],
+      fix: async () => {
+        removeActiveFileProperty("fixme");
+      },
+      propertyCommand: { fixme: null },
+    }))
     .exhaustive();
 }
 
@@ -376,8 +407,8 @@ function createInconsistentDescription(
   path: string,
   body: string,
   properties?: Properties,
-  settings?: NonNullable<PropertyLinterConfig>["Inconsistent description"],
-): LintInspection | null {
+  settings?: PropertyLinterConfig["Inconsistent description"],
+): PropertyLintInspection | null {
   const shouldIgnored = isMatchedGlobPatterns(
     path,
     settings?.ignoreFiles ?? [],
@@ -441,6 +472,7 @@ function createInconsistentDescription(
   const description = properties?.description as string | undefined;
 
   return tsmatch([createNewDescription(), description])
+    .returnType<ReturnType<typeof createInconsistentDescription> | null>()
     .with([null, undefined], () => null)
     .with([P.string, undefined], ([newDescription]) => ({
       code: "Inconsistent description",
@@ -449,6 +481,7 @@ function createInconsistentDescription(
       fix: async () => {
         updateActiveFileProperty("description", newDescription);
       },
+      propertyCommand: { description: newDescription },
     }))
     .with([null, P.string], () => ({
       code: "Inconsistent description",
@@ -457,6 +490,7 @@ function createInconsistentDescription(
       fix: async () => {
         removeActiveFileProperty("description");
       },
+      propertyCommand: { description: null },
     }))
     .with([P.string, P.string], ([newDescription, description]) =>
       newDescription === description
@@ -468,6 +502,7 @@ function createInconsistentDescription(
             fix: async () => {
               updateActiveFileProperty("description", newDescription);
             },
+            propertyCommand: { description: newDescription },
           },
     )
     .exhaustive();

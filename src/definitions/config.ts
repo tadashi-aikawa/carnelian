@@ -218,8 +218,8 @@ export type EditorConfig = NonNullable<Config["editor"]>;
 
 type LinterConfig = NonNullable<Config["linter"]>;
 export type PropertyLinterConfig = NonNullable<
-  LinterConfig["rules"]
->["propery"];
+  NonNullable<LinterConfig["rules"]>["propery"]
+>;
 
 type KeyChainAccountName = string;
 
