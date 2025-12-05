@@ -124,7 +124,8 @@ export function addActiveFileProperties(properties: {
 export function removeActiveFileProperty(key: string): void {
   orThrow(
     getActiveMetadataEditor(),
-    (me) => me.removeProperties([{ entry: { key } }]),
+    // removePropertiesを使うとフォーカスが外れるのでinsertPropertiesでundefinedを入れる
+    (me) => me.insertProperties({ [key]: undefined }),
     { message: errorMessage["MetadataEditor is null"] },
   );
 }

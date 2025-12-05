@@ -58,6 +58,7 @@ export type UMetadataEditor = {
   addProperty(): void;
   focusValue(key: string): void;
   insertProperties(props: Properties): void;
+  /** フォーカスがプロパティにあたるので注意 */
   removeProperties(entries: { entry: { key: any } }[]): void;
   /** 現在のプロパティを取得する */
   serialize(): UProperties;
