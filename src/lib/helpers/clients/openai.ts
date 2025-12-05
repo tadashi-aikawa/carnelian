@@ -22,9 +22,6 @@ export async function fetchOpenAIChatCompletion(args: {
 }): Promise<Result> {
   // Azure
   if (args.azure) {
-    console.log(
-      `${args.azure.apiEndpoint}/openai/deployments/${args.azure.model}/chat/completions?api-version=${args.azure.apiVersion}`,
-    );
     const res = await requestUrl({
       url: `${args.azure.apiEndpoint}/openai/deployments/${args.azure.model}/chat/completions?api-version=${args.azure.apiVersion}`,
       method: "POST",
