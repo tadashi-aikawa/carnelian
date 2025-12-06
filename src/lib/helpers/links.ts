@@ -12,9 +12,8 @@ declare let app: UApp;
 export function getActiveFileBacklinksByFilePath(): {
   [path: string]: ULinkCache[];
 } | null {
-  return map(
-    getActiveFile(),
-    (f) => app.metadataCache.getBacklinksForFile(f).data,
+  return map(getActiveFile(), (f) =>
+    Object.fromEntries(app.metadataCache.getBacklinksForFile(f).data),
   );
 }
 

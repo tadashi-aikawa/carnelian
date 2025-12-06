@@ -147,7 +147,7 @@ export type UApp = App & {
   vault: UVault;
   fileManager: UFileManager;
   metadataCache: {
-    getBacklinksForFile(file: TFile): { data: Record<string, ULinkCache[]> };
+    getBacklinksForFile(file: TFile): { data: Map<string, ULinkCache[]> };
     initialized: boolean;
   };
   internalPlugins: {
