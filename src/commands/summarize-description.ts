@@ -93,7 +93,8 @@ function createSystemMessage(noteType: NoteType): string | null {
 - OGPのdescriptionとして使う文章を想定しているので以下2点を意識して
   - titleに含まれないけど検索されそうなキーワードは優先して入れて
   - ただし、文章として意味が成立するようにして(単語の羅列のみは禁止)
-- 本文に記載されていない内容を推測するのは禁止`;
+- 本文に記載されていない内容を推測するのは禁止
+- 最後を『記事である』『ノートである』『内容である』と表現しないで`;
 
   switch (noteType.name) {
     case "Prime note":
