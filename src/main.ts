@@ -4,6 +4,11 @@ import type { UApp } from "./lib/types";
 import { type Service, createServices } from "./services";
 import { DEFAULT_SETTINGS, type PluginSettings, SettingTab } from "./settings";
 
+import "dayjs/locale/ja";
+import dayjs from "dayjs";
+
+dayjs.locale("ja");
+
 export default class CarnelianPlugin extends Plugin {
   settings!: PluginSettings;
   services: Service[] = [];

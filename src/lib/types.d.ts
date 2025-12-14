@@ -24,7 +24,8 @@ type CommandId =
   | "editor:save-file"
   | "editor:cycle-list-checklist" // Cycle bullet/checkbox
   | "workspace:edit-file-title"
-  | "obsidian-silhouette:cycle-bullet-checkbox";
+  | "obsidian-silhouette:cycle-bullet-checkbox"
+  | "publish:view-changes";
 
 export interface CodeBlock {
   language: string | null;

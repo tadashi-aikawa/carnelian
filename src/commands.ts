@@ -50,6 +50,7 @@ import { pasteClipboardAsAVIF } from "./commands/paste-clipboard-as-avif";
 import { pasteClipboardAsWebp } from "./commands/paste-clipboard-as-webp";
 import { pasteSiteCard } from "./commands/paste-site-card";
 import { pasteURLToSiteLink } from "./commands/paste-url-to-site-link";
+import { publish } from "./commands/publish";
 import { saveWith } from "./commands/save-with";
 import { showFileInfo } from "./commands/show-file-info";
 import { stripLinksAndDecorations } from "./commands/strip-links-and-decorations";
@@ -69,6 +70,14 @@ function createCarnelianCommands(settings: PluginSettings) {
   const sf = settings.file;
 
   return [
+    {
+      name: "Publish",
+      kind: "all",
+      enabled: sa?.Publish,
+      executor: () => {
+        publish(sa?.Publish);
+      },
+    },
     {
       name: "Focus editor content",
       kind: "editor",

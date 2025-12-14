@@ -39,6 +39,14 @@ export function omitBy<T extends { [key: string]: any }>(
   return cloned;
 }
 
+export const mapValues = <K, T, U>(
+  obj: { [key: string]: T },
+  to: (x: T) => U,
+): { [key: string]: U } =>
+  Object.fromEntries(
+    Object.entries(obj).map(([key, value]) => [key, to(value)]),
+  );
+
 export function forceLowerCaseKeys(obj: { [key: string]: any }): {
   [key: string]: any;
 } {

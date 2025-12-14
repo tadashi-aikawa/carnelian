@@ -88,6 +88,24 @@
             "Open vault in terminal": {
               "type": "boolean"
             },
+            "Publish": {
+              "additionalProperties": false,
+              "description": "前処理を行いObsidian Publishに公開する",
+              "properties": {
+                "changelogNotePath": {
+                  "description": "更新履歴のノートパス (ex: 更新履歴.md)",
+                  "type": "string"
+                },
+                "ignoreFiles": {
+                  "description": "更新ファイルに含めないファイルパスのglobパターン配列 default: [] ex: [\"Templates/**\", \"Notes/Untitled.md\"]",
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                }
+              },
+              "type": "object"
+            },
             "Toggle Live preview": {
               "description": "『Toggle Live Preview/Source mode』との違いは全エディタが対象になること",
               "type": "boolean"

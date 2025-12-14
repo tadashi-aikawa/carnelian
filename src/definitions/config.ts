@@ -34,6 +34,18 @@ export interface Config {
     // Tab groups
     "Create new note horizontally"?: boolean;
     "Create new note vertically"?: boolean;
+
+    /** 前処理を行いObsidian Publishに公開する */
+    Publish?: {
+      /** 更新履歴のノートパス (ex: 更新履歴.md) */
+      changelogNotePath?: string;
+      /**
+       * 更新ファイルに含めないファイルパスのglobパターン配列
+       * default: []
+       * ex: ["Templates/**", "Notes/Untitled.md"]
+       */
+      ignoreFiles?: string[];
+    };
   };
 
   file?: {
@@ -215,6 +227,7 @@ export interface Config {
 }
 
 export type EditorConfig = NonNullable<Config["editor"]>;
+export type AllConfig = NonNullable<Config["all"]>;
 
 type LinterConfig = NonNullable<Config["linter"]>;
 export type PropertyLinterConfig = NonNullable<
