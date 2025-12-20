@@ -198,6 +198,10 @@ export interface Config {
     "Format table"?: boolean;
     "Strip links and decorations"?: boolean;
 
+    // Line operations
+    "Duplicate line up"?: boolean;
+    "Duplicate line down"?: boolean;
+
     // External
     "Open property URL"?: boolean;
     "Open as local MkDocs site"?: {

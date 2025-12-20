@@ -148,6 +148,33 @@ export function deleteActiveLine(): void {
 }
 
 /**
+ * 現在行を下方向に複製します
+ */
+export function duplicateActiveLineDown(): void {
+  orThrow(getActiveEditor(), (e) => {
+    const cur = e.getCursor();
+    const lineText = e.getLine(cur.line);
+    e.replaceRange(`\n${lineText}`, { line: cur.line, ch: lineText.length });
+    e.setCursor({ line: cur.line + 1, ch: cur.ch });
+  });
+}
+
+/**
+ * 現在行を上方向に複製します
+ */
+export function duplicateActiveLineUp(): void {
+  orThrow(getActiveEditor(), (e) => {
+    const cur = e.getCursor();
+    const lineText = e.getLine(cur.line);
+    e.replaceRange(`${lineText}\n`, {
+      line: cur.line,
+      ch: 0,
+    });
+    e.setCursor({ line: cur.line, ch: cur.ch });
+  });
+}
+
+/**
  * 複数行を削除します
  * @param beginLine - 開始行 (0はじまり)
  * @param endLine   - 終了行 (0はじまり.省略で最後まで)

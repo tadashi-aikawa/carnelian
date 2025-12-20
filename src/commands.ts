@@ -29,6 +29,8 @@ import { createTDQ } from "./commands/create-tdq";
 import { createTroubleshootingNote } from "./commands/create-troubleshooting-note";
 import { cycleBulletCheckbox } from "./commands/cycle-bullet-checkbox";
 import { deleteActiveFile } from "./commands/delete-active-file";
+import { duplicateLineDown } from "./commands/duplicate-line-down";
+import { duplicateLineUp } from "./commands/duplicate-line-up";
 import { fixLink } from "./commands/fix-link";
 import { focusEditorContent } from "./commands/focus-content";
 import { formatTable } from "./commands/format-table";
@@ -374,6 +376,18 @@ function createCarnelianCommands(settings: PluginSettings) {
       kind: "editor",
       enabled: se?.["Strip links and decorations"],
       executor: stripLinksAndDecorations,
+    },
+    {
+      name: "Duplicate line up",
+      kind: "editor",
+      enabled: se?.["Duplicate line up"],
+      executor: duplicateLineUp,
+    },
+    {
+      name: "Duplicate line down",
+      kind: "editor",
+      enabled: se?.["Duplicate line down"],
+      executor: duplicateLineDown,
     },
     {
       name: "Copy Strip links and decorations",

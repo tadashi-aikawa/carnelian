@@ -258,6 +258,12 @@
             "Cycle bullet/checkbox": {
               "type": "boolean"
             },
+            "Duplicate line down": {
+              "type": "boolean"
+            },
+            "Duplicate line up": {
+              "type": "boolean"
+            },
             "Fix link": {
               "type": "boolean"
             },

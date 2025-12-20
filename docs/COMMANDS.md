@@ -77,6 +77,8 @@
 | Sort selection              | 選択したテキスト行をアルファベット順またはカスタム条件でソート             |
 | Format table                | Markdownテーブルを整形して一貫した配置に調整（モバイル非対応）             |
 | Strip links and decorations | 選択テキストからMarkdown装飾（太字・イタリック・ハイライト・リンク）を除去 |
+| Duplicate line up           | 現在行を上方向に複製（カーソルは元の位置を維持）                           |
+| Duplicate line down         | 現在行を下方向に複製（カーソルは複製された行に移動）                       |
 
 
 ## ナビゲーション・検査
