@@ -24,6 +24,8 @@ export class LinkClickService implements Service {
       linkEl.getAttribute("href") ??
       map(
         getActiveEditor()?.cm,
+        // WARNING: テーブル内の同一セルではうまくいかない (posAtDOMが正しく動作しない)
+        //          wikiリンクの[[と]]をクリックした場合はうまくいかない
         (cm) => getLinkTokenAtOffset(cm.posAtDOM(linkEl))?.text,
       );
     if (!linkText) {
