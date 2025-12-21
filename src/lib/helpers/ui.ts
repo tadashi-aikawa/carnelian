@@ -171,7 +171,7 @@ export async function showInputDialog(args: {
   message: string;
   placeholder?: string;
   defaultValue?: string;
-  inputType?: "text" | "date";
+  inputType?: "text" | "date" | "time";
 }): Promise<string | null> {
   return new InputDialog(
     args.message,

@@ -40,7 +40,17 @@ participants:
     return notify(`${path} は既に存在します`);
   }
 
-  insertToCursor(`[[${inputTitle}]]`);
+  const startTime = await showInputDialog({
+    message: "開始時間を入力してください",
+    placeholder: "12:30",
+    defaultValue: "14:00",
+    inputType: "time",
+  });
+  if (!startTime) {
+    return;
+  }
+
+  insertToCursor(`- [ ] ${startTime} [[${inputTitle}]]`);
   const f = await createFile(path, NOTE_BODY);
   await openFile(f.path);
 }

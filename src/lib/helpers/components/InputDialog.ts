@@ -12,7 +12,7 @@ export class InputDialog extends Modal {
     public title: string,
     public placeholder?: string,
     public defaultValue?: string,
-    public inputType?: "text" | "date",
+    public inputType?: "text" | "date" | "time",
   ) {
     super(app);
   }
