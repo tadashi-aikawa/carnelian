@@ -44,48 +44,62 @@
     },
     "Config": {
       "additionalProperties": false,
-      "description": "data.jsonの設定ファイルを定義するインターフェース JSON Schemaを生成するためにも使用される\n\nINFO: ここではrequiredになっていても、設定ミスでnullishな値は入る可能性があるので、処理するときは例外処理が必要",
+      "description": "Carnelianプラグインの設定ファイルを定義するインターフェース JSON Schemaを生成するためにも使用される\n\nINFO: ここではrequiredになっていても、設定ミスでnullishな値は入る可能性があるので、処理するときは例外処理が必要\n\n## 依存関係\n- ImageMagick: 画像変換コマンド用（Homebrew経由でインストール）\n- OpenAI API: AI機能用（設定でAPIキーが必要）\n- インターネット接続: OGPメタデータ取得用\n- Bluesky API: ソーシャルメディア統合用\n\n## モバイル互換性 一部コマンドはiOS/Androidで動作しない可能性があります",
       "properties": {
         "all": {
           "additionalProperties": false,
+          "description": "グローバルコマンド（ファイルを開いていなくても実行可能）",
           "properties": {
             "Clean old daily notes": {
+              "description": "14日前より古いデイリーノートを別ディレクトリに移動（要Obsidian再起動でキャッシュ更新）",
               "type": "boolean"
             },
             "Create MIN ADR": {
+              "description": "Minerva用ADRを作成。自動採番とADRリスト更新",
               "type": "boolean"
             },
             "Create OBS ADR": {
+              "description": "Obsidian用ADRを作成",
               "type": "boolean"
             },
             "Create PRO ADR": {
+              "description": "PRO用ADRを作成",
               "type": "boolean"
             },
             "Create VIM ADR": {
+              "description": "Vim用ADRを作成。経緯・提案内容・メリット/デメリットのセクション付き",
               "type": "boolean"
             },
             "Create an Article": {
+              "description": "📘 Articlesディレクトリに記事を作成。カバー画像とプロパティを自動設定",
               "type": "boolean"
             },
             "Create new note horizontally": {
+              "description": "水平方向に新しいノートを作成",
               "type": "boolean"
             },
             "Create new note vertically": {
+              "description": "垂直方向に新しいノートを作成",
               "type": "boolean"
             },
             "Move to next workspace": {
+              "description": "次のワークスペースに移動",
               "type": "boolean"
             },
             "Open active file in yazi": {
+              "description": "現在のVaultをyaziで開く（yazi, Ghostty, zsh必須）",
               "type": "boolean"
             },
             "Open active folder in terminal": {
+              "description": "現在のディレクトリをターミナルで開く（Ghostty必須）",
               "type": "boolean"
             },
             "Open vault in lazygit": {
+              "description": "現在のVaultをLazygitで開く（Ghostty必須）",
               "type": "boolean"
             },
             "Open vault in terminal": {
+              "description": "現在のVaultをターミナルで開く（Ghostty必須）",
               "type": "boolean"
             },
             "Publish": {
@@ -107,7 +121,7 @@
               "type": "object"
             },
             "Toggle Live preview": {
-              "description": "『Toggle Live Preview/Source mode』との違いは全エディタが対象になること",
+              "description": "ライブプレビュー/ソースモード切替。全エディタが対象",
               "type": "boolean"
             }
           },
@@ -115,8 +129,10 @@
         },
         "click": {
           "additionalProperties": false,
+          "description": "クリックイベントに関連するコマンド",
           "properties": {
             "Open link vertically": {
+              "description": "修飾キーを押しながら左クリックしたときに垂直分割で開くサービス",
               "type": "boolean"
             }
           },
@@ -124,9 +140,11 @@
         },
         "editor": {
           "additionalProperties": false,
+          "description": "エディタコンテキストで実行可能なコマンド",
           "properties": {
             "Add permalink property": {
               "additionalProperties": false,
+              "description": "パーマリンクプロパティを追加（Articleはタイトルから生成、それ以外はADRとして）",
               "properties": {
                 "vendor": {
                   "anyOf": [
@@ -191,16 +209,20 @@
               "type": "object"
             },
             "Add property suitably": {
+              "description": "カーソル行の内容からよしなにプロパティを追加（URL→url、その他→description）",
               "type": "boolean"
             },
             "Copy Minerva URL": {
+              "description": "現在ファイルのObsidian Publish URLを生成してコピー",
               "type": "boolean"
             },
             "Copy Strip links and decorations": {
+              "description": "選択テキストからリンクや装飾を除去してコピー（モバイル非対応）",
               "type": "boolean"
             },
             "Copy as Confluence": {
               "additionalProperties": false,
+              "description": "現在の内容をConfluence記法に変換してコピー",
               "properties": {
                 "domain": {
                   "description": "Confluenceのドメイン 例: `example.atlassian.net`",
@@ -214,6 +236,7 @@
             },
             "Copy as Slack": {
               "additionalProperties": false,
+              "description": "現在の内容をSlack記法に変換してコピー",
               "properties": {
                 "replaceRegExpMapping": {
                   "additionalProperties": {
@@ -226,45 +249,59 @@
               "type": "object"
             },
             "Copy url property": {
+              "description": "現在ファイルのurlプロパティ値をコピー",
               "type": "boolean"
             },
             "Create Activity note": {
+              "description": "📜 Activity noteを作成し、カーソル位置にリンク挿入",
               "type": "boolean"
             },
             "Create Brain note": {
+              "description": "🧠 Brain noteを作成し、カーソル位置にリンク挿入",
               "type": "boolean"
             },
             "Create Hub note": {
+              "description": "📒 Hub noteを作成し、カーソル位置にリンク挿入",
               "type": "boolean"
             },
             "Create MTG note": {
+              "description": "📅 MTG用ノートを作成し、カーソル位置にリンク挿入",
               "type": "boolean"
             },
             "Create Obsidian逆引きレシピ": {
+              "description": "📗 Obsidian逆引きレシピを作成",
               "type": "boolean"
             },
             "Create Prime note": {
+              "description": "📕 Prime noteを作成し、カーソル位置にリンク挿入",
               "type": "boolean"
             },
             "Create Report note": {
+              "description": "📰 Report noteを作成し、カーソル位置にリンク挿入",
               "type": "boolean"
             },
             "Create TDQ": {
+              "description": "TDQを作成し、カーソル位置にリンク挿入（自動採番）",
               "type": "boolean"
             },
             "Create Trouble Shooting note": {
+              "description": "📝 Troubleshooting noteを作成し、カーソル位置にリンク挿入",
               "type": "boolean"
             },
             "Cycle bullet/checkbox": {
+              "description": "箇条書き/チェックボックスを切り替え",
               "type": "boolean"
             },
             "Duplicate line down": {
+              "description": "現在行を下方向に複製",
               "type": "boolean"
             },
             "Duplicate line up": {
+              "description": "現在行を上方向に複製",
               "type": "boolean"
             },
             "Fix link": {
+              "description": "[[title (alias)]]を[[title (alias)|title]]形式に修正",
               "type": "boolean"
             },
             "Focus editor content": {
@@ -272,28 +309,36 @@
               "type": "boolean"
             },
             "Format table": {
+              "description": "Markdownテーブルを整形（モバイル非対応）",
               "type": "boolean"
             },
             "Insert Bluesky posts to weekly note": {
+              "description": "指定週のBlueskyポストをカード形式で挿入（外部URL付きのみ）",
               "type": "boolean"
             },
             "Insert MOC": {
+              "description": "MOCテンプレートを挿入",
               "type": "boolean"
             },
             "Insert new notes to the weekly note": {
+              "description": "週の期間内に作成されたパブリックノートのリストを挿入",
               "type": "boolean"
             },
             "Insert note card": {
+              "description": "内部ノート用のカードレイアウトを作成（ファイルピッカー）",
               "type": "boolean"
             },
             "Move to next inspection": {
+              "description": "現在ファイルの次のリンティング問題に移動",
               "type": "boolean"
             },
             "Move to previous inspection": {
+              "description": "現在ファイルの前のリンティング問題に移動",
               "type": "boolean"
             },
             "Open as local MkDocs site": {
               "additionalProperties": false,
+              "description": "ローカルMkDocsサイトとして開く",
               "properties": {
                 "baseUrl": {
                   "description": "ex: http://localhost:8081 (default: http://localhost:8000)",
@@ -308,6 +353,7 @@
             },
             "Open as remote MkDocs site": {
               "additionalProperties": false,
+              "description": "リモートMkDocsサイトとして開く",
               "properties": {
                 "baseUrl": {
                   "description": "ex: http://your-mkdocs-domain",
@@ -324,14 +370,21 @@
               "type": "object"
             },
             "Open property URL": {
+              "description": "ファイルのurlプロパティに保存されたURLを開く",
               "type": "boolean"
             },
             "Paste URL to site link": {
+              "description": "クリップボードURLからOGPメタデータを取得してMarkdownリンク挿入",
               "type": "boolean"
             },
             "Paste clipboard as AVIF": {
               "additionalProperties": false,
+              "description": "クリップボード画像をAVIF変換して保存・挿入（ImageMagick必須）",
               "properties": {
+                "maxWidth": {
+                  "description": "最大幅 (超えている場合は自動で縮小する)",
+                  "type": "number"
+                },
                 "quality": {
                   "description": "AVIFの品質 (default: 35)",
                   "type": "number"
@@ -340,19 +393,31 @@
               "type": "object"
             },
             "Paste clipboard as WebP": {
-              "type": "boolean"
+              "additionalProperties": false,
+              "description": "クリップボード画像をWebP変換して保存・挿入（ImageMagick必須）",
+              "properties": {
+                "maxWidth": {
+                  "description": "最大幅 (超えている場合は自動で縮小する)",
+                  "type": "number"
+                }
+              },
+              "type": "object"
             },
             "Paste site card": {
+              "description": "クリップボードURLからOGPメタデータを取得してサイトカード挿入",
               "type": "boolean"
             },
             "Save with": {
+              "description": "LintやFormatなどを実行して保存",
               "type": "boolean"
             },
             "Strip links and decorations": {
+              "description": "選択範囲のリンクや装飾を無効化（1文字リンク非対応、モバイル非対応）",
               "type": "boolean"
             },
             "Summarize description": {
               "additionalProperties": false,
+              "description": "OpenAI APIで150文字の説明を生成しdescriptionプロパティに設定",
               "properties": {
                 "property": {
                   "description": "要約を保存するプロパティ名 (default: description)",
@@ -369,15 +434,19 @@
               "type": "object"
             },
             "Transform MOC": {
+              "description": "MOCを新しい形式に変換",
               "type": "boolean"
             },
             "Transform to v2 OGP card": {
+              "description": "カーソル配下のOGPカードをv2形式に変換（情報も最新化）",
               "type": "boolean"
             },
             "Update MOC suitably": {
+              "description": "MOCがなければ挿入、あれば新形式に変換",
               "type": "boolean"
             },
             "Update change log": {
+              "description": "created/updatedプロパティを更新（HTMLフッターがあればその日付を使用）",
               "type": "boolean"
             }
           },
@@ -385,17 +454,22 @@
         },
         "file": {
           "additionalProperties": false,
+          "description": "ファイルを開いているときに実行可能なコマンド",
           "properties": {
             "Copy active file full path": {
+              "description": "現在のファイルのフルシステムパスをクリップボードにコピー",
               "type": "boolean"
             },
             "Copy active image file to clipboard": {
+              "description": "現在の画像ファイルをクリップボードにコピー",
               "type": "boolean"
             },
             "Delete active file": {
+              "description": "現在のファイルを削除（バックリンクが存在する場合はエラー）",
               "type": "boolean"
             },
             "Show File info": {
+              "description": "現在のファイルの詳細情報を表示",
               "type": "boolean"
             }
           },
@@ -403,6 +477,7 @@
         },
         "formatter": {
           "additionalProperties": false,
+          "description": "保存時のフォーマッター設定",
           "properties": {
             "ignoreFiles": {
               "description": "変換を無視するファイルパスのglobパターン配列 default: [] ex: [\"Templates/**\", \"Notes/Untitled.md\"]",
@@ -427,12 +502,14 @@
         },
         "linter": {
           "additionalProperties": false,
+          "description": "リンター設定",
           "properties": {
             "rules": {
               "additionalProperties": false,
               "properties": {
                 "content": {
                   "additionalProperties": false,
+                  "description": "コンテンツに関するルール",
                   "properties": {
                     "Disallow fixme": {
                       "description": "本文のFIXME記述を禁止する",
@@ -471,6 +548,7 @@
                 },
                 "propery": {
                   "additionalProperties": false,
+                  "description": "プロパティに関するルール",
                   "properties": {
                     "Inconsistent description": {
                       "additionalProperties": false,
