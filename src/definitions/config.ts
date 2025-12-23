@@ -175,11 +175,16 @@ export interface Config {
 
     // ── Images ─────────────────────────────────────────────
     /** クリップボード画像をWebP変換して保存・挿入（ImageMagick必須） */
-    "Paste clipboard as WebP"?: boolean;
+    "Paste clipboard as WebP"?: {
+      /** 最大幅 (超えている場合は自動で縮小する) */
+      maxWidth?: number;
+    };
     /** クリップボード画像をAVIF変換して保存・挿入（ImageMagick必須） */
     "Paste clipboard as AVIF"?: {
       /** AVIFの品質 (default: 35) */
       quality?: number;
+      /** 最大幅 (超えている場合は自動で縮小する) */
+      maxWidth?: number;
     };
 
     /** エディタの本文にフォーカスを移す */

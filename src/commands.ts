@@ -150,16 +150,13 @@ function createCarnelianCommands(settings: PluginSettings) {
       name: "Paste clipboard as WebP",
       kind: "editor",
       enabled: se?.["Paste clipboard as WebP"],
-      executor: pasteClipboardAsWebp,
+      executor: () => pasteClipboardAsWebp(se?.["Paste clipboard as WebP"]),
     },
     {
       name: "Paste clipboard as AVIF",
       kind: "editor",
       enabled: se?.["Paste clipboard as AVIF"],
-      executor: () =>
-        pasteClipboardAsAVIF({
-          quality: se?.["Paste clipboard as AVIF"]?.quality,
-        }),
+      executor: () => pasteClipboardAsAVIF(se?.["Paste clipboard as AVIF"]),
     },
     {
       name: "Copy as Confluence",
