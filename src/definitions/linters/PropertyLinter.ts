@@ -15,6 +15,7 @@ import {
   isHeading,
   isHtmlTag,
   isMatchedGlobPatterns,
+  isOnlyImageEmbedLink,
   match,
 } from "src/lib/utils/strings";
 import type { Properties } from "src/lib/utils/types";
@@ -447,6 +448,9 @@ function createInconsistentDescription(
     if (!line) {
       return null;
     }
+    if (isOnlyImageEmbedLink(line)) {
+      return null;
+    }
 
     const strippedLine = stripLinks(stripDecoration(line));
     if (!strippedLine) {
@@ -473,7 +477,7 @@ function createInconsistentDescription(
 
   return tsmatch([createNewDescription(), description])
     .returnType<ReturnType<typeof createInconsistentDescription> | null>()
-    .with([null, undefined], () => null)
+    .with([null, P._], () => null)
     .with([P.string, undefined], ([newDescription]) => ({
       code: "Inconsistent description",
       message: "descriptionプロパティを追加しました",
@@ -482,15 +486,6 @@ function createInconsistentDescription(
         updateActiveFileProperty("description", newDescription);
       },
       propertyCommand: { description: newDescription },
-    }))
-    .with([null, P.string], () => ({
-      code: "Inconsistent description",
-      message: "descriptionプロパティを削除しました",
-      level: "ERROR" as LintInspection["level"],
-      fix: async () => {
-        removeActiveFileProperty("description");
-      },
-      propertyCommand: { description: null },
     }))
     .with([P.string, P.string], ([newDescription, description]) =>
       newDescription === description

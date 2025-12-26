@@ -16,6 +16,7 @@ import {
   isHeading,
   isHtmlTag,
   isMatchedGlobPatterns,
+  isOnlyImageEmbedLink,
   isUrl,
   match,
   microFuzzy,
@@ -652,6 +653,27 @@ test.each([
     expected: ReturnType<typeof isBlockquote>,
   ) => {
     expect(isBlockquote(text)).toBe(expected);
+  },
+);
+
+// isOnlyImageEmbedLink のテスト
+test.each([
+  ["![[image.png]]", true],
+  ["Some text ![[image.png]]", false],
+  ["![[image1.png]] and ![[image2.png]]", false],
+  ["![[image with spaces.png]]", true],
+  ["![[image.png", false],
+  ["[[not an image link]]", false],
+  ["![alt](./image.png)", true],
+  ["![](./image.png)", true],
+  ["![](./image.png) and ![](./image.png)", false],
+])(
+  `isOnlyImageEmbedLink("%s"))`,
+  (
+    text: Parameters<typeof isOnlyImageEmbedLink>[0],
+    expected: ReturnType<typeof isOnlyImageEmbedLink>,
+  ) => {
+    expect(isOnlyImageEmbedLink(text)).toBe(expected);
   },
 );
 

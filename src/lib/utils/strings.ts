@@ -412,6 +412,16 @@ export function isBlockquote(line: string): boolean {
 }
 
 /**
+ * 行が画像埋め込みリンクのみかどうかを返却します
+ */
+export function isOnlyImageEmbedLink(line: string): boolean {
+  const trimmed = line.trim();
+  return (
+    /^!\[\[[^\]]+\]\]$/.test(trimmed) || /^!\[[^\]]*\]\([^)]+\)$/.test(trimmed)
+  );
+}
+
+/**
  * 行がHTMLタグかどうかを返却します
  */
 export function isHtmlTag(line: string): boolean {
