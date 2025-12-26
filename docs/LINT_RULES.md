@@ -143,8 +143,8 @@ lint機能のルールを記載する。
 | ノートの種類         | レベル | 備考    |
 | -------------------- | ------ | ------- |
 | Glossary note        | ERROR  | autofix |
-| Hub note             |        | autofix |
-| Procedure note       |        | autofix |
+| Hub note             | ERROR  | autofix |
+| Procedure note       | ERROR  | autofix |
 | Activity note        |        | autofix |
 | Troubleshooting note |        | autofix |
 | Prime note           |        | autofix |

@@ -419,11 +419,12 @@ function createInconsistentDescription(
   }
 
   const supported = tsmatch(noteType.name)
-    .with(P.union("Glossary note", "My note"), () => true)
+    .with(
+      P.union("Glossary note", "Procedure note", "My note", "Hub note"),
+      () => true,
+    )
     .with(
       P.union(
-        "Hub note",
-        "Procedure note",
         "Activity note",
         "Troubleshooting note",
         "Prime note",
