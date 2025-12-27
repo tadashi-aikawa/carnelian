@@ -6,6 +6,7 @@ declare let app: UApp;
 
 /**
  * ファイルを開いたときに実行する処理を設定します
+ *  handlerのfile引数は、タブグループのファイルが存在しない場合はnullになります
  *
  * @returns 処理の解除処理
  */
