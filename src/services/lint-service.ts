@@ -1,6 +1,7 @@
 import type { TFile } from "obsidian";
 import { contentLinter } from "src/definitions/linters/ContentLinter";
 import { propertyLinter } from "src/definitions/linters/PropertyLinter";
+import { getActiveFile } from "src/lib/helpers/entries";
 import {
   setOnExWCommandEvent,
   setOnFileOpenEvent,
@@ -18,6 +19,14 @@ export class LintService implements Service {
   unsetExWCommandHandler!: () => void;
 
   constructor(public settings: PluginSettings["linter"]) {}
+
+  onLayoutReady(): void {
+    // 起動直後、既にファイルが開かれている場合はファイルの中身を保存する (setOnCreateFileEvent では取得できないため)
+    const activeFile = getActiveFile();
+    if (activeFile) {
+      lintFile(activeFile, this.settings);
+    }
+  }
 
   onload(): void {
     this.unsetFileOpenHandler = setOnFileOpenEvent(async (file) => {
