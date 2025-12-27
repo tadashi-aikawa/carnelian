@@ -7,6 +7,16 @@
   width: 95%;
 }
 
+.carnelian-confirm-dialog-message {
+  margin-bottom: 1.5rem;
+  white-space: break-spaces;
+}
+.carnelian-confirm-dialog-button-container {
+  display: flex;
+  justify-content: end;
+  gap: 0.5rem;
+}
+
 .additional-properties {
   height: 30px;
   display: flex;

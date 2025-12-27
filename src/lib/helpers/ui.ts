@@ -1,5 +1,6 @@
 import { exec, execFile } from "child_process";
 import { Modal, type TFile } from "obsidian";
+import { ConfirmDialog } from "src/lib/helpers/components/ConfirmDialog";
 import type { UApp } from "../types";
 import { FileSearchDialog } from "./components/FileSearchDialog";
 import { InputDialog } from "./components/InputDialog";
@@ -156,6 +157,23 @@ export async function showInfoDialog(args: {
   content: string;
 }) {
   new Modal(app).setTitle(args.title).setContent(args.content).open();
+}
+
+/**
+ * 確認ダイアログを表示し、OKが押されたらtrue、キャンセルまたはそれ以外で閉じたらfalseを返却します。
+ */
+export async function showConfirmDialog(args: {
+  title: string;
+  message: string;
+  okText?: string;
+  cancelText?: string;
+}): Promise<boolean> {
+  return new ConfirmDialog(
+    args.title,
+    args.message,
+    args.okText,
+    args.cancelText,
+  ).open();
 }
 
 /**
