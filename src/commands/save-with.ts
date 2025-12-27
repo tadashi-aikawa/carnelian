@@ -1,6 +1,7 @@
 import { runCommandById } from "src/lib/helpers/commands";
-import { getActiveFile } from "src/lib/helpers/entries";
+import { getActiveFile, isMarkdownFile } from "src/lib/helpers/entries";
 import { notifyValidationError } from "src/lib/helpers/ui";
+import { updateAutoDatePropertiesForActiveFile } from "src/services/auto-date-properties-service";
 import { formatActiveFile } from "src/services/format-service";
 import { lintFile } from "src/services/lint-service";
 import type { PluginSettings } from "src/settings";
@@ -19,10 +20,13 @@ export async function saveWith(options: {
   }
 
   if (lint) {
-    await lintFile(file, options.lint);
+    await lintFile(file, lint);
   }
   if (format) {
     await formatActiveFile(format);
+  }
+  if (file && isMarkdownFile(file)) {
+    updateAutoDatePropertiesForActiveFile();
   }
 
   runCommandById("editor:save-file");

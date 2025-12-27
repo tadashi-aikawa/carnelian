@@ -1,5 +1,5 @@
-import { AddDatePropertiesService } from "./services/add-date-properties-service";
 import { AddPropertiesToHeadService } from "./services/add-properties-to-head-service";
+import { AutoDatePropertiesService } from "./services/auto-date-properties-service";
 import { FormatService } from "./services/format-service";
 import { LinkClickService } from "./services/link-click-service";
 import { LintService } from "./services/lint-service";
@@ -14,7 +14,7 @@ export interface Service {
 
 export function createServices(settings: PluginSettings): Service[] {
   return [
-    new AddDatePropertiesService(),
+    new AutoDatePropertiesService(),
     settings.linter ? new LintService(settings.linter) : [],
     new FormatService(settings.formatter),
     new AddPropertiesToHeadService(),
