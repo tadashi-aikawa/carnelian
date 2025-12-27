@@ -29,6 +29,14 @@ export class AddPropertiesToHeadService implements Service {
   unsetFileOpenHandler!: () => void;
   unsetPropertiesChangedEventRef!: () => void;
 
+  onLayoutReady(): void {
+    // 初回はイベントが発生しないので
+    const path = getActiveFilePath();
+    if (path != null) {
+      this.addPropertiesElement(path);
+    }
+  }
+
   onload() {
     this.unsetFileOpenHandler = setOnFileOpenEvent((file) => {
       if (!file) {
@@ -47,12 +55,6 @@ export class AddPropertiesToHeadService implements Service {
         }
       },
     );
-
-    // 初回はイベントが発生しないので
-    const path = getActiveFilePath();
-    if (path != null) {
-      this.addPropertiesElement(path);
-    }
   }
 
   onunload() {
