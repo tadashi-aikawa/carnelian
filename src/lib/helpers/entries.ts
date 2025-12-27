@@ -230,6 +230,18 @@ export async function renameFileWithoutLinkModified(
 }
 
 /**
+ * ファイルを複製します
+ *
+ * ```ts
+ * await copyFile("Notes/mimizou.md", "Notes/mimizou-copy.md")
+ * ```
+ */
+export async function copyFile(path: string, dst: string): Promise<TFile> {
+  await app.vault.adapter.copy(path, dst);
+  return getFileByPath(dst) as TFile;
+}
+
+/**
  * Trash > Deleted files の設定に従ってファイルを削除します
  * ```ts
  * await deleteFile(getFileByPath("Notes/hoge.md")!)

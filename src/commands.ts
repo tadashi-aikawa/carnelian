@@ -29,6 +29,7 @@ import { createTDQ } from "./commands/create-tdq";
 import { createTroubleshootingNote } from "./commands/create-troubleshooting-note";
 import { cycleBulletCheckbox } from "./commands/cycle-bullet-checkbox";
 import { deleteActiveFile } from "./commands/delete-active-file";
+import { duplicateActiveFileVertically } from "./commands/duplicate-active-file-vertically";
 import { duplicateLineDown } from "./commands/duplicate-line-down";
 import { duplicateLineUp } from "./commands/duplicate-line-up";
 import { fixLink } from "./commands/fix-link";
@@ -142,6 +143,12 @@ function createCarnelianCommands(settings: PluginSettings) {
       kind: "file",
       enabled: sf?.["Delete active file"],
       executor: deleteActiveFile,
+    },
+    {
+      name: "Duplicate active file vertically",
+      kind: "file",
+      enabled: sf?.["Duplicate active file vertically"],
+      executor: duplicateActiveFileVertically,
     },
     {
       name: "Toggle Live preview",
