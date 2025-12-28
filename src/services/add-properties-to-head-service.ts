@@ -1,7 +1,7 @@
 import { now } from "src/lib/helpers/datetimes";
 import { getActiveFilePath } from "src/lib/helpers/entries";
 import {
-  setOnFileOpenEvent,
+  setOnActiveLeafChangeEvent,
   setOnPropertiesChangedEvent,
 } from "src/lib/helpers/events";
 import { getPropertiesByPath } from "src/lib/helpers/properties";
@@ -26,7 +26,7 @@ export class AddPropertiesToHeadService implements Service {
   name = "Add properties to head";
   className = "additional-properties";
 
-  unsetFileOpenHandler!: () => void;
+  unsetActiveLeafChangeHandler!: () => void;
   unsetPropertiesChangedEventRef!: () => void;
 
   onLayoutReady(): void {
@@ -38,7 +38,8 @@ export class AddPropertiesToHeadService implements Service {
   }
 
   onload() {
-    this.unsetFileOpenHandler = setOnFileOpenEvent((file) => {
+    this.unsetActiveLeafChangeHandler = setOnActiveLeafChangeEvent((leaf) => {
+      const file = leaf?.view.file;
       if (!file) {
         return;
       }
@@ -58,7 +59,7 @@ export class AddPropertiesToHeadService implements Service {
   }
 
   onunload() {
-    this.unsetFileOpenHandler();
+    this.unsetActiveLeafChangeHandler();
     this.unsetPropertiesChangedEventRef();
     this.removePropertiesElements();
   }
