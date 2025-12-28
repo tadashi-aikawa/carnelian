@@ -19,19 +19,21 @@ export const useActiveFileEssentialBodyStore = () => {
     essentialBodyMapping[path]?.[date] != null;
 
   /**
-   * date時点での本質的な内容をセットします。ただし、すでにセットされている場合は上書きしません。
+   * date時点での本質的な内容をセットします。
    * @args.path ファイルパス
    * @args.date YYYY-MM-DD
    * @args.body frontmatterを除いた本文全文
+   * @args.noOverwrite すでにセットされている場合は上書きしない
    */
   const setEssentialBody = (args: {
     path: string;
     date: string;
     body: string;
+    noOverwrite?: boolean;
   }): void => {
-    const { path, date, body } = args;
+    const { path, date, body, noOverwrite = false } = args;
 
-    if (hasEssetialBody(path, date)) {
+    if (noOverwrite && hasEssetialBody(path, date)) {
       return;
     }
 
@@ -54,9 +56,32 @@ export const useActiveFileEssentialBodyStore = () => {
     return essentialBodyMapping[path]?.[date] === hash(toEssentialBody(body));
   };
 
+  /**
+   * bodyの内容と本質的に等しい内容が記録されている日付を返します。
+   * 見つからなかった場合はnullを返します。
+   * @args.path ファイルパス
+   * @args.body 比較先のfrontmatterを除いた本文全文
+   */
+  const findDateByHash = (path: string, body: string): string | null => {
+    const targetHash = hash(toEssentialBody(body));
+    const dateHashMapping = essentialBodyMapping[path];
+    if (!dateHashMapping) {
+      return null;
+    }
+
+    for (const [date, recordedHash] of Object.entries(dateHashMapping)) {
+      if (recordedHash === targetHash) {
+        return date;
+      }
+    }
+
+    return null;
+  };
+
   return {
     setEssentialBody,
     equals,
+    findDateByHash,
   };
 };
 

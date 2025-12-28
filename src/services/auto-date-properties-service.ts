@@ -91,6 +91,7 @@ updated: ${today}
         path: file.path,
         date: updated,
         body,
+        noOverwrite: true, // ファイルを開いて編集したあと、エディタを切り替えたときの問題に対応
       });
     });
 
@@ -121,17 +122,18 @@ export function updateAutoDatePropertiesForActiveFile(path: string): void {
     return;
   }
 
-  if (store.equals({ path, date: updated, body })) {
-    // 実質的に内容が変わっていない場合は何もしない
-    return;
+  // 変更後の内容が特定日付時点の本質ハッシュと同一なら、updatedを戻して終了
+  const hashDate = store.findDateByHash(path, body);
+  if (hashDate && hashDate !== today) {
+    if (hashDate !== updated) {
+      updateActiveFileProperty("updated", hashDate);
+      notify(`↩ updatedプロパティを『${hashDate}』に巻き戻しました`, 3000);
+    }
+  } else {
+    store.setEssentialBody({ path, date: today, body });
+    if (updated !== today) {
+      updateActiveFileProperty("updated", today);
+      notify(`🔄 updatedプロパティを『${today}』に更新しました`, 3000);
+    }
   }
-
-  store.setEssentialBody({ path, date: today, body });
-
-  if (updated === today) {
-    return;
-  }
-
-  updateActiveFileProperty("updated", today);
-  notify("最終更新日を更新しました", 3000);
 }
