@@ -5,6 +5,7 @@ import { toEditorPosition, toFullPath } from "../obsutils/mapper";
 import type { UApp } from "../types";
 import { map, orThrow } from "../utils/guard";
 import { getActiveEditor } from "./editors/basic";
+import { exists } from "./io";
 import { getActiveLeaf } from "./leaves";
 import { getActiveFileCache, getFileCacheByPath } from "./metadata";
 import { getFileDeleteMode } from "./settings";
@@ -239,6 +240,40 @@ export async function renameFileWithoutLinkModified(
 export async function copyFile(path: string, dst: string): Promise<TFile> {
   await app.vault.adapter.copy(path, dst);
   return getFileByPath(dst) as TFile;
+}
+
+/**
+ * ファイルを複製し、重複しないパスにコピーします
+ */
+export async function duplicateFile(file: TFile): Promise<TFile> {
+  const dstPath = await getDuplicateFilePath(file);
+  return copyFile(file.path, dstPath);
+}
+
+/**
+ * ファイルを複製する際の重複しないパスを取得します
+ */
+export async function getDuplicateFilePath(file: TFile): Promise<string> {
+  const folderPath = file.parent?.path ?? "";
+  const buildPath = (basename: string) =>
+    folderPath
+      ? `${folderPath}/${basename}.${file.extension}`
+      : `${basename}.${file.extension}`;
+
+  const baseName = `${file.basename} (copy)`;
+  let candidate = buildPath(baseName);
+  if (!(await exists(candidate))) {
+    return candidate;
+  }
+
+  let suffix = 2;
+  while (true) {
+    candidate = buildPath(`${file.basename} (copy ${suffix})`);
+    if (!(await exists(candidate))) {
+      return candidate;
+    }
+    suffix += 1;
+  }
 }
 
 /**

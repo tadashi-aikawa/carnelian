@@ -79,6 +79,10 @@ export interface Config {
     "Copy active image file to clipboard"?: boolean;
     /** 現在のファイルの詳細情報を表示 */
     "Show File info"?: boolean;
+    /** 現在のファイルを複製して新しいタブで開く */
+    "Duplicate active file"?: boolean;
+    /** 現在のファイルを複製して下方向に開く */
+    "Duplicate active file horizontally"?: boolean;
     /** 現在のファイルを複製して右方向に開く */
     "Duplicate active file vertically"?: boolean;
     /** 現在のファイルを削除（バックリンクが存在する場合はエラー） */

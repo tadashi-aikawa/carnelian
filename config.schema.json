@@ -468,6 +468,14 @@
               "description": "現在のファイルを削除（バックリンクが存在する場合はエラー）",
               "type": "boolean"
             },
+            "Duplicate active file": {
+              "description": "現在のファイルを複製して新しいタブで開く",
+              "type": "boolean"
+            },
+            "Duplicate active file horizontally": {
+              "description": "現在のファイルを複製して下方向に開く",
+              "type": "boolean"
+            },
             "Duplicate active file vertically": {
               "description": "現在のファイルを複製して右方向に開く",
               "type": "boolean"
