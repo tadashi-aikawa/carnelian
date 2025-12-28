@@ -3,8 +3,8 @@ import { contentLinter } from "src/definitions/linters/ContentLinter";
 import { propertyLinter } from "src/definitions/linters/PropertyLinter";
 import { getActiveFile } from "src/lib/helpers/entries";
 import {
+  setOnActiveLeafChangeEvent,
   setOnExWCommandEvent,
-  setOnFileOpenEvent,
 } from "src/lib/helpers/events";
 import { lint, removeLinterInspectionElements } from "src/lib/obsutils/linter";
 import type { Service } from "src/services";
@@ -15,7 +15,7 @@ import type { PluginSettings } from "src/settings";
  */
 export class LintService implements Service {
   name = "Lint";
-  unsetFileOpenHandler!: () => void;
+  unsetActiveLeafChangeHandler!: () => void;
   unsetExWCommandHandler!: () => void;
 
   constructor(public settings: PluginSettings["linter"]) {}
@@ -29,12 +29,22 @@ export class LintService implements Service {
   }
 
   onload(): void {
-    this.unsetFileOpenHandler = setOnFileOpenEvent(async (file) => {
-      if (!file) {
-        return;
-      }
-      await lintFile(file, this.settings, false);
-    });
+    // INFO: setOnFileOpenEvent ではなく setOnActiveLeafChangeEvent を使うのは
+    //       同名ファイルを複数開いたときなどに対応するため
+    // WARNING: AQSでpreviewをしたあとに現在のタブ以外で開いた場合
+    //          プレビュー前に表示されているファイルのLint diagnosticsが正しく表示されない問題がある
+    //          (最後にプレビューしたdiagnosticsが表示される)
+    this.unsetActiveLeafChangeHandler = setOnActiveLeafChangeEvent(
+      async (leaf) => {
+        const file = leaf?.view.file;
+        if (!file) {
+          return;
+        }
+        await lintFile(file, this.settings, false);
+      },
+      this.name,
+    );
+
     this.unsetExWCommandHandler = setOnExWCommandEvent(
       (file) => lintFile(file, this.settings, true),
       this.name,
@@ -42,7 +52,7 @@ export class LintService implements Service {
   }
 
   onunload(): void {
-    this.unsetFileOpenHandler();
+    this.unsetActiveLeafChangeHandler();
     this.unsetExWCommandHandler();
     removeLinterInspectionElements();
   }

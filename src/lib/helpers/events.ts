@@ -1,5 +1,10 @@
-import type { CachedMetadata, TAbstractFile, TFile } from "obsidian";
-import type { UApp } from "../types";
+import type {
+  CachedMetadata,
+  TAbstractFile,
+  TFile,
+  WorkspaceLeaf,
+} from "obsidian";
+import type { UApp, UWorkspaceLeaf } from "../types";
 import { getActiveFile, isFile } from "./entries";
 
 declare let app: UApp;
@@ -15,6 +20,25 @@ export function setOnFileOpenEvent(
   ctx?: any,
 ): () => void {
   const ref = app.workspace.on("file-open", handler, ctx);
+  return () => {
+    app.workspace.offref(ref);
+  };
+}
+
+/**
+ * アクティブなLeafが変更されたときに実行する処理を設定します
+ *
+ * @returns 処理の解除処理
+ */
+export function setOnActiveLeafChangeEvent(
+  handler: (leaf: UWorkspaceLeaf | null) => any,
+  ctx?: any,
+): () => void {
+  const ref = app.workspace.on(
+    "active-leaf-change",
+    handler as (leaf: WorkspaceLeaf | null) => any,
+    ctx,
+  );
   return () => {
     app.workspace.offref(ref);
   };

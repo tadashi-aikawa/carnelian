@@ -123,6 +123,7 @@ export type UWorkspaceLeaf = WorkspaceLeaf & {
   parent?: UWorkspaceLeaf | null;
   children?: UWorkspaceLeaf[];
   detach?: () => void;
+  view: UFileView;
 };
 
 export type UWorkspaceMarkdownLeaf = UWorkspaceLeaf & {
