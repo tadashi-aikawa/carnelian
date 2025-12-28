@@ -1,6 +1,7 @@
 import { now } from "src/lib/helpers/datetimes";
 import {
   appendTextToFile,
+  getActiveFile,
   getActiveFileBody,
   isMarkdownFile,
   loadFileBodyCache,
@@ -13,6 +14,7 @@ import {
 } from "src/lib/helpers/events";
 import {
   getActiveFileProperties,
+  getPropertiesByPath,
   updateActiveFileProperty,
 } from "src/lib/helpers/properties";
 import { notify } from "src/lib/helpers/ui";
@@ -33,10 +35,16 @@ export class AutoDatePropertiesService implements Service {
   unsetExWCommandEventHandler!: () => void;
 
   onLayoutReady(): void {
+    const file = getActiveFile();
     const body = getActiveFileBody();
-    if (body) {
+    const updated = getActiveFileProperties()?.updated;
+    if (file && body && updated) {
       // 起動直後、既にファイルが開かれている場合はファイルの中身を保存する (setOnCreateFileEvent では取得できないため)
-      store.setEssentialBody(body);
+      store.setEssentialBody({
+        path: file.path,
+        date: updated,
+        body,
+      });
     }
 
     this.unsetCreateFileEventHandler = setOnCreateFileEvent(async (file) => {
@@ -74,15 +82,23 @@ updated: ${today}
       if (!body) {
         return;
       }
+      const updated = getPropertiesByPath(file.path)?.updated;
+      if (!updated) {
+        return;
+      }
 
-      store.setEssentialBody(body);
+      store.setEssentialBody({
+        path: file.path,
+        date: updated,
+        body,
+      });
     });
 
     this.unsetExWCommandEventHandler = setOnExWCommandEvent(async (file) => {
       if (!file || !isMarkdownFile(file)) {
         return;
       }
-      updateAutoDatePropertiesForActiveFile();
+      updateAutoDatePropertiesForActiveFile(file.path);
     }, this.name);
   }
 
@@ -93,9 +109,10 @@ updated: ${today}
   }
 }
 
-export function updateAutoDatePropertiesForActiveFile(): void {
+export function updateAutoDatePropertiesForActiveFile(path: string): void {
   const updated = getActiveFileProperties()?.updated;
-  if (!updated || updated === now("YYYY-MM-DD")) {
+  const today = now("YYYY-MM-DD");
+  if (!updated) {
     return;
   }
 
@@ -104,12 +121,17 @@ export function updateAutoDatePropertiesForActiveFile(): void {
     return;
   }
 
-  if (store.equals(body)) {
+  if (store.equals({ path, date: updated, body })) {
     // 実質的に内容が変わっていない場合は何もしない
     return;
   }
 
-  store.setEssentialBody(body);
-  updateActiveFileProperty("updated", now("YYYY-MM-DD"));
+  store.setEssentialBody({ path, date: today, body });
+
+  if (updated === today) {
+    return;
+  }
+
+  updateActiveFileProperty("updated", today);
   notify("最終更新日を更新しました", 3000);
 }

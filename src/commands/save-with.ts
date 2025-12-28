@@ -26,7 +26,7 @@ export async function saveWith(options: {
     await formatActiveFile(format);
   }
   if (file && isMarkdownFile(file)) {
-    updateAutoDatePropertiesForActiveFile();
+    updateAutoDatePropertiesForActiveFile(file.path);
   }
 
   runCommandById("editor:save-file");
