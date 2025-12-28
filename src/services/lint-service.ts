@@ -22,6 +22,8 @@ export class LintService implements Service {
 
   onLayoutReady(): void {
     // 起動直後、既にファイルが開かれている場合はファイルの中身を保存する (setOnCreateFileEvent では取得できないため)
+    // reload時は初回はイベントが発生しないので
+    // WARN: 冪等性担保の実装が必要
     const activeFile = getActiveFile();
     if (activeFile) {
       lintFile(activeFile, this.settings, false);

@@ -30,9 +30,11 @@ export class AddPropertiesToHeadService implements Service {
   unsetPropertiesChangedEventRef!: () => void;
 
   onLayoutReady(): void {
-    // 初回はイベントが発生しないので
+    // reload時は初回はイベントが発生しないので
+    // WARN: 冪等性担保の実装が必要
     const path = getActiveFilePath();
     if (path != null) {
+      this.removePropertiesElements();
       this.addPropertiesElement(path);
     }
   }
