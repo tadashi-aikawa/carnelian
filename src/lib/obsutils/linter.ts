@@ -30,6 +30,7 @@ export async function lint(
   file: TFile,
   linters: Linter[],
   settings: PluginSettings["linter"],
+  autofix: boolean,
 ) {
   const content = await loadFileContentCache(file.path);
   const body = await loadFileBodyCache(file.path);
@@ -44,10 +45,11 @@ export async function lint(
   });
 
   removeLinterInspectionElements();
-  if (!properties?.ignoreAutoFix) {
+  const canAutoFix = !properties?.ignoreAutoFix && autofix;
+  if (canAutoFix) {
     await fixByInspections(inspections);
   }
-  addLinterInspectionElement(inspections);
+  addLinterInspectionElement(inspections, canAutoFix);
 
   inspectionsOrderByOffset = orderBy(
     inspections.filter((x) => x.offset != null),
@@ -98,13 +100,20 @@ async function fixByInspections(inspections: LintInspection[]) {
   }
 }
 
-function addLinterInspectionElement(inspections: LintInspection[]) {
+function addLinterInspectionElement(
+  inspections: LintInspection[],
+  canAutoFix: boolean,
+) {
   const summaries = Object.entries(groupBy(inspections, (x) => x.code)).map(
     ([code, inspections]) => ({ code, inspections }),
   );
 
-  const nonFixableSummaries = summaries.filter((x) => !x.inspections[0].fix);
-  const fixableSummaries = summaries.filter((x) => x.inspections[0].fix);
+  const nonFixableSummaries = summaries.filter(
+    (x) => !canAutoFix || !x.inspections[0].fix,
+  );
+  const fixableSummaries = summaries.filter(
+    (x) => canAutoFix && x.inspections[0].fix,
+  );
 
   const inspectionsEl = createDiv({ cls: "linter-inspections" });
 

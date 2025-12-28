@@ -20,7 +20,7 @@ export async function saveWith(options: {
   }
 
   if (lint) {
-    await lintFile(file, lint);
+    await lintFile(file, lint, true);
   }
   if (format) {
     await formatActiveFile(format);

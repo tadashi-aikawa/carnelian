@@ -24,7 +24,7 @@ export class LintService implements Service {
     // 起動直後、既にファイルが開かれている場合はファイルの中身を保存する (setOnCreateFileEvent では取得できないため)
     const activeFile = getActiveFile();
     if (activeFile) {
-      lintFile(activeFile, this.settings);
+      lintFile(activeFile, this.settings, false);
     }
   }
 
@@ -33,10 +33,10 @@ export class LintService implements Service {
       if (!file) {
         return;
       }
-      await lintFile(file, this.settings);
+      await lintFile(file, this.settings, false);
     });
     this.unsetExWCommandHandler = setOnExWCommandEvent(
-      (file) => lintFile(file, this.settings),
+      (file) => lintFile(file, this.settings, true),
       this.name,
     );
   }
@@ -51,6 +51,7 @@ export class LintService implements Service {
 export async function lintFile(
   file: TFile,
   settings: PluginSettings["linter"],
+  autofix: boolean,
 ) {
-  await lint(file, [contentLinter, propertyLinter], settings);
+  await lint(file, [contentLinter, propertyLinter], settings, autofix);
 }
