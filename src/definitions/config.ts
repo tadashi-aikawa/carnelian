@@ -242,6 +242,8 @@ export interface Config {
     // ── Link/Card ──────────────────────────────────────────
     /** クリップボードURLからOGPメタデータを取得してサイトカード挿入 */
     "Paste site card"?: boolean;
+    /** クリップボードのBluesky埋め込みスクリプトから埋め込みHTMLを挿入 */
+    "Paste Bluesky embed"?: boolean;
     /** 内部ノート用のカードレイアウトを作成（ファイルピッカー） */
     "Insert note card"?: boolean;
     /** カーソル配下のOGPカードをv2形式に変換（情報も最新化） */

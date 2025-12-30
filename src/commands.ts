@@ -51,6 +51,7 @@ import { openAsRemoteMkDocsSite } from "./commands/open-as-remote-mkdocs-site";
 import { openPropertyUrl } from "./commands/open-property-url";
 import { openVaultInLazygit } from "./commands/open-vault-in-lazygit";
 import { openVaultInTerminal } from "./commands/open-vault-in-terminal";
+import { pasteBlueskyEmbed } from "./commands/paste-bluesky-embed";
 import { pasteClipboardAsAVIF } from "./commands/paste-clipboard-as-avif";
 import { pasteClipboardAsWebp } from "./commands/paste-clipboard-as-webp";
 import { pasteSiteCard } from "./commands/paste-site-card";
@@ -267,6 +268,12 @@ function createCarnelianCommands(settings: PluginSettings) {
       kind: "editor",
       enabled: se?.["Paste site card"],
       executor: pasteSiteCard,
+    },
+    {
+      name: "Paste Bluesky embed",
+      kind: "editor",
+      enabled: se?.["Paste Bluesky embed"],
+      executor: pasteBlueskyEmbed,
     },
     {
       name: "Insert note card",

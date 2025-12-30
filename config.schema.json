@@ -373,6 +373,10 @@
               "description": "ファイルのurlプロパティに保存されたURLを開く",
               "type": "boolean"
             },
+            "Paste Bluesky embed": {
+              "description": "クリップボードのBluesky埋め込みスクリプトから埋め込みHTMLを挿入",
+              "type": "boolean"
+            },
             "Paste URL to site link": {
               "description": "クリップボードURLからOGPメタデータを取得してMarkdownリンク挿入",
               "type": "boolean"
