@@ -24,6 +24,7 @@ import {
   replaceAt,
   replaceWithRegExpMapping,
   replaceWithStringMapping,
+  trimEmptyLines,
 } from "./strings";
 
 test.each([
@@ -39,6 +40,26 @@ test.each([
     expected: ReturnType<typeof excludeSpace>,
   ) => {
     expect(excludeSpace(text)).toBe(expected);
+  },
+);
+
+test.each([
+  ["", ""],
+  ["\n", ""],
+  ["\n\n", ""],
+  ["\n a \n", "a"],
+  ["\n\n a \n\n", "a"],
+  ["\n a \n b \n", "a \n b"],
+  ["\n\n a\n b \n\n", "a\n b"],
+  ["\n\n  a  \n\n", "a"],
+  ["\n\n\t a \n\n", "a"],
+])(
+  `trimEmptyLines("%s"))`,
+  (
+    text: Parameters<typeof trimEmptyLines>[0],
+    expected: ReturnType<typeof trimEmptyLines>,
+  ) => {
+    expect(trimEmptyLines(text)).toBe(expected);
   },
 );
 

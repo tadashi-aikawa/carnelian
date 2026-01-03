@@ -1,4 +1,4 @@
-import type { SectionCache } from "obsidian";
+import type { HeadingCache, SectionCache } from "obsidian";
 import type { CodeBlock } from "../types";
 import { map } from "../utils/guard";
 import { getActiveFile, loadFileContentCache } from "./entries";
@@ -49,6 +49,46 @@ export function getCodeBlockSectionsByPath(
   return (
     getFileCacheByPath(path)?.sections?.filter((x) => x.type === "code") ?? null
   );
+}
+
+/**
+ * ファイルパスから指定見出しのセクション内容を取得します
+ */
+export async function loadHeadingSectionContentByPath(
+  path: string,
+  heading: string,
+  level: number,
+): Promise<string | null> {
+  const headings = getFileCacheByPath(path)?.headings as HeadingCache[] | null;
+  if (!headings) {
+    return null;
+  }
+
+  const target = headings.find(
+    (x) => x.level === level && x.heading === heading,
+  );
+  if (!target) {
+    return null;
+  }
+
+  const next = headings
+    .filter(
+      (x) =>
+        x.position.start.offset > target.position.start.offset &&
+        x.level <= level,
+    )
+    .sort((a, b) => a.position.start.offset - b.position.start.offset)[0];
+
+  const startOffset = target.position.end.offset;
+  if (next) {
+    return loadFileContentCache(path, {
+      start: { offset: startOffset },
+      end: { offset: next.position.start.offset },
+    });
+  }
+
+  const fullContent = await loadFileContentCache(path);
+  return fullContent ? fullContent.slice(startOffset) : null;
 }
 
 /**

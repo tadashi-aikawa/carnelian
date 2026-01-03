@@ -32,6 +32,14 @@ export function notify(
 }
 
 /**
+ * エラーではないが条件を満たさず処理を中断した場合に通知します
+ * タイムアウトはあります
+ */
+export function notifyWarning(text: string): Notice {
+  return notify(`🚨 ${text}`, 5000);
+}
+
+/**
  * バリデーションエラーを通知します
  * タイムアウトはあります
  */

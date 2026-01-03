@@ -54,6 +54,20 @@
               "description": "14日前より古いデイリーノートを別ディレクトリに移動（要Obsidian再起動でキャッシュ更新）",
               "type": "boolean"
             },
+            "Copy daily note section in range": {
+              "additionalProperties": false,
+              "description": "指定期間のDaily Noteから特定セクションを集約してクリップボードにコピー",
+              "properties": {
+                "sectionName": {
+                  "description": "対象セクション名 (H2)",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "sectionName"
+              ],
+              "type": "object"
+            },
             "Create MIN ADR": {
               "description": "Minerva用ADRを作成。自動採番とADRリスト更新",
               "type": "boolean"

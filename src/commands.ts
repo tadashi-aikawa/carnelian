@@ -6,6 +6,7 @@ import { copyActiveFileFullPath } from "./commands/copy-active-file-full-path";
 import { copyActiveImageFileToClipboard } from "./commands/copy-active-image-file-to-clipboard";
 import { copyAsConfluence } from "./commands/copy-as-confluence";
 import { copyAsSlack } from "./commands/copy-as-slack";
+import { copyDailyNoteSectionInRange } from "./commands/copy-daily-note-section-in-range";
 import { copyMinervaURL } from "./commands/copy-minerva-url";
 import { copyStripLinksAndDecorations } from "./commands/copy-strip-links-and-decorations";
 import { copyUrlProperty } from "./commands/copy-url-property";
@@ -292,6 +293,13 @@ function createCarnelianCommands(settings: PluginSettings) {
       kind: "editor",
       enabled: se?.["Paste URL to site link"],
       executor: pasteURLToSiteLink,
+    },
+    {
+      name: "Copy daily note section in range",
+      kind: "all",
+      enabled: sa?.["Copy daily note section in range"],
+      executor: () =>
+        copyDailyNoteSectionInRange(sa?.["Copy daily note section in range"]),
     },
     {
       name: "Clean old daily notes",

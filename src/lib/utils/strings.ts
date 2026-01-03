@@ -175,6 +175,13 @@ export function pad(text: string, length: number, char = " "): string {
 }
 
 /**
+ * テキストの前後の空行と空白を削除します
+ */
+export function trimEmptyLines(text: string): string {
+  return text.replace(/^\n+/, "").replace(/\n+$/, "").trim();
+}
+
+/**
  * 指定行における段落の情報とテキストを取得します
  * 指定行が空行の場合はnullを返します
  *
