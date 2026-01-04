@@ -47,7 +47,7 @@ function extractColorMode(script: string): string | null {
 function createEmbedHtml(embedUri: string, colorMode: string): string {
   return [
     '<div class="bluesky-embed-container">',
-    `<iframe height="100px" class="bluesky-embed" src="https://embed.bsky.app/embed/${embedUri}?colorMode=${colorMode}" scrolling="no" frameborder="0" loading="lazy"> </iframe>`,
+    `<iframe height="500px" class="bluesky-embed" src="https://embed.bsky.app/embed/${embedUri}?colorMode=${colorMode}" scrolling="no" frameborder="0" loading="lazy"> </iframe>`,
     "</div>",
   ].join("\n");
 }
