@@ -207,7 +207,7 @@ function createV1LinkCard(
       (x) => ({
         ...base,
         level,
-        offset: x.range.start,
+        offset: x.range.start - 6, // Live Previewの表示を確認するため1行前にする
       }),
     );
   };

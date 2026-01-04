@@ -153,6 +153,26 @@ export function getActiveParagraph(): {
 }
 
 /**
+ * 指定行番号の段落情報とテキストを取得します
+ * 指定行が空白の場合はnullを返します
+ *
+ * @returns {
+ *   startLine: 段落の開始行番号(0はじまり)
+ *   endLine: 段落の終了行番号(0はじまり)
+ *   text: 段落のテキスト全体
+ * }
+ */
+export function getParagraphAtLineNo(lineNo: number): {
+  startLine: number;
+  endLine: number;
+  text: string;
+} | null {
+  return map(getActiveEditor(), (editor) =>
+    getParagraphAtLine(editor.getValue(), lineNo),
+  );
+}
+
+/**
  * 正規表現パターンに一致する行を起点にファイルの最後まで削除します
  */
 export function deleteLinesFrom(pattern: RegExp): void {

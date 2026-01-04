@@ -1,5 +1,8 @@
-import { getActiveParagraph } from "src/lib/helpers/editors/advanced";
-import { setLinesInRange } from "src/lib/helpers/editors/basic";
+import { getParagraphAtLineNo } from "src/lib/helpers/editors/advanced";
+import {
+  getActiveLineNo,
+  setLinesInRange,
+} from "src/lib/helpers/editors/basic";
 import { getFileByPath } from "src/lib/helpers/entries";
 import { linkText2Path } from "src/lib/helpers/links";
 import {
@@ -11,11 +14,17 @@ import { createCard, createNoteCard } from "src/lib/helpers/web";
 import { doSinglePatternCaptureMatching, isUrl } from "src/lib/utils/strings";
 
 /**
- * カーソル配下のOGPカード情報をv2形式で上書きします。
+ * カーソルより1行下のOGPカード情報をv2形式で上書きします。
  * 既にv2形式の場合も情報は最新化されます。
  */
 export async function transformToV2OGPCard() {
-  const p = getActiveParagraph();
+  const activeLineNo = getActiveLineNo();
+  if (!activeLineNo) {
+    notifyValidationError("現在行が取得できません");
+    return;
+  }
+
+  const p = getParagraphAtLineNo(activeLineNo + 1);
   if (!p) {
     notifyValidationError("段落が空です");
     return;
