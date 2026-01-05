@@ -58,13 +58,18 @@
               "additionalProperties": false,
               "description": "指定期間のDaily Noteから特定セクションを集約してクリップボードにコピー",
               "properties": {
+                "sectionLevel": {
+                  "description": "対象セクションのレベル",
+                  "type": "number"
+                },
                 "sectionName": {
-                  "description": "対象セクション名 (H2)",
+                  "description": "対象セクション名",
                   "type": "string"
                 }
               },
               "required": [
-                "sectionName"
+                "sectionName",
+                "sectionLevel"
               ],
               "type": "object"
             },

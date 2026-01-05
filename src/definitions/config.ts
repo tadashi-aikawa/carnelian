@@ -37,8 +37,10 @@ export interface Config {
     // ── Others ─────────────────────────────────────────────
     /** 指定期間のDaily Noteから特定セクションを集約してクリップボードにコピー */
     "Copy daily note section in range"?: {
-      /** 対象セクション名 (H2) */
+      /** 対象セクション名 */
       sectionName: string;
+      /** 対象セクションのレベル */
+      sectionLevel: number;
     };
     /** 14日前より古いデイリーノートを別ディレクトリに移動（要Obsidian再起動でキャッシュ更新） */
     "Clean old daily notes"?: boolean;

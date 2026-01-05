@@ -18,10 +18,16 @@ import { trimEmptyLines } from "src/lib/utils/strings";
 export async function copyDailyNoteSectionInRange(
   options?: AllConfig["Copy daily note section in range"],
 ) {
-  const sectionName = options?.sectionName?.trim();
-  if (!sectionName) {
+  if (!options) {
     return notifyValidationError(
-      "'all.Copy daily note section in range.sectionName' が設定されていません。",
+      "'all.Copy daily note section in range' が設定されていません。",
+    );
+  }
+
+  const { sectionName, sectionLevel } = options;
+  if (!sectionLevel || sectionLevel < 1 || sectionLevel > 6) {
+    return notifyValidationError(
+      "'all.Copy daily note section in range.sectionLevel' の設定値が不正です。",
     );
   }
 
@@ -70,7 +76,7 @@ export async function copyDailyNoteSectionInRange(
     const content = await loadHeadingSectionContentByPath(
       note.path,
       sectionName,
-      2,
+      sectionLevel,
     );
     if (!content) {
       continue;
