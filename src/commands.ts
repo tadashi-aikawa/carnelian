@@ -1,4 +1,5 @@
 import type { Command } from "obsidian";
+import { pasteClipboardAsWebpForOGP } from "src/commands/paste-clipboard-as-webp-ogp";
 import { addPermalinkProperty } from "./commands/add-permalink-property";
 import { addPropertySuitably } from "./commands/add-property-suitably";
 import { cleanOldDailyNotes } from "./commands/clean-old-daily-notes";
@@ -177,6 +178,12 @@ function createCarnelianCommands(settings: PluginSettings) {
       kind: "editor",
       enabled: se?.["Paste clipboard as WebP"],
       executor: () => pasteClipboardAsWebp(se?.["Paste clipboard as WebP"]),
+    },
+    {
+      name: "Paste clipboard as WebP for OGP",
+      kind: "editor",
+      enabled: se?.["Paste clipboard as WebP for OGP"],
+      executor: pasteClipboardAsWebpForOGP,
     },
     {
       name: "Paste clipboard as AVIF",

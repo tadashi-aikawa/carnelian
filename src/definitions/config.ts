@@ -192,6 +192,8 @@ export interface Config {
       /** 最大幅 (超えている場合は自動で縮小する) */
       maxWidth?: number;
     };
+    /** クリップボード画像をOGPに最適なサイズでWebP変換して保存・挿入（ImageMagick必須） */
+    "Paste clipboard as WebP for OGP"?: boolean;
     /** クリップボード画像をAVIF変換して保存・挿入（ImageMagick必須） */
     "Paste clipboard as AVIF"?: {
       /** AVIFの品質 (default: 35) */

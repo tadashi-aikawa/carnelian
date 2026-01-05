@@ -426,6 +426,10 @@
               },
               "type": "object"
             },
+            "Paste clipboard as WebP for OGP": {
+              "description": "クリップボード画像をOGPに最適なサイズでWebP変換して保存・挿入（ImageMagick必須）",
+              "type": "boolean"
+            },
             "Paste site card": {
               "description": "クリップボードURLからOGPメタデータを取得してサイトカード挿入",
               "type": "boolean"
