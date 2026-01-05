@@ -35,6 +35,39 @@ function toSlackLink(link: Link): string {
   return `[${link.title}](${url})`;
 }
 
+function normalizeSlackLinkSpacing(
+  base: string,
+  link: Link,
+): { range: Link["range"]; text: string } {
+  const slackLink = toSlackLink(link);
+  const { start, end } = link.range;
+
+  let left = start;
+  while (left > 0 && base[left - 1] === " ") {
+    left--;
+  }
+
+  const hasCharBefore = left > 0 && base[left - 1] !== "\n";
+  if (!hasCharBefore) {
+    left = start;
+  }
+
+  let right = end;
+  while (right < base.length - 1 && base[right + 1] === " ") {
+    right++;
+  }
+
+  const hasCharAfter = right < base.length - 1 && base[right + 1] !== "\n";
+  if (!hasCharAfter) {
+    right = end;
+  }
+
+  return {
+    range: { start: left, end: right },
+    text: `${hasCharBefore ? " " : ""}${slackLink}${hasCharAfter ? " " : ""}`,
+  };
+}
+
 /**
  * Slackに貼り付ける形式でクリップボードにコピーします
  */
@@ -54,7 +87,8 @@ export async function copyAsSlack(options: {
 
   let text = target;
   for (const link of links) {
-    text = replaceAt(text, link.range, toSlackLink(link));
+    const normalized = normalizeSlackLinkSpacing(text, link);
+    text = replaceAt(text, normalized.range, normalized.text);
   }
   text = text
     .split("\n")
