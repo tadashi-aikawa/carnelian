@@ -6,7 +6,7 @@ import {
 import { doSinglePatternMatching } from "src/lib/utils/strings";
 
 /**
- * urlsプロパティを追加します
+ * urlプロパティを追加します
  * 現在行にURLがある場合は、それをプロパティに移動します
  */
 export function addUrlProperty() {

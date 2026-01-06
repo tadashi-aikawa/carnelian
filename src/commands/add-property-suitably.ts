@@ -21,7 +21,7 @@ export async function addPropertySuitably() {
     return;
   }
 
-  const text = await getClipboardText();
+  const text = await getClipboardText({ trim: true });
   if (isUrl(text)) {
     addActiveFileProperty("url", text);
     return;
