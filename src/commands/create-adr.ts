@@ -6,6 +6,10 @@ import {
   openFile,
 } from "src/lib/helpers/entries";
 import { exists } from "src/lib/helpers/io";
+import {
+  getActiveFileProperties,
+  updateActiveFileProperty,
+} from "src/lib/helpers/properties";
 import { notify, showInputDialog } from "src/lib/helpers/ui";
 import { sorter } from "src/lib/utils/collections";
 
@@ -113,6 +117,10 @@ status:
   const adrListPath = `💿ADR/${prefix}.md`;
   await openFile(adrListPath);
   appendLine(`| [[${adrTitle}]]       |  |`);
+
+  if (getActiveFileProperties()?.updated) {
+    updateActiveFileProperty("updated", today);
+  }
 
   const f = await createFile(adrFilePath, NOTE_BODY);
   await openFile(f.path);

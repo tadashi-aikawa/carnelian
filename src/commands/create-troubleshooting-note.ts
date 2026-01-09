@@ -3,6 +3,10 @@ import { now } from "src/lib/helpers/datetimes";
 import { insertToCursor } from "src/lib/helpers/editors/basic";
 import { createFile, openFile } from "src/lib/helpers/entries";
 import { exists } from "src/lib/helpers/io";
+import {
+  getActiveFileProperties,
+  updateActiveFileProperty,
+} from "src/lib/helpers/properties";
 import { notify, showInputDialog } from "src/lib/helpers/ui";
 
 /**
@@ -49,6 +53,11 @@ status:
   }
 
   insertToCursor(`[[${title}]]`);
+
+  if (getActiveFileProperties()?.updated) {
+    updateActiveFileProperty("updated", today);
+  }
+
   const f = await createFile(path, NOTE_BODY);
   await openFile(f.path);
 }
