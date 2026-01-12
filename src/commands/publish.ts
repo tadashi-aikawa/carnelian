@@ -44,7 +44,7 @@ export async function publish(options?: AllConfig["Publish"]) {
   const filesByUpdated = mapValues(
     groupBy(targetFilesBase, (note) => note.updated.format("YYYY-MM-DD (ddd)")),
     (notes) =>
-      groupBy(notes, (n) =>
+      groupBy(notes.toSorted(), (n) =>
         n.created.isSame(n.updated, "day") ? "created" : "updated",
       ),
   );
