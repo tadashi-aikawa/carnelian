@@ -8,6 +8,7 @@ import {
   updateActiveFileProperty,
 } from "src/lib/helpers/properties";
 import { notify, showInputDialog } from "src/lib/helpers/ui";
+import { dateTimePropertyFormat } from "src/lib/utils/dates";
 
 /**
  * [Brain note]を作成し、カーソル配下にリンクを挿入します
@@ -15,7 +16,7 @@ import { notify, showInputDialog } from "src/lib/helpers/ui";
  * [Brain note]: (https://minerva.mamansoft.net/Notes/Brain%20note)
  */
 export async function createBrainNote() {
-  const today = now("YYYY-MM-DD");
+  const today = now(dateTimePropertyFormat);
   const nt = getNoteType("Brain note");
 
   const NOTE_BODY = `

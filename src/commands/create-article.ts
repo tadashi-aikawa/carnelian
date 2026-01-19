@@ -3,6 +3,7 @@ import { createFile, openFile } from "src/lib/helpers/entries";
 import { exists } from "src/lib/helpers/io";
 import { addActiveFileProperties } from "src/lib/helpers/properties";
 import { notify, showInputDialog } from "src/lib/helpers/ui";
+import { dateTimePropertyFormat } from "src/lib/utils/dates";
 
 /**
  * Articleを作成します
@@ -23,12 +24,12 @@ export async function createArticle() {
     return notify(`${fp} はすでに存在しています`);
   }
 
-  const today = now("YYYY-MM-DD");
+  const today = now(dateTimePropertyFormat);
   const f = await createFile(
     fp,
     `[[📒Articles]] > [[📒2026 Articles]]
 
-![[${today}.webp|cover-picture]]
+![[${now("YYYY-MM-DD")}.webp|cover-picture]]
 `,
   );
 
@@ -37,7 +38,7 @@ export async function createArticle() {
   addActiveFileProperties({
     created: today,
     updated: today,
-    cover: `📘Articles/attachments/${today}.webp`,
+    cover: `📘Articles/attachments/${now("YYYY-MM-DD")}.webp`,
     publish: false,
   });
 }

@@ -13,11 +13,12 @@ import {
   setOnFileOpenEvent,
 } from "src/lib/helpers/events";
 import {
-  getActiveFileProperties,
-  getPropertiesByPath,
+  getActiveFileUpdatedPropertyAsDatetime,
+  getUpdatedPropertiesAsDatetime,
   updateActiveFileProperty,
 } from "src/lib/helpers/properties";
 import { notify } from "src/lib/helpers/ui";
+import { dateTimePropertyFormat } from "src/lib/utils/dates";
 import type { Service } from "src/services";
 import { store } from "src/store";
 
@@ -37,12 +38,12 @@ export class AutoDatePropertiesService implements Service {
   onLayoutReady(): void {
     const file = getActiveFile();
     const body = getActiveFileBody();
-    const updated = getActiveFileProperties()?.updated;
+    const updated = getActiveFileUpdatedPropertyAsDatetime();
     if (file && body && updated) {
       // 起動直後、既にファイルが開かれている場合はファイルの中身を保存する (setOnCreateFileEvent では取得できないため)
       store.setEssentialBody({
         path: file.path,
-        date: updated,
+        datetime: updated,
         body,
       });
     }
@@ -59,13 +60,13 @@ export class AutoDatePropertiesService implements Service {
         return;
       }
 
-      const today = now("YYYY-MM-DD");
+      const nowDatetime = now(dateTimePropertyFormat);
       await appendTextToFile(
         file.path,
         `
 ---
-created: ${today}
-updated: ${today}
+created: ${nowDatetime}
+updated: ${nowDatetime}
 ---
 `.trimStart(),
       );
@@ -82,14 +83,14 @@ updated: ${today}
       if (!body) {
         return;
       }
-      const updated = getPropertiesByPath(file.path)?.updated;
+      const updated = getUpdatedPropertiesAsDatetime(file.path);
       if (!updated) {
         return;
       }
 
       store.setEssentialBody({
         path: file.path,
-        date: updated,
+        datetime: updated,
         body,
         noOverwrite: true, // ファイルを開いて編集したあと、エディタを切り替えたときの問題に対応
       });
@@ -111,8 +112,8 @@ updated: ${today}
 }
 
 export function updateAutoDatePropertiesForActiveFile(path: string): void {
-  const updated = getActiveFileProperties()?.updated;
-  const today = now("YYYY-MM-DD");
+  const updated = getActiveFileUpdatedPropertyAsDatetime();
+  const nowDatetime = now(dateTimePropertyFormat);
   if (!updated) {
     return;
   }
@@ -123,17 +124,17 @@ export function updateAutoDatePropertiesForActiveFile(path: string): void {
   }
 
   // 変更後の内容が特定日付時点の本質ハッシュと同一なら、updatedを戻して終了
-  const hashDate = store.findDateByHash(path, body);
-  if (hashDate && hashDate !== today) {
+  const hashDate = store.findDatetimeByHash(path, body);
+  if (hashDate && hashDate !== nowDatetime) {
     if (hashDate !== updated) {
       updateActiveFileProperty("updated", hashDate);
-      notify(`↩ updatedプロパティを『${hashDate}』に巻き戻しました`, 3000);
+      notify(`↩ updatedを『${hashDate}』に巻き戻し`, 3000);
     }
   } else {
-    store.setEssentialBody({ path, date: today, body });
-    if (updated !== today) {
-      updateActiveFileProperty("updated", today);
-      notify(`🔄 updatedプロパティを『${today}』に更新しました`, 3000);
+    store.setEssentialBody({ path, datetime: nowDatetime, body });
+    if (updated !== nowDatetime) {
+      updateActiveFileProperty("updated", nowDatetime);
+      notify(`🔄 updatedを『${nowDatetime}』に更新`, 3000);
     }
   }
 }

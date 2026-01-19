@@ -2,6 +2,8 @@ import dayjs, { type Dayjs } from "dayjs";
 
 export function now(format: "unixtime"): number;
 export function now(format: "dayjs"): Dayjs;
+export function now(format: "YYYY-MM-DD"): string;
+export function now(format: "YYYY-MM-DD HH:mm:ss"): string;
 export function now(format: string): string;
 
 /**
@@ -16,7 +18,7 @@ export function now(format: string): string;
  * ```
  */
 export function now(
-  format: string | "unixtime" | "dayjs",
+  format: string | "YYYY-MM-DD" | "YYYY-MM-DD HH:mm:ss" | "unixtime" | "dayjs",
 ): string | number | Dayjs {
   const now = dayjs();
   switch (format) {

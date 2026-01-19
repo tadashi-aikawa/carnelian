@@ -466,7 +466,7 @@ export function getActiveFileBody(): string | null {
  * ```
  */
 export function getCreationDate(
-  format: string | "unixtime" | "dayjs",
+  format: string | "YYYY-MM-DD" | "YYYY-MM-DD HH:mm:ss" | "unixtime" | "dayjs",
 ): string | number | Dayjs | null {
   return map(getActiveFile()?.stat.ctime, (unixtime) => {
     switch (format) {
@@ -492,7 +492,7 @@ export function getCreationDate(
  * ```
  */
 export function getUpdateDate(
-  format: string | "unixtime" | "dayjs",
+  format: string | "YYYY-MM-DD" | "YYYY-MM-DD HH:mm:ss" | "unixtime" | "dayjs",
 ): string | number | Dayjs | null {
   return map(getActiveFile()?.stat.mtime, (unixtime) => {
     switch (format) {

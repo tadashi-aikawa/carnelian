@@ -7,12 +7,13 @@ import {
   updateActiveFileProperty,
 } from "src/lib/helpers/properties";
 import { notify, showInputDialog } from "src/lib/helpers/ui";
+import { dateTimePropertyFormat } from "src/lib/utils/dates";
 
 /**
  * Obsidian逆引きレシピを追加します
  */
 export async function createObsidianCookbook() {
-  const today = now("YYYY-MM-DD");
+  const today = now(dateTimePropertyFormat);
 
   const NOTE_BODY = `---
 created: ${today}

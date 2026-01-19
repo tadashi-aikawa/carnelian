@@ -1,5 +1,7 @@
 import type { Dayjs } from "dayjs";
 
+export const dateTimePropertyFormat = "YYYY-MM-DD HH:mm";
+
 export function getDatesInRange(begin: Dayjs, end: Dayjs): Dayjs[] {
   let date = begin;
   if (begin.isAfter(end)) {

@@ -1,3 +1,5 @@
+import dayjs from "dayjs";
+import { dateTimePropertyFormat } from "src/lib/utils/dates";
 import type { Properties, UApp, UMetadataEditor } from "../types";
 import { errorMessage } from "../utils/errors";
 import { orThrow } from "../utils/guard";
@@ -25,6 +27,18 @@ export function getPropertiesByPath(path: string): Properties | null {
 }
 
 /**
+ * ファイルパスからupdatedプロパティをYYYY-MM-DD HH:mm形式で取得します
+ */
+export function getUpdatedPropertiesAsDatetime(path: string): string | null {
+  const updatedValue = getPropertiesByPath(path)?.updated;
+  if (!updatedValue) {
+    return null;
+  }
+
+  return dayjs(updatedValue).format(dateTimePropertyFormat);
+}
+
+/**
  * 現在のファイルからプロパティを取得します
  *
  * ```ts
@@ -34,6 +48,18 @@ export function getPropertiesByPath(path: string): Properties | null {
  */
 export function getActiveFileProperties(): Properties | null {
   return getActiveFileCache()?.frontmatter ?? null;
+}
+
+/**
+ * 現在ファイルのupdatedプロパティをYYYY-MM-DD HH:mm形式で取得します
+ */
+export function getActiveFileUpdatedPropertyAsDatetime(): string | null {
+  const updatedValue = getActiveFileProperties()?.updated;
+  if (!updatedValue) {
+    return null;
+  }
+
+  return dayjs(updatedValue).format(dateTimePropertyFormat);
 }
 
 /**

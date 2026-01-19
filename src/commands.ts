@@ -27,7 +27,6 @@ import { createNewNoteVertically } from "./commands/create-new-note-vertically";
 import { createObsidianCookbook } from "./commands/create-obsidian-cookbook";
 import { createPrimeNote } from "./commands/create-prime-note";
 import { createReportNote } from "./commands/create-report-note";
-import { createTDQ } from "./commands/create-tdq";
 import { createTroubleshootingNote } from "./commands/create-troubleshooting-note";
 import { cycleBulletCheckbox } from "./commands/cycle-bullet-checkbox";
 import { deleteActiveFile } from "./commands/delete-active-file";
@@ -379,12 +378,6 @@ function createCarnelianCommands(settings: PluginSettings) {
       kind: "all",
       enabled: se?.["Create Obsidian逆引きレシピ"],
       executor: createObsidianCookbook,
-    },
-    {
-      name: "Create TDQ",
-      kind: "editor",
-      enabled: se?.["Create TDQ"],
-      executor: createTDQ,
     },
     {
       name: "Create MTG note",

@@ -7,6 +7,7 @@ import {
   getUpdateDate,
 } from "src/lib/helpers/entries";
 import { notify } from "src/lib/helpers/ui";
+import { dateTimePropertyFormat } from "src/lib/utils/dates";
 import { doSinglePatternCaptureMatching } from "src/lib/utils/strings";
 import {
   addActiveFileProperties,
@@ -20,7 +21,7 @@ import {
 export function updateChangeLog() {
   const properties = getActiveFileProperties();
   if (properties?.updated) {
-    updateActiveFileProperty("updated", now("YYYY-MM-DD"));
+    updateActiveFileProperty("updated", now(dateTimePropertyFormat));
     return notify("最終更新日を更新しました", 3000);
   }
 
@@ -47,8 +48,8 @@ export function updateChangeLog() {
   // 他に情報がなければファイルのメタデータを使う
   // バックアップの復元や、本質的な変更以外でも日付がセットされてしまうのであまり信用できない
   addActiveFileProperties({
-    created: getCreationDate("YYYY-MM-DD"),
-    updated: getUpdateDate("YYYY-MM-DD"),
+    created: getCreationDate(dateTimePropertyFormat),
+    updated: getUpdateDate(dateTimePropertyFormat),
   });
   notify("ファイルのメタデータからchange logを更新しました", 3000);
 }

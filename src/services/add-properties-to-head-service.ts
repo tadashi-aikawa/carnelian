@@ -13,10 +13,12 @@ import { ExhaustiveError } from "src/lib/utils/errors";
 import type { Service } from "src/services";
 
 /**
- * 日付の文字列(YYYY-MM-DD)を表示形式にします
+ * 日付の文字列(YYYY-MM-DD または YYYY-MM-DD HH:mm)を表示形式にします
  */
 function toDisplayDate(date: string): string {
-  return date === now("YYYY-MM-DD") ? "✨Today" : date;
+  const today = now("YYYY-MM-DD");
+  const dateOnly = date.split(" ")[0];
+  return dateOnly === today ? "✨Today" : date;
 }
 
 /**

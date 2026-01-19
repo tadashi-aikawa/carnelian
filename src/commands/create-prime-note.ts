@@ -8,6 +8,7 @@ import {
   updateActiveFileProperty,
 } from "src/lib/helpers/properties";
 import { notify, showInputDialog } from "src/lib/helpers/ui";
+import { dateTimePropertyFormat } from "src/lib/utils/dates";
 
 /**
  * [Prime note]を作成し、カーソル配下にリンクを挿入します
@@ -15,7 +16,7 @@ import { notify, showInputDialog } from "src/lib/helpers/ui";
  * [Prime note]: (https://minerva.mamansoft.net/Notes/Prime%20note)
  */
 export async function createPrimeNote() {
-  const today = now("YYYY-MM-DD");
+  const today = now(dateTimePropertyFormat);
   const nt = getNoteType("Prime note");
 
   const NOTE_BODY = `

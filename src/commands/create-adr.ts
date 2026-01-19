@@ -12,6 +12,7 @@ import {
 } from "src/lib/helpers/properties";
 import { notify, showInputDialog } from "src/lib/helpers/ui";
 import { sorter } from "src/lib/utils/collections";
+import { dateTimePropertyFormat } from "src/lib/utils/dates";
 
 /**
  * MINのADRを作成します
@@ -45,7 +46,7 @@ export async function createOBSADR() {
  * 指定した種類のADRノートを作成し、一覧表の最後に挿入します
  */
 async function createADR(type: "MIN" | "OBS" | "PRO" | "VIM") {
-  const today = now("YYYY-MM-DD");
+  const today = now(dateTimePropertyFormat);
 
   const prefix = `💿${type}`;
   const maxNumber = Number(

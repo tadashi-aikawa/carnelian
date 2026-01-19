@@ -7,6 +7,7 @@ import {
   updateActiveFileProperty,
 } from "src/lib/helpers/properties";
 import { notify, showInputDialog } from "src/lib/helpers/ui";
+import { dateTimePropertyFormat } from "src/lib/utils/dates";
 
 /**
  * MTG用ノートを作成し、カーソル配下にリンクを挿入します
@@ -57,7 +58,7 @@ participants:
   insertToCursor(`- [ ] ${startTime} [[${inputTitle}]]`);
 
   if (getActiveFileProperties()?.updated) {
-    updateActiveFileProperty("updated", date);
+    updateActiveFileProperty("updated", now(dateTimePropertyFormat));
   }
 
   const f = await createFile(path, NOTE_BODY);

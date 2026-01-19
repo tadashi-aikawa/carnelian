@@ -8,6 +8,7 @@ import {
   updateActiveFileProperty,
 } from "src/lib/helpers/properties";
 import { notify, showInputDialog } from "src/lib/helpers/ui";
+import { dateTimePropertyFormat } from "src/lib/utils/dates";
 
 /**
  * [Activity note]を作成し、カーソル配下にリンクを挿入します
@@ -15,7 +16,7 @@ import { notify, showInputDialog } from "src/lib/helpers/ui";
  * [Activity note]: (https://minerva.mamansoft.net/Notes/Activity%20note)
  */
 export async function createActivityNote() {
-  const today = now("YYYY-MM-DD");
+  const today = now(dateTimePropertyFormat);
   const nt = getNoteType("Activity note");
 
   const NOTE_BODY = `
@@ -35,7 +36,7 @@ cover: ${nt.coverImagePath}
     return;
   }
 
-  const title = `${nt.prefixEmoji}${today} ${inputTitle}`;
+  const title = `${nt.prefixEmoji}${now("YYYY-MM-DD")} ${inputTitle}`;
   const path = `Notes/${title}.md`;
   if (await exists(path)) {
     return notify(`${path} は既に存在します`);

@@ -8,6 +8,7 @@ import {
 } from "src/lib/helpers/entries";
 import { addActiveFileProperties } from "src/lib/helpers/properties";
 import { notifyValidationError } from "src/lib/helpers/ui";
+import { dateTimePropertyFormat } from "src/lib/utils/dates";
 
 /**
  * アクティブファイルを複製して新しいタブで開きます
@@ -36,7 +37,7 @@ export async function duplicateActiveFileBase(
   }
 
   await sleep(0);
-  const today = now("YYYY-MM-DD");
+  const today = now(dateTimePropertyFormat);
   addActiveFileProperties({
     created: today,
     updated: today,
