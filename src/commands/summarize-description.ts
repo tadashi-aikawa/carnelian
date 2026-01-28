@@ -102,6 +102,7 @@ function createSystemMessage(noteType: NoteType): string | null {
     case "Hub note":
     case "Report note":
     case "My note":
+    case "Glossary note":
     case "Procedure note":
       return `${base}
 - 『で・ある調』にして
@@ -195,7 +196,6 @@ function createSystemMessage(noteType: NoteType): string | null {
   - ReadingとNew Notesの内容は不要
 `;
     case "Daily note":
-    case "Glossary note":
     case "Brain note":
     case "Rule note":
       return null;
