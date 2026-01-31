@@ -231,6 +231,10 @@
               "description": "カーソル行の内容からよしなにプロパティを追加（URL→url、その他→description）",
               "type": "boolean"
             },
+            "Clear task status": {
+              "description": "タスクのチェック状態とタイマー表記をクリア",
+              "type": "boolean"
+            },
             "Copy Minerva URL": {
               "description": "現在ファイルのObsidian Publish URLを生成してコピー",
               "type": "boolean"

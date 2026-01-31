@@ -3,6 +3,7 @@ import { pasteClipboardAsWebpForOGP } from "src/commands/paste-clipboard-as-webp
 import { addPermalinkProperty } from "./commands/add-permalink-property";
 import { addPropertySuitably } from "./commands/add-property-suitably";
 import { cleanOldDailyNotes } from "./commands/clean-old-daily-notes";
+import { clearTaskStatus } from "./commands/clear-task-status";
 import { copyActiveFileFullPath } from "./commands/copy-active-file-full-path";
 import { copyActiveImageFileToClipboard } from "./commands/copy-active-image-file-to-clipboard";
 import { copyAsConfluence } from "./commands/copy-as-confluence";
@@ -141,6 +142,12 @@ function createCarnelianCommands(settings: PluginSettings) {
       kind: "editor",
       enabled: se?.["Cycle bullet/checkbox"],
       executor: cycleBulletCheckbox,
+    },
+    {
+      name: "Clear task status",
+      kind: "editor",
+      enabled: se?.["Clear task status"],
+      executor: clearTaskStatus,
     },
     {
       name: "Delete active file",
