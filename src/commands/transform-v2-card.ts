@@ -9,6 +9,7 @@ import {
   notify,
   notifyRuntimeError,
   notifyValidationError,
+  notifyWarning,
 } from "src/lib/helpers/ui";
 import { createCard, createNoteCard } from "src/lib/helpers/web";
 import { doSinglePatternCaptureMatching, isUrl } from "src/lib/utils/strings";
@@ -69,9 +70,21 @@ async function transformAsSite(text: string): Promise<string | null> {
     const html = await createCard(url);
     return html;
   } catch (e: any) {
-    if (e.message?.endsWith("status 404")) {
-      notifyValidationError("対象URLが404です");
-      return null;
+    if (
+      e.message?.endsWith("status 404") ||
+      e.message === "メタデータの取得に失敗しました" ||
+      e.message?.includes("ERR_NAME_NOT_RESOLVED")
+    ) {
+      notifyWarning("対象URLが404です");
+      return text
+        .replace(
+          '<div class="link-card">',
+          '<div class="link-card not-found-site">',
+        )
+        .replace(
+          '<div class="link-card-v2">',
+          '<div class="link-card-v2 not-found-site">',
+        );
     }
     notifyRuntimeError(e);
     return null;
