@@ -69,6 +69,10 @@ async function transformAsSite(text: string): Promise<string | null> {
     const html = await createCard(url);
     return html;
   } catch (e: any) {
+    if (e.message?.endsWith("status 404")) {
+      notifyValidationError("対象URLが404です");
+      return null;
+    }
     notifyRuntimeError(e);
     return null;
   } finally {
