@@ -60,8 +60,8 @@
   gap: 0.5rem;
   margin-top: 0.5rem;
   margin-bottom: 0.25rem;
-  width: var(--file-line-width);
-  padding-right: var(--file-margins);
+  width: min(var(--file-line-width), 100%);
+  padding-right: 1.5rem;
   place-self: center;
   font-size: 90%;
   line-height: 14px;
