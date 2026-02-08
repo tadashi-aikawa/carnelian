@@ -15,7 +15,7 @@
 ## 前提環境
 
 - macOS
-- [Bun] v1.2.22
+- [Bun] v1.3.5
 - [Hot Reload]プラグイン
 
 ## 開発環境構築
@@ -45,7 +45,7 @@ bun dev
 このコマンドは3つのことを行います。
 
 - Vaultのプラグインディレクトリ(`.obsidian/plugins`)配下に`carnelian`プロジェクトを生成する
-- TypeScriptのファイルに変更があったら、[esbuild]が自動でビルドしてJavaScriptファイルを生成する
+- TypeScriptのファイルに変更があったら、[esbuild]が自動でビルドしてJavaScriptファイルと`config.schema.json`を生成する
 - `esbuild.config.mjs`の`FILES`に記載されたファイルに変更があったら、`PLUGIN_DIR`で指定したディレクトリ配下に自動でコピーする
 
 ```typescript
@@ -53,18 +53,10 @@ bun dev
 const FILES = ["main.js", "manifest.json", "styles.css",  "config.schema.json"];
 ```
 
-## Schemaの更新
-
-設定ファイルをJSON Schemaファイル `config.schema.json` に変換します。
+## push前のチェックコマンド
 
 ```bash
-bun schema
-```
-
-## Lint
-
-```bash
-bun lint
+bun pre:push
 ```
 
 ## 秘密情報の管理

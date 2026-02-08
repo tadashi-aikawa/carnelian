@@ -34,14 +34,15 @@
   "keywords": [],
   "license": "MIT",
   "scripts": {
+    "prepare": "husky",
     "dev": "bun esbuild.config.mjs",
     "build": "bun esbuild.config.mjs production",
+    "typecheck": "tsc -noEmit -skipLibCheck",
+    "lint": "biome check src",
     "test": "bun test",
     "test:large": "ALLOW_LARGE_TEST=1 bun test",
-    "lint": "biome check src",
+    "pre:push": "bun typecheck && bun lint && bun run test",
     "version": "node version-bump.mjs && git add manifest.json versions.json",
-    "prepare": "husky",
-    "pre:push": "tsc -noEmit -skipLibCheck && bun lint && bun run test",
     "schema": "ts-json-schema-generator --path src/definitions/config.ts --type Config --tsconfig tsconfig.schema.json > config.schema.json"
   }
 }
