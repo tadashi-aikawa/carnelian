@@ -13,12 +13,14 @@ import { ExhaustiveError } from "src/lib/utils/errors";
 import type { Service } from "src/services";
 
 /**
- * 日付の文字列(YYYY-MM-DD または YYYY-MM-DD HH:mm)を表示形式にします
+ * 日付の文字列を表示形式にします
+ * @params date (ex: 2023-10-09 or 2023-10-09T12:00:00 or 2023-10-09 12:00:00)
  */
-function toDisplayDate(date: string): string {
+function toDisplay(datetime: string): string {
   const today = now("YYYY-MM-DD");
-  const dateOnly = date.split(" ")[0];
-  return dateOnly === today ? "✨Today" : date;
+  const [date, _time] = datetime.split(/[ T]/);
+  const time = _time.split(":").slice(0, 2).join(":");
+  return `${date === today ? "✨Today" : date} ${time ? ` ${time}` : ""}`;
 }
 
 /**
@@ -107,12 +109,12 @@ export class AddPropertiesToHeadService implements Service {
     const propertiesEl = createDiv({ cls: this.className });
     if (created) {
       propertiesEl.appendChild(
-        this.createHeaderContainer(`作成日: ${toDisplayDate(created)}`, "date"),
+        this.createHeaderContainer(`作成日: ${toDisplay(created)}`, "date"),
       );
     }
     if (updated) {
       propertiesEl.appendChild(
-        this.createHeaderContainer(`更新日: ${toDisplayDate(updated)}`, "date"),
+        this.createHeaderContainer(`更新日: ${toDisplay(updated)}`, "date"),
       );
     }
     if (status) {
