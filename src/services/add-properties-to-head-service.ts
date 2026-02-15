@@ -19,7 +19,7 @@ import type { Service } from "src/services";
 function toDisplay(datetime: string): string {
   const today = now("YYYY-MM-DD");
   const [date, _time] = datetime.split(/[ T]/);
-  const time = _time.split(":").slice(0, 2).join(":");
+  const time: string | undefined = _time?.split(":").slice(0, 2).join(":");
   return `${date === today ? "✨Today" : date} ${time ? ` ${time}` : ""}`;
 }
 
