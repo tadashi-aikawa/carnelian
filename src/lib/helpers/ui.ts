@@ -78,8 +78,9 @@ export async function copyImageToClipboard(
   imageBuffer: Buffer,
   mimeType: (typeof imageMimeTypesByExtension)[keyof typeof imageMimeTypesByExtension],
 ): Promise<void> {
+  const imageBytes = Uint8Array.from(imageBuffer);
   const bitmap = await createImageBitmap(
-    new Blob([imageBuffer], { type: mimeType }),
+    new Blob([imageBytes], { type: mimeType }),
   );
 
   const canvas = new OffscreenCanvas(bitmap.width, bitmap.height);
