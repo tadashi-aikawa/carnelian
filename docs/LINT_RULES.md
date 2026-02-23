@@ -169,9 +169,9 @@ lint機能のルールを記載する。
 
 | ノートの種類         | レベル | 備考             |
 | -------------------- | ------ | ---------------- |
-| Glossary note        | ERROR  |                  |
+| Glossary note        |        |                  |
 | Hub note             |        |                  |
-| Procedure note       | ERROR  |                  |
+| Procedure note       |        |                  |
 | Activity note        |        |                  |
 | Troubleshooting note |        |                  |
 | Prime note           |        |                  |

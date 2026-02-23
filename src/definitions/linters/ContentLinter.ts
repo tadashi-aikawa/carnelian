@@ -90,11 +90,11 @@ function createDisallowedLinkCard(
 
   switch (noteType.name) {
     case "Glossary note":
-      return createInspections("ERROR");
+      return [];
     case "Hub note":
       return [];
     case "Procedure note":
-      return createInspections("ERROR");
+      return [];
     case "Activity note":
       return [];
     case "Troubleshooting note":
