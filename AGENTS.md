@@ -13,7 +13,7 @@
 - `bun build`: Production build (single `main.js`).
 - `bun test`: Run unit tests (Bun test runner).
 - `ALLOW_LARGE_TEST=1 bun test` or `bun test:large`: Include large/slow tests.
-- `bun lint`: Lint/format via Biome.
+- `bun check`: Lint/format via Biome.
 - `bun pre:push`: Full check (typecheck, lint, tests). Husky runs this on push.
 - `bun schema`: Generate `config.schema.json` from `src/definitions/config.ts`.
 
