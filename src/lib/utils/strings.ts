@@ -128,6 +128,48 @@ export function replaceAt(base: string, range: Range, text: string): string {
   return base.substring(0, range.start) + text + base.substring(range.end + 1);
 }
 
+const FORMATTING_CHARS = new Set(["*", "_", "~"]);
+
+/**
+ * テキスト置換時にスペーシングを調整します。
+ * 装飾記号 (*, _, ~) が隣接している場合はスペースを挿入しません。
+ */
+export function normalizeReplacementSpacing(
+  base: string,
+  range: Range,
+  replacementText: string,
+): { range: Range; text: string } {
+  const { start, end } = range;
+
+  let left = start;
+  while (left > 0 && base[left - 1] === " ") {
+    left--;
+  }
+
+  const hasCharBefore = left > 0 && base[left - 1] !== "\n";
+  if (!hasCharBefore) {
+    left = start;
+  }
+
+  let right = end;
+  while (right < base.length - 1 && base[right + 1] === " ") {
+    right++;
+  }
+
+  const hasCharAfter = right < base.length - 1 && base[right + 1] !== "\n";
+  if (!hasCharAfter) {
+    right = end;
+  }
+
+  const addSpaceBefore = hasCharBefore && !FORMATTING_CHARS.has(base[left - 1]);
+  const addSpaceAfter = hasCharAfter && !FORMATTING_CHARS.has(base[right + 1]);
+
+  return {
+    range: { start: left, end: right },
+    text: `${addSpaceBefore ? " " : ""}${replacementText}${addSpaceAfter ? " " : ""}`,
+  };
+}
+
 /**
  * SJISのbufferをstringに変換します
  */

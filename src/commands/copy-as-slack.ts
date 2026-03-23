@@ -7,6 +7,7 @@ import { copyToClipboard, notify } from "src/lib/helpers/ui";
 import { sorter } from "src/lib/utils/collections";
 import {
   getWikiLinks,
+  normalizeReplacementSpacing,
   replaceAt,
   replaceWithRegExpMapping,
   replaceWithStringMapping,
@@ -39,33 +40,7 @@ function normalizeSlackLinkSpacing(
   base: string,
   link: Link,
 ): { range: Link["range"]; text: string } {
-  const slackLink = toSlackLink(link);
-  const { start, end } = link.range;
-
-  let left = start;
-  while (left > 0 && base[left - 1] === " ") {
-    left--;
-  }
-
-  const hasCharBefore = left > 0 && base[left - 1] !== "\n";
-  if (!hasCharBefore) {
-    left = start;
-  }
-
-  let right = end;
-  while (right < base.length - 1 && base[right + 1] === " ") {
-    right++;
-  }
-
-  const hasCharAfter = right < base.length - 1 && base[right + 1] !== "\n";
-  if (!hasCharAfter) {
-    right = end;
-  }
-
-  return {
-    range: { start: left, end: right },
-    text: `${hasCharBefore ? " " : ""}${slackLink}${hasCharAfter ? " " : ""}`,
-  };
+  return normalizeReplacementSpacing(base, link.range, toSlackLink(link));
 }
 
 /**

@@ -20,6 +20,7 @@ import {
   isUrl,
   match,
   microFuzzy,
+  normalizeReplacementSpacing,
   pad,
   replaceAt,
   replaceWithRegExpMapping,
@@ -240,6 +241,81 @@ test.each([["0123456789", { start: 3, end: 6 }, "---", "012---789"]])(
     expected: ReturnType<typeof replaceAt>,
   ) => {
     expect(replaceAt(base, range, text)).toBe(expected);
+  },
+);
+
+test.each<
+  [
+    ...Parameters<typeof normalizeReplacementSpacing>,
+    ReturnType<typeof normalizeReplacementSpacing>,
+  ]
+>([
+  [
+    "foo[[link]]bar",
+    { start: 3, end: 10 },
+    "link",
+    { range: { start: 3, end: 10 }, text: " link " },
+  ],
+  [
+    "**[[link]]**",
+    { start: 2, end: 9 },
+    "link",
+    { range: { start: 2, end: 9 }, text: "link" },
+  ],
+  [
+    "*[[link]]*",
+    { start: 1, end: 8 },
+    "link",
+    { range: { start: 1, end: 8 }, text: "link" },
+  ],
+  [
+    "__[[link]]__",
+    { start: 2, end: 9 },
+    "link",
+    { range: { start: 2, end: 9 }, text: "link" },
+  ],
+  [
+    "~~[[link]]~~",
+    { start: 2, end: 9 },
+    "link",
+    { range: { start: 2, end: 9 }, text: "link" },
+  ],
+  [
+    "**[[link]]",
+    { start: 2, end: 9 },
+    "link",
+    { range: { start: 2, end: 9 }, text: "link" },
+  ],
+  [
+    "[[link]]**",
+    { start: 0, end: 7 },
+    "link",
+    { range: { start: 0, end: 7 }, text: "link" },
+  ],
+  [
+    "[[link]]",
+    { start: 0, end: 7 },
+    "link",
+    { range: { start: 0, end: 7 }, text: "link" },
+  ],
+  [
+    "前 [[link]] 後",
+    { start: 2, end: 9 },
+    "link",
+    { range: { start: 1, end: 10 }, text: " link " },
+  ],
+  [
+    "**[[link]] 後",
+    { start: 2, end: 9 },
+    "link",
+    { range: { start: 2, end: 10 }, text: "link " },
+  ],
+])(
+  'normalizeReplacementSpacing("%s", %o, "%s")',
+  (base, range, replacement, expected) => {
+    expect(normalizeReplacementSpacing(base, range, replacement)).toEqual(
+      expected,
+    );
   },
 );
 
