@@ -107,6 +107,11 @@ function createSystemMessage(noteType: NoteType): string | null {
       return `${base}
 - 『で・ある調』にして
 `;
+    case "Brain note":
+      return `${base}
+- 『で・ある調』にして
+- **思考や考えを書き綴ったノート**なので、それに適した説明にすること。何についてのどういう感じの考察なのか。
+`;
     case "Series note":
       return `${base}
 - 『です・ます調』にして
@@ -196,7 +201,6 @@ function createSystemMessage(noteType: NoteType): string | null {
   - ReadingとNew Notesの内容は不要
 `;
     case "Daily note":
-    case "Brain note":
     case "Rule note":
       return null;
     default:
