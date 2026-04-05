@@ -6,7 +6,11 @@ import {
   getActiveFileProperties,
   updateActiveFileProperty,
 } from "src/lib/helpers/properties";
-import { notify, showInputDialog } from "src/lib/helpers/ui";
+import {
+  notify,
+  showInputDialog,
+  showInputDialogWithSubmitModifier,
+} from "src/lib/helpers/ui";
 import { dateTimePropertyFormat } from "src/lib/utils/dates";
 
 /**
@@ -45,22 +49,29 @@ participants:
     return notify(`${path} は既に存在します`);
   }
 
-  const startTime = await showInputDialog({
+  const startTime = await showInputDialogWithSubmitModifier({
     message: "開始時間を入力してください",
     placeholder: "12:30",
     defaultValue: "14:00",
     inputType: "time",
   });
-  if (!startTime) {
+  if (!startTime.value) {
     return;
   }
 
-  insertToCursor(`- [ ] ${startTime} [[${inputTitle}]]`);
+  insertToCursor(`- [ ] ${startTime.value} [[${inputTitle}]]`);
 
   if (getActiveFileProperties()?.updated) {
     updateActiveFileProperty("updated", now(dateTimePropertyFormat));
   }
 
   const f = await createFile(path, NOTE_BODY);
-  await openFile(f.path);
+  await openFile(
+    f.path,
+    startTime.metaKey
+      ? { splitVertical: true }
+      : startTime.shiftKey
+        ? { newLeaf: true }
+        : undefined,
+  );
 }

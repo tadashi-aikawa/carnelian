@@ -7,7 +7,7 @@ import {
   getActiveFileProperties,
   updateActiveFileProperty,
 } from "src/lib/helpers/properties";
-import { notify, showInputDialog } from "src/lib/helpers/ui";
+import { notify, showInputDialogWithSubmitModifier } from "src/lib/helpers/ui";
 import { dateTimePropertyFormat } from "src/lib/utils/dates";
 
 /**
@@ -28,15 +28,15 @@ cover: ${nt.coverImagePath}
 
 `.trim();
 
-  const inputTitle = await showInputDialog({
+  const input = await showInputDialogWithSubmitModifier({
     message: "ノートタイトルを入力してください",
     placeholder: "Obsidianを使ってみる",
   });
-  if (!inputTitle) {
+  if (!input.value) {
     return;
   }
 
-  const title = `${nt.prefixEmoji}${inputTitle}`;
+  const title = `${nt.prefixEmoji}${input.value}`;
   const path = `Notes/${title}.md`;
   if (await exists(path)) {
     return notify(`${path} は既に存在します`);
@@ -49,5 +49,12 @@ cover: ${nt.coverImagePath}
   }
 
   const f = await createFile(path, NOTE_BODY);
-  await openFile(f.path);
+  await openFile(
+    f.path,
+    input.metaKey
+      ? { splitVertical: true }
+      : input.shiftKey
+        ? { newLeaf: true }
+        : undefined,
+  );
 }
