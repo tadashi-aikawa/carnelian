@@ -353,6 +353,10 @@
               "description": "指定週のBlueskyポストをカード形式で挿入（外部URL付きのみ）",
               "type": "boolean"
             },
+            "Insert Done to Weekly Report": {
+              "description": "週の期間内のDaily Notesから『やったこと』をトップレベル項目ごとにマージして挿入",
+              "type": "boolean"
+            },
             "Insert MOC": {
               "description": "MOCテンプレートを挿入",
               "type": "boolean"

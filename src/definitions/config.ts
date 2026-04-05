@@ -250,6 +250,8 @@ export interface Config {
     // ── Weekly Report ──────────────────────────────────────
     /** 週の期間内に作成されたパブリックノートのリストを挿入 */
     "Insert new notes to the weekly note"?: boolean;
+    /** 週の期間内のDaily Notesから『やったこと』をトップレベル項目ごとにマージして挿入 */
+    "Insert Done to Weekly Report"?: boolean;
     /** 指定週のBlueskyポストをカード形式で挿入（外部URL付きのみ） */
     "Insert Bluesky posts to weekly note"?: boolean;
 

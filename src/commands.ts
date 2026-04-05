@@ -41,6 +41,7 @@ import { fixLink } from "./commands/fix-link";
 import { focusEditorContent } from "./commands/focus-content";
 import { formatTable } from "./commands/format-table";
 import { insertBlueskyPostsToWeeklyNote } from "./commands/insert-bluesky-posts-to-weekly-note";
+import { insertDoneToWeeklyReport } from "./commands/insert-done-to-weekly-report";
 import { insertNewNotesToWeeklyNote } from "./commands/insert-inputs-to-weekly-note";
 import { insertMOC } from "./commands/insert-moc";
 import { insertNoteCard } from "./commands/insert-note-card";
@@ -247,6 +248,12 @@ function createCarnelianCommands(settings: PluginSettings) {
       kind: "editor",
       enabled: se?.["Insert new notes to the weekly note"],
       executor: insertNewNotesToWeeklyNote,
+    },
+    {
+      name: "Insert Done to Weekly Report",
+      kind: "editor",
+      enabled: se?.["Insert Done to Weekly Report"],
+      executor: insertDoneToWeeklyReport,
     },
     {
       name: "Insert Bluesky posts to weekly note",
