@@ -313,7 +313,7 @@
             },
             "Create task note": {
               "additionalProperties": false,
-              "description": "📌 タスクノートを作成し、カーソル位置にリンク挿入",
+              "description": "📌 タスクノートを作成",
               "properties": {
                 "directory": {
                   "description": "タスクノートの保存先ディレクトリ",

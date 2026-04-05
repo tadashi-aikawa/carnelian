@@ -1,12 +1,15 @@
 import { now } from "src/lib/helpers/datetimes";
-import { insertToCursor } from "src/lib/helpers/editors/basic";
 import { createFile, openFile } from "src/lib/helpers/entries";
 import { exists } from "src/lib/helpers/io";
 import {
   getActiveFileProperties,
   updateActiveFileProperty,
 } from "src/lib/helpers/properties";
-import { notify, notifyWarning, showInputDialog } from "src/lib/helpers/ui";
+import {
+  notify,
+  notifyWarning,
+  showInputDialogWithSubmitModifier,
+} from "src/lib/helpers/ui";
 import { dateTimePropertyFormat } from "src/lib/utils/dates";
 import type { PluginSettings } from "src/settings";
 
@@ -15,7 +18,7 @@ type CreateTaskNoteSetting = NonNullable<
 >["Create task note"];
 
 /**
- * タスクノートを作成し、カーソル配下にリンクを挿入します
+ * タスクノートを作成します
  */
 export async function createTaskNote(setting?: CreateTaskNoteSetting) {
   const directory = setting?.directory?.trim();
@@ -27,22 +30,21 @@ export async function createTaskNote(setting?: CreateTaskNoteSetting) {
     return notifyWarning(`${directory} は存在しません`);
   }
 
-  const inputTitle = await showInputDialog({
+  const input = await showInputDialogWithSubmitModifier({
     message: "タスクのタイトルを入力してください",
     placeholder: "タスクノート作成コマンドの追加",
   });
-  if (!inputTitle) {
+  if (!input.value) {
     return;
   }
 
-  const title = `📌${inputTitle}`;
+  const title = `📌${input.value}`;
   const path = `${directory.replace(/\/+$/u, "")}/${title}.md`;
   if (await exists(path)) {
     return notify(`${path} は既に存在します`);
   }
 
   const today = now(dateTimePropertyFormat);
-  insertToCursor(`[[${title}]]`);
 
   if (getActiveFileProperties()?.updated) {
     updateActiveFileProperty("updated", today);
@@ -65,7 +67,14 @@ updated: ${today}
 ## 作業メモ
 `.trim(),
   );
-  await openFile(f.path);
+  await openFile(
+    f.path,
+    input.metaKey
+      ? { splitVertical: true }
+      : input.shiftKey
+        ? { newLeaf: true }
+        : undefined,
+  );
 }
 
 function generateTaskNoteId(): string {

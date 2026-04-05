@@ -3,6 +3,12 @@ import type { UApp } from "src/lib/types";
 
 declare let app: UApp;
 
+export type InputDialogResult = {
+  value: string | null;
+  metaKey: boolean;
+  shiftKey: boolean;
+};
+
 export class InputDialog extends Modal {
   inputEl!: HTMLInputElement;
   promise!: Promise<string | null>;
@@ -63,5 +69,41 @@ export class InputDialog extends Modal {
     });
 
     return this.promise;
+  }
+
+  openWithSubmitModifier(): Promise<InputDialogResult> {
+    super.open();
+
+    return new Promise<InputDialogResult>((resolve) => {
+      const listener = (ev: KeyboardEvent) => {
+        if (ev.isComposing) {
+          return;
+        }
+        if (ev.code === "Enter") {
+          ev.preventDefault();
+          this.submitted = true;
+          resolve({
+            value: this.inputEl.value,
+            metaKey: ev.metaKey,
+            shiftKey: ev.shiftKey,
+          });
+          this.close();
+        }
+      };
+
+      this.inputEl.addEventListener("keydown", listener);
+
+      this.onClose = () => {
+        super.onClose();
+        this.inputEl.removeEventListener("keydown", listener);
+        if (!this.submitted) {
+          resolve({
+            value: null,
+            metaKey: false,
+            shiftKey: false,
+          });
+        }
+      };
+    });
   }
 }

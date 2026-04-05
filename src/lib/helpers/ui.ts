@@ -3,7 +3,7 @@ import { Modal, type TFile } from "obsidian";
 import { ConfirmDialog } from "src/lib/helpers/components/ConfirmDialog";
 import type { UApp } from "../types";
 import { FileSearchDialog } from "./components/FileSearchDialog";
-import { InputDialog } from "./components/InputDialog";
+import { InputDialog, type InputDialogResult } from "./components/InputDialog";
 import { SelectionDialog } from "./components/SelectionDialog";
 import type { imageMimeTypesByExtension } from "./entries";
 
@@ -206,6 +206,20 @@ export async function showInputDialog(args: {
     args.defaultValue,
     args.inputType ?? "text",
   ).open();
+}
+
+export async function showInputDialogWithSubmitModifier(args: {
+  message: string;
+  placeholder?: string;
+  defaultValue?: string;
+  inputType?: "text" | "date" | "time";
+}): Promise<InputDialogResult> {
+  return new InputDialog(
+    args.message,
+    args.placeholder,
+    args.defaultValue,
+    args.inputType ?? "text",
+  ).openWithSubmitModifier();
 }
 
 /**

@@ -185,7 +185,7 @@ export interface Config {
     "Create TDQ"?: boolean;
     /** 📅 MTG用ノートを作成し、カーソル位置にリンク挿入 */
     "Create MTG note"?: boolean;
-    /** 📌 タスクノートを作成し、カーソル位置にリンク挿入 */
+    /** 📌 タスクノートを作成 */
     "Create task note"?: {
       /** タスクノートの保存先ディレクトリ */
       directory: string;
