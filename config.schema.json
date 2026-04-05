@@ -311,6 +311,20 @@
               "description": "📝 Troubleshooting noteを作成し、カーソル位置にリンク挿入",
               "type": "boolean"
             },
+            "Create task note": {
+              "additionalProperties": false,
+              "description": "📌 タスクノートを作成し、カーソル位置にリンク挿入",
+              "properties": {
+                "directory": {
+                  "description": "タスクノートの保存先ディレクトリ",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "directory"
+              ],
+              "type": "object"
+            },
             "Cycle bullet/checkbox": {
               "description": "箇条書き/チェックボックスを切り替え",
               "type": "boolean"

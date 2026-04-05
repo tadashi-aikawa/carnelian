@@ -28,6 +28,7 @@ import { createNewNoteVertically } from "./commands/create-new-note-vertically";
 import { createObsidianCookbook } from "./commands/create-obsidian-cookbook";
 import { createPrimeNote } from "./commands/create-prime-note";
 import { createReportNote } from "./commands/create-report-note";
+import { createTaskNote } from "./commands/create-task-note";
 import { createTroubleshootingNote } from "./commands/create-troubleshooting-note";
 import { cycleBulletCheckbox } from "./commands/cycle-bullet-checkbox";
 import { deleteActiveFile } from "./commands/delete-active-file";
@@ -391,6 +392,14 @@ function createCarnelianCommands(settings: PluginSettings) {
       kind: "editor",
       enabled: se?.["Create MTG note"],
       executor: createMtgNote,
+    },
+    {
+      name: "Create task note",
+      kind: "editor",
+      enabled: se?.["Create task note"],
+      executor: () => {
+        createTaskNote(se?.["Create task note"]);
+      },
     },
 
     {

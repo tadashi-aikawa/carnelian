@@ -185,6 +185,11 @@ export interface Config {
     "Create TDQ"?: boolean;
     /** 📅 MTG用ノートを作成し、カーソル位置にリンク挿入 */
     "Create MTG note"?: boolean;
+    /** 📌 タスクノートを作成し、カーソル位置にリンク挿入 */
+    "Create task note"?: {
+      /** タスクノートの保存先ディレクトリ */
+      directory: string;
+    };
 
     // ── Images ─────────────────────────────────────────────
     /** クリップボード画像をWebP変換して保存・挿入（ImageMagick必須） */
