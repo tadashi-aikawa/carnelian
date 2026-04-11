@@ -24,8 +24,7 @@ export async function createTroubleshootingNote() {
 created: ${today}
 updated: ${today}
 cover: ${nt.coverImagePath}
-status:
-  - ❌未解決
+status: ❌未解決
 ---
 ## 事象
 

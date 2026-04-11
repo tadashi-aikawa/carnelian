@@ -73,8 +73,7 @@ created: ${today}
 updated: ${today}
 cover: ${cover}
 permalink: ${permalink}
-status:
-  - 🤔Proposed
+status: 🤔Proposed
 ---
 %% 結論があればここ %%
 
