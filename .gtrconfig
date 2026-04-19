@@ -1,0 +1,6 @@
+[copy]
+    include = carnelianrc.json
+
+[hooks]
+    postCreate = bun install --frozen-lockfile --ignore-scripts
+
