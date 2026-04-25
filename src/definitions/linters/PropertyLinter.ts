@@ -154,7 +154,9 @@ function createNoCover(
     .returnType<ReturnType<typeof createNoCover>>()
     .with(
       P.union(
+        "Glossary note",
         "Hub note",
+        "Procedure note",
         "Activity note",
         "Troubleshooting note",
         "Prime note",
@@ -169,7 +171,7 @@ function createNoCover(
       ),
       () => ({ ...base, level: "ERROR" }),
     )
-    .with(P.union("Glossary note", "Procedure note", "Daily note"), () => null)
+    .with("Daily note", () => null)
     .exhaustive();
 }
 

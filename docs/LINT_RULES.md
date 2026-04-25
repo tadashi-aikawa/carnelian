@@ -32,9 +32,9 @@ lint機能のルールを記載する。
 
 | ノートの種類         | レベル | 備考    |
 | -------------------- | ------ | ------- |
-| Glossary note        |        |         |
+| Glossary note        | ERROR  | autofix |
 | Hub note             | ERROR  | autofix |
-| Procedure note       |        |         |
+| Procedure note       | ERROR  | autofix |
 | Activity note        | ERROR  | autofix |
 | Troubleshooting note | ERROR  | autofix |
 | Prime note           | ERROR  | autofix |

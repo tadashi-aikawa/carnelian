@@ -108,13 +108,13 @@ const noteTypeByName = createNotes({
   "Glossary note": {
     name: "Glossary note",
     prefixEmoji: null,
-    coverImagePath: null,
+    coverImagePath: `${docDir}/attachments/glossary.webp`,
     pathPattern: new RegExp(`^${escapedDocDir}/[^にをすむ]+\\.md$`),
   },
   "Procedure note": {
     name: "Procedure note",
     prefixEmoji: null,
-    coverImagePath: null,
+    coverImagePath: `${docDir}/attachments/procedure.webp`,
     pathPattern: new RegExp(`^${escapedDocDir}/.+\\.md$`),
   },
 } as const);
