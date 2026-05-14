@@ -440,6 +440,27 @@ export function getActiveFileContent(position?: {
 }
 
 /**
+ * 保存後の内容がcacheに反映されるまで待機します
+ */
+export async function waitUntilSaved(
+  file: TFile,
+  option?: { timeoutMsec: number },
+): Promise<void> {
+  const content = getActiveFileContent();
+  if (content == null) {
+    return;
+  }
+
+  const { timeoutMsec = 500 } = option ?? {};
+  for (let i = 0; i < timeoutMsec / 10; i++) {
+    if ((await app.vault.cachedRead(file)) === content) {
+      return;
+    }
+    await sleep(10);
+  }
+}
+
+/**
  * 現在ファイルの本文(frontmatter以外)を取得します
  */
 export function getActiveFileBody(): string | null {

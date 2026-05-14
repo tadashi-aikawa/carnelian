@@ -1,5 +1,9 @@
 import { runCommandById } from "src/lib/helpers/commands";
-import { getActiveFile, isMarkdownFile } from "src/lib/helpers/entries";
+import {
+  getActiveFile,
+  isMarkdownFile,
+  waitUntilSaved,
+} from "src/lib/helpers/entries";
 import { notifyValidationError } from "src/lib/helpers/ui";
 import { updateAutoDatePropertiesForActiveFile } from "src/services/auto-date-properties-service";
 import { formatActiveFile } from "src/services/format-service";
@@ -19,6 +23,11 @@ export async function saveWith(options: {
     return notifyValidationError("アクティブなファイルがありません");
   }
 
+  // 最新のキャッシュを利用して処理を行うため
+  runCommandById("editor:save-file");
+  // 保存後すぐにファイルの内容を取得しても、保存前の内容が返されることがあるため
+  await waitUntilSaved(file);
+
   if (lint) {
     await lintFile(file, lint, true);
   }
@@ -29,5 +38,6 @@ export async function saveWith(options: {
     updateAutoDatePropertiesForActiveFile(file.path);
   }
 
+  // lintやformatで変更された結果を保存するため
   runCommandById("editor:save-file");
 }
