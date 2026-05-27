@@ -65,6 +65,7 @@ import { saveWith } from "./commands/save-with";
 import { showFileInfo } from "./commands/show-file-info";
 import { stripLinksAndDecorations } from "./commands/strip-links-and-decorations";
 import { summarizeDescription } from "./commands/summarize-description";
+import { swapAdjacentTabGroup } from "./commands/swap-adjacent-tab-group";
 import { toggleLivePreview } from "./commands/toggle-live-preview";
 import { transformMOC } from "./commands/transform-moc";
 import { transformToV2OGPCard } from "./commands/transform-v2-card";
@@ -121,6 +122,12 @@ function createCarnelianCommands(settings: PluginSettings) {
       kind: "all",
       enabled: sa?.["Create new note vertically"],
       executor: createNewNoteVertically,
+    },
+    {
+      name: "Swap adjacent tab group",
+      kind: "all",
+      enabled: sa?.["Swap adjacent tab group"],
+      executor: swapAdjacentTabGroup,
     },
     {
       name: "Save with",

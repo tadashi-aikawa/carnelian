@@ -139,6 +139,10 @@
               },
               "type": "object"
             },
+            "Swap adjacent tab group": {
+              "description": "隣接するタブグループと入れ替える",
+              "type": "boolean"
+            },
             "Toggle Live preview": {
               "description": "ライブプレビュー/ソースモード切替。全エディタが対象",
               "type": "boolean"

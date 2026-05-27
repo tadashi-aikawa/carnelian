@@ -64,6 +64,8 @@ export interface Config {
     "Create new note horizontally"?: boolean;
     /** 垂直方向に新しいノートを作成 */
     "Create new note vertically"?: boolean;
+    /** 隣接するタブグループと入れ替える */
+    "Swap adjacent tab group"?: boolean;
 
     /** 前処理を行いObsidian Publishに公開する */
     Publish?: {
