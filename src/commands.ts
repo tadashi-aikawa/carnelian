@@ -39,6 +39,7 @@ import { duplicateLineDown } from "./commands/duplicate-line-down";
 import { duplicateLineUp } from "./commands/duplicate-line-up";
 import { fixLink } from "./commands/fix-link";
 import { focusEditorContent } from "./commands/focus-content";
+import { focusStatusProperty } from "./commands/focus-status-property";
 import { formatTable } from "./commands/format-table";
 import { insertBlueskyPostsToWeeklyNote } from "./commands/insert-bluesky-posts-to-weekly-note";
 import { insertDoneToWeeklyReport } from "./commands/insert-done-to-weekly-report";
@@ -430,6 +431,12 @@ function createCarnelianCommands(settings: PluginSettings) {
         addPermalinkProperty({
           vendor: se?.["Add permalink property"]?.vendor,
         }),
+    },
+    {
+      name: "Focus status property",
+      kind: "editor",
+      enabled: se?.["Focus status property"],
+      executor: focusStatusProperty,
     },
     {
       name: "Format table",

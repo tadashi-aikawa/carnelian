@@ -291,6 +291,8 @@ export interface Config {
       /** 利用するAIベンダー情報 */
       vendor: AIVendor & { type: "openai" };
     };
+    /** statusプロパティにフォーカス */
+    "Focus status property"?: boolean;
     /** created/updatedプロパティを更新（HTMLフッターがあればその日付を使用） */
     "Update change log"?: boolean;
 

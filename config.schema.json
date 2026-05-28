@@ -349,6 +349,10 @@
               "description": "エディタの本文にフォーカスを移す",
               "type": "boolean"
             },
+            "Focus status property": {
+              "description": "statusプロパティにフォーカス",
+              "type": "boolean"
+            },
             "Format table": {
               "description": "Markdownテーブルを整形（モバイル非対応）",
               "type": "boolean"
