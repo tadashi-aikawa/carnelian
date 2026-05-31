@@ -121,6 +121,14 @@ test.each([
 
   // mixed
   ["[e](link) [[f]] [g] [[h|H!]]", "e f g H!"],
+  ["**[[text]]**", "**text**"],
+  ["__[[text|alias]]__", "__alias__"],
+
+  // image link
+  ["![[image.png]]", ""],
+  ["![[path/to/image.png|alias]]", ""],
+  ["![alt](image.png)", ""],
+  ["before ![[image.png]] after", "before  after"],
 
   // checkbox
   ["- [ ] hoge", "- [ ] hoge"],

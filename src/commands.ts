@@ -64,6 +64,7 @@ import { pasteURLToSiteLink } from "./commands/paste-url-to-site-link";
 import { publish } from "./commands/publish";
 import { saveWith } from "./commands/save-with";
 import { showFileInfo } from "./commands/show-file-info";
+import { stripLinks } from "./commands/strip-links";
 import { stripLinksAndDecorations } from "./commands/strip-links-and-decorations";
 import { summarizeDescription } from "./commands/summarize-description";
 import { swapAdjacentTabGroup } from "./commands/swap-adjacent-tab-group";
@@ -443,6 +444,12 @@ function createCarnelianCommands(settings: PluginSettings) {
       kind: "editor",
       enabled: se?.["Format table"],
       executor: formatTable,
+    },
+    {
+      name: "Strip links",
+      kind: "editor",
+      enabled: se?.["Strip links"],
+      executor: stripLinks,
     },
     {
       name: "Strip links and decorations",

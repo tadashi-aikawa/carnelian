@@ -53,6 +53,8 @@ export function stripLinks(text: string): string {
     .split("\n")
     .map((x) =>
       x
+        .replaceAll(/!\[\[[^\]]*?\]\]/g, "")
+        .replaceAll(/!\[[^\]]*?\]\(.*?\)/g, "")
         .replaceAll(/\[\[[^\|\]]*?\|([^\]]*?)\]\]/g, "$1")
         .replaceAll(/\[\[([^\]]*?)\]\]/g, "$1")
         .replaceAll(/\[([^\]]*?)\]\(.*?\)/g, "$1")

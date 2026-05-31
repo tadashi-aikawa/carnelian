@@ -299,6 +299,8 @@ export interface Config {
     // ── Format ─────────────────────────────────────────────
     /** Markdownテーブルを整形（モバイル非対応） */
     "Format table"?: boolean;
+    /** 選択範囲のリンクを無効化（画像リンクは削除、1文字リンク非対応、モバイル非対応） */
+    "Strip links"?: boolean;
     /** 選択範囲のリンクや装飾を無効化（1文字リンク非対応、モバイル非対応） */
     "Strip links and decorations"?: boolean;
 

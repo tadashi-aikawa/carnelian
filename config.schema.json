@@ -468,6 +468,10 @@
               "description": "LintやFormatなどを実行して保存",
               "type": "boolean"
             },
+            "Strip links": {
+              "description": "選択範囲のリンクを無効化（画像リンクは削除、1文字リンク非対応、モバイル非対応）",
+              "type": "boolean"
+            },
             "Strip links and decorations": {
               "description": "選択範囲のリンクや装飾を無効化（1文字リンク非対応、モバイル非対応）",
               "type": "boolean"
