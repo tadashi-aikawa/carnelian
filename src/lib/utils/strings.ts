@@ -352,6 +352,16 @@ export function getWikiLinks(text: string): {
 }
 
 /**
+ * wikiリンクのエイリアスがリンク先と同一かを判定します
+ */
+export function hasRedundantWikiLinkAlias(link: {
+  title: string;
+  alias?: string;
+}): boolean {
+  return link.alias != null && link.title === link.alias;
+}
+
+/**
  * textがURLかどうかを判定します
  */
 export function isUrl(text: string): boolean {

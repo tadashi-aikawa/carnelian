@@ -342,7 +342,7 @@
               "type": "boolean"
             },
             "Fix link": {
-              "description": "[[title (alias)]]を[[title (alias)|title]]形式に修正",
+              "description": "内部リンクのエイリアス形式や冗長なエイリアスを修正",
               "type": "boolean"
             },
             "Focus editor content": {
@@ -598,6 +598,10 @@
                     },
                     "No link comment": {
                       "description": "リンクカードに対応するリンクコメントの欠如を検出する",
+                      "type": "boolean"
+                    },
+                    "Redundant link alias": {
+                      "description": "リンク先と同一の無意味なエイリアスを検出する",
                       "type": "boolean"
                     },
                     "Unofficial MOC format": {

@@ -158,6 +158,8 @@ export interface Config {
         "Unresolved internal link"?: boolean;
         /** 末尾に括弧を含む内部リンクを検出する（必要に応じ箇条書きを除外） */
         "Link ends with parenthesis"?: boolean;
+        /** リンク先と同一の無意味なエイリアスを検出する */
+        "Redundant link alias"?: boolean;
         /** 本文のFIXME記述を禁止する */
         "Disallow fixme"?: boolean;
       };
@@ -242,7 +244,7 @@ export interface Config {
     };
 
     // ── Linter ─────────────────────────────────────────────
-    /** [[title (alias)]]を[[title (alias)|title]]形式に修正 */
+    /** 内部リンクのエイリアス形式や冗長なエイリアスを修正 */
     "Fix link"?: boolean;
     /** 現在ファイルの次のリンティング問題に移動 */
     "Move to next inspection"?: boolean;

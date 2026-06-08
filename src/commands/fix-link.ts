@@ -3,7 +3,7 @@ import {
   getCursorOffsetAtActiveLine,
   setInActiveLineRange,
 } from "src/lib/helpers/editors/basic";
-import { getWikiLinks } from "src/lib/utils/strings";
+import { getWikiLinks, hasRedundantWikiLinkAlias } from "src/lib/utils/strings";
 
 /**
  * リンクを正します
@@ -22,11 +22,23 @@ export function fixLink() {
     return;
   }
 
-  // INFO: 今は  [[title (alias)]] => [[title (alias)|title]] だけ
-  //       今後拡張する可能性あり
+  if (hasRedundantWikiLinkAlias(currentLink)) {
+    setInActiveLineRange(
+      currentLink.range.start,
+      currentLink.range.end,
+      `[[${currentLink.title}]]`,
+    );
+    return;
+  }
+
+  const alias = currentLink.title.replace(/(.+) \(.+\)$/, "$1");
+  if (alias === currentLink.title) {
+    return;
+  }
+
   setInActiveLineRange(
     currentLink.range.start,
     currentLink.range.end,
-    `[[${currentLink.title}|${currentLink.title.replace(/(.+) \(.+\)$/, "$1")}]]`,
+    `[[${currentLink.title}|${alias}]]`,
   );
 }

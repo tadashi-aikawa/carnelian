@@ -7,6 +7,7 @@ import type { LintInspection, Linter } from "src/lib/utils/linter";
 import {
   getSinglePatternCaptureMatchingLocations,
   getWikiLinks,
+  hasRedundantWikiLinkAlias,
 } from "src/lib/utils/strings";
 import { getSinglePatternMatchingLocations } from "src/lib/utils/strings";
 import { match } from "src/lib/utils/strings";
@@ -40,6 +41,9 @@ export const contentLinter: Linter = {
         : []),
       ...(rules?.["Link ends with parenthesis"]
         ? createLinkEndsWithParenthesis(noteType, content)
+        : []),
+      ...(rules?.["Redundant link alias"]
+        ? createRedundantLinkAlias(content)
         : []),
       ...(rules?.["Disallow fixme"] ? createDisallowFixme(content) : []),
     ];
@@ -494,6 +498,26 @@ function createLinkEndsWithParenthesis(
     default:
       throw new ExhaustiveError(noteType);
   }
+}
+
+function createRedundantLinkAlias(content: string): LintInspection[] {
+  return getWikiLinks(
+    content
+      .split("\n")
+      .map((line) => (line.startsWith("%%") ? "x".repeat(line.length) : line))
+      .join("\n"),
+  )
+    .filter(hasRedundantWikiLinkAlias)
+    .map((link) => {
+      const lineNo = toLineNo(link.range.start) ?? undefined;
+      return {
+        code: "Redundant link alias",
+        level: "WARN",
+        lineNo,
+        offset: link.range.start,
+        message: `L${lineNo} ([[${link.title}|${link.alias}]])`,
+      };
+    });
 }
 
 function createDisallowFixme(content?: string): LintInspection[] {

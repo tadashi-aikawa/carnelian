@@ -11,6 +11,7 @@ import {
   getSinglePatternCaptureMatchingLocations,
   getSinglePatternMatchingLocations,
   getWikiLinks,
+  hasRedundantWikiLinkAlias,
   isBlockquote,
   isCodeBlockStartOrEnd,
   isHeading,
@@ -556,6 +557,22 @@ test.each([
     expected: ReturnType<typeof getWikiLinks>,
   ) => {
     expect(getWikiLinks(text)).toStrictEqual(expected);
+  },
+);
+
+test.each([
+  [{ title: "hoge", alias: "hoge" }, true],
+  [{ title: "hoge", alias: "Hoge" }, false],
+  [{ title: "hoge", alias: " hoge" }, false],
+  [{ title: "folder/hoge", alias: "hoge" }, false],
+  [{ title: "hoge" }, false],
+])(
+  "hasRedundantWikiLinkAlias(%o)",
+  (
+    link: Parameters<typeof hasRedundantWikiLinkAlias>[0],
+    expected: ReturnType<typeof hasRedundantWikiLinkAlias>,
+  ) => {
+    expect(hasRedundantWikiLinkAlias(link)).toBe(expected);
   },
 );
 

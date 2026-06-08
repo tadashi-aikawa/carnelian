@@ -328,6 +328,18 @@ MOCのフォーマットがMinervaの最新仕様に従っていない。
 | Weekly Report        | ERROR  | 箇条書き(New Notes)は除外  |
 
 
+### Redundant link alias
+
+`[[hoge|hoge]]` のように、リンク先とエイリアスが完全一致する内部リンクが存在する。
+行頭が `%%` のコメント内にあるリンクは除外する。
+
+- `Move to next inspection` /  `Move to previous inspection` 対応
+
+| 対象     | レベル |
+| -------- | ------ |
+| 全ノート | WARN   |
+
+
 ### Disallow fixme
 
 本文に `!FIXME` / `!fixme` / `==ハイライト==` が含まれている。`fixme` プロパティの有無は問わない。
