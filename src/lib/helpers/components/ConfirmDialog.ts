@@ -47,11 +47,11 @@ export class ConfirmDialog extends Modal {
     super.open();
 
     this.promise = new Promise<boolean>((resolve) => {
-      const okEventListener = (ev: Event) => {
+      const okEventListener = (_ev: Event) => {
         resolve(true);
         this.close();
       };
-      const cancelEventListener = (ev: Event) => {
+      const cancelEventListener = (_ev: Event) => {
         resolve(false);
         this.close();
       };

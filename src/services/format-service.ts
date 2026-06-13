@@ -20,7 +20,7 @@ export class FormatService implements Service {
   constructor(public settings: PluginSettings["formatter"]) {}
 
   onload(): void {
-    this.unsetExWCommandHandler = setOnExWCommandEvent(async (file) => {
+    this.unsetExWCommandHandler = setOnExWCommandEvent(async (_file) => {
       await formatActiveFile(this.settings);
     }, this.name);
   }

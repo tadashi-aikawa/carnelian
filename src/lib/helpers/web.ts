@@ -1,4 +1,4 @@
-import { type TFile, requestUrl } from "obsidian";
+import { requestUrl, type TFile } from "obsidian";
 import { stripDecoration, stripLinks } from "../obsutils/parser";
 import { defineUserAgent } from "../utils/agent";
 import { forceLowerCaseKeys } from "../utils/collections";

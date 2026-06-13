@@ -55,10 +55,10 @@ export function stripLinks(text: string): string {
       x
         .replaceAll(/!\[\[[^\]]*?\]\]/g, "")
         .replaceAll(/!\[[^\]]*?\]\(.*?\)/g, "")
-        .replaceAll(/\[\[[^\|\]]*?\|([^\]]*?)\]\]/g, "$1")
+        .replaceAll(/\[\[[^|\]]*?\|([^\]]*?)\]\]/g, "$1")
         .replaceAll(/\[\[([^\]]*?)\]\]/g, "$1")
         .replaceAll(/\[([^\]]*?)\]\(.*?\)/g, "$1")
-        .replaceAll(/(?<![-\*] )\[([^\]]*?)\]/g, "$1"),
+        .replaceAll(/(?<![-*] )\[([^\]]*?)\]/g, "$1"),
     )
     .join("\n");
 }

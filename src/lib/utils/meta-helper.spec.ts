@@ -60,19 +60,14 @@ if (Bun.env.ALLOW_LARGE_TEST) {
       "https://blog.studysapuri.jp/entry/2018/11/14/working-out-loud",
       "https://blog.studysapuri.jp/icon/favicon",
     ],
-  ])(
-    "%s",
-    async (
-      _name: string,
-      url: Parameters<typeof getFaviconUrl>[1],
-      expected: ReturnType<typeof getFaviconUrl>,
-    ) => {
-      const textResponse = await (await fetch(url)).text();
-      expect(getFaviconUrl(new JSDOM(textResponse).window.document, url)).toBe(
-        expected,
-      );
-    },
-  );
+  ])("%s", async (_name: string, url: Parameters<
+    typeof getFaviconUrl
+  >[1], expected: ReturnType<typeof getFaviconUrl>) => {
+    const textResponse = await (await fetch(url)).text();
+    expect(getFaviconUrl(new JSDOM(textResponse).window.document, url)).toBe(
+      expected,
+    );
+  });
 
   test.each([
     ["mockito", "https://site.mockito.org/", undefined],
@@ -106,22 +101,17 @@ if (Bun.env.ALLOW_LARGE_TEST) {
       "https://bun.sh/blog/bun-v1.2",
       "https://bun.sh/og/blog/bun-v1.2.jpg",
     ],
-  ])(
-    "%s",
-    async (
-      _name: string,
-      url: Parameters<typeof getCoverUrl>[1],
-      expected: ReturnType<typeof getCoverUrl>,
-    ) => {
-      const textResponse = await (await fetch(url)).text();
-      const actual = getCoverUrl(new JSDOM(textResponse).window.document, url);
-      if (expected === undefined) {
-        expect(actual).toBeUndefined();
-      } else {
-        expect(actual).toBe(expected);
-      }
-    },
-  );
+  ])("%s", async (_name: string, url: Parameters<
+    typeof getCoverUrl
+  >[1], expected: ReturnType<typeof getCoverUrl>) => {
+    const textResponse = await (await fetch(url)).text();
+    const actual = getCoverUrl(new JSDOM(textResponse).window.document, url);
+    if (expected === undefined) {
+      expect(actual).toBeUndefined();
+    } else {
+      expect(actual).toBe(expected);
+    }
+  });
 
   test.each([
     [
@@ -148,26 +138,20 @@ if (Bun.env.ALLOW_LARGE_TEST) {
       "https://www.4gamer.net/games/794/G079439/20250227068/",
       { content: "text/html; charset=EUC-JP" },
     ],
-  ])(
-    "%s",
-    async (
-      _name: string,
-      httpEquiv: string,
-      url: Parameters<typeof getMetaByHttpEquiv>[1],
-      expected: ReturnType<typeof getMetaByHttpEquiv>,
-    ) => {
-      const textResponse = await (await fetch(url)).text();
-      const actual = getMetaByHttpEquiv(
-        new JSDOM(textResponse).window.document,
-        httpEquiv,
-      );
-      if (expected === undefined) {
-        expect(actual).toBeUndefined();
-      } else {
-        expect(actual).toEqual(expected);
-      }
-    },
-  );
+  ])("%s", async (_name: string, httpEquiv: string, url: Parameters<
+    typeof getMetaByHttpEquiv
+  >[1], expected: ReturnType<typeof getMetaByHttpEquiv>) => {
+    const textResponse = await (await fetch(url)).text();
+    const actual = getMetaByHttpEquiv(
+      new JSDOM(textResponse).window.document,
+      httpEquiv,
+    );
+    if (expected === undefined) {
+      expect(actual).toBeUndefined();
+    } else {
+      expect(actual).toEqual(expected);
+    }
+  });
 
   test.each([
     [
@@ -176,18 +160,15 @@ if (Bun.env.ALLOW_LARGE_TEST) {
     ],
     ["https://www.itmedia.co.jp/news/articles/2307/26/news116.html", undefined],
     ["https://www.itmedia.co.jp/pcuser/spv/2310/18/news078.html", "shift_jis"],
-  ])(
-    "%s",
-    async (url: string, expected: ReturnType<typeof getCharsetFromMeta>) => {
-      const textResponse = await (await fetch(url)).text();
-      const actual = getCharsetFromMeta(
-        new JSDOM(textResponse).window.document,
-      );
-      if (expected === undefined) {
-        expect(actual).toBeUndefined();
-      } else {
-        expect(actual).toBe(expected);
-      }
-    },
-  );
+  ])("%s", async (url: string, expected: ReturnType<
+    typeof getCharsetFromMeta
+  >) => {
+    const textResponse = await (await fetch(url)).text();
+    const actual = getCharsetFromMeta(new JSDOM(textResponse).window.document);
+    if (expected === undefined) {
+      expect(actual).toBeUndefined();
+    } else {
+      expect(actual).toBe(expected);
+    }
+  });
 }

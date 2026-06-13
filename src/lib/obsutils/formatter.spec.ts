@@ -1,5 +1,5 @@
 import { expect, test } from "bun:test";
-import { type TextReplacement, formatLineBreaks } from "./formatter";
+import { formatLineBreaks, type TextReplacement } from "./formatter";
 
 test.each([
   // 基本的な空行の削除・整理
@@ -40,12 +40,9 @@ test.each([
 
   // 空行がない場合
   ["line1\nline2\nline3", []],
-])(
-  `formatLineBreaks("%s")`,
-  (markdown: string, expected: TextReplacement[]) => {
-    expect(Array.from(formatLineBreaks(markdown))).toEqual(expected);
-  },
-);
+])(`formatLineBreaks("%s")`, (markdown: string, expected: TextReplacement[]) => {
+  expect(Array.from(formatLineBreaks(markdown))).toEqual(expected);
+});
 
 // コードブロック内の空行は処理されない
 test.each([
@@ -65,12 +62,9 @@ test.each([
       { from: { line: 5, ch: 0 }, to: { line: 5, ch: 0 }, text: "\n\n" },
     ],
   ],
-])(
-  `formatLineBreaks with code blocks("%s")`,
-  (markdown: string, expected: TextReplacement[]) => {
-    expect(Array.from(formatLineBreaks(markdown))).toEqual(expected);
-  },
-);
+])(`formatLineBreaks with code blocks("%s")`, (markdown: string, expected: TextReplacement[]) => {
+  expect(Array.from(formatLineBreaks(markdown))).toEqual(expected);
+});
 
 // 見出し処理の詳細テスト
 test.each([
@@ -167,12 +161,9 @@ test.each([
   ["#### Heading4\n\ntext", []],
   ["##### Heading5\n\ntext", []],
   ["###### Heading6\n\ntext", []],
-])(
-  `formatLineBreaks with headings("%s")`,
-  (markdown: string, expected: TextReplacement[]) => {
-    expect(Array.from(formatLineBreaks(markdown))).toEqual(expected);
-  },
-);
+])(`formatLineBreaks with headings("%s")`, (markdown: string, expected: TextReplacement[]) => {
+  expect(Array.from(formatLineBreaks(markdown))).toEqual(expected);
+});
 
 // エッジケースのテスト
 test.each([
@@ -217,9 +208,6 @@ test.each([
       { from: { line: 4, ch: 0 }, to: { line: 5, ch: 0 }, text: "" },
     ],
   ],
-])(
-  `formatLineBreaks edge cases("%s")`,
-  (markdown: string, expected: TextReplacement[]) => {
-    expect(Array.from(formatLineBreaks(markdown))).toEqual(expected);
-  },
-);
+])(`formatLineBreaks edge cases("%s")`, (markdown: string, expected: TextReplacement[]) => {
+  expect(Array.from(formatLineBreaks(markdown))).toEqual(expected);
+});

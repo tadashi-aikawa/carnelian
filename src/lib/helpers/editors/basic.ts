@@ -373,7 +373,7 @@ export function appendLine(str: string): void {
  */
 export function setLivePreview(leaf: WorkspaceLeaf, enabled: boolean) {
   const vs = leaf.getViewState();
-  vs.state.source = enabled;
+  vs.state!.source = enabled;
   leaf.setViewState(vs);
 }
 

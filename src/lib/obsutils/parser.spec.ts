@@ -39,12 +39,11 @@ test.each([
   ["　　- hoge", { prefix: "　　- ", content: "hoge" }],
   ["　　- [ ] hoge", { prefix: "　　- [ ] ", content: "hoge" }],
   ["　　- [x] hoge", { prefix: "　　- [x] ", content: "hoge" }],
-])(
-  `parseMarkdownList("%s")`,
-  (text: string, expected: ReturnType<typeof parseMarkdownList>) => {
-    expect(parseMarkdownList(text)).toEqual(expected);
-  },
-);
+])(`parseMarkdownList("%s")`, (text: string, expected: ReturnType<
+  typeof parseMarkdownList
+>) => {
+  expect(parseMarkdownList(text)).toEqual(expected);
+});
 
 test.each([
   ["#hoge", ["hoge"]],
@@ -55,12 +54,11 @@ test.each([
   ["#hoge #hoga", ["hoge", "hoga"]],
   ["hoge #hoga fuga", ["hoga"]],
   ["#hoge hoga #fuga", ["hoge", "fuga"]],
-])(
-  `parseTags("%s")`,
-  (text: string, expected: ReturnType<typeof parseTags>) => {
-    expect(parseTags(text)).toEqual(expected);
-  },
-);
+])(`parseTags("%s")`, (text: string, expected: ReturnType<
+  typeof parseTags
+>) => {
+  expect(parseTags(text)).toEqual(expected);
+});
 
 test.each([
   // bold
@@ -99,12 +97,11 @@ test.each([
 
   // mixed
   ["a **b** ~~c~~ ==d== e", "a b c d e"],
-])(
-  `stripDecoration("%s")`,
-  (text: string, expected: ReturnType<typeof stripDecoration>) => {
-    expect(stripDecoration(text)).toEqual(expected);
-  },
-);
+])(`stripDecoration("%s")`, (text: string, expected: ReturnType<
+  typeof stripDecoration
+>) => {
+  expect(stripDecoration(text)).toEqual(expected);
+});
 
 test.each([
   // link
@@ -137,12 +134,11 @@ test.each([
   ["- [x] hoge", "- [x] hoge"],
   ["- [x] [hoge](fuga)", "- [x] hoge"],
   ["- [x] [[hoge]]", "- [x] hoge"],
-])(
-  `stripLinks("%s")`,
-  (text: string, expected: ReturnType<typeof stripLinks>) => {
-    expect(stripLinks(text)).toEqual(expected);
-  },
-);
+])(`stripLinks("%s")`, (text: string, expected: ReturnType<
+  typeof stripLinks
+>) => {
+  expect(stripLinks(text)).toEqual(expected);
+});
 
 test.each([
   [
@@ -178,9 +174,8 @@ test.each([
   ],
   [["> ```", "> const a = 1;", "> ```", "text"].join("\n"), "text"],
   [["> <div>==a==</div>", "text"].join("\n"), ["> ", "text"].join("\n")],
-])(
-  `stripCodeAndHtmlBlocks("%s")`,
-  (text: string, expected: ReturnType<typeof stripCodeAndHtmlBlocks>) => {
-    expect(stripCodeAndHtmlBlocks(text)).toEqual(expected);
-  },
-);
+])(`stripCodeAndHtmlBlocks("%s")`, (text: string, expected: ReturnType<
+  typeof stripCodeAndHtmlBlocks
+>) => {
+  expect(stripCodeAndHtmlBlocks(text)).toEqual(expected);
+});

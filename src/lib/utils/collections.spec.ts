@@ -26,17 +26,11 @@ test.each([
   // predicate
   [["aaa", "bb", "c"], (x) => x.length, ASC, ["c", "bb", "aaa"]],
   [["c", "bb", "aaa"], (x) => x.length, ASC, ["c", "bb", "aaa"]],
-])(
-  `orderBy("%s")`,
-  (
-    collection: any[],
-    predicate: (t: any) => any,
-    order: "asc" | "desc",
-    expected: ReturnType<typeof orderBy>,
-  ) => {
-    expect(orderBy(collection, predicate, order)).toEqual(expected);
-  },
-);
+])(`orderBy("%s")`, (collection: any[], predicate: (t: any) => any, order:
+  | "asc"
+  | "desc", expected: ReturnType<typeof orderBy>) => {
+  expect(orderBy(collection, predicate, order)).toEqual(expected);
+});
 
 test.each<
   [
@@ -56,15 +50,11 @@ test.each([
     { key: 1, key2: 2, Key3: 3, KEY4: 4 },
     { key: 1, key2: 2, key3: 3, key4: 4 },
   ],
-])(
-  `forceLowerCaseKeys("%s")`,
-  (
-    obj: Parameters<typeof forceLowerCaseKeys>[0],
-    expected: ReturnType<typeof forceLowerCaseKeys>,
-  ) => {
-    expect(forceLowerCaseKeys(obj)).toStrictEqual(expected);
-  },
-);
+])(`forceLowerCaseKeys("%s")`, (obj: Parameters<
+  typeof forceLowerCaseKeys
+>[0], expected: ReturnType<typeof forceLowerCaseKeys>) => {
+  expect(forceLowerCaseKeys(obj)).toStrictEqual(expected);
+});
 
 test.each([
   [
@@ -74,15 +64,11 @@ test.each([
       ["2", "4", undefined],
     ],
   ],
-])(
-  `zipRotate("%s")`,
-  (
-    matrix: Parameters<typeof zipRotate>[0],
-    expected: ReturnType<typeof zipRotate>,
-  ) => {
-    expect(zipRotate(matrix)).toStrictEqual(expected);
-  },
-);
+])(`zipRotate("%s")`, (matrix: Parameters<
+  typeof zipRotate
+>[0], expected: ReturnType<typeof zipRotate>) => {
+  expect(zipRotate(matrix)).toStrictEqual(expected);
+});
 
 test.each([
   [
@@ -103,12 +89,11 @@ test.each([
       [1, 2],
     ],
   ],
-])(
-  `uniq("%s")`,
-  (values: Parameters<typeof uniq>[0], expected: ReturnType<typeof uniq>) => {
-    expect(uniq(values)).toStrictEqual(expected);
-  },
-);
+])(`uniq("%s")`, (values: Parameters<typeof uniq>[0], expected: ReturnType<
+  typeof uniq
+>) => {
+  expect(uniq(values)).toStrictEqual(expected);
+});
 
 test.each<
   [

@@ -3,16 +3,16 @@ import { toLineNo } from "src/lib/helpers/editors/basic";
 import { getUnresolvedLinkMap } from "src/lib/helpers/links";
 import { stripCodeAndHtmlBlocks } from "src/lib/obsutils/parser";
 import { ExhaustiveError } from "src/lib/utils/errors";
-import type { LintInspection, Linter } from "src/lib/utils/linter";
+import type { Linter, LintInspection } from "src/lib/utils/linter";
 import {
   getSinglePatternCaptureMatchingLocations,
+  getSinglePatternMatchingLocations,
   getWikiLinks,
   hasRedundantWikiLinkAlias,
+  match,
 } from "src/lib/utils/strings";
-import { getSinglePatternMatchingLocations } from "src/lib/utils/strings";
-import { match } from "src/lib/utils/strings";
-import { findNoteTypeBy } from "../mkms";
 import type { NoteType } from "../mkms";
+import { findNoteTypeBy } from "../mkms";
 
 export const contentLinter: Linter = {
   lint: ({ content, path, settings }) => {
@@ -24,7 +24,7 @@ export const contentLinter: Linter = {
     const rules = settings?.rules?.content;
     return [
       ...(rules?.["Disallowed link card"]
-        ? createDisallowedLinkCard(noteType, content)
+        ? createDisallowedLinkCard(noteType)
         : []),
       ...(rules?.["No link comment"]
         ? createNoLinkComment(noteType, content)
@@ -66,32 +66,8 @@ const hasLinkCard = (content: string): boolean =>
 const hasV1DatesFormat = (content: string): boolean =>
   content.includes('class="minerva-change-meta"');
 
-function createDisallowedLinkCard(
-  noteType: NoteType,
-  content: string,
-): LintInspection[] {
-  const base = {
-    code: "Disallowed link card",
-    message: "リンクカードは許可されていません",
-  };
-
-  const createInspections = (level: LintInspection["level"]) => {
-    if (!hasLinkCard(content)) {
-      return [];
-    }
-
-    const cards = getSinglePatternMatchingLocations(
-      content,
-      /class="(link-card|link-card-v2)"/g,
-    );
-    return cards.map((x) => ({
-      ...base,
-      level,
-      lineNo: toLineNo(x.range.start) ?? undefined,
-      offset: x.range.start,
-    }));
-  };
-
+// TODO: 削除
+function createDisallowedLinkCard(noteType: NoteType): LintInspection[] {
   switch (noteType.name) {
     case "Glossary note":
       return [];
@@ -535,7 +511,7 @@ function createDisallowFixme(content?: string): LintInspection[] {
   }
 
   // normalizedContentでは元の位置が特定できないので位置情報は入れない
-  return patterns.map((x) => ({
+  return patterns.map(() => ({
     code: "Disallow fixme",
     message: "本文にFIXME相当の記述が残っています",
     level: "WARN" as const,

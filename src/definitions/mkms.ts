@@ -131,9 +131,7 @@ export function findNoteType(file: TFile): NoteType | null {
 /**
  * ファイルに適切なノートタイプを返却します。該当するものがなかった場合はnullを返します。
  */
-export function findNoteTypeBy(args: {
-  path: string;
-}): NoteType | null {
+export function findNoteTypeBy(args: { path: string }): NoteType | null {
   return (
     Object.values(noteTypeByName).find((x) => {
       if (x.pathPattern != null && !args.path.match(x.pathPattern)) {

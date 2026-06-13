@@ -39,7 +39,7 @@ export function omitBy<T extends { [key: string]: any }>(
   return cloned;
 }
 
-export const mapValues = <K, T, U>(
+export const mapValues = <T, U>(
   obj: { [key: string]: T },
   to: (x: T) => U,
 ): { [key: string]: U } =>

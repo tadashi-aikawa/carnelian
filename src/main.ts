@@ -1,7 +1,7 @@
 import { type EventRef, Plugin } from "obsidian";
 import { createCommands } from "./commands";
 import type { UApp } from "./lib/types";
-import { type Service, createServices } from "./services";
+import { createServices, type Service } from "./services";
 import { DEFAULT_SETTINGS, type PluginSettings, SettingTab } from "./settings";
 
 import "dayjs/locale/ja";
@@ -10,7 +10,7 @@ import dayjs from "dayjs";
 dayjs.locale("ja");
 
 export default class CarnelianPlugin extends Plugin {
-  settings!: PluginSettings;
+  declare settings: PluginSettings;
   services: Service[] = [];
   declare app: UApp;
 

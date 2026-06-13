@@ -35,15 +35,11 @@ test.each([
   ["suf ", "suf"],
   [" both ", "both"],
   [" a ll ", "all"],
-])(
-  `excludeSpace("%s"))`,
-  (
-    text: Parameters<typeof excludeSpace>[0],
-    expected: ReturnType<typeof excludeSpace>,
-  ) => {
-    expect(excludeSpace(text)).toBe(expected);
-  },
-);
+])(`excludeSpace("%s"))`, (text: Parameters<
+  typeof excludeSpace
+>[0], expected: ReturnType<typeof excludeSpace>) => {
+  expect(excludeSpace(text)).toBe(expected);
+});
 
 test.each([
   ["", ""],
@@ -55,15 +51,11 @@ test.each([
   ["\n\n a\n b \n\n", "a\n b"],
   ["\n\n  a  \n\n", "a"],
   ["\n\n\t a \n\n", "a"],
-])(
-  `trimEmptyLines("%s"))`,
-  (
-    text: Parameters<typeof trimEmptyLines>[0],
-    expected: ReturnType<typeof trimEmptyLines>,
-  ) => {
-    expect(trimEmptyLines(text)).toBe(expected);
-  },
-);
+])(`trimEmptyLines("%s"))`, (text: Parameters<
+  typeof trimEmptyLines
+>[0], expected: ReturnType<typeof trimEmptyLines>) => {
+  expect(trimEmptyLines(text)).toBe(expected);
+});
 
 test.each([
   ["a🍰b", "ab"],
@@ -71,30 +63,23 @@ test.each([
   ["suf🍰", "suf"],
   ["🍰both😌", "both"],
   ["🍰a🍊ll🅰", "all"],
-])(
-  `excludeEmoji("%s"))`,
-  (
-    text: Parameters<typeof excludeEmoji>[0],
-    expected: ReturnType<typeof excludeEmoji>,
-  ) => {
-    expect(excludeEmoji(text)).toBe(expected);
-  },
-);
+])(`excludeEmoji("%s"))`, (text: Parameters<
+  typeof excludeEmoji
+>[0], expected: ReturnType<typeof excludeEmoji>) => {
+  expect(excludeEmoji(text)).toBe(expected);
+});
 
 test.each([
   ["abc123cdf", /\d+/, true],
   ["abc123cdf", /[a-z]+/, true],
   ["abc123cdf", /^\d+/, false],
-])(
-  `match("%s", "%s"))`,
-  (
-    text: Parameters<typeof match>[0],
-    pattern: Parameters<typeof match>[1],
-    expected: ReturnType<typeof match>,
-  ) => {
-    expect(match(text, pattern)).toBe(expected);
-  },
-);
+])(`match("%s", "%s"))`, (text: Parameters<
+  typeof match
+>[0], pattern: Parameters<typeof match>[1], expected: ReturnType<
+  typeof match
+>) => {
+  expect(match(text, pattern)).toBe(expected);
+});
 
 test.each([
   [
@@ -105,16 +90,13 @@ test.each([
   ["hoge", /h../g, ["hog"]],
   ["hogehoge", /h../g, ["hog", "hog"]],
   ["aaaa", /h../g, []],
-])(
-  `doSinglePatternMatching("%s")`,
-  (
-    text: Parameters<typeof doSinglePatternMatching>[0],
-    pattern: Parameters<typeof doSinglePatternMatching>[1],
-    expected: ReturnType<typeof doSinglePatternMatching>,
-  ) => {
-    expect(doSinglePatternMatching(text, pattern)).toEqual(expected);
-  },
-);
+])(`doSinglePatternMatching("%s")`, (text: Parameters<
+  typeof doSinglePatternMatching
+>[0], pattern: Parameters<
+  typeof doSinglePatternMatching
+>[1], expected: ReturnType<typeof doSinglePatternMatching>) => {
+  expect(doSinglePatternMatching(text, pattern)).toEqual(expected);
+});
 
 test.each([
   ["2023-10-12から2023-10-02", /から(\d{4}-\d{2}-\d{2})/g, ["2023-10-02"]],
@@ -123,16 +105,13 @@ test.each([
     /から(\d{4}-\d{2}-\d{2})/g,
     ["2023-10-02", "2023-10-22"],
   ],
-])(
-  `doSinglePatternCaptureMatching("%s")`,
-  (
-    text: Parameters<typeof doSinglePatternCaptureMatching>[0],
-    pattern: Parameters<typeof doSinglePatternCaptureMatching>[1],
-    expected: ReturnType<typeof doSinglePatternCaptureMatching>,
-  ) => {
-    expect(doSinglePatternCaptureMatching(text, pattern)).toEqual(expected);
-  },
-);
+])(`doSinglePatternCaptureMatching("%s")`, (text: Parameters<
+  typeof doSinglePatternCaptureMatching
+>[0], pattern: Parameters<
+  typeof doSinglePatternCaptureMatching
+>[1], expected: ReturnType<typeof doSinglePatternCaptureMatching>) => {
+  expect(doSinglePatternCaptureMatching(text, pattern)).toEqual(expected);
+});
 
 test.each([
   [
@@ -154,16 +133,13 @@ test.each([
     ],
   ],
   ["aaaa", /h../g, []],
-])(
-  `getSinglePatternMatchingLocations("%s")`,
-  (
-    text: Parameters<typeof getSinglePatternMatchingLocations>[0],
-    pattern: Parameters<typeof getSinglePatternMatchingLocations>[1],
-    expected: ReturnType<typeof getSinglePatternMatchingLocations>,
-  ) => {
-    expect(getSinglePatternMatchingLocations(text, pattern)).toEqual(expected);
-  },
-);
+])(`getSinglePatternMatchingLocations("%s")`, (text: Parameters<
+  typeof getSinglePatternMatchingLocations
+>[0], pattern: Parameters<
+  typeof getSinglePatternMatchingLocations
+>[1], expected: ReturnType<typeof getSinglePatternMatchingLocations>) => {
+  expect(getSinglePatternMatchingLocations(text, pattern)).toEqual(expected);
+});
 
 test.each([
   [
@@ -190,18 +166,17 @@ test.each([
     ],
   ],
   ["aaaa", /h../g, []],
-])(
-  `getSinglePatternCaptureMatchingLocations("%s")`,
-  (
-    text: Parameters<typeof getSinglePatternCaptureMatchingLocations>[0],
-    pattern: Parameters<typeof getSinglePatternCaptureMatchingLocations>[1],
-    expected: ReturnType<typeof getSinglePatternCaptureMatchingLocations>,
-  ) => {
-    expect(getSinglePatternCaptureMatchingLocations(text, pattern)).toEqual(
-      expected,
-    );
-  },
-);
+])(`getSinglePatternCaptureMatchingLocations("%s")`, (text: Parameters<
+  typeof getSinglePatternCaptureMatchingLocations
+>[0], pattern: Parameters<
+  typeof getSinglePatternCaptureMatchingLocations
+>[1], expected: ReturnType<
+  typeof getSinglePatternCaptureMatchingLocations
+>) => {
+  expect(getSinglePatternCaptureMatchingLocations(text, pattern)).toEqual(
+    expected,
+  );
+});
 
 test.each<
   [
@@ -233,17 +208,15 @@ test.each<
   expect(replaceWithStringMapping(text, mapping)).toBe(expected);
 });
 
-test.each([["0123456789", { start: 3, end: 6 }, "---", "012---789"]])(
-  `replaceAt("%s")`,
-  (
-    base: Parameters<typeof replaceAt>[0],
-    range: Parameters<typeof replaceAt>[1],
-    text: Parameters<typeof replaceAt>[2],
-    expected: ReturnType<typeof replaceAt>,
-  ) => {
-    expect(replaceAt(base, range, text)).toBe(expected);
-  },
-);
+test.each([
+  ["0123456789", { start: 3, end: 6 }, "---", "012---789"],
+])(`replaceAt("%s")`, (base: Parameters<typeof replaceAt>[0], range: Parameters<
+  typeof replaceAt
+>[1], text: Parameters<typeof replaceAt>[2], expected: ReturnType<
+  typeof replaceAt
+>) => {
+  expect(replaceAt(base, range, text)).toBe(expected);
+});
 
 test.each<
   [
@@ -311,28 +284,21 @@ test.each<
     "link",
     { range: { start: 2, end: 10 }, text: "link " },
   ],
-])(
-  'normalizeReplacementSpacing("%s", %o, "%s")',
-  (base, range, replacement, expected) => {
-    expect(normalizeReplacementSpacing(base, range, replacement)).toEqual(
-      expected,
-    );
-  },
-);
+])('normalizeReplacementSpacing("%s", %o, "%s")', (base, range, replacement, expected) => {
+  expect(normalizeReplacementSpacing(base, range, replacement)).toEqual(
+    expected,
+  );
+});
 
 test.each([
   ["abc", 3],
   ["あいう", 6],
   ["%.,●", 5],
-])(
-  `countCharsWidth("%s")`,
-  (
-    chars: Parameters<typeof countCharsWidth>[0],
-    expected: ReturnType<typeof countCharsWidth>,
-  ) => {
-    expect(countCharsWidth(chars)).toBe(expected);
-  },
-);
+])(`countCharsWidth("%s")`, (chars: Parameters<
+  typeof countCharsWidth
+>[0], expected: ReturnType<typeof countCharsWidth>) => {
+  expect(countCharsWidth(chars)).toBe(expected);
+});
 
 test.each([
   ["abc", 5, " ", " abc "],
@@ -340,17 +306,11 @@ test.each([
   ["abc", 4, " ", "abc "],
   ["abc", 3, " ", "abc"],
   ["abc", 2, " ", "abc"],
-])(
-  `pad("%s", %d, "%s")`,
-  (
-    text: Parameters<typeof pad>[0],
-    length: Parameters<typeof pad>[1],
-    char: Parameters<typeof pad>[2],
-    expected: ReturnType<typeof pad>,
-  ) => {
-    expect(pad(text, length, char)).toBe(expected);
-  },
-);
+])(`pad("%s", %d, "%s")`, (text: Parameters<typeof pad>[0], length: Parameters<
+  typeof pad
+>[1], char: Parameters<typeof pad>[2], expected: ReturnType<typeof pad>) => {
+  expect(pad(text, length, char)).toBe(expected);
+});
 
 test.each([
   [
@@ -431,16 +391,13 @@ test.each([
     2,
     null,
   ],
-])(
-  `getActiveParagraph("%s", "%d")`,
-  (
-    text: Parameters<typeof getParagraphAtLine>[0],
-    line: Parameters<typeof getParagraphAtLine>[1],
-    expected: ReturnType<typeof getParagraphAtLine>,
-  ) => {
-    expect(getParagraphAtLine(text, line)).toStrictEqual(expected);
-  },
-);
+])(`getActiveParagraph("%s", "%d")`, (text: Parameters<
+  typeof getParagraphAtLine
+>[0], line: Parameters<typeof getParagraphAtLine>[1], expected: ReturnType<
+  typeof getParagraphAtLine
+>) => {
+  expect(getParagraphAtLine(text, line)).toStrictEqual(expected);
+});
 
 test.each([
   [
@@ -555,15 +512,11 @@ test.each([
 | 2  |                               |
 `.trim(),
   ],
-])(
-  `formatTable("%s")`,
-  (
-    tableText: Parameters<typeof formatTable>[0],
-    expected: ReturnType<typeof formatTable>,
-  ) => {
-    expect(formatTable(tableText)).toBe(expected);
-  },
-);
+])(`formatTable("%s")`, (tableText: Parameters<
+  typeof formatTable
+>[0], expected: ReturnType<typeof formatTable>) => {
+  expect(formatTable(tableText)).toBe(expected);
+});
 
 test.each([
   ["abc [[def]] ghi", [{ title: "def", range: { start: 4, end: 10 } }]],
@@ -586,15 +539,11 @@ test.each([
     "aaa\n| 1 | [[hoge\\|hoge]] |\nbbb",
     [{ title: "hoge", alias: "hoge", range: { start: 10, end: 23 } }],
   ],
-])(
-  `getWikiLinks("%s")`,
-  (
-    text: Parameters<typeof getWikiLinks>[0],
-    expected: ReturnType<typeof getWikiLinks>,
-  ) => {
-    expect(getWikiLinks(text)).toStrictEqual(expected);
-  },
-);
+])(`getWikiLinks("%s")`, (text: Parameters<
+  typeof getWikiLinks
+>[0], expected: ReturnType<typeof getWikiLinks>) => {
+  expect(getWikiLinks(text)).toStrictEqual(expected);
+});
 
 test.each([
   [{ title: "hoge", alias: "hoge" }, true],
@@ -602,15 +551,11 @@ test.each([
   [{ title: "hoge", alias: " hoge" }, false],
   [{ title: "folder/hoge", alias: "hoge" }, false],
   [{ title: "hoge" }, false],
-])(
-  "hasRedundantWikiLinkAlias(%o)",
-  (
-    link: Parameters<typeof hasRedundantWikiLinkAlias>[0],
-    expected: ReturnType<typeof hasRedundantWikiLinkAlias>,
-  ) => {
-    expect(hasRedundantWikiLinkAlias(link)).toBe(expected);
-  },
-);
+])("hasRedundantWikiLinkAlias(%o)", (link: Parameters<
+  typeof hasRedundantWikiLinkAlias
+>[0], expected: ReturnType<typeof hasRedundantWikiLinkAlias>) => {
+  expect(hasRedundantWikiLinkAlias(link)).toBe(expected);
+});
 
 test.each<[Parameters<typeof isUrl>[0], ReturnType<typeof isUrl>]>([
   ["http://example.com", true],
@@ -629,15 +574,11 @@ test.each([
   ["Notes/Obsidian.md", "Notes/Obsidian.md"],
   ["Notes/Obsidian.png", "Notes/Obsidian.png"],
   ["Notes/Obsidian++.md", "Notes/Obsidian%2B%2B.md"],
-])(
-  `encodeToUrl("%s")`,
-  (
-    filePath: Parameters<typeof encodeToUrl>[0],
-    expected: ReturnType<typeof encodeToUrl>,
-  ) => {
-    expect(encodeToUrl(filePath)).toBe(expected);
-  },
-);
+])(`encodeToUrl("%s")`, (filePath: Parameters<
+  typeof encodeToUrl
+>[0], expected: ReturnType<typeof encodeToUrl>) => {
+  expect(encodeToUrl(filePath)).toBe(expected);
+});
 
 test.each<
   [
@@ -756,15 +697,11 @@ test.each([
   ["No heading here", false],
   [" ## Invalid heading", false],
   ["#tag", false],
-])(
-  `isHeading("%s"))`,
-  (
-    text: Parameters<typeof isHeading>[0],
-    expected: ReturnType<typeof isHeading>,
-  ) => {
-    expect(isHeading(text)).toBe(expected);
-  },
-);
+])(`isHeading("%s"))`, (text: Parameters<
+  typeof isHeading
+>[0], expected: ReturnType<typeof isHeading>) => {
+  expect(isHeading(text)).toBe(expected);
+});
 
 // isCodeBlockStartOrEnd のテスト
 test.each([
@@ -777,15 +714,11 @@ test.each([
   ["Not a code block", false],
   ["`Inline code`", false],
   ["~~~~", true],
-])(
-  `isCodeBlockStartOrEnd("%s"))`,
-  (
-    text: Parameters<typeof isCodeBlockStartOrEnd>[0],
-    expected: ReturnType<typeof isCodeBlockStartOrEnd>,
-  ) => {
-    expect(isCodeBlockStartOrEnd(text)).toBe(expected);
-  },
-);
+])(`isCodeBlockStartOrEnd("%s"))`, (text: Parameters<
+  typeof isCodeBlockStartOrEnd
+>[0], expected: ReturnType<typeof isCodeBlockStartOrEnd>) => {
+  expect(isCodeBlockStartOrEnd(text)).toBe(expected);
+});
 
 // isBlockquote のテスト
 test.each([
@@ -796,15 +729,11 @@ test.each([
   [">", true],
   ["> ", true],
   [">> ", true],
-])(
-  `isBlockquote("%s"))`,
-  (
-    text: Parameters<typeof isBlockquote>[0],
-    expected: ReturnType<typeof isBlockquote>,
-  ) => {
-    expect(isBlockquote(text)).toBe(expected);
-  },
-);
+])(`isBlockquote("%s"))`, (text: Parameters<
+  typeof isBlockquote
+>[0], expected: ReturnType<typeof isBlockquote>) => {
+  expect(isBlockquote(text)).toBe(expected);
+});
 
 // isOnlyImageEmbedLink のテスト
 test.each([
@@ -817,15 +746,11 @@ test.each([
   ["![alt](./image.png)", true],
   ["![](./image.png)", true],
   ["![](./image.png) and ![](./image.png)", false],
-])(
-  `isOnlyImageEmbedLink("%s"))`,
-  (
-    text: Parameters<typeof isOnlyImageEmbedLink>[0],
-    expected: ReturnType<typeof isOnlyImageEmbedLink>,
-  ) => {
-    expect(isOnlyImageEmbedLink(text)).toBe(expected);
-  },
-);
+])(`isOnlyImageEmbedLink("%s"))`, (text: Parameters<
+  typeof isOnlyImageEmbedLink
+>[0], expected: ReturnType<typeof isOnlyImageEmbedLink>) => {
+  expect(isOnlyImageEmbedLink(text)).toBe(expected);
+});
 
 // isHTMLTag のテスト
 test.each([
@@ -837,12 +762,8 @@ test.each([
   ["< invalid >", false],
   ["<br>", true],
   ["<input type='text'>", true],
-])(
-  `isHtmlTag("%s"))`,
-  (
-    text: Parameters<typeof isHtmlTag>[0],
-    expected: ReturnType<typeof isHtmlTag>,
-  ) => {
-    expect(isHtmlTag(text)).toBe(expected);
-  },
-);
+])(`isHtmlTag("%s"))`, (text: Parameters<
+  typeof isHtmlTag
+>[0], expected: ReturnType<typeof isHtmlTag>) => {
+  expect(isHtmlTag(text)).toBe(expected);
+});

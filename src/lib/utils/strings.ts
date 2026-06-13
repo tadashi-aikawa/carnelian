@@ -6,7 +6,6 @@ import { isPresent } from "./guard";
 type Range = { start: number; end: number };
 
 const regEmoji = new RegExp(
-  // biome-ignore lint/suspicious/noMisleadingCharacterClass: <explanation>
   /[\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF]|[\uFE0E-\uFE0F]/,
   "g",
 );
@@ -250,9 +249,7 @@ export function getParagraphAtLine(
     return null;
   }
 
-  const previousEmptyLineIndex = lineContents
-    .slice(0, line)
-    .findLastIndex((x) => x === "");
+  const previousEmptyLineIndex = lineContents.slice(0, line).lastIndexOf("");
   const startLine =
     previousEmptyLineIndex === -1 ? 0 : previousEmptyLineIndex + 1;
 

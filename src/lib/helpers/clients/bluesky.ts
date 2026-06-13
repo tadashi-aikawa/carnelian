@@ -1,6 +1,6 @@
 import { AtpAgent } from "@atproto/api";
-import dayjs from "dayjs";
 import type { Dayjs } from "dayjs";
+import dayjs from "dayjs";
 
 interface FeedPostRecord {
   $type: "app.bsky.feed.post";
@@ -48,10 +48,10 @@ export async function fetchFeedPostRecords(
   }
 
   return feeds.data.feed.map((f) => {
-    const r = f.post.record as FeedPostRecord;
+    const r = f.post.record as any as FeedPostRecord;
     return {
       createdAt: dayjs(r.createdAt),
-      text: r.text.replace(/\n[a-zA-Z0-9\/.\-_]+\.\.\.$/, "").trim(),
+      text: r.text.replace(/\n[a-zA-Z0-9/.\-_]+\.\.\.$/, "").trim(),
       embedTitle: r.embed?.external?.title,
       embedUri: r.embed?.external?.uri,
     };

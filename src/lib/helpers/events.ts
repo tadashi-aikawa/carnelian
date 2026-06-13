@@ -103,7 +103,7 @@ export function setOnExWCommandEvent(
   exWCommandEventHandlerMap[handlerName] = handler;
 
   (window as any).CodeMirrorAdapter.commands.save = () => {
-    Object.entries(exWCommandEventHandlerMap).map(([_name, handler]) => {
+    Object.entries(exWCommandEventHandlerMap).forEach(([_name, handler]) => {
       handler(getActiveFile()!);
     });
   };

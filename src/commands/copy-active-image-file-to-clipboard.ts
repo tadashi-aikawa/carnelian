@@ -1,7 +1,7 @@
 import { readFileSync } from "fs";
 import {
-  type ImageExtension,
   getActiveFile,
+  type ImageExtension,
   imageExtensions,
   imageMimeTypesByExtension,
 } from "src/lib/helpers/entries";

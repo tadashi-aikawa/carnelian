@@ -1,7 +1,7 @@
 import dayjs, { type Dayjs } from "dayjs";
 import type { TFile } from "obsidian";
 import type { AllConfig } from "src/definitions/config";
-import { type NoteType, findNoteType } from "src/definitions/mkms";
+import { findNoteType, type NoteType } from "src/definitions/mkms";
 import { runCommandById } from "src/lib/helpers/commands";
 import { now } from "src/lib/helpers/datetimes";
 import { getMarkdownFiles } from "src/lib/helpers/entries";
@@ -14,7 +14,6 @@ import { isPresent } from "src/lib/utils/guard";
 import { isMatchedGlobPatterns } from "src/lib/utils/strings";
 import { match } from "ts-pattern";
 
-type NoteKind = "created" | "updated";
 type Note = { file: TFile; noteType: NoteType; updated: Dayjs; created: Dayjs };
 
 /**

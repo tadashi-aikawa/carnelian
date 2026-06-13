@@ -161,10 +161,7 @@ export function openLazygit(path: string): Promise<void> {
   });
 }
 
-export async function showInfoDialog(args: {
-  title: string;
-  content: string;
-}) {
+export async function showInfoDialog(args: { title: string; content: string }) {
   new Modal(app).setTitle(args.title).setContent(args.content).open();
 }
 

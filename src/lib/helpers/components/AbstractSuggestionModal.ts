@@ -18,7 +18,7 @@ export abstract class AbstractSuggestionModal<T>
   isOpen!: boolean;
   updateSuggestions!: () => unknown;
   chooser!: UnsafeModalInterface<T>["chooser"];
-  scope!: UnsafeModalInterface<T>["scope"];
+  declare scope: UnsafeModalInterface<T>["scope"];
 
   getItems(): T[] | null {
     return this.chooser.values ?? null;

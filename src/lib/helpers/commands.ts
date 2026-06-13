@@ -1,6 +1,5 @@
 import type { Command } from "obsidian";
-import type { UApp } from "../types";
-import type { CommandId } from "../types";
+import type { CommandId, UApp } from "../types";
 
 declare let app: UApp;
 

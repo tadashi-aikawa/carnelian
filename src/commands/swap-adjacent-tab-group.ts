@@ -46,7 +46,10 @@ export async function swapAdjacentTabGroup() {
     return notifyWarning("アクティブなタブがありません");
   }
 
-  const layout = app.workspace.getLayout();
+  const layout = app.workspace.getLayout() as Record<
+    string,
+    WorkspaceLayoutNode
+  >;
   const result = findTabGroupByLeafId(layout.main, activeLeaf.id);
   if (!result) {
     return notifyWarning("メイン領域のタブグループが見つかりません");

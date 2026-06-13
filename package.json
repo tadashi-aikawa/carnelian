@@ -4,31 +4,31 @@
   "author": "tadashi-aikawa",
   "main": "main.js",
   "dependencies": {
-    "@atproto/api": "0.13.25",
-    "dayjs": "1.11.13",
+    "@atproto/api": "0.20.14",
+    "dayjs": "1.11.21",
     "encoding-japanese": "2.2.0",
     "jssha": "3.3.1",
-    "minimatch": "10.1.1",
-    "ts-pattern": "5.8.0"
+    "minimatch": "10.2.5",
+    "ts-pattern": "5.9.0"
   },
   "devDependencies": {
-    "@biomejs/biome": "1.9.4",
-    "@types/bun": "1.2.0",
+    "@biomejs/biome": "2.4.16",
+    "@types/bun": "1.3.14",
     "@types/encoding-japanese": "2.2.1",
-    "@types/jsdom": "21.1.7",
-    "@types/node": "24.5.2",
-    "@types/web": "0.0.188",
-    "@typescript/native-preview": "7.0.0-dev.20260208.1",
-    "builtin-modules": "4.0.0",
-    "chokidar": "4.0.3",
-    "esbuild": "0.24.2",
-    "jsdom": "25.0.1",
-    "obsidian": "latest",
-    "ts-json-schema-generator": "2.4.0",
+    "@types/jsdom": "28.0.3",
+    "@types/node": "22.19.21",
+    "@types/web": "0.0.350",
+    "@typescript/native-preview": "7.0.0-dev.20260612.1",
+    "builtin-modules": "5.2.0",
+    "chokidar": "5.0.0",
+    "esbuild": "0.28.1",
+    "jsdom": "29.1.1",
+    "obsidian": "1.13.1",
+    "ts-json-schema-generator": "2.9.0",
     "tslib": "2.8.1"
   },
   "peerDependencies": {
-    "typescript": "5.7.3"
+    "typescript": "6.0.3"
   },
   "description": "Obsidian Plugin for tadashi-aikawa",
   "keywords": [],

@@ -1,5 +1,5 @@
 import type { AIVendor } from "src/definitions/config";
-import { type NoteType, findNoteType } from "src/definitions/mkms";
+import { findNoteType, type NoteType } from "src/definitions/mkms";
 import { resolveAzure, resolveOpenAI } from "src/envs";
 import { fetchOpenAIChatCompletion } from "src/lib/helpers/clients/openai";
 import { getActiveFile, getActiveFileTitle } from "src/lib/helpers/entries";

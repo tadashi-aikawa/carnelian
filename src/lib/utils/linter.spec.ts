@@ -1,5 +1,5 @@
 import { expect, test } from "bun:test";
-import { type LintInspection, type Linter, lintAll } from "./linter";
+import { type Linter, type LintInspection, lintAll } from "./linter";
 
 const titleLinter: Linter = {
   lint: ({ title }) => {

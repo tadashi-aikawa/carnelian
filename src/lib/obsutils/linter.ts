@@ -6,12 +6,12 @@ import {
 import { getPropertiesByPath } from "src/lib/helpers/properties";
 import {
   insertElementAfterHeader,
+  notifyValidationError,
   removeElementsFromContainer,
 } from "src/lib/helpers/ui";
-import { notifyValidationError } from "src/lib/helpers/ui";
 import {
-  type LintInspection,
   type Linter,
+  type LintInspection,
   lintAll,
 } from "src/lib/utils/linter";
 import type { PluginSettings } from "src/settings";

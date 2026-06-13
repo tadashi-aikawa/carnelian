@@ -8,7 +8,7 @@ import {
   stripLinks,
 } from "src/lib/obsutils/parser";
 import { isPresent } from "src/lib/utils/guard";
-import type { LintInspection, Linter } from "src/lib/utils/linter";
+import type { Linter, LintInspection } from "src/lib/utils/linter";
 import {
   isBlockquote,
   isCodeBlockStartOrEnd,
@@ -21,8 +21,8 @@ import {
 import type { Properties } from "src/lib/utils/types";
 import { P, match as tsmatch } from "ts-pattern";
 import type { PropertyLinterConfig } from "../config";
-import { findNoteTypeBy } from "../mkms";
 import type { NoteType } from "../mkms";
+import { findNoteTypeBy } from "../mkms";
 
 type PropertyLintInspection = LintInspection & {
   propertyCommand?: { [key: string]: any | null };
