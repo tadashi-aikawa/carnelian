@@ -15,7 +15,7 @@
 ## 前提環境
 
 - macOS
-- [Bun] v1.3.5
+- [Bun] v1.3以上
 - [Hot Reload]プラグイン
 
 ## 開発環境構築
@@ -23,7 +23,7 @@
 ### 依存パッケージのインストール
 
 ```bash
-bun install --frozen-lockfile --ignore-scripts
+bun ci
 ```
 
 ### 設定ファイルの作成
