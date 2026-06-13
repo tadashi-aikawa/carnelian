@@ -380,6 +380,38 @@ ${recordTextList.join("\n")}
 `.trim();
 }
 
+function isTableLine(text: string, index: number): boolean {
+  const lineStart = text.lastIndexOf("\n", index - 1) + 1;
+  return text.slice(lineStart).startsWith("|");
+}
+
+function parseWikiLinkText(
+  text: string,
+  option?: { inTableLine?: boolean },
+): {
+  title: string;
+  alias?: string;
+} {
+  const body = text.replaceAll("[[", "").replaceAll("]]", "");
+  for (let i = 0; i < body.length; i++) {
+    if (option?.inTableLine && body[i] === "\\" && body[i + 1] === "|") {
+      return {
+        title: body.slice(0, i).replaceAll("\\|", "|"),
+        alias: body.slice(i + 2).replaceAll("\\|", "|"),
+      };
+    }
+
+    if (body[i] === "|") {
+      return {
+        title: body.slice(0, i),
+        alias: body.slice(i + 1),
+      };
+    }
+  }
+
+  return { title: body };
+}
+
 /**
  * テキストからwikiリンクのテキストと範囲を抽出します
  */
@@ -389,15 +421,11 @@ export function getWikiLinks(text: string): {
   range: Range;
 }[] {
   return getSinglePatternMatchingLocations(text, /\[\[.+?\]\]/g).map((x) => {
-    const [title, alias] = x.text
-      .replaceAll("[[", "")
-      .replaceAll("]]", "")
-      .split("|");
-
     return {
-      title,
+      ...parseWikiLinkText(x.text, {
+        inTableLine: isTableLine(text, x.range.start),
+      }),
       range: x.range,
-      ...(alias ? { alias } : {}),
     };
   });
 }

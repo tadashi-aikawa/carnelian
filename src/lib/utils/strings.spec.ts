@@ -578,6 +578,14 @@ test.each([
     "abc [[def|DEF]] ghi",
     [{ title: "def", alias: "DEF", range: { start: 4, end: 14 } }],
   ],
+  [
+    "| 1 | [[def\\|DEF]] |",
+    [{ title: "def", alias: "DEF", range: { start: 6, end: 17 } }],
+  ],
+  [
+    "aaa\n| 1 | [[hoge\\|hoge]] |\nbbb",
+    [{ title: "hoge", alias: "hoge", range: { start: 10, end: 23 } }],
+  ],
 ])(
   `getWikiLinks("%s")`,
   (

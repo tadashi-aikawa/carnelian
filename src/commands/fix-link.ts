@@ -1,9 +1,33 @@
+import { getActiveParagraph } from "src/lib/helpers/editors/advanced";
 import {
   getActiveLine,
   getCursorOffsetAtActiveLine,
   setInActiveLineRange,
+  setLinesInRange,
 } from "src/lib/helpers/editors/basic";
-import { getWikiLinks, hasRedundantWikiLinkAlias } from "src/lib/utils/strings";
+import {
+  formatTable,
+  getWikiLinks,
+  hasRedundantWikiLinkAlias,
+} from "src/lib/utils/strings";
+
+function formatActiveTableIfNeeded(line: string) {
+  if (!line.startsWith("|")) {
+    return;
+  }
+
+  const p = getActiveParagraph();
+  if (!p) {
+    return;
+  }
+
+  const formattedTableText = formatTable(p.text);
+  if (!formattedTableText) {
+    return;
+  }
+
+  setLinesInRange(p.startLine, p.endLine, formattedTableText);
+}
 
 /**
  * リンクを正します
@@ -28,6 +52,7 @@ export function fixLink() {
       currentLink.range.end,
       `[[${currentLink.title}]]`,
     );
+    formatActiveTableIfNeeded(line);
     return;
   }
 
@@ -41,4 +66,5 @@ export function fixLink() {
     currentLink.range.end,
     `[[${currentLink.title}|${alias}]]`,
   );
+  formatActiveTableIfNeeded(line);
 }
