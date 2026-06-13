@@ -37,7 +37,6 @@
     "dev": "bun esbuild.config.mjs",
     "build": "bun esbuild.config.mjs production",
     "typecheck": "tsgo -noEmit -skipLibCheck",
-    "typecheck:old": "tsc -noEmit -skipLibCheck",
     "check": "biome check src",
     "test": "bun test",
     "test:large": "ALLOW_LARGE_TEST=1 bun test",
