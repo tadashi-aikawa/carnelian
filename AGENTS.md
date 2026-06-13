@@ -16,7 +16,7 @@
 - `bun test`: Bun のテストランナーでユニットテストを実行する。
 - `ALLOW_LARGE_TEST=1 bun test` または `bun test:large`: 重いテストや時間のかかるテストも含めて実行する。
 - `bun check`: Biome で lint / format チェックを行う。
-- `bun pre:push`: typecheck・lint・test をまとめて実行する。push 時には Husky からも実行される。
+- `bun pre:push`: typecheck・lint・test をまとめて実行する。
 - `bun schema`: `src/definitions/config.ts` から `config.schema.json` を生成する。
 
 ## コーディングスタイルと命名規則

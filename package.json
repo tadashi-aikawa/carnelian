@@ -22,7 +22,6 @@
     "builtin-modules": "4.0.0",
     "chokidar": "4.0.3",
     "esbuild": "0.24.2",
-    "husky": "9.1.7",
     "jsdom": "25.0.1",
     "obsidian": "latest",
     "ts-json-schema-generator": "2.4.0",
@@ -35,7 +34,6 @@
   "keywords": [],
   "license": "MIT",
   "scripts": {
-    "prepare": "husky",
     "dev": "bun esbuild.config.mjs",
     "build": "bun esbuild.config.mjs production",
     "typecheck": "tsgo -noEmit -skipLibCheck",
