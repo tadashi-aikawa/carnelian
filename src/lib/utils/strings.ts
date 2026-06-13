@@ -283,7 +283,58 @@ function splitAsTableRow(rowText: string): string[] {
   if (text.at(-1) === "|") {
     text = text.slice(0, -1);
   }
-  return text.split(/(?<!\\)\|/).map((x) => x.trim());
+
+  const cells: string[] = [];
+  let current = "";
+  let escaped = false;
+  let inWikiLink = false;
+
+  for (let i = 0; i < text.length; i++) {
+    const char = text[i];
+    const next = text[i + 1];
+
+    if (escaped) {
+      current += char;
+      escaped = false;
+      continue;
+    }
+
+    if (char === "\\") {
+      current += char;
+      escaped = true;
+      continue;
+    }
+
+    if (!inWikiLink && char === "[" && next === "[") {
+      current += "[[";
+      inWikiLink = true;
+      i++;
+      continue;
+    }
+
+    if (inWikiLink && char === "]" && next === "]") {
+      current += "]]";
+      inWikiLink = false;
+      i++;
+      continue;
+    }
+
+    if (char === "|") {
+      if (inWikiLink) {
+        current += "\\|";
+        continue;
+      }
+
+      cells.push(current.trim());
+      current = "";
+      continue;
+    }
+
+    current += char;
+  }
+
+  cells.push(current.trim());
+  return cells;
 }
 
 function padEndAsWidth(text: string, length: number, char = " "): string {
