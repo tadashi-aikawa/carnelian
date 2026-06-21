@@ -9,13 +9,8 @@
 - `docs/`: コマンド一覧や lint ルール。
 - ルート配下の主なファイル: `manifest.json`, `styles.css`, `config.schema.json`（生成物）, `main.js`（ビルド成果物）。
 
-## ビルド・テスト・開発コマンド
+## 必要なコマンド
 
-- `bun dev`: esbuild で watch + build を行い、生成物を Vault の `.obsidian/plugins/carnelian` にコピーする。`carnelianrc.json` が必要。
-- `bun build`: 本番用ビルドを実行する。出力は単一の `main.js`。
-- `bun test`: Bun のテストランナーでユニットテストを実行する。
-- `ALLOW_LARGE_TEST=1 bun test` または `bun test:large`: 重いテストや時間のかかるテストも含めて実行する。
-- `bun check`: Biome で lint / format チェックを行う。
 - `bun pre:push`: typecheck・lint・test をまとめて実行する。
 - `bun schema`: `src/definitions/config.ts` から `config.schema.json` を生成する。
 
@@ -35,15 +30,4 @@
 - テストフレームワークは Bun 標準のテストランナーを使う。必要に応じて JSDOM を使ってよい。
 - テストファイルは実装の近く（`src/**/name.spec.ts`）に置く。
 - ローカルでは `bun test` を使い、必要なら `bun test:large` で重いテストも確認する。
-
-## コミットとプルリクエスト
-
-- コミットメッセージは Conventional Commits を使う（例: `feat(scope): ...`, `fix: ...`, `docs: ...`）。破壊的変更は `feat!:` を使う。
-- PR には分かりやすい説明、関連 issue、再現手順を書く。挙動変更がある場合はスクリーンショットやログも添付する。
-- 品質ゲートとして `bun pre:push` を通す。必要に応じて `docs/` や schema も更新する。
-
-## セキュリティと設定
-
-- `carnelianrc.json` は `{ "vaultPath": "/path/to/your/Vault" }` の形式で作成する。個人環境のパスはコミットしない。
-- `bun dev` を快適に使うため、Obsidian の Hot Reload プラグインを有効にしておく。
 
