@@ -1,12 +1,18 @@
 import type { TFile } from "obsidian";
 import { contentLinter } from "src/definitions/linters/ContentLinter";
 import { propertyLinter } from "src/definitions/linters/PropertyLinter";
-import { getActiveFile } from "src/lib/helpers/entries";
+import {
+  getActiveFile,
+  loadFileBodyCache,
+  loadFileContentCache,
+} from "src/lib/helpers/entries";
 import {
   setOnActiveLeafChangeEvent,
   setOnExWCommandEvent,
 } from "src/lib/helpers/events";
+import { getPropertiesByPath } from "src/lib/helpers/properties";
 import { lint, removeLinterInspectionElements } from "src/lib/obsutils/linter";
+import { type LintInspection, lintAll } from "src/lib/utils/linter";
 import type { Service } from "src/services";
 import type { PluginSettings } from "src/settings";
 
@@ -66,4 +72,21 @@ export async function lintFile(
   autofix: boolean,
 ) {
   await lint(file, [contentLinter, propertyLinter], settings, autofix);
+}
+
+export async function inspectFile(
+  file: TFile,
+  settings: PluginSettings["linter"],
+): Promise<LintInspection[]> {
+  const content = await loadFileContentCache(file.path);
+  const body = await loadFileBodyCache(file.path);
+  const properties = getPropertiesByPath(file.path) ?? undefined;
+  return lintAll([contentLinter, propertyLinter], {
+    title: file.basename,
+    content: content ?? "",
+    body: body ?? "",
+    path: file.path,
+    properties,
+    settings,
+  });
 }

@@ -3,7 +3,10 @@ import type { Properties } from "./types";
 
 export interface LintInspection {
   code: string;
+  /** エラー内容の説明(常に設定) */
   message: string;
+  /** fix実行後に表示する通知文言(fixableなルールのみ設定) */
+  fixedMessage?: string;
   level: "INFO" | "WARN" | "ERROR";
   lineNo?: number;
   offset?: number;

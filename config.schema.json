@@ -113,6 +113,10 @@
               "description": "現在のディレクトリをターミナルで開く（Ghostty必須）",
               "type": "boolean"
             },
+            "Open lint view": {
+              "description": "指定したMarkdownファイル群にLintを実行し、結果一覧を表示",
+              "type": "boolean"
+            },
             "Open vault in lazygit": {
               "description": "現在のVaultをLazygitで開く（Ghostty必須）",
               "type": "boolean"

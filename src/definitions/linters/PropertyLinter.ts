@@ -135,7 +135,8 @@ function createNoCover(
 
   const base = {
     code: "No cover",
-    message: "coverを割り当てました",
+    message: "coverプロパティがありません",
+    fixedMessage: "coverを割り当てました",
     fix: noteType.coverImagePath
       ? async () => {
           updateActiveFileProperty("cover", noteType.coverImagePath);
@@ -223,7 +224,8 @@ function createNoStatus(
 
   const base = {
     code: "No status",
-    message: "statusに『✅解決済』を割り当てました",
+    message: "statusプロパティがありません",
+    fixedMessage: "statusに『✅解決済』を割り当てました",
     fix: async () => {
       updateActiveFileProperty("status", "✅解決済");
     },
@@ -268,7 +270,8 @@ function createTags(
     }
     return {
       code: "Tags",
-      message: "tagsに『TypeScript』を設定しました",
+      message: "tagsに『TypeScript』が設定されていません",
+      fixedMessage: "tagsに『TypeScript』を設定しました",
       level: "ERROR" as LintInspection["level"],
       fix: async () => {
         updateActiveFileProperty("tags", ["TypeScript"]);
@@ -283,7 +286,8 @@ function createTags(
     }
     return {
       code: "Tags",
-      message: "tagsに『Neovim』を設定しました",
+      message: "tagsに『Neovim』が設定されていません",
+      fixedMessage: "tagsに『Neovim』を設定しました",
       level: "ERROR" as LintInspection["level"],
       fix: async () => {
         updateActiveFileProperty("tags", ["Neovim"]);
@@ -301,7 +305,8 @@ function createTags(
       }
       return {
         code: "Tags",
-        message: "tagsに『Obsidian』を設定しました",
+        message: "tagsに『Obsidian』が設定されていません",
+        fixedMessage: "tagsに『Obsidian』を設定しました",
         level: "ERROR" as LintInspection["level"],
         fix: async () => {
           updateActiveFileProperty("tags", ["Obsidian"]);
@@ -317,7 +322,8 @@ function createTags(
 
   return {
     code: "Tags",
-    message: `tags『${tags.toString()}』を削除しました`,
+    message: `不要なtags『${tags.toString()}』が設定されています`,
+    fixedMessage: `tags『${tags.toString()}』を削除しました`,
     level: "ERROR" as LintInspection["level"],
     fix: async () => {
       removeActiveFileProperty("tags");
@@ -346,7 +352,8 @@ function createMkDocsTitle(
     if (propsTitle) {
       return {
         code: "MkDocs Title",
-        message: "titleを削除しました",
+        message: "不要なtitleプロパティがあります",
+        fixedMessage: "titleを削除しました",
         level: "ERROR" as LintInspection["level"],
         fix: async () => {
           removeActiveFileProperty("title");
@@ -359,7 +366,8 @@ function createMkDocsTitle(
 
   return {
     code: "MkDocs Title",
-    message: "titleを修正しました",
+    message: "titleプロパティが正しくありません",
+    fixedMessage: "titleを修正しました",
     level: "ERROR" as LintInspection["level"],
     fix: async () => {
       updateActiveFileProperty("title", title);
@@ -386,7 +394,8 @@ function createInconsistentFixme(
     .with([false, undefined], () => null)
     .with([true, P.union(false, undefined)], () => ({
       code: "Inconsistent fixme",
-      message: "fixmeプロパティをtrueにしました",
+      message: "本文にFIXMEがあるのにfixmeプロパティがありません",
+      fixedMessage: "fixmeプロパティをtrueにしました",
       level: "ERROR" as LintInspection["level"],
       fix: async () => {
         updateActiveFileProperty("fixme", true);
@@ -395,7 +404,8 @@ function createInconsistentFixme(
     }))
     .with([false, P.union(true, false)], () => ({
       code: "Inconsistent fixme",
-      message: "fixmeプロパティを削除しました",
+      message: "本文にFIXMEが無いのにfixmeプロパティがあります",
+      fixedMessage: "fixmeプロパティを削除しました",
       level: "ERROR" as LintInspection["level"],
       fix: async () => {
         removeActiveFileProperty("fixme");
@@ -483,7 +493,8 @@ function createInconsistentDescription(
     .with([null, P._], () => null)
     .with([P.string, undefined], ([newDescription]) => ({
       code: "Inconsistent description",
-      message: "descriptionプロパティを追加しました",
+      message: "descriptionプロパティがありません",
+      fixedMessage: "descriptionプロパティを追加しました",
       level: "ERROR" as LintInspection["level"],
       fix: async () => {
         updateActiveFileProperty("description", newDescription);
@@ -495,7 +506,8 @@ function createInconsistentDescription(
         ? null
         : {
             code: "Inconsistent description",
-            message: "descriptionプロパティを更新しました",
+            message: "descriptionプロパティが本文と一致していません",
+            fixedMessage: "descriptionプロパティを更新しました",
             level: "ERROR" as LintInspection["level"],
             fix: async () => {
               updateActiveFileProperty("description", newDescription);

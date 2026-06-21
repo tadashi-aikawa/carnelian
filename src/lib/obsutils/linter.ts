@@ -162,7 +162,7 @@ function addLinterInspectionElement(
     );
     recordDiv.appendChild(
       createDiv({
-        text: `${s.inspections[0].message}`,
+        text: `${s.inspections[0].fixedMessage ?? s.inspections[0].message}`,
         cls: ["linter-inspections-container-contents__fixed__text"],
       }),
     );

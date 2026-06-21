@@ -59,6 +59,10 @@ export interface Config {
     /** 次のワークスペースに移動 */
     "Move to next workspace"?: boolean;
 
+    // ── Linter ─────────────────────────────────────────────
+    /** 指定したMarkdownファイル群にLintを実行し、結果一覧を表示 */
+    "Open lint view"?: boolean;
+
     // ── Tab groups ─────────────────────────────────────────
     /** 水平方向に新しいノートを作成 */
     "Create new note horizontally"?: boolean;

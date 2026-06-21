@@ -1,5 +1,6 @@
 import { type EventRef, Plugin } from "obsidian";
 import { createCommands } from "./commands";
+import { LINT_VIEW_TYPE, LintView } from "./commands/open-lint-view";
 import type { UApp } from "./lib/types";
 import { createServices, type Service } from "./services";
 import { DEFAULT_SETTINGS, type PluginSettings, SettingTab } from "./settings";
@@ -17,6 +18,10 @@ export default class CarnelianPlugin extends Plugin {
   async onload() {
     await this.loadSettings();
     this.addSettingTab(new SettingTab(this.app, this));
+    this.registerView(
+      LINT_VIEW_TYPE,
+      (leaf) => new LintView(leaf, this.settings.linter),
+    );
     for (const cmd of createCommands(this.settings)) {
       this.addCommand(cmd);
     }

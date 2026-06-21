@@ -286,7 +286,8 @@ function createV1DatesFormat(
 ): LintInspection[] {
   const base = {
     code: "v1 Dates format",
-    message: "createdとupdatedプロパティを追加しました",
+    message: "非推奨のv1形式の日付メタがあります",
+    fixedMessage: "createdとupdatedプロパティを追加しました",
     fix: async () => {
       updateChangeLog();
     },

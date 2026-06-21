@@ -53,6 +53,7 @@ import { openActiveFileInYazi } from "./commands/open-active-file-in-yazi";
 import { openActiveFolderInTerminal } from "./commands/open-active-folder-in-terminal";
 import { openAsLocalMkDocsSite } from "./commands/open-as-local-mkdocs-site";
 import { openAsRemoteMkDocsSite } from "./commands/open-as-remote-mkdocs-site";
+import { openLintView } from "./commands/open-lint-view";
 import { openPropertyUrl } from "./commands/open-property-url";
 import { openVaultInLazygit } from "./commands/open-vault-in-lazygit";
 import { openVaultInTerminal } from "./commands/open-vault-in-terminal";
@@ -147,6 +148,12 @@ function createCarnelianCommands(settings: PluginSettings) {
       kind: "all",
       enabled: sa?.["Move to next workspace"],
       executor: moveToNextWorkspace,
+    },
+    {
+      name: "Open lint view",
+      kind: "all",
+      enabled: sa?.["Open lint view"],
+      executor: openLintView,
     },
     {
       name: "Cycle bullet/checkbox",
