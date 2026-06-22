@@ -30,6 +30,27 @@ export function getActiveFileBacklinkPaths(): string[] {
 }
 
 /**
+ * 指定パスのファイルにバックリンクが1件でも存在するかどうかを返します
+ *
+ * 出現位置の詳細を構築する `getBacklinksForFile` ではなく、既存のリンクグラフ
+ * (`resolvedLinks`) を逆引きし、最初の1件が見つかった時点で打ち切るため軽量です
+ *
+ * ```ts
+ * hasBacklink("Notes/Obsidian.md")
+ * // true
+ * ```
+ */
+export function hasBacklink(path: string): boolean {
+  const { resolvedLinks } = app.metadataCache;
+  for (const src in resolvedLinks) {
+    if (path in resolvedLinks[src]) {
+      return true;
+    }
+  }
+  return false;
+}
+
+/**
  * ファイルの未解決リンクを{ノート名: 出現数}のマッピングオブジェクトで取得します
  * キャッシュに存在しない場合はnullを返します
  *

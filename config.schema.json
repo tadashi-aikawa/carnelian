@@ -600,6 +600,19 @@
                       "description": "末尾に括弧を含む内部リンクを検出する（必要に応じ箇条書きを除外）",
                       "type": "boolean"
                     },
+                    "No backlinks": {
+                      "additionalProperties": false,
+                      "description": "どこからもバックリンクされていない孤立ノートを検出する",
+                      "properties": {
+                        "ignoreFiles": {
+                          "items": {
+                            "type": "string"
+                          },
+                          "type": "array"
+                        }
+                      },
+                      "type": "object"
+                    },
                     "No link comment": {
                       "description": "リンクカードに対応するリンクコメントの欠如を検出する",
                       "type": "boolean"

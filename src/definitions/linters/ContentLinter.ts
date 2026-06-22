@@ -1,6 +1,6 @@
 import { updateChangeLog } from "src/commands/update-change-log";
 import { toLineNo } from "src/lib/helpers/editors/basic";
-import { getUnresolvedLinkMap } from "src/lib/helpers/links";
+import { getUnresolvedLinkMap, hasBacklink } from "src/lib/helpers/links";
 import { stripCodeAndHtmlBlocks } from "src/lib/obsutils/parser";
 import { ExhaustiveError } from "src/lib/utils/errors";
 import type { Linter, LintInspection } from "src/lib/utils/linter";
@@ -9,8 +9,10 @@ import {
   getSinglePatternMatchingLocations,
   getWikiLinks,
   hasRedundantWikiLinkAlias,
+  isMatchedGlobPatterns,
   match,
 } from "src/lib/utils/strings";
+import type { ContentLinterConfig } from "../config";
 import type { NoteType } from "../mkms";
 import { findNoteTypeBy } from "../mkms";
 
@@ -46,6 +48,9 @@ export const contentLinter: Linter = {
         ? createRedundantLinkAlias(content)
         : []),
       ...(rules?.["Disallow fixme"] ? createDisallowFixme(content) : []),
+      ...(rules?.["No backlinks"]
+        ? createNoBacklinks(noteType, path, rules["No backlinks"])
+        : []),
     ];
   },
 };
@@ -517,4 +522,57 @@ function createDisallowFixme(content?: string): LintInspection[] {
     message: "本文にFIXME相当の記述が残っています",
     level: "WARN" as const,
   }));
+}
+
+function createNoBacklinks(
+  noteType: NoteType,
+  path: string,
+  config: NonNullable<ContentLinterConfig["No backlinks"]>,
+): LintInspection[] {
+  if (isMatchedGlobPatterns(path, config?.ignoreFiles ?? [])) {
+    return [];
+  }
+
+  const base = {
+    code: "No backlinks",
+    message: "バックリンクが存在しません",
+  };
+
+  const createInspection = (level: LintInspection["level"]) =>
+    hasBacklink(path) ? [] : [{ ...base, level }];
+
+  switch (noteType.name) {
+    case "Glossary note":
+      return createInspection("WARN");
+    case "Hub note":
+      return createInspection("WARN");
+    case "Procedure note":
+      return createInspection("WARN");
+    case "Activity note":
+      return createInspection("WARN");
+    case "Troubleshooting note":
+      return createInspection("WARN");
+    case "Prime note":
+      return createInspection("WARN");
+    case "Report note":
+      return createInspection("WARN");
+    case "Brain note":
+      return createInspection("WARN");
+    case "My note":
+      return createInspection("WARN");
+    case "Series note":
+      return createInspection("WARN");
+    case "Rule note":
+      return createInspection("WARN");
+    case "ADR note":
+      return createInspection("WARN");
+    case "Article note":
+      return [];
+    case "Daily note":
+      return [];
+    case "Weekly report":
+      return [];
+    default:
+      throw new ExhaustiveError(noteType);
+  }
 }

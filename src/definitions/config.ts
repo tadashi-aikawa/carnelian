@@ -166,6 +166,10 @@ export interface Config {
         "Redundant link alias"?: boolean;
         /** 本文のFIXME記述を禁止する */
         "Disallow fixme"?: boolean;
+        /** どこからもバックリンクされていない孤立ノートを検出する */
+        "No backlinks"?: {
+          ignoreFiles?: string[];
+        };
       };
     };
   };
@@ -354,6 +358,9 @@ export type AllConfig = NonNullable<Config["all"]>;
 type LinterConfig = NonNullable<Config["linter"]>;
 export type PropertyLinterConfig = NonNullable<
   NonNullable<LinterConfig["rules"]>["propery"]
+>;
+export type ContentLinterConfig = NonNullable<
+  NonNullable<LinterConfig["rules"]>["content"]
 >;
 
 type KeyChainAccountName = string;
