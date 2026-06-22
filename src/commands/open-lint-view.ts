@@ -47,9 +47,13 @@ export class LintView extends ItemView {
   private readonly settings: PluginSettings["linter"];
   private inputEl!: HTMLInputElement;
   private runButtonEl!: HTMLButtonElement;
-  private summaryEl!: HTMLElement;
+  private summaryTextEl!: HTMLElement;
+  private levelSectionEl!: HTMLElement;
+  private codeSectionEl!: HTMLElement;
   private resultEl!: HTMLElement;
-  private activeFilterLevels = new Set<LintInspectionLevel>();
+  private excludedLevels = new Set<LintInspectionLevel>();
+  private excludedCodes = new Set<string>();
+  private lastCodeOrder: string[] = [];
   private lastTargetFileCount = 0;
   private lastRecords: InspectionRecord[] = [];
 
@@ -101,15 +105,21 @@ export class LintView extends ItemView {
     });
     this.runButtonEl.addEventListener("click", () => this.runLint());
 
-    this.summaryEl = containerEl.createDiv({
-      cls: "carnelian-lint-view__summary",
+    this.summaryTextEl = containerEl.createDiv({
+      cls: "carnelian-lint-view__summary-text",
     });
-    this.summaryEl.createDiv({
+    this.summaryTextEl.createSpan({
       text: "Path glob pattern を指定して実行してください",
       cls: "carnelian-lint-view__summary-placeholder",
     });
+    this.levelSectionEl = containerEl.createDiv({
+      cls: "carnelian-lint-view__section",
+    });
+    this.codeSectionEl = containerEl.createDiv({
+      cls: "carnelian-lint-view__section",
+    });
     this.resultEl = containerEl.createDiv({
-      cls: "carnelian-lint-view__result",
+      cls: "carnelian-lint-view__section carnelian-lint-view__result",
     });
   }
 
@@ -152,6 +162,7 @@ export class LintView extends ItemView {
 
     this.lastTargetFileCount = targetFiles.length;
     this.lastRecords = records;
+    this.lastCodeOrder = computeCodeOrder(records);
     this.renderResults();
   }
 
@@ -188,6 +199,10 @@ export class LintView extends ItemView {
       infoCount,
     });
     this.resultEl.empty();
+    this.resultEl.createDiv({
+      text: "Results",
+      cls: "carnelian-lint-view__section-heading",
+    });
 
     if (this.lastRecords.length === 0) {
       this.resultEl.createDiv({
@@ -246,11 +261,10 @@ export class LintView extends ItemView {
   }
 
   private filterRecords(records: InspectionRecord[]): InspectionRecord[] {
-    if (this.activeFilterLevels.size === 0) {
-      return records;
-    }
-    return records.filter((record) =>
-      this.activeFilterLevels.has(record.inspection.level),
+    return records.filter(
+      (record) =>
+        !this.excludedCodes.has(record.inspection.code) &&
+        !this.excludedLevels.has(record.inspection.level),
     );
   }
 
@@ -260,25 +274,36 @@ export class LintView extends ItemView {
     ).length;
   }
 
-  private toggleFilterLevel(level: LintInspectionLevel): void {
-    if (this.activeFilterLevels.has(level)) {
-      this.activeFilterLevels.delete(level);
+  private toggleExcludedLevel(level: LintInspectionLevel): void {
+    if (this.excludedLevels.has(level)) {
+      this.excludedLevels.delete(level);
     } else {
-      this.activeFilterLevels.add(level);
+      this.excludedLevels.add(level);
+    }
+    this.renderResults();
+  }
+
+  private toggleExcludedCode(code: string): void {
+    if (this.excludedCodes.has(code)) {
+      this.excludedCodes.delete(code);
+    } else {
+      this.excludedCodes.add(code);
     }
     this.renderResults();
   }
 
   private isFiltering(): boolean {
-    return this.activeFilterLevels.size > 0;
+    return this.excludedLevels.size > 0 || this.excludedCodes.size > 0;
   }
 
   private renderEmptySummary(message: string): void {
-    this.summaryEl.empty();
-    this.summaryEl.createDiv({
+    this.summaryTextEl.empty();
+    this.summaryTextEl.createSpan({
       text: message,
       cls: "carnelian-lint-view__summary-placeholder",
     });
+    this.levelSectionEl.empty();
+    this.codeSectionEl.empty();
   }
 
   private renderSummary(summary: {
@@ -291,40 +316,110 @@ export class LintView extends ItemView {
     warnCount: number;
     infoCount: number;
   }): void {
-    this.summaryEl.empty();
-    const fileStats: SummaryStat[] = [
-      { label: "Files", value: summary.targetFileCount, icon: "📄" },
-      {
-        label: "Affected",
-        value: formatFilteredCount(
-          summary.visibleAffectedFileCount,
-          summary.affectedFileCount,
-          this.isFiltering(),
-        ),
-        icon: "📌",
-      },
-    ];
-    const diagnosticStats: SummaryStat[] = [
-      {
-        label: "Diagnostics",
-        value: formatFilteredCount(
-          summary.visibleDiagnosticCount,
-          summary.diagnosticCount,
-          this.isFiltering(),
-        ),
-        icon: "🧪",
-      },
+    this.renderSummaryText(summary);
+    this.renderLevelSection(summary);
+    this.renderCodeSection();
+  }
+
+  private renderSummaryText(summary: {
+    targetFileCount: number;
+    affectedFileCount: number;
+    visibleAffectedFileCount: number;
+    diagnosticCount: number;
+    visibleDiagnosticCount: number;
+  }): void {
+    this.summaryTextEl.empty();
+    const filtering = this.isFiltering();
+    const affected = formatFilteredCount(
+      summary.visibleAffectedFileCount,
+      summary.affectedFileCount,
+      filtering,
+    );
+    const diagnostics = formatFilteredCount(
+      summary.visibleDiagnosticCount,
+      summary.diagnosticCount,
+      filtering,
+    );
+
+    const sentenceEl = this.summaryTextEl.createSpan({
+      cls: "carnelian-lint-view__summary-sentence",
+    });
+    const appendValue = (value: string | number): void => {
+      sentenceEl.createSpan({
+        text: `${value}`,
+        cls: "carnelian-lint-view__summary-value",
+      });
+    };
+
+    appendValue(diagnostics);
+    sentenceEl.appendText(" detected (");
+    appendValue(affected);
+    sentenceEl.appendText(" affected files / ");
+    appendValue(summary.targetFileCount);
+    sentenceEl.appendText(" total)");
+  }
+
+  private renderLevelSection(summary: {
+    errorCount: number;
+    warnCount: number;
+    infoCount: number;
+  }): void {
+    this.levelSectionEl.empty();
+    this.levelSectionEl.createDiv({
+      text: "Levels",
+      cls: "carnelian-lint-view__section-heading",
+    });
+    const levelStats: SummaryStat[] = [
       { label: "Error", value: summary.errorCount, icon: "⛔", level: "error" },
       { label: "Warn", value: summary.warnCount, icon: "⚠️", level: "warn" },
       { label: "Info", value: summary.infoCount, icon: "ℹ️", level: "info" },
     ];
-
-    this.renderSummaryRow(fileStats);
-    this.renderSummaryRow(diagnosticStats);
+    this.renderStatChips(this.levelSectionEl, levelStats);
   }
 
-  private renderSummaryRow(stats: SummaryStat[]): void {
-    const rowEl = this.summaryEl.createDiv({
+  private renderCodeSection(): void {
+    this.codeSectionEl.empty();
+    if (this.lastCodeOrder.length === 0) {
+      return;
+    }
+    this.codeSectionEl.createDiv({
+      text: "Codes",
+      cls: "carnelian-lint-view__section-heading",
+    });
+
+    const countByCode = new Map<string, number>();
+    for (const record of this.lastRecords) {
+      const code = record.inspection.code;
+      countByCode.set(code, (countByCode.get(code) ?? 0) + 1);
+    }
+
+    const rowEl = this.codeSectionEl.createDiv({
+      cls: "carnelian-lint-view__summary-row",
+    });
+    for (const code of this.lastCodeOrder) {
+      const count = countByCode.get(code) ?? 0;
+      const excluded = this.excludedCodes.has(code);
+      const chipEl = rowEl.createEl("button", {
+        cls: [
+          "carnelian-lint-view__stat",
+          "carnelian-lint-view__stat--code",
+          excluded ? "carnelian-lint-view__stat--excluded" : "",
+        ].filter((x) => x.length > 0),
+      });
+      chipEl.addEventListener("click", () => this.toggleExcludedCode(code));
+      chipEl.createSpan({
+        text: code,
+        cls: "carnelian-lint-view__stat-label",
+      });
+      chipEl.createSpan({
+        text: `${count}`,
+        cls: "carnelian-lint-view__stat-value",
+      });
+    }
+  }
+
+  private renderStatChips(parent: HTMLElement, stats: SummaryStat[]): void {
+    const rowEl = parent.createDiv({
       cls: "carnelian-lint-view__summary-row",
     });
 
@@ -333,14 +428,14 @@ export class LintView extends ItemView {
         cls: [
           "carnelian-lint-view__stat",
           stat.level ? `carnelian-lint-view__stat--${stat.level}` : "",
-          stat.level && this.isLevelFilterActive(stat.level)
-            ? "carnelian-lint-view__stat--active"
+          stat.level && this.isLevelExcluded(stat.level)
+            ? "carnelian-lint-view__stat--excluded"
             : "",
         ].filter((x) => x.length > 0),
       });
       if (stat.level) {
         statEl.addEventListener("click", () =>
-          this.toggleFilterLevel(levelFromLowercase(stat.level!)),
+          this.toggleExcludedLevel(levelFromLowercase(stat.level!)),
         );
       }
       statEl.createSpan({
@@ -358,8 +453,8 @@ export class LintView extends ItemView {
     }
   }
 
-  private isLevelFilterActive(level: Lowercase<LintInspectionLevel>): boolean {
-    return this.activeFilterLevels.has(levelFromLowercase(level));
+  private isLevelExcluded(level: Lowercase<LintInspectionLevel>): boolean {
+    return this.excludedLevels.has(levelFromLowercase(level));
   }
 }
 
@@ -369,6 +464,20 @@ function formatFilteredCount(
   filtering: boolean,
 ): string | number {
   return filtering ? `${visibleCount}/${totalCount}` : totalCount;
+}
+
+function computeCodeOrder(records: InspectionRecord[]): string[] {
+  const countByCode = new Map<string, number>();
+  for (const record of records) {
+    const code = record.inspection.code;
+    countByCode.set(code, (countByCode.get(code) ?? 0) + 1);
+  }
+  return [...countByCode.entries()]
+    .sort(
+      ([codeA, countA], [codeB, countB]) =>
+        countB - countA || codeA.localeCompare(codeB),
+    )
+    .map(([code]) => code);
 }
 
 function levelFromLowercase(
