@@ -199,20 +199,25 @@ export class LintView extends ItemView {
       infoCount,
     });
     this.resultEl.empty();
-    this.resultEl.createDiv({
-      text: "Results",
-      cls: "carnelian-lint-view__section-heading",
+    const headingEl = this.resultEl.createDiv({
+      cls: "carnelian-lint-view__section-heading carnelian-lint-view__section-heading--with-counts",
+    });
+    headingEl.createSpan({ text: "Results" });
+    this.renderHeadingCounts(headingEl, filteredRecords);
+
+    const bodyEl = this.resultEl.createDiv({
+      cls: "carnelian-lint-view__result-body",
     });
 
     if (this.lastRecords.length === 0) {
-      this.resultEl.createDiv({
+      bodyEl.createDiv({
         text: "No diagnostics",
         cls: "carnelian-lint-view__empty",
       });
       return;
     }
     if (filteredRecords.length === 0) {
-      this.resultEl.createDiv({
+      bodyEl.createDiv({
         text: "No diagnostics matched the active filters",
         cls: "carnelian-lint-view__empty",
       });
@@ -220,7 +225,7 @@ export class LintView extends ItemView {
     }
 
     for (const [filePath, fileRecords] of Object.entries(recordsByFilePath)) {
-      const fileEl = this.resultEl.createEl("details", {
+      const fileEl = bodyEl.createEl("details", {
         cls: "carnelian-lint-view__file",
       });
       fileEl.open = true;
@@ -257,6 +262,42 @@ export class LintView extends ItemView {
           cls: "carnelian-lint-view__diagnostic-text",
         });
       }
+    }
+  }
+
+  private renderHeadingCounts(
+    parent: HTMLElement,
+    records: InspectionRecord[],
+  ): void {
+    const countsEl = parent.createDiv({
+      cls: "carnelian-lint-view__heading-counts",
+    });
+    const levelStats: {
+      level: Lowercase<LintInspectionLevel>;
+      icon: string;
+    }[] = [
+      { level: "error", icon: "⛔" },
+      { level: "warn", icon: "⚠️" },
+      { level: "info", icon: "ℹ️" },
+    ];
+    for (const { level, icon } of levelStats) {
+      const count = records.filter(
+        (record) => record.inspection.level === levelFromLowercase(level),
+      ).length;
+      if (count === 0) {
+        continue;
+      }
+      const countEl = countsEl.createSpan({
+        cls: `carnelian-lint-view__heading-count carnelian-lint-view__heading-count--${level}`,
+      });
+      countEl.createSpan({
+        text: icon,
+        cls: "carnelian-lint-view__heading-count-icon",
+      });
+      countEl.createSpan({
+        text: `${count}`,
+        cls: "carnelian-lint-view__heading-count-value",
+      });
     }
   }
 

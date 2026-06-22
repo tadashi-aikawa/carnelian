@@ -486,8 +486,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
-  padding-top: 0.6rem;
-  border-top: 1px solid var(--background-modifier-border);
+  padding-top: 0.9rem;
 }
 
 .carnelian-lint-view__section-heading {
@@ -594,7 +593,53 @@ button.carnelian-lint-view__stat:hover {
 .carnelian-lint-view__result {
   flex: 1;
   min-height: 0;
+}
+
+.carnelian-lint-view__result-body {
+  flex: 1;
+  min-height: 0;
   overflow-y: auto;
+}
+
+.carnelian-lint-view__section-heading--with-counts {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.carnelian-lint-view__heading-counts {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.carnelian-lint-view__heading-count {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  font-size: 0.82rem;
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+.carnelian-lint-view__heading-count-icon {
+  line-height: 1;
+}
+
+.carnelian-lint-view__heading-count-value {
+  font-weight: 700;
+}
+
+.carnelian-lint-view__heading-count--error .carnelian-lint-view__heading-count-value {
+  color: orangered;
+}
+
+.carnelian-lint-view__heading-count--warn .carnelian-lint-view__heading-count-value {
+  color: orange;
+}
+
+.carnelian-lint-view__heading-count--info .carnelian-lint-view__heading-count-value {
+  color: skyblue;
 }
 
 .carnelian-lint-view__empty {
