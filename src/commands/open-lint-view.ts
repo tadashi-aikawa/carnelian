@@ -413,6 +413,9 @@ export class LintView extends ItemView {
 
     const countByCode = new Map<string, number>();
     for (const record of this.lastRecords) {
+      if (this.excludedLevels.has(record.inspection.level)) {
+        continue;
+      }
       const code = record.inspection.code;
       countByCode.set(code, (countByCode.get(code) ?? 0) + 1);
     }
@@ -422,6 +425,9 @@ export class LintView extends ItemView {
     });
     for (const code of this.lastCodeOrder) {
       const count = countByCode.get(code) ?? 0;
+      if (count === 0) {
+        continue;
+      }
       const excluded = this.excludedCodes.has(code);
       const chipEl = rowEl.createEl("button", {
         cls: [
