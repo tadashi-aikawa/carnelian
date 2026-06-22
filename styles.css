@@ -498,6 +498,30 @@
   letter-spacing: 0.05em;
 }
 
+.carnelian-lint-view__section-heading--with-action {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.carnelian-lint-view__toggle-all {
+  padding: 0.1rem 0.4rem;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 4px;
+  background: var(--background-secondary);
+  color: var(--text-muted);
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: none;
+  letter-spacing: normal;
+  cursor: pointer;
+}
+
+.carnelian-lint-view__toggle-all:hover {
+  background: var(--background-modifier-hover);
+}
+
 .carnelian-lint-view__summary-row {
   display: flex;
   flex-wrap: wrap;

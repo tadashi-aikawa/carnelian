@@ -292,6 +292,22 @@ export class LintView extends ItemView {
     this.renderResults();
   }
 
+  private toggleAllCodes(): void {
+    const allExcluded = this.lastCodeOrder.every((code) =>
+      this.excludedCodes.has(code),
+    );
+    if (allExcluded) {
+      for (const code of this.lastCodeOrder) {
+        this.excludedCodes.delete(code);
+      }
+    } else {
+      for (const code of this.lastCodeOrder) {
+        this.excludedCodes.add(code);
+      }
+    }
+    this.renderResults();
+  }
+
   private isFiltering(): boolean {
     return this.excludedLevels.size > 0 || this.excludedCodes.size > 0;
   }
@@ -382,10 +398,18 @@ export class LintView extends ItemView {
     if (this.lastCodeOrder.length === 0) {
       return;
     }
-    this.codeSectionEl.createDiv({
-      text: "Codes",
-      cls: "carnelian-lint-view__section-heading",
+    const headingEl = this.codeSectionEl.createDiv({
+      cls: "carnelian-lint-view__section-heading carnelian-lint-view__section-heading--with-action",
     });
+    headingEl.createSpan({ text: "Codes" });
+    const allExcluded = this.lastCodeOrder.every((code) =>
+      this.excludedCodes.has(code),
+    );
+    const toggleAllEl = headingEl.createEl("button", {
+      text: allExcluded ? "全てON" : "全てOFF",
+      cls: "carnelian-lint-view__toggle-all",
+    });
+    toggleAllEl.addEventListener("click", () => this.toggleAllCodes());
 
     const countByCode = new Map<string, number>();
     for (const record of this.lastRecords) {
