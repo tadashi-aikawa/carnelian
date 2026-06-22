@@ -134,7 +134,7 @@ export class LintView extends ItemView {
       .filter((file) =>
         patterns.length === 0
           ? true
-          : isMatchedGlobPatterns(file.path, patterns),
+          : isMatchedGlobPatterns(file.path, patterns, { nocase: true }),
       )
       .toSorted((a, b) => a.path.localeCompare(b.path));
 

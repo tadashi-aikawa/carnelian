@@ -504,13 +504,14 @@ export function microFuzzy(value: string, query: string): FuzzyResult {
 export function isMatchedGlobPatterns(
   path: string,
   patterns: string[],
+  options?: { nocase?: boolean },
 ): boolean {
   if (patterns.length === 0) {
     return false;
   }
 
   try {
-    return patterns.some((p) => minimatch(path, p));
+    return patterns.some((p) => minimatch(path, p, options));
   } catch (error) {
     console.warn(`Invalid glob pattern detected: ${error}`);
     return false;

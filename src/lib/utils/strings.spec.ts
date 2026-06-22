@@ -684,6 +684,18 @@ describe("isMatchedGlobPatterns", () => {
     const result = isMatchedGlobPatterns("folder/document.md", patterns);
     expect(result).toBe(true);
   });
+
+  test("nocase オプションで大文字小文字を無視する", () => {
+    expect(
+      isMatchedGlobPatterns("Journal/Daily/note.md", ["journal/**"], {
+        nocase: true,
+      }),
+    ).toBe(true);
+    // オプションなしでは区別される
+    expect(isMatchedGlobPatterns("Journal/Daily/note.md", ["journal/**"])).toBe(
+      false,
+    );
+  });
 });
 
 test.each([
