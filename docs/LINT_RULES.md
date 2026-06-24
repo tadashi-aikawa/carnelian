@@ -1,349 +1,114 @@
 # LINT_RULES
 
-lint機能のルールを記載する。
-
-## Property Linter
-
-### No description
-
-プロパティに `description` が存在しない。
-
-| ノートの種類         | レベル | 備考 |
-| -------------------- | ------ | ---- |
-| Glossary note        | ERROR  |      |
-| Hub note             |        |      |
-| Procedure note       | WARN   |      |
-| Activity note        | ERROR  |      |
-| Troubleshooting note | ERROR  |      |
-| Prime note           | ERROR  |      |
-| Report note          | ERROR  |      |
-| Brain note           | ERROR  |      |
-| Article note         | ERROR  |      |
-| My note              | WARN   |      |
-| Series note          | ERROR  |      |
-| Rule note            | ERROR  |      |
-| ADR note             | ERROR  |      |
-| Daily note           |        |      |
-| Weekly Report        | ERROR  |      |
-
-### No cover
-
-プロパティに `cover` が存在しない。
-
-| ノートの種類         | レベル | 備考    |
-| -------------------- | ------ | ------- |
-| Glossary note        | ERROR  | autofix |
-| Hub note             | ERROR  | autofix |
-| Procedure note       | ERROR  | autofix |
-| Activity note        | ERROR  | autofix |
-| Troubleshooting note | ERROR  | autofix |
-| Prime note           | ERROR  | autofix |
-| Report note          | ERROR  | autofix |
-| Brain note           | ERROR  | autofix |
-| Article note         | ERROR  |         |
-| My note              | ERROR  |         |
-| Series note          | ERROR  |         |
-| Rule note            | ERROR  |         |
-| ADR note             | ERROR  |         |
-| Daily note           |        |         |
-| Weekly Report        | ERROR  | autofix |
-
-### No url
-
-プロパティに `url` が存在しない。
-
-| ノートの種類         | レベル | 備考 |
-| -------------------- | ------ | ---- |
-| Glossary note        | WARN   |      |
-| Hub note             |        |      |
-| Procedure note       | INFO   |      |
-| Activity note        |        |      |
-| Troubleshooting note |        |      |
-| Prime note           |        |      |
-| Report note          |        |      |
-| Brain note           |        |      |
-| Article note         |        |      |
-| My note              |        |      |
-| Series note          |        |      |
-| Rule note            |        |      |
-| ADR note             |        |      |
-| Daily note           |        |      |
-| Weekly Report        |        |      |
-
-### No status
-
-プロパティに `status` が存在しない。
-
-| ノートの種類         | レベル | 備考    |
-| -------------------- | ------ | ------- |
-| Glossary note        |        |         |
-| Hub note             |        |         |
-| Procedure note       |        |         |
-| Activity note        |        |         |
-| Troubleshooting note | ERROR  | autofix |
-| Prime note           |        |         |
-| Report note          |        |         |
-| Brain note           |        |         |
-| Article note         |        |         |
-| My note              |        |         |
-| Series note          |        |         |
-| Rule note            |        |         |
-| ADR note             | ERROR  |         |
-| Daily note           |        |         |
-| Weekly Report        |        |         |
-
-### Tags
-
-プロパティに `tags` が存在する。
-
-
-| ノートの種類         | レベル | 備考    |
-| -------------------- | ------ | ------- |
-| Glossary note        | ERROR  | autofix |
-| Hub note             | ERROR  | autofix |
-| Procedure note       | ERROR  | autofix |
-| Activity note        | ERROR  | autofix |
-| Troubleshooting note | ERROR  | autofix |
-| Prime note           | ERROR  | autofix |
-| Report note          | ERROR  | autofix |
-| Brain note           | ERROR  | autofix |
-| Article note         | ERROR  | autofix |
-| My note              | ERROR  | autofix |
-| Series note          | ERROR  | autofix |
-| Rule note            | ERROR  | autofix |
-| ADR note             | ERROR  | autofix |
-| Daily note           | ERROR  | autofix |
-| Weekly Report        | ERROR  | autofix |
-
-
-以下のケースは例外的に **タグを許容し、タグが無い場合はautofixで付与する**。
-
-
-| 条件                                                  | つけるタグ   |
-| ------                                                | ------       |
-| タイトルに` (JavaScript)`が含まれているノート         | `TypeScript` |
-| タイトルに` (Vim)`が含まれているノート                | `Neovim`     |
-| `📗Obsidian逆引きレシピ` ディレクトリ配下のSeris note | `Obsidian`   |
-
-
-### Inconsistent fixme
-
-本文の `!FIXME` / `!fixme` / `==ハイライト==` 有無と `fixme` プロパティの有無が不整合である。
-
-| 対象   | レベル | 備考    |
-| ------ | ------ | ------- |
-| 全ノート | ERROR  | autofix |
-
-
-### Inconsistent description
-
-本文1行目の内容と `description` の内容に不整合がある。
-
-
-| ノートの種類         | レベル | 備考    |
-| -------------------- | ------ | ------- |
-| Glossary note        | ERROR  | autofix |
-| Hub note             | ERROR  | autofix |
-| Procedure note       | ERROR  | autofix |
-| Activity note        |        | autofix |
-| Troubleshooting note |        | autofix |
-| Prime note           |        | autofix |
-| Report note          |        | autofix |
-| Brain note           |        | autofix |
-| Article note         |        | autofix |
-| My note              | ERROR  | autofix |
-| Series note          |        | autofix |
-| Rule note            |        | autofix |
-| ADR note             |        | autofix |
-| Daily note           |        | autofix |
-| Weekly Report        |        | autofix |
-
-
-## Content Linter
-
-### Disallowed link card
-
-カード型リンク(external/internal)が許可されていないのに利用されている。
-
-- `Move to next inspection` /  `Move to previous inspection` 対応
-
-| ノートの種類         | レベル | 備考             |
-| -------------------- | ------ | ---------------- |
-| Glossary note        |        |                  |
-| Hub note             |        |                  |
-| Procedure note       |        |                  |
-| Activity note        |        |                  |
-| Troubleshooting note |        |                  |
-| Prime note           |        |                  |
-| Report note          |        |                  |
-| Brain note           |        |                  |
-| Article note         |        |                  |
-| My note              |        |                  |
-| Series note          |        |                  |
-| Rule note            |        |                  |
-| ADR note             |        |                  |
-| Daily note           |        | 気にしなくていい |
-| Weekly Report        |        |                  |
-
-### No link comment
-
-Vault内のノートを参照するカードがあるのに、その内部リンクが存在しない。
-
-具体的には本文中に `data-href="hogehoge"` があるのに `%%[[hogehoge]]%%` がない場合。
-
-- `Move to next inspection` /  `Move to previous inspection` 対応
-
-| ノートの種類         | レベル | 備考             |
-| -------------------- | ------ | ---------------- |
-| Glossary note        |        | 使ってないはず   |
-| Hub note             | ERROR  |                  |
-| Procedure note       |        | 使ってないはず   |
-| Activity note        | ERROR  |                  |
-| Troubleshooting note | ERROR  |                  |
-| Prime note           | ERROR  |                  |
-| Report note          | ERROR  |                  |
-| Brain note           | ERROR  |                  |
-| Article note         | ERROR  |                  |
-| My note              | ERROR  |                  |
-| Series note          | ERROR  |                  |
-| Rule note            | ERROR  |                  |
-| ADR note             | ERROR  |                  |
-| Daily note           |        | 気にしなくていい |
-| Weekly Report        | ERROR  |                  |
-
-### v1 link card
-
-Link cardが非推奨のv1形式になっている。
-
-- `Move to next inspection` /  `Move to previous inspection` 対応
-
-| ノートの種類         | レベル | 備考             |
-| -------------------- | ------ | ---------------- |
-| Glossary note        |        | 使ってないはず   |
-| Hub note             | WARN   |                  |
-| Procedure note       |        | 使ってないはず   |
-| Activity note        | WARN   |                  |
-| Troubleshooting note | WARN   |                  |
-| Prime note           | WARN   |                  |
-| Report note          | WARN   |                  |
-| Brain note           | WARN   |                  |
-| Article note         | WARN   |                  |
-| My note              | WARN   |                  |
-| Series note          | WARN   |                  |
-| Rule note            | WARN   |                  |
-| ADR note             | WARN   |                  |
-| Daily note           |        | 気にしなくていい |
-| Weekly Report        | WARN   |                  |
-
-### Unofficial MOC format
-
-MOCのフォーマットがMinervaの最新仕様に従っていない。
-
-| ノートの種類         | レベル | 備考              |
-| -------------------- | ------ | ----------------- |
-| Glossary note        | ERROR  |                   |
-| Hub note             |        | Hubは例外を認める |
-| Procedure note       | ERROR  |                   |
-| Activity note        |        | 使ってないはず    |
-| Troubleshooting note |        | 使ってないはず    |
-| Prime note           | ERROR  |                   |
-| Report note          |        | 使ってないはず    |
-| Brain note           |        | 使ってないはず    |
-| Article note         |        | 使ってないはず    |
-| My note              |        | 使ってないはず    |
-| Series note          |        | 使ってないはず    |
-| Rule note            |        | 使ってないはず    |
-| ADR note             |        | 使ってないはず    |
-| Daily note           |        | 使ってないはず    |
-| Weekly Report        |        | 使ってないはず    |
-
-### v1 dates format 
-
-ノートの作成日、最終更新日の形式が古い。
-
-| ノートの種類         | レベル | 備考           |
-| -------------------- | ------ | -------------- |
-| Glossary note        | ERROR  | autofix        |
-| Hub note             | ERROR  | autofix        |
-| Procedure note       | ERROR  | autofix        |
-| Activity note        | ERROR  | autofix        |
-| Troubleshooting note | ERROR  | autofix        |
-| Prime note           | ERROR  | autofix        |
-| Report note          | ERROR  | autofix        |
-| Brain note           | ERROR  | autofix        |
-| Article note         | ERROR  | autofix        |
-| My note              | ERROR  | autofix        |
-| Series note          | ERROR  | autofix        |
-| Rule note            | ERROR  | autofix        |
-| ADR note             | ERROR  | autofix        |
-| Daily note           |        | 存在しないはず |
-| Weekly Report        | ERROR  | autofix        |
-
-### Unresolved internal link
-
-未解決の内部リンクが存在する。
-
-- `Move to next inspection` /  `Move to previous inspection` 対応
-
-| ノートの種類         | レベル | 備考 |
-| -------------------- | ------ | ---- |
-| Glossary note        | INFO   |      |
-| Hub note             | INFO   |      |
-| Procedure note       | INFO   |      |
-| Activity note        | INFO   |      |
-| Troubleshooting note | WARN   |      |
-| Prime note           | WARN   |      |
-| Report note          | WARN   |      |
-| Brain note           | WARN   |      |
-| Article note         | ERROR  |      |
-| My note              | WARN   |      |
-| Series note          | ERROR  |      |
-| Rule note            | ERROR  |      |
-| ADR note             | ERROR  |      |
-| Daily note           |        |      |
-| Weekly Report        | WARN   |      |
-
-### Link ends with parenthesis
-
-括弧 ` (...)` で終わるリンクが存在する。( `...` は任意の文字列 )
-
-- `Move to next inspection` /  `Move to previous inspection` 対応
-
-| ノートの種類         | レベル | 備考                       |
-| -------------------- | ------ | -------------------------- |
-| Glossary note        | WARN   | 同名リンクで使うことがある |
-| Hub note             | WARN   | 同名リンクで使うことがある |
-| Procedure note       | ERROR  |                            |
-| Activity note        | ERROR  |                            |
-| Troubleshooting note | ERROR  |                            |
-| Prime note           | ERROR  |                            |
-| Report note          | ERROR  |                            |
-| Brain note           | ERROR  |                            |
-| Article note         | ERROR  |                            |
-| My note              | ERROR  |                            |
-| Series note          | ERROR  |                            |
-| Rule note            | ERROR  |                            |
-| ADR note             | ERROR  |                            |
-| Daily note           |        |                            |
-| Weekly Report        | ERROR  | 箇条書き(New Notes)は除外  |
-
-
-### Redundant link alias
-
-`[[hoge|hoge]]` のように、リンク先とエイリアスが完全一致する内部リンクが存在する。
-行頭が `%%` のコメント内にあるリンクは除外する。
-
-- `Move to next inspection` /  `Move to previous inspection` 対応
-
-| 対象     | レベル |
-| -------- | ------ |
-| 全ノート | WARN   |
-
-
-### Disallow fixme
-
-本文に `!FIXME` / `!fixme` / `==ハイライト==` が含まれている。`fixme` プロパティの有無は問わない。
-
-| 対象     | レベル |
-| -------- | ------ |
-| 全ノート | WARN   |
+lint機能の設定方法を記載する。
+
+## Linter note type
+
+Linterは `linter.noteTypes` に定義されたノート種別だけを検査対象にする。
+`mkms.ts` のノート種別とは独立しており、ノート作成コマンドなどには影響しない。
+
+```json
+{
+  "linter": {
+    "noteTypes": [
+      {
+        "name": "Article note",
+        "pathPattern": "^📘Articles/📘.+\\.md$",
+        "coverImagePath": null
+      },
+      {
+        "name": "Daily note",
+        "pathPattern": "^_Privates/Daily Notes/.+\\.md$"
+      }
+    ]
+  }
+}
+```
+
+- `name`: Linter上のノート種別名。
+- `pathPattern`: Vault rootからの相対パスに対して評価する正規表現文字列。
+- `coverImagePath`: `No cover` のautofixで設定するcover画像パス。省略または `null` の場合、診断のみ行う。
+- 複数の `pathPattern` に一致する場合は、配列の先頭にあるノート種別を使う。
+- どの `pathPattern` にも一致しないファイルは、diagnosticsを出力しない。
+
+## Rule config
+
+各ruleは `linter.rules.property` または `linter.rules.content` 配下に定義する。
+rule keyが存在すれば有効、存在しなければ無効になる。
+
+```json
+{
+  "linter": {
+    "rules": {
+      "property": {
+        "No cover": {
+          "defaultLevel": "ERROR",
+          "levels": {
+            "Daily note": null
+          },
+          "ignoreFiles": ["Templates/**"]
+        },
+        "Inconsistent description": {
+          "defaultLevel": null,
+          "levels": {
+            "Glossary note": "ERROR",
+            "Hub note": "ERROR",
+            "Procedure note": "ERROR",
+            "My note": "ERROR"
+          },
+          "ignoreFiles": []
+        }
+      },
+      "content": {
+        "Unresolved internal link": {
+          "defaultLevel": "WARN",
+          "levels": {
+            "Article note": "ERROR",
+            "Daily note": null
+          }
+        },
+        "No backlinks": {
+          "defaultLevel": "WARN",
+          "levels": {
+            "Article note": null,
+            "Daily note": null
+          },
+          "ignoreFiles": []
+        }
+      }
+    }
+  }
+}
+```
+
+- `defaultLevel`: `levels` で未指定のノート種別に使うLevel。`"INFO"`, `"WARN"`, `"ERROR"`, `null` を指定できる。
+- `levels`: ノート種別ごとのLevel。`null` を指定したノート種別では診断しない。
+- `ignoreFiles`: 各ruleで指定可能。globパターンに一致するファイルをそのruleだけ検査対象外にする。
+
+## Property Linter rules
+
+| Rule | Description | Autofix |
+| --- | --- | --- |
+| `No description` | `description` プロパティが存在しない。 | - |
+| `No cover` | `cover` プロパティが存在しない。 | `coverImagePath` がある場合、`cover` を設定する。 |
+| `No url` | `url` プロパティが存在しない。 | - |
+| `No status` | `status` プロパティが存在しない。 | `✅解決済` を設定する。 |
+| `Tags` | タグの付与漏れまたは不要な `tags` プロパティを検出する。 | タグを追加・削除する。 |
+| `MkDocs title` | MkDocs向けの `title` プロパティをファイル名と同期する。 | `title` を設定・削除する。 |
+| `Inconsistent fixme` | 本文の `!FIXME` / `!fixme` / `==ハイライト==` と `fixme` プロパティの不整合を検出する。 | `fixme` プロパティを本文に合わせる。 |
+| `Inconsistent description` | 本文1行目と `description` プロパティの不整合を検出する。 | `description` を本文1行目に合わせる。 |
+
+## Content Linter rules
+
+| Rule | Description | Autofix |
+| --- | --- | --- |
+| `Disallowed link card` | カード型リンクが使われている。 | - |
+| `No link comment` | 内部リンクカードに対応するリンクコメントが存在しない。 | - |
+| `v1 link card` | 非推奨のv1形式カードリンクを検出する。 | - |
+| `Unofficial MOC format` | MOCのフォーマットが最新仕様に従っていない。 | - |
+| `v1 dates format` | 古い日付メタを検出する。 | `created` / `updated` を追加する。 |
+| `Unresolved internal link` | 未解決の内部リンクを検出する。 | - |
+| `Link ends with parenthesis` | 括弧 ` (...)` で終わる内部リンクを検出する。 | - |
+| `Redundant link alias` | `[[hoge\|hoge]]` のような冗長な内部リンクエイリアスを検出する。 | - |
+| `Disallow fixme` | 本文に `!FIXME` / `!fixme` / `==ハイライト==` が残っている。 | - |
+| `No backlinks` | バックリンクが存在しない。 | - |

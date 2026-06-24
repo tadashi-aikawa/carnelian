@@ -2,23 +2,24 @@ import { updateChangeLog } from "src/commands/update-change-log";
 import { toLineNo } from "src/lib/helpers/editors/basic";
 import { getUnresolvedLinkMap, hasBacklink } from "src/lib/helpers/links";
 import { stripCodeAndHtmlBlocks } from "src/lib/obsutils/parser";
-import { ExhaustiveError } from "src/lib/utils/errors";
 import type { Linter, LintInspection } from "src/lib/utils/linter";
 import {
   getSinglePatternCaptureMatchingLocations,
   getSinglePatternMatchingLocations,
   getWikiLinks,
   hasRedundantWikiLinkAlias,
-  isMatchedGlobPatterns,
   match,
 } from "src/lib/utils/strings";
-import type { ContentLinterConfig } from "../config";
-import type { NoteType } from "../mkms";
-import { findNoteTypeBy } from "../mkms";
+import type { LinterRuleConfig } from "../config";
+import {
+  findLintNoteTypeBy,
+  type LintNoteType,
+  resolveLintLevel,
+} from "./LintNoteType";
 
 export const contentLinter: Linter = {
   lint: ({ content, path, settings }) => {
-    const noteType = findNoteTypeBy({ path });
+    const noteType = findLintNoteTypeBy({ path, settings });
     if (!noteType) {
       return [];
     }
@@ -26,28 +27,57 @@ export const contentLinter: Linter = {
     const rules = settings?.rules?.content;
     return [
       ...(rules?.["Disallowed link card"]
-        ? createDisallowedLinkCard(noteType)
+        ? createDisallowedLinkCard(
+            noteType,
+            content,
+            path,
+            rules["Disallowed link card"],
+          )
         : []),
       ...(rules?.["No link comment"]
-        ? createNoLinkComment(noteType, content)
+        ? createNoLinkComment(noteType, content, path, rules["No link comment"])
         : []),
-      ...(rules?.["v1 link card"] ? createV1LinkCard(noteType, content) : []),
+      ...(rules?.["v1 link card"]
+        ? createV1LinkCard(noteType, content, path, rules["v1 link card"])
+        : []),
       ...(rules?.["Unofficial MOC format"]
-        ? createUnofficialMOCFormat(noteType, content)
+        ? createUnofficialMOCFormat(
+            noteType,
+            content,
+            path,
+            rules["Unofficial MOC format"],
+          )
         : []),
       ...(rules?.["v1 dates format"]
-        ? createV1DatesFormat(noteType, content)
+        ? createV1DatesFormat(noteType, content, path, rules["v1 dates format"])
         : []),
       ...(rules?.["Unresolved internal link"]
-        ? createUnresolvedInternalLink(noteType, path, content)
+        ? createUnresolvedInternalLink(
+            noteType,
+            path,
+            content,
+            rules["Unresolved internal link"],
+          )
         : []),
       ...(rules?.["Link ends with parenthesis"]
-        ? createLinkEndsWithParenthesis(noteType, content)
+        ? createLinkEndsWithParenthesis(
+            noteType,
+            content,
+            path,
+            rules["Link ends with parenthesis"],
+          )
         : []),
       ...(rules?.["Redundant link alias"]
-        ? createRedundantLinkAlias(content)
+        ? createRedundantLinkAlias(
+            noteType,
+            content,
+            path,
+            rules["Redundant link alias"],
+          )
         : []),
-      ...(rules?.["Disallow fixme"] ? createDisallowFixme(content) : []),
+      ...(rules?.["Disallow fixme"]
+        ? createDisallowFixme(noteType, content, path, rules["Disallow fixme"])
+        : []),
       ...(rules?.["No backlinks"]
         ? createNoBacklinks(noteType, path, rules["No backlinks"])
         : []),
@@ -71,224 +101,121 @@ const hasLinkCard = (content: string): boolean =>
 const hasV1DatesFormat = (content: string): boolean =>
   content.includes('class="minerva-change-meta"');
 
-// TODO: 削除
-function createDisallowedLinkCard(noteType: NoteType): LintInspection[] {
-  switch (noteType.name) {
-    case "Glossary note":
-      return [];
-    case "Hub note":
-      return [];
-    case "Procedure note":
-      return [];
-    case "Activity note":
-      return [];
-    case "Troubleshooting note":
-      return [];
-    case "Prime note":
-      return [];
-    case "Report note":
-      return [];
-    case "Brain note":
-      return [];
-    case "Article note":
-      return [];
-    case "My note":
-      return [];
-    case "Series note":
-      return [];
-    case "Rule note":
-      return [];
-    case "ADR note":
-      return [];
-    case "Daily note":
-      return [];
-    case "Weekly report":
-      return [];
-    default:
-      throw new ExhaustiveError(noteType);
+function createDisallowedLinkCard(
+  noteType: LintNoteType,
+  content: string,
+  path: string,
+  rule?: LinterRuleConfig,
+): LintInspection[] {
+  const level = resolveLintLevel(rule, noteType.name, path);
+  if (!level || !hasLinkCard(content)) {
+    return [];
   }
+  return [
+    {
+      code: "Disallowed link card",
+      message: "許可されていないカード型リンクがあります",
+      level,
+    },
+  ];
 }
 
 function createNoLinkComment(
-  noteType: NoteType,
+  noteType: LintNoteType,
   content: string,
+  path: string,
+  rule?: LinterRuleConfig,
 ): LintInspection[] {
+  const level = resolveLintLevel(rule, noteType.name, path);
+  if (!level) {
+    return [];
+  }
+
   const base = {
     code: "No link comment",
     message: "内部リンクのリンクカードに対するリンクコメントがありません",
   };
 
-  const createInspections = (level: LintInspection["level"]) => {
-    if (!hasLinkCard(content)) {
-      return [];
-    }
+  if (!hasLinkCard(content)) {
+    return [];
+  }
 
-    const linkNames = getSinglePatternCaptureMatchingLocations(
-      content,
-      /<a data-href="([^"]+)"/g,
-    );
-    if (linkNames.length === 0) {
-      return [];
-    }
+  const linkNames = getSinglePatternCaptureMatchingLocations(
+    content,
+    /<a data-href="([^"]+)"/g,
+  );
+  if (linkNames.length === 0) {
+    return [];
+  }
 
-    const invalidLinkNames = linkNames.filter(
-      (x) => !content.includes(`%%[[${x.captured}]]%%`),
-    );
-    return invalidLinkNames.map((x) => ({
+  return linkNames
+    .filter((x) => !content.includes(`%%[[${x.captured}]]%%`))
+    .map((x) => ({
       ...base,
       level,
       lineNo: toLineNo(x.range.start) ?? undefined,
       offset: x.range.start,
     }));
-  };
-
-  switch (noteType.name) {
-    case "Glossary note":
-      return [];
-    case "Hub note":
-      return createInspections("ERROR");
-    case "Procedure note":
-      return [];
-    case "Activity note":
-      return createInspections("ERROR");
-    case "Troubleshooting note":
-      return createInspections("ERROR");
-    case "Prime note":
-      return createInspections("ERROR");
-    case "Report note":
-      return createInspections("ERROR");
-    case "Brain note":
-      return createInspections("ERROR");
-    case "Article note":
-      return createInspections("ERROR");
-    case "My note":
-      return createInspections("ERROR");
-    case "Series note":
-      return createInspections("ERROR");
-    case "Rule note":
-      return createInspections("ERROR");
-    case "ADR note":
-      return createInspections("ERROR");
-    case "Daily note":
-      return [];
-    case "Weekly report":
-      return createInspections("ERROR");
-    default:
-      throw new ExhaustiveError(noteType);
-  }
 }
 
 function createV1LinkCard(
-  noteType: NoteType,
+  noteType: LintNoteType,
   content: string,
+  path: string,
+  rule?: LinterRuleConfig,
 ): LintInspection[] {
+  const level = resolveLintLevel(rule, noteType.name, path);
+  if (!level) {
+    return [];
+  }
+
   const base = {
     code: "v1 link card",
     message: "非推奨のv1形式カードリンクがあります",
   };
 
-  const createInspection = (level: LintInspection["level"]) => {
-    return getSinglePatternMatchingLocations(content, /class="link-card"/g).map(
-      (x) => ({
-        ...base,
-        level,
-        offset: x.range.start - 6, // Live Previewの表示を確認するため1行前にする
-      }),
-    );
-  };
-
-  switch (noteType.name) {
-    case "Glossary note":
-      return [];
-    case "Hub note":
-      return createInspection("WARN");
-    case "Procedure note":
-      return [];
-    case "Activity note":
-      return createInspection("WARN");
-    case "Troubleshooting note":
-      return createInspection("WARN");
-    case "Prime note":
-      return createInspection("WARN");
-    case "Report note":
-      return createInspection("WARN");
-    case "Brain note":
-      return createInspection("WARN");
-    case "Article note":
-      return createInspection("WARN");
-    case "My note":
-      return createInspection("WARN");
-    case "Series note":
-      return createInspection("WARN");
-    case "Rule note":
-      return createInspection("WARN");
-    case "ADR note":
-      return createInspection("WARN");
-    case "Daily note":
-      return [];
-    case "Weekly report":
-      return createInspection("WARN");
-    default:
-      throw new ExhaustiveError(noteType);
-  }
+  return getSinglePatternMatchingLocations(content, /class="link-card"/g).map(
+    (x) => ({
+      ...base,
+      level,
+      offset: x.range.start - 6, // Live Previewの表示を確認するため1行前にする
+    }),
+  );
 }
 
 function createUnofficialMOCFormat(
-  noteType: NoteType,
+  noteType: LintNoteType,
   content: string,
+  path: string,
+  rule?: LinterRuleConfig,
 ): LintInspection[] {
+  const level = resolveLintLevel(rule, noteType.name, path);
+  if (!level) {
+    return [];
+  }
+
   const base = {
     code: "Unofficial MOC format",
     message: "最新仕様に従っていないMOCがあります",
   };
 
-  const createInspection = (level: LintInspection["level"]) => {
-    if (!hasMOC(content) || hasOfficalMOCFormat(content)) {
-      return [];
-    }
-    return [{ ...base, level }];
-  };
-
-  switch (noteType.name) {
-    case "Glossary note":
-      return createInspection("ERROR");
-    case "Hub note":
-      return [];
-    case "Procedure note":
-      return createInspection("ERROR");
-    case "Activity note":
-      return [];
-    case "Troubleshooting note":
-      return [];
-    case "Prime note":
-      return createInspection("ERROR");
-    case "Report note":
-      return [];
-    case "Brain note":
-      return [];
-    case "Article note":
-      return [];
-    case "My note":
-      return [];
-    case "Series note":
-      return [];
-    case "Rule note":
-      return [];
-    case "ADR note":
-      return [];
-    case "Daily note":
-      return [];
-    case "Weekly report":
-      return [];
-    default:
-      throw new ExhaustiveError(noteType);
+  if (!hasMOC(content) || hasOfficalMOCFormat(content)) {
+    return [];
   }
+  return [{ ...base, level }];
 }
 
 function createV1DatesFormat(
-  noteType: NoteType,
+  noteType: LintNoteType,
   content: string,
+  path: string,
+  rule?: LinterRuleConfig,
 ): LintInspection[] {
+  const level = resolveLintLevel(rule, noteType.name, path);
+  if (!level) {
+    return [];
+  }
+
   const base = {
     code: "v1 Dates format",
     message: "非推奨のv1形式の日付メタがあります",
@@ -298,191 +225,95 @@ function createV1DatesFormat(
     },
   };
 
-  const createInspection = (level: LintInspection["level"]) =>
-    hasV1DatesFormat(content) ? [{ ...base, level }] : [];
-
-  switch (noteType.name) {
-    case "Glossary note":
-      return createInspection("ERROR");
-    case "Hub note":
-      return createInspection("ERROR");
-    case "Procedure note":
-      return createInspection("ERROR");
-    case "Activity note":
-      return createInspection("ERROR");
-    case "Troubleshooting note":
-      return createInspection("ERROR");
-    case "Prime note":
-      return createInspection("ERROR");
-    case "Report note":
-      return createInspection("ERROR");
-    case "Brain note":
-      return createInspection("ERROR");
-    case "Article note":
-      return createInspection("ERROR");
-    case "My note":
-      return createInspection("ERROR");
-    case "Series note":
-      return createInspection("ERROR");
-    case "Rule note":
-      return createInspection("ERROR");
-    case "ADR note":
-      return createInspection("ERROR");
-    case "Daily note":
-      return [];
-    case "Weekly report":
-      return [];
-    default:
-      throw new ExhaustiveError(noteType);
-  }
+  return hasV1DatesFormat(content) ? [{ ...base, level }] : [];
 }
 
 function createUnresolvedInternalLink(
-  noteType: NoteType,
+  noteType: LintNoteType,
   path: string,
   content: string,
+  rule?: LinterRuleConfig,
 ): LintInspection[] {
+  const level = resolveLintLevel(rule, noteType.name, path);
+  if (!level) {
+    return [];
+  }
+
   const base = {
     code: "Unresolved internal link",
   };
 
-  const createInspection = (level: LintInspection["level"]) => {
-    const unresolvedLinkMap = getUnresolvedLinkMap(path);
-    // 新規ファイル作成時はタイミングによってキャッシュが間に合わずnullになることがある
-    if (!unresolvedLinkMap) {
-      return [];
-    }
-
-    return Object.keys(unresolvedLinkMap)
-      .flatMap((linkName) =>
-        getSinglePatternMatchingLocations(
-          content,
-          new RegExp(`\\[\\[${linkName}(|\\|[^\\]]*)\\]\\]`, "g"),
-        ),
-      )
-      .map((x) => ({
-        ...base,
-        level,
-        offset: x.range.start,
-        message: `[[${x.text}]] は未解決のリンクです`,
-      }));
-  };
-
-  switch (noteType.name) {
-    case "Glossary note":
-      return createInspection("INFO");
-    case "Hub note":
-      return createInspection("INFO");
-    case "Procedure note":
-      return createInspection("INFO");
-    case "Activity note":
-      return createInspection("INFO");
-    case "Troubleshooting note":
-      return createInspection("WARN");
-    case "Prime note":
-      return createInspection("WARN");
-    case "Report note":
-      return createInspection("WARN");
-    case "Brain note":
-      return createInspection("WARN");
-    case "Article note":
-      return createInspection("ERROR");
-    case "My note":
-      return createInspection("WARN");
-    case "Series note":
-      return createInspection("ERROR");
-    case "Rule note":
-      return createInspection("ERROR");
-    case "ADR note":
-      return createInspection("ERROR");
-    case "Daily note":
-      return [];
-    case "Weekly report":
-      return createInspection("WARN");
-    default:
-      throw new ExhaustiveError(noteType);
+  const unresolvedLinkMap = getUnresolvedLinkMap(path);
+  // 新規ファイル作成時はタイミングによってキャッシュが間に合わずnullになることがある
+  if (!unresolvedLinkMap) {
+    return [];
   }
+
+  return Object.keys(unresolvedLinkMap)
+    .flatMap((linkName) =>
+      getSinglePatternMatchingLocations(
+        content,
+        new RegExp(`\\[\\[${linkName}(|\\|[^\\]]*)\\]\\]`, "g"),
+      ),
+    )
+    .map((x) => ({
+      ...base,
+      level,
+      offset: x.range.start,
+      message: `[[${x.text}]] は未解決のリンクです`,
+    }));
 }
 
 function createLinkEndsWithParenthesis(
-  noteType: NoteType,
+  noteType: LintNoteType,
   content: string,
+  path: string,
+  rule?: LinterRuleConfig,
 ): LintInspection[] {
+  const level = resolveLintLevel(rule, noteType.name, path);
+  if (!level) {
+    return [];
+  }
+
   const base = {
     code: "Link ends with parenthesis",
   };
 
-  const createInspection = (
-    level: LintInspection["level"],
-    option?: { ignoreInList?: boolean },
-  ) =>
-    getWikiLinks(
-      content
-        .split("\n")
-        // コメント内のinternal linkは検査対象外のため
-        .map((l) => (l.startsWith("%%") ? "x".repeat(l.length) : l))
-        // 箇条書き内を無視する場合の対応
-        .map((l) => {
-          if (!option?.ignoreInList) {
-            return l;
-          }
-          return l.startsWith("- ") ? "x".repeat(l.length) : l;
-        })
-        .join("\n"),
-    )
-      .map((x) => ({ ...x, title: x.title.split("#")[0] })) // ヘッダは除外
-      .filter((x) => {
-        const target = x.alias ?? x.title;
-        return match(target, / \(.+\)$/);
-      })
-      .map((x) => {
-        const lineNo = toLineNo(x.range.start) ?? undefined;
-        return {
-          ...base,
-          level,
-          lineNo,
-          offset: x.range.start,
-          message: `L${lineNo} (${x.title})`,
-        };
-      });
-
-  switch (noteType.name) {
-    case "Glossary note":
-      return createInspection("WARN");
-    case "Hub note":
-      return createInspection("WARN");
-    case "Procedure note":
-      return createInspection("ERROR");
-    case "Activity note":
-      return createInspection("ERROR");
-    case "Troubleshooting note":
-      return createInspection("ERROR");
-    case "Prime note":
-      return createInspection("ERROR");
-    case "Report note":
-      return createInspection("ERROR");
-    case "Brain note":
-      return createInspection("ERROR");
-    case "Article note":
-      return createInspection("ERROR");
-    case "My note":
-      return createInspection("ERROR");
-    case "Series note":
-      return createInspection("ERROR");
-    case "Rule note":
-      return createInspection("ERROR");
-    case "ADR note":
-      return createInspection("ERROR");
-    case "Daily note":
-      return [];
-    case "Weekly report":
-      return createInspection("ERROR", { ignoreInList: true });
-    default:
-      throw new ExhaustiveError(noteType);
-  }
+  return getWikiLinks(
+    content
+      .split("\n")
+      // コメント内のinternal linkは検査対象外のため
+      .map((l) => (l.startsWith("%%") ? "x".repeat(l.length) : l))
+      .join("\n"),
+  )
+    .map((x) => ({ ...x, title: x.title.split("#")[0] })) // ヘッダは除外
+    .filter((x) => {
+      const target = x.alias ?? x.title;
+      return match(target, / \(.+\)$/);
+    })
+    .map((x) => {
+      const lineNo = toLineNo(x.range.start) ?? undefined;
+      return {
+        ...base,
+        level,
+        lineNo,
+        offset: x.range.start,
+        message: `L${lineNo} (${x.title})`,
+      };
+    });
 }
 
-function createRedundantLinkAlias(content: string): LintInspection[] {
+function createRedundantLinkAlias(
+  noteType: LintNoteType,
+  content: string,
+  path: string,
+  rule?: LinterRuleConfig,
+): LintInspection[] {
+  const level = resolveLintLevel(rule, noteType.name, path);
+  if (!level) {
+    return [];
+  }
+
   return getWikiLinks(
     content
       .split("\n")
@@ -494,7 +325,7 @@ function createRedundantLinkAlias(content: string): LintInspection[] {
       const lineNo = toLineNo(link.range.start) ?? undefined;
       return {
         code: "Redundant link alias",
-        level: "WARN",
+        level,
         lineNo,
         offset: link.range.start,
         message: `L${lineNo} ([[${link.title}|${link.alias}]])`,
@@ -502,7 +333,17 @@ function createRedundantLinkAlias(content: string): LintInspection[] {
     });
 }
 
-function createDisallowFixme(content?: string): LintInspection[] {
+function createDisallowFixme(
+  noteType: LintNoteType,
+  content: string | undefined,
+  path: string,
+  rule?: LinterRuleConfig,
+): LintInspection[] {
+  const level = resolveLintLevel(rule, noteType.name, path);
+  if (!level) {
+    return [];
+  }
+
   const normalizedContent = content ? stripCodeAndHtmlBlocks(content) : content;
   if (!normalizedContent) {
     return [];
@@ -520,16 +361,17 @@ function createDisallowFixme(content?: string): LintInspection[] {
   return patterns.map(() => ({
     code: "Disallow fixme",
     message: "本文にFIXME相当の記述が残っています",
-    level: "WARN" as const,
+    level,
   }));
 }
 
 function createNoBacklinks(
-  noteType: NoteType,
+  noteType: LintNoteType,
   path: string,
-  config: NonNullable<ContentLinterConfig["No backlinks"]>,
+  config: LinterRuleConfig,
 ): LintInspection[] {
-  if (isMatchedGlobPatterns(path, config?.ignoreFiles ?? [])) {
+  const level = resolveLintLevel(config, noteType.name, path);
+  if (!level) {
     return [];
   }
 
@@ -538,41 +380,5 @@ function createNoBacklinks(
     message: "バックリンクが存在しません",
   };
 
-  const createInspection = (level: LintInspection["level"]) =>
-    hasBacklink(path) ? [] : [{ ...base, level }];
-
-  switch (noteType.name) {
-    case "Glossary note":
-      return createInspection("WARN");
-    case "Hub note":
-      return createInspection("WARN");
-    case "Procedure note":
-      return createInspection("WARN");
-    case "Activity note":
-      return createInspection("WARN");
-    case "Troubleshooting note":
-      return createInspection("WARN");
-    case "Prime note":
-      return createInspection("WARN");
-    case "Report note":
-      return createInspection("WARN");
-    case "Brain note":
-      return createInspection("WARN");
-    case "My note":
-      return createInspection("WARN");
-    case "Series note":
-      return createInspection("WARN");
-    case "Rule note":
-      return createInspection("WARN");
-    case "ADR note":
-      return createInspection("WARN");
-    case "Article note":
-      return [];
-    case "Daily note":
-      return [];
-    case "Weekly report":
-      return [];
-    default:
-      throw new ExhaustiveError(noteType);
-  }
+  return hasBacklink(path) ? [] : [{ ...base, level }];
 }

@@ -581,6 +581,13 @@
           "additionalProperties": false,
           "description": "リンター設定",
           "properties": {
+            "noteTypes": {
+              "description": "Linterの判定に使うノート種別",
+              "items": {
+                "$ref": "#/definitions/LinterNoteTypeConfig"
+              },
+              "type": "array"
+            },
             "rules": {
               "additionalProperties": false,
               "properties": {
@@ -589,101 +596,83 @@
                   "description": "コンテンツに関するルール",
                   "properties": {
                     "Disallow fixme": {
-                      "description": "本文のFIXME記述を禁止する",
-                      "type": "boolean"
+                      "$ref": "#/definitions/LinterRuleConfig",
+                      "description": "本文のFIXME記述を禁止する"
                     },
                     "Disallowed link card": {
-                      "description": "リンクカードの利用を禁止しているノート種別で検出する",
-                      "type": "boolean"
+                      "$ref": "#/definitions/LinterRuleConfig",
+                      "description": "リンクカードの利用を禁止しているノート種別で検出する"
                     },
                     "Link ends with parenthesis": {
-                      "description": "末尾に括弧を含む内部リンクを検出する（必要に応じ箇条書きを除外）",
-                      "type": "boolean"
+                      "$ref": "#/definitions/LinterRuleConfig",
+                      "description": "末尾に括弧を含む内部リンクを検出する（必要に応じ箇条書きを除外）"
                     },
                     "No backlinks": {
-                      "additionalProperties": false,
-                      "description": "どこからもバックリンクされていない孤立ノートを検出する",
-                      "properties": {
-                        "ignoreFiles": {
-                          "items": {
-                            "type": "string"
-                          },
-                          "type": "array"
-                        }
-                      },
-                      "type": "object"
+                      "$ref": "#/definitions/LinterRuleConfig",
+                      "description": "どこからもバックリンクされていない孤立ノートを検出する"
                     },
                     "No link comment": {
-                      "description": "リンクカードに対応するリンクコメントの欠如を検出する",
-                      "type": "boolean"
+                      "$ref": "#/definitions/LinterRuleConfig",
+                      "description": "リンクカードに対応するリンクコメントの欠如を検出する"
                     },
                     "Redundant link alias": {
-                      "description": "リンク先と同一の無意味なエイリアスを検出する",
-                      "type": "boolean"
+                      "$ref": "#/definitions/LinterRuleConfig",
+                      "description": "リンク先と同一の無意味なエイリアスを検出する"
                     },
                     "Unofficial MOC format": {
-                      "description": "最新仕様に従っていないMOCセクションを検出する",
-                      "type": "boolean"
+                      "$ref": "#/definitions/LinterRuleConfig",
+                      "description": "最新仕様に従っていないMOCセクションを検出する"
                     },
                     "Unresolved internal link": {
-                      "description": "未解決の内部リンクを検出する",
-                      "type": "boolean"
+                      "$ref": "#/definitions/LinterRuleConfig",
+                      "description": "未解決の内部リンクを検出する"
                     },
                     "v1 dates format": {
-                      "description": "旧形式の投稿日/更新日ブロックを検出し、created/updatedを付与する",
-                      "type": "boolean"
+                      "$ref": "#/definitions/LinterRuleConfig",
+                      "description": "旧形式の投稿日/更新日ブロックを検出し、created/updatedを付与する"
                     },
                     "v1 link card": {
-                      "description": "旧形式(v1)のリンクカード使用を警告する",
-                      "type": "boolean"
+                      "$ref": "#/definitions/LinterRuleConfig",
+                      "description": "旧形式(v1)のリンクカード使用を警告する"
                     }
                   },
                   "type": "object"
                 },
-                "propery": {
+                "property": {
                   "additionalProperties": false,
                   "description": "プロパティに関するルール",
                   "properties": {
                     "Inconsistent description": {
-                      "additionalProperties": false,
-                      "description": "descriptionプロパティと本文の内容を比較し、不一致を検出する",
-                      "properties": {
-                        "ignoreFiles": {
-                          "items": {
-                            "type": "string"
-                          },
-                          "type": "array"
-                        }
-                      },
-                      "type": "object"
+                      "$ref": "#/definitions/LinterRuleConfig",
+                      "description": "descriptionプロパティと本文の内容を比較し、不一致を検出する"
                     },
                     "Inconsistent fixme": {
-                      "description": "本文の!FIXMEや==強調とfixmeプロパティの状態を同期させる",
-                      "type": "boolean"
+                      "$ref": "#/definitions/LinterRuleConfig",
+                      "description": "本文の!FIXMEや==強調とfixmeプロパティの状態を同期させる"
                     },
                     "MkDocs title": {
-                      "description": "MkDocs向けのtitleプロパティをファイル名と同期させる",
-                      "type": "boolean"
+                      "$ref": "#/definitions/LinterRuleConfig",
+                      "description": "MkDocs向けのtitleプロパティをファイル名と同期させる"
                     },
                     "No cover": {
-                      "description": "ノート種別に応じてcoverを自動付与・必須チェックする",
-                      "type": "boolean"
+                      "$ref": "#/definitions/LinterRuleConfig",
+                      "description": "ノート種別に応じてcoverを自動付与・必須チェックする"
                     },
                     "No description": {
-                      "description": "descriptionプロパティが必須のノートで未設定を検出する",
-                      "type": "boolean"
+                      "$ref": "#/definitions/LinterRuleConfig",
+                      "description": "descriptionプロパティが必須のノートで未設定を検出する"
                     },
                     "No status": {
-                      "description": "statusの未設定を検出し、必要に応じて既定値を割り当てる",
-                      "type": "boolean"
+                      "$ref": "#/definitions/LinterRuleConfig",
+                      "description": "statusの未設定を検出し、必要に応じて既定値を割り当てる"
                     },
                     "No url": {
-                      "description": "urlプロパティが必要なノートで未設定を検出する",
-                      "type": "boolean"
+                      "$ref": "#/definitions/LinterRuleConfig",
+                      "description": "urlプロパティが必要なノートで未設定を検出する"
                     },
                     "Tags": {
-                      "description": "タイトルやパスに応じて所定のタグ付与/削除を行う",
-                      "type": "boolean"
+                      "$ref": "#/definitions/LinterRuleConfig",
+                      "description": "タイトルやパスに応じて所定のタグ付与/削除を行う"
                     }
                   },
                   "type": "object"
@@ -695,6 +684,80 @@
           "type": "object"
         }
       },
+      "type": "object"
+    },
+    "LinterDiagnosticLevel": {
+      "enum": [
+        "INFO",
+        "WARN",
+        "ERROR"
+      ],
+      "type": "string"
+    },
+    "LinterNoteTypeConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "coverImagePath": {
+          "description": "No coverのautofixで設定するcover画像パス",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "name": {
+          "description": "Linter上のノート種別名",
+          "type": "string"
+        },
+        "pathPattern": {
+          "description": "Vault rootからの相対パスに対して評価する正規表現文字列",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "pathPattern"
+      ],
+      "type": "object"
+    },
+    "LinterRuleConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "defaultLevel": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/LinterDiagnosticLevel"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "levelsで未指定のノート種別に使うLevel。nullの場合は診断しない"
+        },
+        "ignoreFiles": {
+          "description": "検査を無視するファイルパスのglobパターン配列 default: [] ex: [\"Templates/**\", \"Notes/Untitled.md\"]",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "levels": {
+          "additionalProperties": {
+            "anyOf": [
+              {
+                "$ref": "#/definitions/LinterDiagnosticLevel"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "description": "ノート種別ごとのLevel。nullの場合は診断しない",
+          "type": "object"
+        }
+      },
+      "required": [
+        "defaultLevel"
+      ],
       "type": "object"
     },
     "OpenAIVendor": {

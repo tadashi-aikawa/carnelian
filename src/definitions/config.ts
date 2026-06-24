@@ -124,52 +124,50 @@ export interface Config {
 
   /** リンター設定 */
   linter?: {
+    /** Linterの判定に使うノート種別 */
+    noteTypes?: LinterNoteTypeConfig[];
     rules?: {
       /** プロパティに関するルール */
-      propery?: {
+      property?: {
         /** descriptionプロパティが必須のノートで未設定を検出する */
-        "No description"?: boolean;
+        "No description"?: LinterRuleConfig;
         /** ノート種別に応じてcoverを自動付与・必須チェックする */
-        "No cover"?: boolean;
+        "No cover"?: LinterRuleConfig;
         /** urlプロパティが必要なノートで未設定を検出する */
-        "No url"?: boolean;
+        "No url"?: LinterRuleConfig;
         /** statusの未設定を検出し、必要に応じて既定値を割り当てる */
-        "No status"?: boolean;
+        "No status"?: LinterRuleConfig;
         /** タイトルやパスに応じて所定のタグ付与/削除を行う */
-        Tags?: boolean;
+        Tags?: LinterRuleConfig;
         /** MkDocs向けのtitleプロパティをファイル名と同期させる */
-        "MkDocs title"?: boolean;
+        "MkDocs title"?: LinterRuleConfig;
         /** 本文の!FIXMEや==強調とfixmeプロパティの状態を同期させる */
-        "Inconsistent fixme"?: boolean;
+        "Inconsistent fixme"?: LinterRuleConfig;
         /** descriptionプロパティと本文の内容を比較し、不一致を検出する */
-        "Inconsistent description"?: {
-          ignoreFiles?: string[];
-        };
+        "Inconsistent description"?: LinterRuleConfig;
       };
       /** コンテンツに関するルール */
       content?: {
         /** リンクカードの利用を禁止しているノート種別で検出する */
-        "Disallowed link card"?: boolean;
+        "Disallowed link card"?: LinterRuleConfig;
         /** リンクカードに対応するリンクコメントの欠如を検出する */
-        "No link comment"?: boolean;
+        "No link comment"?: LinterRuleConfig;
         /** 旧形式(v1)のリンクカード使用を警告する */
-        "v1 link card"?: boolean;
+        "v1 link card"?: LinterRuleConfig;
         /** 最新仕様に従っていないMOCセクションを検出する */
-        "Unofficial MOC format"?: boolean;
+        "Unofficial MOC format"?: LinterRuleConfig;
         /** 旧形式の投稿日/更新日ブロックを検出し、created/updatedを付与する */
-        "v1 dates format"?: boolean;
+        "v1 dates format"?: LinterRuleConfig;
         /** 未解決の内部リンクを検出する */
-        "Unresolved internal link"?: boolean;
+        "Unresolved internal link"?: LinterRuleConfig;
         /** 末尾に括弧を含む内部リンクを検出する（必要に応じ箇条書きを除外） */
-        "Link ends with parenthesis"?: boolean;
+        "Link ends with parenthesis"?: LinterRuleConfig;
         /** リンク先と同一の無意味なエイリアスを検出する */
-        "Redundant link alias"?: boolean;
+        "Redundant link alias"?: LinterRuleConfig;
         /** 本文のFIXME記述を禁止する */
-        "Disallow fixme"?: boolean;
+        "Disallow fixme"?: LinterRuleConfig;
         /** どこからもバックリンクされていない孤立ノートを検出する */
-        "No backlinks"?: {
-          ignoreFiles?: string[];
-        };
+        "No backlinks"?: LinterRuleConfig;
       };
     };
   };
@@ -357,11 +355,35 @@ export type AllConfig = NonNullable<Config["all"]>;
 
 type LinterConfig = NonNullable<Config["linter"]>;
 export type PropertyLinterConfig = NonNullable<
-  NonNullable<LinterConfig["rules"]>["propery"]
+  NonNullable<LinterConfig["rules"]>["property"]
 >;
 export type ContentLinterConfig = NonNullable<
   NonNullable<LinterConfig["rules"]>["content"]
 >;
+
+export type LinterDiagnosticLevel = "INFO" | "WARN" | "ERROR";
+
+export type LinterNoteTypeConfig = {
+  /** Linter上のノート種別名 */
+  name: string;
+  /** Vault rootからの相対パスに対して評価する正規表現文字列 */
+  pathPattern: string;
+  /** No coverのautofixで設定するcover画像パス */
+  coverImagePath?: string | null;
+};
+
+export type LinterRuleConfig = {
+  /** levelsで未指定のノート種別に使うLevel。nullの場合は診断しない */
+  defaultLevel: LinterDiagnosticLevel | null;
+  /** ノート種別ごとのLevel。nullの場合は診断しない */
+  levels?: { [noteTypeName: string]: LinterDiagnosticLevel | null };
+  /**
+   * 検査を無視するファイルパスのglobパターン配列
+   * default: []
+   * ex: ["Templates/**", "Notes/Untitled.md"]
+   */
+  ignoreFiles?: string[];
+};
 
 type KeyChainAccountName = string;
 

@@ -14,15 +14,17 @@ import {
   isCodeBlockStartOrEnd,
   isHeading,
   isHtmlTag,
-  isMatchedGlobPatterns,
   isOnlyImageEmbedLink,
   match,
 } from "src/lib/utils/strings";
 import type { Properties } from "src/lib/utils/types";
 import { P, match as tsmatch } from "ts-pattern";
-import type { PropertyLinterConfig } from "../config";
-import type { NoteType } from "../mkms";
-import { findNoteTypeBy } from "../mkms";
+import type { LinterRuleConfig } from "../config";
+import {
+  findLintNoteTypeBy,
+  type LintNoteType,
+  resolveLintLevel,
+} from "./LintNoteType";
 
 type PropertyLintInspection = LintInspection & {
   propertyCommand?: { [key: string]: any | null };
@@ -30,12 +32,12 @@ type PropertyLintInspection = LintInspection & {
 
 export const propertyLinter: Linter = {
   lint: ({ title, properties, body, path, settings }) => {
-    const noteType = findNoteTypeBy({ path });
+    const noteType = findLintNoteTypeBy({ path, settings });
     if (!noteType) {
       return [];
     }
 
-    const rules = settings?.rules?.propery;
+    const rules = settings?.rules?.property;
 
     // autofixでプロパティに修正が加わるものは、vpに反映させてから他のルールを評価する
     let vp = properties || {};
@@ -65,204 +67,150 @@ export const propertyLinter: Linter = {
           )
         : null,
       rules?.["Inconsistent fixme"]
-        ? vpUpdateWrapper(createInconsistentFixme(vp, body))
+        ? vpUpdateWrapper(
+            createInconsistentFixme(
+              noteType,
+              path,
+              vp,
+              body,
+              rules["Inconsistent fixme"],
+            ),
+          )
         : null,
       rules?.["No cover"]
-        ? vpUpdateWrapper(createNoCover(noteType, path, vp))
+        ? vpUpdateWrapper(createNoCover(noteType, path, vp, rules["No cover"]))
         : null,
       rules?.["No status"]
-        ? vpUpdateWrapper(createNoStatus(noteType, vp))
+        ? vpUpdateWrapper(
+            createNoStatus(noteType, path, vp, rules["No status"]),
+          )
         : null,
-      rules?.Tags ? vpUpdateWrapper(createTags(title, vp, path)) : null,
+      rules?.Tags
+        ? vpUpdateWrapper(createTags(noteType, title, vp, path, rules.Tags))
+        : null,
       rules?.["MkDocs title"]
-        ? vpUpdateWrapper(createMkDocsTitle(title, vp))
+        ? vpUpdateWrapper(
+            createMkDocsTitle(noteType, path, title, vp, rules["MkDocs title"]),
+          )
         : null,
 
-      rules?.["No description"] ? createNoDescription(noteType, vp) : null,
-      rules?.["No url"] ? createNoUrl(noteType, vp) : null,
+      rules?.["No description"]
+        ? createNoDescription(noteType, path, vp, rules["No description"])
+        : null,
+      rules?.["No url"]
+        ? createNoUrl(noteType, path, vp, rules["No url"])
+        : null,
     ].filter(isPresent);
   },
 };
 
 function createNoDescription(
-  noteType: NoteType,
+  noteType: LintNoteType,
+  path: string,
   properties?: Properties,
+  rule?: LinterRuleConfig,
 ): LintInspection | null {
   if (properties?.description) {
     return null;
   }
+  const level = resolveLintLevel(rule, noteType.name, path);
+  if (!level) {
+    return null;
+  }
 
-  const base = {
+  return {
     code: "No description",
     message: "プロパティにdescriptionがありません",
+    level,
   };
-
-  return tsmatch(noteType.name)
-    .returnType<LintInspection | null>()
-    .with(
-      P.union(
-        "Glossary note",
-        "Activity note",
-        "Troubleshooting note",
-        "Prime note",
-        "Report note",
-        "Article note",
-        "Brain note",
-        "Series note",
-        "Rule note",
-        "ADR note",
-        "Weekly report",
-      ),
-      () => ({ ...base, level: "ERROR" }),
-    )
-    .with(P.union("Hub note", "Daily note"), () => null)
-    .with(P.union("Procedure note", "My note"), () => ({
-      ...base,
-      level: "WARN",
-    }))
-    .exhaustive();
 }
 
-// PropertyLintInspectionは不要
 function createNoCover(
-  noteType: NoteType,
+  noteType: LintNoteType,
   path: string,
   properties?: Properties,
+  rule?: LinterRuleConfig,
 ): LintInspection | null {
   if (properties?.cover) {
     return null;
   }
+  const level = resolveLintLevel(rule, noteType.name, path);
+  if (!level) {
+    return null;
+  }
 
-  const base = {
+  return {
     code: "No cover",
     message: "coverプロパティがありません",
     fixedMessage: "coverを割り当てました",
+    level,
     fix: noteType.coverImagePath
       ? async () => {
           updateActiveFileProperty("cover", noteType.coverImagePath);
         }
-      : path.startsWith("📗Productivityを上げるために大切な100のこと/")
-        ? async () => {
-            updateActiveFileProperty(
-              "cover",
-              "📗Productivityを上げるために大切な100のこと/attachments/productivity100.webp",
-            );
-          }
-        : undefined,
+      : undefined,
   };
-
-  return tsmatch(noteType.name)
-    .returnType<ReturnType<typeof createNoCover>>()
-    .with(
-      P.union(
-        "Glossary note",
-        "Hub note",
-        "Procedure note",
-        "Activity note",
-        "Troubleshooting note",
-        "Prime note",
-        "Report note",
-        "Article note",
-        "Brain note",
-        "My note",
-        "Series note",
-        "Rule note",
-        "ADR note",
-        "Weekly report",
-      ),
-      () => ({ ...base, level: "ERROR" }),
-    )
-    .with("Daily note", () => null)
-    .exhaustive();
 }
 
 function createNoUrl(
-  noteType: NoteType,
+  noteType: LintNoteType,
+  path: string,
   properties?: Properties,
+  rule?: LinterRuleConfig,
 ): LintInspection | null {
   if (properties?.url) {
     return null;
   }
+  const level = resolveLintLevel(rule, noteType.name, path);
+  if (!level) {
+    return null;
+  }
 
-  const base = {
+  return {
     code: "No url",
     message: "プロパティにurlがありません",
+    level,
   };
-
-  return tsmatch(noteType.name)
-    .returnType<LintInspection | null>()
-    .with("Glossary note", () => ({ ...base, level: "WARN" }))
-    .with("Procedure note", () => ({ ...base, level: "INFO" }))
-    .with(
-      P.union(
-        "Hub note",
-        "Activity note",
-        "Troubleshooting note",
-        "Prime note",
-        "Report note",
-        "Article note",
-        "Brain note",
-        "My note",
-        "Series note",
-        "Rule note",
-        "ADR note",
-        "Daily note",
-        "Weekly report",
-      ),
-      () => null,
-    )
-    .exhaustive();
 }
 
 function createNoStatus(
-  noteType: NoteType,
+  noteType: LintNoteType,
+  path: string,
   properties?: Properties,
+  rule?: LinterRuleConfig,
 ): PropertyLintInspection | null {
   if (properties?.status) {
     return null;
   }
+  const level = resolveLintLevel(rule, noteType.name, path);
+  if (!level) {
+    return null;
+  }
 
-  const base = {
+  return {
     code: "No status",
     message: "statusプロパティがありません",
     fixedMessage: "statusに『✅解決済』を割り当てました",
+    level,
     fix: async () => {
       updateActiveFileProperty("status", "✅解決済");
     },
     propertyCommand: { status: "✅解決済" },
   };
-
-  return tsmatch(noteType.name)
-    .returnType<ReturnType<typeof createNoStatus> | null>()
-    .with("Troubleshooting note", () => ({ ...base, level: "ERROR" }))
-    .with(
-      P.union(
-        "Glossary note",
-        "Hub note",
-        "Procedure note",
-        "Activity note",
-        "Prime note",
-        "Report note",
-        "Article note",
-        "Brain note",
-        "My note",
-        "Series note",
-        "Rule note",
-        "ADR note",
-        "Daily note",
-        "Weekly report",
-      ),
-      () => null,
-    )
-    .exhaustive();
 }
 
 function createTags(
+  noteType: LintNoteType,
   title: string,
-  properties?: Properties,
-  path?: string,
+  properties: Properties | undefined,
+  path: string,
+  rule?: LinterRuleConfig,
 ): PropertyLintInspection | null {
   const tags = properties?.tags;
+  const level = resolveLintLevel(rule, noteType.name, path);
+  if (!level) {
+    return null;
+  }
 
   if (title.endsWith("(JavaScript)")) {
     if (tags?.includes("TypeScript")) {
@@ -272,7 +220,7 @@ function createTags(
       code: "Tags",
       message: "tagsに『TypeScript』が設定されていません",
       fixedMessage: "tagsに『TypeScript』を設定しました",
-      level: "ERROR" as LintInspection["level"],
+      level,
       fix: async () => {
         updateActiveFileProperty("tags", ["TypeScript"]);
       },
@@ -288,7 +236,7 @@ function createTags(
       code: "Tags",
       message: "tagsに『Neovim』が設定されていません",
       fixedMessage: "tagsに『Neovim』を設定しました",
-      level: "ERROR" as LintInspection["level"],
+      level,
       fix: async () => {
         updateActiveFileProperty("tags", ["Neovim"]);
       },
@@ -298,7 +246,6 @@ function createTags(
 
   // 📗Obsidian逆引きレシピ ディレクトリ配下のSeries noteはObsidianタグを付与
   if (path?.startsWith("📗Obsidian逆引きレシピ/")) {
-    const noteType = findNoteTypeBy({ path });
     if (noteType?.name === "Series note") {
       if (tags?.includes("Obsidian")) {
         return null;
@@ -307,7 +254,7 @@ function createTags(
         code: "Tags",
         message: "tagsに『Obsidian』が設定されていません",
         fixedMessage: "tagsに『Obsidian』を設定しました",
-        level: "ERROR" as LintInspection["level"],
+        level,
         fix: async () => {
           updateActiveFileProperty("tags", ["Obsidian"]);
         },
@@ -324,7 +271,7 @@ function createTags(
     code: "Tags",
     message: `不要なtags『${tags.toString()}』が設定されています`,
     fixedMessage: `tags『${tags.toString()}』を削除しました`,
-    level: "ERROR" as LintInspection["level"],
+    level,
     fix: async () => {
       removeActiveFileProperty("tags");
     },
@@ -333,9 +280,17 @@ function createTags(
 }
 
 function createMkDocsTitle(
+  noteType: LintNoteType,
+  path: string,
   title: string,
   properties?: Properties,
+  rule?: LinterRuleConfig,
 ): PropertyLintInspection | null {
+  const level = resolveLintLevel(rule, noteType.name, path);
+  if (!level) {
+    return null;
+  }
+
   // TODO: 設定を反映させるようにしたい
   if (title === "nav" || title === "index") {
     return null;
@@ -354,7 +309,7 @@ function createMkDocsTitle(
         code: "MkDocs Title",
         message: "不要なtitleプロパティがあります",
         fixedMessage: "titleを削除しました",
-        level: "ERROR" as LintInspection["level"],
+        level,
         fix: async () => {
           removeActiveFileProperty("title");
         },
@@ -368,7 +323,7 @@ function createMkDocsTitle(
     code: "MkDocs Title",
     message: "titleプロパティが正しくありません",
     fixedMessage: "titleを修正しました",
-    level: "ERROR" as LintInspection["level"],
+    level,
     fix: async () => {
       updateActiveFileProperty("title", title);
     },
@@ -377,9 +332,17 @@ function createMkDocsTitle(
 }
 
 function createInconsistentFixme(
+  noteType: LintNoteType,
+  path: string,
   properties?: Properties,
   body?: string,
+  rule?: LinterRuleConfig,
 ): PropertyLintInspection | null {
+  const level = resolveLintLevel(rule, noteType.name, path);
+  if (!level) {
+    return null;
+  }
+
   const normalizedContent = body ? stripCodeAndHtmlBlocks(body) : body;
   const fixmeInContent = !normalizedContent
     ? false
@@ -396,7 +359,7 @@ function createInconsistentFixme(
       code: "Inconsistent fixme",
       message: "本文にFIXMEがあるのにfixmeプロパティがありません",
       fixedMessage: "fixmeプロパティをtrueにしました",
-      level: "ERROR" as LintInspection["level"],
+      level,
       fix: async () => {
         updateActiveFileProperty("fixme", true);
       },
@@ -406,7 +369,7 @@ function createInconsistentFixme(
       code: "Inconsistent fixme",
       message: "本文にFIXMEが無いのにfixmeプロパティがあります",
       fixedMessage: "fixmeプロパティを削除しました",
-      level: "ERROR" as LintInspection["level"],
+      level,
       fix: async () => {
         removeActiveFileProperty("fixme");
       },
@@ -416,43 +379,14 @@ function createInconsistentFixme(
 }
 
 function createInconsistentDescription(
-  noteType: NoteType,
+  noteType: LintNoteType,
   path: string,
   body: string,
   properties?: Properties,
-  settings?: PropertyLinterConfig["Inconsistent description"],
+  settings?: LinterRuleConfig,
 ): PropertyLintInspection | null {
-  const shouldIgnored = isMatchedGlobPatterns(
-    path,
-    settings?.ignoreFiles ?? [],
-  );
-  if (shouldIgnored) {
-    return null;
-  }
-
-  const supported = tsmatch(noteType.name)
-    .with(
-      P.union("Glossary note", "Procedure note", "My note", "Hub note"),
-      () => true,
-    )
-    .with(
-      P.union(
-        "Activity note",
-        "Troubleshooting note",
-        "Prime note",
-        "Report note",
-        "Article note",
-        "Brain note",
-        "Series note",
-        "Rule note",
-        "ADR note",
-        "Daily note",
-        "Weekly report",
-      ),
-      () => false,
-    )
-    .exhaustive();
-  if (!supported) {
+  const level = resolveLintLevel(settings, noteType.name, path);
+  if (!level) {
     return null;
   }
 
@@ -495,7 +429,7 @@ function createInconsistentDescription(
       code: "Inconsistent description",
       message: "descriptionプロパティがありません",
       fixedMessage: "descriptionプロパティを追加しました",
-      level: "ERROR" as LintInspection["level"],
+      level,
       fix: async () => {
         updateActiveFileProperty("description", newDescription);
       },
@@ -508,7 +442,7 @@ function createInconsistentDescription(
             code: "Inconsistent description",
             message: "descriptionプロパティが本文と一致していません",
             fixedMessage: "descriptionプロパティを更新しました",
-            level: "ERROR" as LintInspection["level"],
+            level,
             fix: async () => {
               updateActiveFileProperty("description", newDescription);
             },
