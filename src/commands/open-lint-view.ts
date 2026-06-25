@@ -249,6 +249,9 @@ export class LintView extends ItemView {
           cls: [
             "carnelian-lint-view__diagnostic",
             `carnelian-lint-view__diagnostic--${record.inspection.level.toLowerCase()}`,
+            record.inspection.lineNo == null
+              ? ""
+              : "carnelian-lint-view__diagnostic--with-line",
           ],
         });
         diagnosticEl.addEventListener("click", () => openInspection(record));
@@ -261,6 +264,12 @@ export class LintView extends ItemView {
           text: formatDiagnostic(record.inspection),
           cls: "carnelian-lint-view__diagnostic-text",
         });
+        if (record.inspection.lineNo != null) {
+          diagnosticEl.createDiv({
+            text: `L${record.inspection.lineNo}`,
+            cls: "carnelian-lint-view__diagnostic-line",
+          });
+        }
       }
     }
   }
@@ -575,6 +584,5 @@ async function openInspection(record: InspectionRecord): Promise<void> {
 }
 
 function formatDiagnostic(inspection: LintInspection): string {
-  const location = inspection.lineNo == null ? "" : `L${inspection.lineNo} `;
-  return `${location}${inspection.code}: ${inspection.message}`;
+  return `${inspection.code}: ${inspection.message}`;
 }

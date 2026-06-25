@@ -1,8 +1,11 @@
 import { updateChangeLog } from "src/commands/update-change-log";
-import { toLineNo } from "src/lib/helpers/editors/basic";
 import { getUnresolvedLinkMap, hasBacklink } from "src/lib/helpers/links";
 import { stripCodeAndHtmlBlocks } from "src/lib/obsutils/parser";
-import type { Linter, LintInspection } from "src/lib/utils/linter";
+import {
+  type Linter,
+  type LintInspection,
+  lineNoFromOffset,
+} from "src/lib/utils/linter";
 import {
   getSinglePatternCaptureMatchingLocations,
   getSinglePatternMatchingLocations,
@@ -153,7 +156,7 @@ function createNoLinkComment(
     .map((x) => ({
       ...base,
       level,
-      lineNo: toLineNo(x.range.start) ?? undefined,
+      lineNo: lineNoFromOffset(content, x.range.start) ?? undefined,
       offset: x.range.start,
     }));
 }
@@ -292,13 +295,13 @@ function createLinkEndsWithParenthesis(
       return match(target, / \(.+\)$/);
     })
     .map((x) => {
-      const lineNo = toLineNo(x.range.start) ?? undefined;
+      const lineNo = lineNoFromOffset(content, x.range.start) ?? undefined;
       return {
         ...base,
         level,
         lineNo,
         offset: x.range.start,
-        message: `L${lineNo} (${x.title})`,
+        message: `(${x.title})`,
       };
     });
 }
@@ -322,13 +325,13 @@ function createRedundantLinkAlias(
   )
     .filter(hasRedundantWikiLinkAlias)
     .map((link) => {
-      const lineNo = toLineNo(link.range.start) ?? undefined;
+      const lineNo = lineNoFromOffset(content, link.range.start) ?? undefined;
       return {
         code: "Redundant link alias",
         level,
         lineNo,
         offset: link.range.start,
-        message: `L${lineNo} ([[${link.title}|${link.alias}]])`,
+        message: `[[${link.title}|${link.alias}]]`,
       };
     });
 }

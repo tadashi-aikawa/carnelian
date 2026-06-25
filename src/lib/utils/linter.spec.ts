@@ -1,5 +1,10 @@
 import { expect, test } from "bun:test";
-import { type Linter, type LintInspection, lintAll } from "./linter";
+import {
+  type Linter,
+  type LintInspection,
+  lineNoFromOffset,
+  lintAll,
+} from "./linter";
 
 const titleLinter: Linter = {
   lint: ({ title }) => {
@@ -146,4 +151,18 @@ test("Lint検査が重複していてもユニークにはならない", () => {
       level: "WARN",
     },
   ]);
+});
+
+test("offsetから1始まりの行番号を取得できる", () => {
+  const content = "abc\ndef\n";
+
+  expect(lineNoFromOffset(content, 0)).toBe(1);
+  expect(lineNoFromOffset(content, 4)).toBe(2);
+  expect(lineNoFromOffset(content, content.length)).toBe(3);
+});
+
+test("offsetが本文範囲外なら行番号を取得しない", () => {
+  expect(lineNoFromOffset("abc", -1)).toBeNull();
+  expect(lineNoFromOffset("abc", 4)).toBeNull();
+  expect(lineNoFromOffset("abc", 1.5)).toBeNull();
 });

@@ -32,3 +32,13 @@ export interface Linter {
 export function lintAll(linters: Linter[], args: LintArgs): LintInspection[] {
   return linters.flatMap((ltr) => ltr.lint(args));
 }
+
+export function lineNoFromOffset(
+  content: string,
+  offset: number,
+): number | null {
+  if (!Number.isInteger(offset) || offset < 0 || offset > content.length) {
+    return null;
+  }
+  return content.slice(0, offset).split("\n").length;
+}

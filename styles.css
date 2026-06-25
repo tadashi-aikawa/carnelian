@@ -696,6 +696,10 @@ button.carnelian-lint-view__stat:hover {
   cursor: pointer;
 }
 
+.carnelian-lint-view__diagnostic--with-line {
+  grid-template-columns: auto minmax(0, 1fr) auto;
+}
+
 .carnelian-lint-view__diagnostic:hover {
   background: var(--background-modifier-hover);
 }
@@ -725,6 +729,19 @@ button.carnelian-lint-view__stat:hover {
 .carnelian-lint-view__diagnostic--info
   .carnelian-lint-view__diagnostic-level {
   background-color: skyblue;
+}
+
+.carnelian-lint-view__diagnostic-line {
+  align-self: start;
+  color: var(--text-faint);
+  font-family: var(--font-monospace);
+  font-size: 0.72rem;
+  line-height: 1.2;
+  padding: 0.08rem 0.35rem;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 999px;
+  background-color: var(--background-secondary);
+  white-space: nowrap;
 }
 
 .carnelian-lint-view__diagnostic-text {
