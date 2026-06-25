@@ -262,6 +262,7 @@ function createUnresolvedInternalLink(
     .map((x) => ({
       ...base,
       level,
+      lineNo: lineNoFromOffset(content, x.range.start) ?? undefined,
       offset: x.range.start,
       message: `[[${x.text}]] は未解決のリンクです`,
     }));
