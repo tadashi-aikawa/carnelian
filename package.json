@@ -11,7 +11,8 @@
     "check:write": "biome check --write",
     "test": "bun test",
     "test:large": "ALLOW_LARGE_TEST=1 bun test",
-    "pre:push": "bun typecheck && bun check && bun run test",
+    "leakcheck": "betterleaks -v git --git-workers 4",
+    "pre:push": "bun run leakcheck && bun typecheck && bun check && bun run test",
     "version": "node version-bump.mjs && git add manifest.json versions.json",
     "schema": "ts-json-schema-generator --path src/definitions/config.ts --type Config --tsconfig tsconfig.schema.json > config.schema.json"
   },
