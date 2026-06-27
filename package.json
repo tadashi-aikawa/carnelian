@@ -8,6 +8,7 @@
     "build": "bun esbuild.config.mjs production",
     "typecheck": "tsgo -noEmit -skipLibCheck",
     "check": "biome check src",
+    "check:write": "biome check --write",
     "test": "bun test",
     "test:large": "ALLOW_LARGE_TEST=1 bun test",
     "pre:push": "bun typecheck && bun check && bun run test",
