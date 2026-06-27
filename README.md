@@ -36,6 +36,12 @@ bun ci
 }
 ```
 
+### Gitフックの設定
+
+```bash
+git config core.hooksPath hooks
+```
+
 ## 開発コマンド
 
 ```bash
