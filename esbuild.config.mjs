@@ -1,8 +1,8 @@
-import fs, { existsSync } from "fs";
-import path from "path";
 import builtins from "builtin-modules";
 import chokidar from "chokidar";
 import esbuild from "esbuild";
+import fs, { existsSync } from "fs";
+import path from "path";
 import process, { exit } from "process";
 
 async function loadPluginDir() {

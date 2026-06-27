@@ -107,7 +107,7 @@
   min-height: 3rem;
   background-color: black;
   opacity: 1;
-  animation: slide-in-out 5.0s forwards;
+  animation: slide-in-out 5s forwards;
   position: absolute;
   filter: drop-shadow(255 255 255.25rem violet);
   bottom: 190px;
@@ -117,7 +117,7 @@
   border-radius: 12px;
   display: flex;
   flex-direction: column;
-  gap: 1.0rem;
+  gap: 1rem;
 }
 .linter-inspections-container__fixed::after {
   content: "";
@@ -575,18 +575,15 @@ button.carnelian-lint-view__stat:hover {
   font-weight: 700;
 }
 
-.carnelian-lint-view__stat--error
-  .carnelian-lint-view__stat-value {
+.carnelian-lint-view__stat--error .carnelian-lint-view__stat-value {
   color: orangered;
 }
 
-.carnelian-lint-view__stat--warn
-  .carnelian-lint-view__stat-value {
+.carnelian-lint-view__stat--warn .carnelian-lint-view__stat-value {
   color: orange;
 }
 
-.carnelian-lint-view__stat--info
-  .carnelian-lint-view__stat-value {
+.carnelian-lint-view__stat--info .carnelian-lint-view__stat-value {
   color: skyblue;
 }
 
@@ -630,15 +627,18 @@ button.carnelian-lint-view__stat:hover {
   font-weight: 700;
 }
 
-.carnelian-lint-view__heading-count--error .carnelian-lint-view__heading-count-value {
+.carnelian-lint-view__heading-count--error
+  .carnelian-lint-view__heading-count-value {
   color: orangered;
 }
 
-.carnelian-lint-view__heading-count--warn .carnelian-lint-view__heading-count-value {
+.carnelian-lint-view__heading-count--warn
+  .carnelian-lint-view__heading-count-value {
   color: orange;
 }
 
-.carnelian-lint-view__heading-count--info .carnelian-lint-view__heading-count-value {
+.carnelian-lint-view__heading-count--info
+  .carnelian-lint-view__heading-count-value {
   color: skyblue;
 }
 
@@ -716,18 +716,15 @@ button.carnelian-lint-view__stat:hover {
   line-height: 1.2;
 }
 
-.carnelian-lint-view__diagnostic--error
-  .carnelian-lint-view__diagnostic-level {
+.carnelian-lint-view__diagnostic--error .carnelian-lint-view__diagnostic-level {
   background-color: orangered;
 }
 
-.carnelian-lint-view__diagnostic--warn
-  .carnelian-lint-view__diagnostic-level {
+.carnelian-lint-view__diagnostic--warn .carnelian-lint-view__diagnostic-level {
   background-color: orange;
 }
 
-.carnelian-lint-view__diagnostic--info
-  .carnelian-lint-view__diagnostic-level {
+.carnelian-lint-view__diagnostic--info .carnelian-lint-view__diagnostic-level {
   background-color: skyblue;
 }
 
