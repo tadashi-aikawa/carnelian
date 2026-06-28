@@ -302,7 +302,7 @@ function createLinkEndsWithParenthesis(
         level,
         lineNo,
         offset: x.range.start,
-        message: `(${x.title})`,
+        message: x.title,
       };
     });
 }
