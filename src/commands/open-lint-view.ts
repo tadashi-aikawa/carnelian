@@ -1,4 +1,4 @@
-import { ItemView, type TFile, type WorkspaceLeaf } from "obsidian";
+import { ItemView, setIcon, type TFile, type WorkspaceLeaf } from "obsidian";
 import { moveToOffset } from "src/lib/helpers/editors/basic";
 import { getMarkdownFiles, openFile } from "src/lib/helpers/entries";
 import { notify, notifyValidationError } from "src/lib/helpers/ui";
@@ -56,6 +56,8 @@ export class LintView extends ItemView {
   private lastCodeOrder: string[] = [];
   private lastTargetFileCount = 0;
   private lastRecords: InspectionRecord[] = [];
+  private autoSyncEnabled = false;
+  private unsetLintCompleteHandler!: () => void;
 
   constructor(leaf: WorkspaceLeaf, settings: PluginSettings["linter"]) {
     super(leaf);
@@ -76,6 +78,16 @@ export class LintView extends ItemView {
 
   async onOpen(): Promise<void> {
     this.render();
+    const ref = app.workspace.on(
+      "carnelian:lint-complete" as any,
+      (async (file: TFile, autofix: boolean) =>
+        this.onFileLinted(file, autofix)) as any,
+    );
+    this.unsetLintCompleteHandler = () => app.workspace.offref(ref);
+  }
+
+  async onClose(): Promise<void> {
+    this.unsetLintCompleteHandler?.();
   }
 
   private render(): void {
@@ -104,6 +116,27 @@ export class LintView extends ItemView {
       cls: "carnelian-lint-view__run-button",
     });
     this.runButtonEl.addEventListener("click", () => this.runLint());
+
+    const autoSyncButtonEl = controlsEl.createEl("button", {
+      cls: "clickable-icon carnelian-lint-view__auto-sync-button",
+      attr: { "aria-label": "自動同期: OFF" },
+    });
+    setIcon(autoSyncButtonEl, "refresh-cw-off");
+    autoSyncButtonEl.addEventListener("click", () => {
+      this.autoSyncEnabled = !this.autoSyncEnabled;
+      setIcon(
+        autoSyncButtonEl,
+        this.autoSyncEnabled ? "refresh-cw" : "refresh-cw-off",
+      );
+      autoSyncButtonEl.toggleClass(
+        "carnelian-lint-view__auto-sync-button--active",
+        this.autoSyncEnabled,
+      );
+      autoSyncButtonEl.setAttribute(
+        "aria-label",
+        `自動同期: ${this.autoSyncEnabled ? "ON" : "OFF"}`,
+      );
+    });
 
     this.summaryTextEl = containerEl.createDiv({
       cls: "carnelian-lint-view__summary-text",
@@ -163,6 +196,26 @@ export class LintView extends ItemView {
     this.lastTargetFileCount = targetFiles.length;
     this.lastRecords = records;
     this.lastCodeOrder = computeCodeOrder(records);
+    this.renderResults();
+  }
+
+  private async onFileLinted(file: TFile, autofix: boolean): Promise<void> {
+    if (!this.autoSyncEnabled) return;
+    const patterns = parsePatterns(this.inputEl.value);
+    if (
+      patterns.length > 0 &&
+      !isMatchedGlobPatterns(file.path, patterns, { nocase: true })
+    )
+      return;
+    const inspections = await inspectFile(file, this.settings);
+    const relevantInspections = autofix
+      ? inspections.filter((i) => !i.fix)
+      : inspections;
+    this.lastRecords = [
+      ...this.lastRecords.filter((r) => r.file.path !== file.path),
+      ...relevantInspections.map((inspection) => ({ file, inspection })),
+    ];
+    this.lastCodeOrder = computeCodeOrder(this.lastRecords);
     this.renderResults();
   }
 

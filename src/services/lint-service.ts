@@ -12,9 +12,12 @@ import {
 } from "src/lib/helpers/events";
 import { getPropertiesByPath } from "src/lib/helpers/properties";
 import { lint, removeLinterInspectionElements } from "src/lib/obsutils/linter";
+import type { UApp } from "src/lib/types";
 import { type LintInspection, lintAll } from "src/lib/utils/linter";
 import type { Service } from "src/services";
 import type { PluginSettings } from "src/settings";
+
+declare let app: UApp;
 
 /**
  * ファイルをアクティブにしたときにLint(検査)をするサービスです
@@ -72,6 +75,7 @@ export async function lintFile(
   autofix: boolean,
 ) {
   await lint(file, [contentLinter, propertyLinter], settings, autofix);
+  app.workspace.trigger("carnelian:lint-complete" as any, file, autofix);
 }
 
 export async function inspectFile(

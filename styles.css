@@ -443,7 +443,7 @@
 
 .carnelian-lint-view__controls {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-columns: minmax(0, 1fr) auto auto;
   gap: 0.5rem;
 }
 
@@ -453,6 +453,10 @@
 
 .carnelian-lint-view__run-button {
   white-space: nowrap;
+}
+
+.carnelian-lint-view__auto-sync-button--active {
+  color: var(--interactive-accent);
 }
 
 .carnelian-lint-view__summary-text {
