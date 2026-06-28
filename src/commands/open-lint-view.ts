@@ -1,6 +1,7 @@
 import { ItemView, setIcon, type TFile, type WorkspaceLeaf } from "obsidian";
 import { moveToOffset } from "src/lib/helpers/editors/basic";
 import { getMarkdownFiles, openFile } from "src/lib/helpers/entries";
+import { getOpenMarkdownFiles } from "src/lib/helpers/leaves";
 import { notify, notifyValidationError } from "src/lib/helpers/ui";
 import type { UApp } from "src/lib/types";
 import { groupBy } from "src/lib/utils/collections";
@@ -100,8 +101,7 @@ export class LintView extends ItemView {
     });
     this.inputEl = controlsEl.createEl("input", {
       cls: "carnelian-lint-view__input",
-      placeholder: "ex: Notes/**/*.md, 📘Articles/**/*.md",
-      value: "**/*.md",
+      placeholder: "未入力: 開いているファイル / ex: Notes/**/*.md",
     });
     this.inputEl.addEventListener("keydown", (ev) => {
       if (ev.isComposing || ev.key !== "Enter") {
@@ -142,7 +142,7 @@ export class LintView extends ItemView {
       cls: "carnelian-lint-view__summary-text",
     });
     this.summaryTextEl.createSpan({
-      text: "Path glob pattern を指定して実行してください",
+      text: "実行してください (未入力の場合は開いているファイルが対象)",
       cls: "carnelian-lint-view__summary-placeholder",
     });
     this.levelSectionEl = containerEl.createDiv({
@@ -156,20 +156,25 @@ export class LintView extends ItemView {
     });
   }
 
-  private async runLint(): Promise<void> {
+  private async runLint(options?: {
+    silent?: boolean;
+    autofix?: boolean;
+  }): Promise<void> {
     if (!this.settings) {
       notifyValidationError("Linter設定がありません");
       return;
     }
 
+    const silent = options?.silent ?? false;
+    const autofix = options?.autofix ?? false;
     const patterns = parsePatterns(this.inputEl.value);
-    const targetFiles = getMarkdownFiles()
-      .filter((file) =>
-        patterns.length === 0
-          ? true
-          : isMatchedGlobPatterns(file.path, patterns, { nocase: true }),
-      )
-      .toSorted((a, b) => a.path.localeCompare(b.path));
+    const targetFiles = (
+      patterns.length === 0
+        ? getOpenMarkdownFiles()
+        : getMarkdownFiles().filter((file) =>
+            isMatchedGlobPatterns(file.path, patterns, { nocase: true }),
+          )
+    ).toSorted((a, b) => a.path.localeCompare(b.path));
 
     if (targetFiles.length === 0) {
       this.renderEmptySummary("対象ファイルがありません");
@@ -177,20 +182,28 @@ export class LintView extends ItemView {
       return;
     }
 
-    this.setRunning(true);
-    const notice = notify(`${targetFiles.length}件のファイルをLint中...`);
+    if (!silent) {
+      this.setRunning(true);
+    }
+    const notice =
+      targetFiles.length >= 100
+        ? notify(`${targetFiles.length}件のファイルをLint中...`)
+        : null;
     const records: InspectionRecord[] = [];
 
     try {
       for (const file of targetFiles) {
         const inspections = await inspectFile(file, this.settings);
         for (const inspection of inspections) {
+          if (autofix && inspection.fix) continue;
           records.push({ file, inspection });
         }
       }
     } finally {
-      notice.hide();
-      this.setRunning(false);
+      notice?.hide();
+      if (!silent) {
+        this.setRunning(false);
+      }
     }
 
     this.lastTargetFileCount = targetFiles.length;
@@ -202,21 +215,12 @@ export class LintView extends ItemView {
   private async onFileLinted(file: TFile, autofix: boolean): Promise<void> {
     if (!this.autoSyncEnabled) return;
     const patterns = parsePatterns(this.inputEl.value);
-    if (
-      patterns.length > 0 &&
-      !isMatchedGlobPatterns(file.path, patterns, { nocase: true })
-    )
-      return;
-    const inspections = await inspectFile(file, this.settings);
-    const relevantInspections = autofix
-      ? inspections.filter((i) => !i.fix)
-      : inspections;
-    this.lastRecords = [
-      ...this.lastRecords.filter((r) => r.file.path !== file.path),
-      ...relevantInspections.map((inspection) => ({ file, inspection })),
-    ];
-    this.lastCodeOrder = computeCodeOrder(this.lastRecords);
-    this.renderResults();
+    if (patterns.length === 0) {
+      if (!getOpenMarkdownFiles().some((f) => f.path === file.path)) return;
+    } else {
+      if (!isMatchedGlobPatterns(file.path, patterns, { nocase: true })) return;
+    }
+    await this.runLint({ silent: true, autofix });
   }
 
   private setRunning(running: boolean): void {

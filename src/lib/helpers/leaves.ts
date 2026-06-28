@@ -1,3 +1,4 @@
+import type { TFile } from "obsidian";
 import type { UApp, UWorkspaceLeaf, UWorkspaceMarkdownLeaf } from "../types";
 
 declare let app: UApp;
@@ -32,4 +33,18 @@ export function getAllLeaves(): UWorkspaceLeaf[] {
  */
 export function getAllMarkdownLeaves(): UWorkspaceMarkdownLeaf[] {
   return app.workspace.getLeavesOfType("markdown") as UWorkspaceMarkdownLeaf[];
+}
+
+/**
+ * 開いているMarkdownファイルを重複除外して返却します
+ */
+export function getOpenMarkdownFiles(): TFile[] {
+  const seen = new Set<string>();
+  return getAllMarkdownLeaves()
+    .flatMap((leaf) => (leaf.view.file ? [leaf.view.file] : []))
+    .filter((file) => {
+      if (seen.has(file.path)) return false;
+      seen.add(file.path);
+      return true;
+    });
 }
