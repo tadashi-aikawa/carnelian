@@ -53,7 +53,7 @@ export function lintAll(linters: Linter[], args: LintArgs): LintInspection[] {
   );
 }
 
-function parseIgnoreLintEntry(entry: string): IgnoreLintEntry {
+export function parseIgnoreLintEntry(entry: string): IgnoreLintEntry {
   const colonIndex = entry.indexOf(":");
   if (colonIndex === -1) {
     return { rule: entry };

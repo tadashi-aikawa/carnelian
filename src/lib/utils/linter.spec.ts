@@ -285,3 +285,189 @@ test("ignoreLintが不正な形式(配列でない)の場合は無視される",
     },
   ]);
 });
+
+import { VALID_LINT_RULE_CODES } from "src/definitions/linters/rule-codes";
+// --- ignoreLint検証用Linter ---
+import { parseIgnoreLintEntry } from "./linter";
+
+const ignoreLintValidationLinter: Linter = {
+  lint: ({ properties }) => {
+    const raw = properties?.ignoreLint;
+    if (raw === undefined || raw === null) {
+      return [];
+    }
+
+    if (!Array.isArray(raw)) {
+      return [
+        {
+          code: "Invalid ignoreLint",
+          message: `ignoreLintは配列で指定してください (現在の型: ${typeof raw})`,
+          level: "WARN",
+        },
+      ];
+    }
+
+    const inspections: LintInspection[] = [];
+    for (const entry of raw) {
+      if (typeof entry !== "string") {
+        inspections.push({
+          code: "Invalid ignoreLint",
+          message: `ignoreLintの要素は文字列で指定してください (値: ${JSON.stringify(entry)})`,
+          level: "WARN",
+        });
+        continue;
+      }
+
+      const parsed = parseIgnoreLintEntry(entry);
+      if (
+        !VALID_LINT_RULE_CODES.includes(
+          parsed.rule as (typeof VALID_LINT_RULE_CODES)[number],
+        )
+      ) {
+        inspections.push({
+          code: "Invalid ignoreLint",
+          message: `ignoreLintに存在しないルール名 '${parsed.rule}' が指定されています`,
+          level: "WARN",
+        });
+      }
+    }
+
+    return inspections;
+  },
+};
+
+test("ignoreLintに有効なルール名のみ指定されている場合は診断なし", () => {
+  const linters = [ignoreLintValidationLinter] as Linter[];
+  const actual = lintAll(linters, {
+    title: "test",
+    content: "",
+    body: "",
+    path: "",
+    properties: {
+      ignoreLint: ["No description", "Tags"],
+    },
+    settings: {},
+  });
+  expect(actual).toStrictEqual([]);
+});
+
+test("ignoreLintに存在しないルール名が指定されている場合は診断が返る", () => {
+  const linters = [ignoreLintValidationLinter] as Linter[];
+  const actual = lintAll(linters, {
+    title: "test",
+    content: "",
+    body: "",
+    path: "",
+    properties: {
+      ignoreLint: ["存在しないルール"],
+    },
+    settings: {},
+  });
+  expect(actual).toStrictEqual([
+    {
+      code: "Invalid ignoreLint",
+      message:
+        "ignoreLintに存在しないルール名 '存在しないルール' が指定されています",
+      level: "WARN",
+    },
+  ]);
+});
+
+test("ignoreLintに不正ルール名:メッセージ形式が指定されている場合はルール名部分のみ検証する", () => {
+  const linters = [ignoreLintValidationLinter] as Linter[];
+  const actual = lintAll(linters, {
+    title: "test",
+    content: "",
+    body: "",
+    path: "",
+    properties: {
+      ignoreLint: ["不正ルール:*メッセージ*"],
+    },
+    settings: {},
+  });
+  expect(actual).toStrictEqual([
+    {
+      code: "Invalid ignoreLint",
+      message: "ignoreLintに存在しないルール名 '不正ルール' が指定されています",
+      level: "WARN",
+    },
+  ]);
+});
+
+test("ignoreLintに有効なルール名:メッセージ形式が指定されている場合は診断なし", () => {
+  const linters = [ignoreLintValidationLinter] as Linter[];
+  const actual = lintAll(linters, {
+    title: "test",
+    content: "",
+    body: "",
+    path: "",
+    properties: {
+      ignoreLint: ["No description:*テスト*"],
+    },
+    settings: {},
+  });
+  expect(actual).toStrictEqual([]);
+});
+
+test("ignoreLintに有効なルール名と不正なルール名が混在する場合は不正なもののみ診断", () => {
+  const linters = [ignoreLintValidationLinter] as Linter[];
+  const actual = lintAll(linters, {
+    title: "test",
+    content: "",
+    body: "",
+    path: "",
+    properties: {
+      ignoreLint: ["No description", "存在しない", "Tags"],
+    },
+    settings: {},
+  });
+  expect(actual).toStrictEqual([
+    {
+      code: "Invalid ignoreLint",
+      message: "ignoreLintに存在しないルール名 '存在しない' が指定されています",
+      level: "WARN",
+    },
+  ]);
+});
+
+test("ignoreLintが配列でなく文字列の場合はフォーマット不正の診断が返る", () => {
+  const linters = [ignoreLintValidationLinter] as Linter[];
+  const actual = lintAll(linters, {
+    title: "test",
+    content: "",
+    body: "",
+    path: "",
+    properties: {
+      ignoreLint: "No description",
+    },
+    settings: {},
+  });
+  expect(actual).toStrictEqual([
+    {
+      code: "Invalid ignoreLint",
+      message: "ignoreLintは配列で指定してください (現在の型: string)",
+      level: "WARN",
+    },
+  ]);
+});
+
+test("ignoreLintの配列にstring以外の要素がある場合はフォーマット不正の診断が返る", () => {
+  const linters = [ignoreLintValidationLinter] as Linter[];
+  const actual = lintAll(linters, {
+    title: "test",
+    content: "",
+    body: "",
+    path: "",
+    properties: {
+      ignoreLint: ["No description", 123, "Tags"],
+    },
+    settings: {},
+  });
+  expect(actual).toStrictEqual([
+    {
+      code: "Invalid ignoreLint",
+      message: "ignoreLintの要素は文字列で指定してください (値: 123)",
+      level: "WARN",
+    },
+  ]);
+});

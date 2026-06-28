@@ -145,6 +145,8 @@ export interface Config {
         "Inconsistent fixme"?: LinterRuleConfig;
         /** descriptionプロパティと本文の内容を比較し、不一致を検出する */
         "Inconsistent description"?: LinterRuleConfig;
+        /** ignoreLintプロパティに存在しないルール名やフォーマット不正を検出する */
+        "Invalid ignoreLint"?: LinterRuleConfig;
       };
       /** コンテンツに関するルール */
       content?: {

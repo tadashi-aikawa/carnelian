@@ -8,7 +8,11 @@ import {
   stripLinks,
 } from "src/lib/obsutils/parser";
 import { isPresent } from "src/lib/utils/guard";
-import type { Linter, LintInspection } from "src/lib/utils/linter";
+import {
+  type Linter,
+  type LintInspection,
+  parseIgnoreLintEntry,
+} from "src/lib/utils/linter";
 import {
   isBlockquote,
   isCodeBlockStartOrEnd,
@@ -25,6 +29,7 @@ import {
   type LintNoteType,
   resolveLintLevel,
 } from "./LintNoteType";
+import { VALID_LINT_RULE_CODES } from "./rule-codes";
 
 type PropertyLintInspection = LintInspection & {
   propertyCommand?: { [key: string]: any | null };
@@ -100,6 +105,14 @@ export const propertyLinter: Linter = {
       rules?.["No url"]
         ? createNoUrl(noteType, path, vp, rules["No url"])
         : null,
+      ...(rules?.["Invalid ignoreLint"]
+        ? createInvalidIgnoreLint(
+            noteType,
+            path,
+            vp,
+            rules["Invalid ignoreLint"],
+          )
+        : []),
     ].filter(isPresent);
   },
 };
@@ -450,4 +463,59 @@ function createInconsistentDescription(
           },
     )
     .exhaustive();
+}
+
+function createInvalidIgnoreLint(
+  noteType: LintNoteType,
+  path: string,
+  properties?: Properties,
+  rule?: LinterRuleConfig,
+): LintInspection[] {
+  const level = resolveLintLevel(rule, noteType.name, path);
+  if (!level) {
+    return [];
+  }
+
+  const raw = properties?.ignoreLint;
+  if (raw === undefined || raw === null) {
+    return [];
+  }
+
+  if (!Array.isArray(raw)) {
+    return [
+      {
+        code: "Invalid ignoreLint",
+        message: `ignoreLintは配列で指定してください (現在の型: ${typeof raw})`,
+        level,
+      },
+    ];
+  }
+
+  const inspections: LintInspection[] = [];
+
+  for (const entry of raw) {
+    if (typeof entry !== "string") {
+      inspections.push({
+        code: "Invalid ignoreLint",
+        message: `ignoreLintの要素は文字列で指定してください (値: ${JSON.stringify(entry)})`,
+        level,
+      });
+      continue;
+    }
+
+    const parsed = parseIgnoreLintEntry(entry);
+    if (
+      !VALID_LINT_RULE_CODES.includes(
+        parsed.rule as (typeof VALID_LINT_RULE_CODES)[number],
+      )
+    ) {
+      inspections.push({
+        code: "Invalid ignoreLint",
+        message: `ignoreLintに存在しないルール名 '${parsed.rule}' が指定されています`,
+        level,
+      });
+    }
+  }
+
+  return inspections;
 }

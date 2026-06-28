@@ -650,6 +650,10 @@
                       "$ref": "#/definitions/LinterRuleConfig",
                       "description": "本文の!FIXMEや==強調とfixmeプロパティの状態を同期させる"
                     },
+                    "Invalid ignoreLint": {
+                      "$ref": "#/definitions/LinterRuleConfig",
+                      "description": "ignoreLintプロパティに存在しないルール名やフォーマット不正を検出する"
+                    },
                     "MkDocs title": {
                       "$ref": "#/definitions/LinterRuleConfig",
                       "description": "MkDocs向けのtitleプロパティをファイル名と同期させる"
