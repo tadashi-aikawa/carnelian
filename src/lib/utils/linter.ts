@@ -1,5 +1,11 @@
 import type { PluginSettings } from "src/settings";
+import { isMatchedGlobPattern } from "./strings";
 import type { Properties } from "./types";
+
+type IgnoreLintEntry = {
+  rule: string;
+  message?: string;
+};
 
 export interface LintInspection {
   code: string;
@@ -30,7 +36,47 @@ export interface Linter {
 }
 
 export function lintAll(linters: Linter[], args: LintArgs): LintInspection[] {
-  return linters.flatMap((ltr) => ltr.lint(args));
+  const inspections = linters.flatMap((ltr) => ltr.lint(args));
+
+  const raw = args.properties?.ignoreLint;
+  const ignoreLintEntries: IgnoreLintEntry[] = Array.isArray(raw)
+    ? raw
+        .filter((x): x is string => typeof x === "string")
+        .map(parseIgnoreLintEntry)
+    : [];
+  if (ignoreLintEntries.length === 0) {
+    return inspections;
+  }
+
+  return inspections.filter(
+    (ins) => !shouldIgnoreInspection(ins, ignoreLintEntries),
+  );
+}
+
+function parseIgnoreLintEntry(entry: string): IgnoreLintEntry {
+  const colonIndex = entry.indexOf(":");
+  if (colonIndex === -1) {
+    return { rule: entry };
+  }
+  return {
+    rule: entry.slice(0, colonIndex),
+    message: entry.slice(colonIndex + 1),
+  };
+}
+
+function shouldIgnoreInspection(
+  inspection: LintInspection,
+  entries: IgnoreLintEntry[],
+): boolean {
+  return entries.some((entry) => {
+    if (entry.rule !== inspection.code) {
+      return false;
+    }
+    if (entry.message) {
+      return isMatchedGlobPattern(inspection.message, entry.message);
+    }
+    return true;
+  });
 }
 
 export function lineNoFromOffset(

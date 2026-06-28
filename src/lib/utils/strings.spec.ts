@@ -16,6 +16,7 @@ import {
   isCodeBlockStartOrEnd,
   isHeading,
   isHtmlTag,
+  isMatchedGlobPattern,
   isMatchedGlobPatterns,
   isOnlyImageEmbedLink,
   isUrl,
@@ -778,4 +779,14 @@ test.each([
   typeof isHtmlTag
 >[0], expected: ReturnType<typeof isHtmlTag>) => {
   expect(isHtmlTag(text)).toBe(expected);
+});
+
+test.each([
+  ["[[廃止されたノート]] は未解決のリンクです", "*廃止されたノート*", true],
+  ["[[foo|foo]]", "[[foo|foo]]", true],
+  ["[[bar|bar]]", "[[foo|foo]]", false],
+  ["[[廃止されたノート]] は未解決のリンクです", "*別のノート*", false],
+  ["バックリンクが存在しません", "*", true],
+])(`isMatchedGlobPattern("%s", "%s")`, (str, pattern, expected) => {
+  expect(isMatchedGlobPattern(str, pattern)).toBe(expected);
 });

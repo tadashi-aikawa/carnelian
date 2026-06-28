@@ -498,6 +498,16 @@ export function microFuzzy(value: string, query: string): FuzzyResult {
   return { type: "none", score: 0 };
 }
 
+export function isMatchedGlobPattern(str: string, pattern: string): boolean {
+  try {
+    const escaped = pattern.replace(/\[/g, "\\[").replace(/\]/g, "\\]");
+    return minimatch(str, escaped);
+  } catch (error) {
+    console.warn(`Invalid glob pattern detected: ${error}`);
+    return false;
+  }
+}
+
 /**
  * pathがpatternsのいずれかのglobパターンにマッチするかどうかを返却します
  */

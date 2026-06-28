@@ -166,3 +166,122 @@ test("offsetが本文範囲外なら行番号を取得しない", () => {
   expect(lineNoFromOffset("abc", 4)).toBeNull();
   expect(lineNoFromOffset("abc", 1.5)).toBeNull();
 });
+
+test("ignoreLintでruleのみ指定すると該当codeの診断が除外される", () => {
+  const linters = [titleLinter, properiesLinter] as Linter[];
+  const actual = lintAll(linters, {
+    title: "ab",
+    content: "",
+    body: "",
+    path: "",
+    properties: {
+      aliases: ["hoge"],
+      tags: [],
+      ignoreLint: ["TLL002"],
+    },
+    settings: {},
+  });
+  expect(actual).toStrictEqual([
+    {
+      code: "PL001",
+      message: "tagsが空になっています",
+      level: "WARN",
+    },
+    {
+      code: "PL002",
+      message: "aliasesが設定されています",
+      level: "INFO",
+    },
+  ]);
+});
+
+test("ignoreLintでrule+messageを指定するとglobマッチする診断のみ除外される", () => {
+  const linters = [titleLinter] as Linter[];
+  const actual = lintAll(linters, {
+    title: " ",
+    content: "",
+    body: "",
+    path: "",
+    properties: {
+      ignoreLint: ["TLL001:*空白*"],
+    },
+    settings: {},
+  });
+  expect(actual).toStrictEqual([
+    {
+      code: "TLL002",
+      message: "タイトルが5文字未満になっています",
+      level: "WARN",
+    },
+  ]);
+});
+
+test("ignoreLintのmessageがマッチしないと除外されない", () => {
+  const linters = [titleLinter] as Linter[];
+  const actual = lintAll(linters, {
+    title: " ",
+    content: "",
+    body: "",
+    path: "",
+    properties: {
+      ignoreLint: ["TLL001:*マッチしない*"],
+    },
+    settings: {},
+  });
+  expect(actual).toStrictEqual([
+    {
+      code: "TLL001",
+      message: "タイトルが空白のみになっています",
+      level: "ERROR",
+    },
+    {
+      code: "TLL002",
+      message: "タイトルが5文字未満になっています",
+      level: "WARN",
+    },
+  ]);
+});
+
+test("ignoreLintで複数エントリを指定するとすべて処理される", () => {
+  const linters = [titleLinter, properiesLinter] as Linter[];
+  const actual = lintAll(linters, {
+    title: "ab",
+    content: "",
+    body: "",
+    path: "",
+    properties: {
+      aliases: ["hoge"],
+      tags: [],
+      ignoreLint: ["TLL002", "PL001"],
+    },
+    settings: {},
+  });
+  expect(actual).toStrictEqual([
+    {
+      code: "PL002",
+      message: "aliasesが設定されています",
+      level: "INFO",
+    },
+  ]);
+});
+
+test("ignoreLintが不正な形式(配列でない)の場合は無視される", () => {
+  const linters = [titleLinter] as Linter[];
+  const actual = lintAll(linters, {
+    title: "1234",
+    content: "",
+    body: "",
+    path: "",
+    properties: {
+      ignoreLint: "invalid",
+    },
+    settings: {},
+  });
+  expect(actual).toStrictEqual([
+    {
+      code: "TLL002",
+      message: "タイトルが5文字未満になっています",
+      level: "WARN",
+    },
+  ]);
+});
