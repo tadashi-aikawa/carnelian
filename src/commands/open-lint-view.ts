@@ -158,7 +158,7 @@ export class LintView extends ItemView {
 
   private async runLint(options?: {
     silent?: boolean;
-    autofix?: boolean;
+    autofixedFile?: TFile;
   }): Promise<void> {
     if (!this.settings) {
       notifyValidationError("Linter設定がありません");
@@ -166,7 +166,7 @@ export class LintView extends ItemView {
     }
 
     const silent = options?.silent ?? false;
-    const autofix = options?.autofix ?? false;
+    const autofixedFile = options?.autofixedFile;
     const patterns = parsePatterns(this.inputEl.value);
     const targetFiles = (
       patterns.length === 0
@@ -195,7 +195,7 @@ export class LintView extends ItemView {
       for (const file of targetFiles) {
         const inspections = await inspectFile(file, this.settings);
         for (const inspection of inspections) {
-          if (autofix && inspection.fix) continue;
+          if (autofixedFile?.path === file.path && inspection.fix) continue;
           records.push({ file, inspection });
         }
       }
@@ -220,7 +220,10 @@ export class LintView extends ItemView {
     } else {
       if (!isMatchedGlobPatterns(file.path, patterns, { nocase: true })) return;
     }
-    await this.runLint({ silent: true, autofix });
+    await this.runLint({
+      silent: true,
+      autofixedFile: autofix ? file : undefined,
+    });
   }
 
   private setRunning(running: boolean): void {
