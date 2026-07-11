@@ -8,24 +8,32 @@ import { getAllMarkdownLeaves } from "src/lib/helpers/leaves";
 import type { UCodeMirrorEditor } from "src/lib/types";
 import type { Service } from "src/services";
 import {
-  linkStatusBadgeExtension,
-  statusBadgeRefresh,
-} from "./link-status-badge-extension";
+  createLinkDecorationExtension,
+  type LinkDecorationOptions,
+  linkDecorationRefresh,
+} from "./link-decoration-extension";
 
 /**
- * Live Previewで内部リンクの直後にリンク先ノートのstatusプロパティをバッジ表示するサービスです
+ * Live Previewで内部リンクをリンク先ノートのプロパティに応じて装飾するサービスです
+ * - statusプロパティをリンク直後にバッジ表示
+ * - fixmeプロパティが有効なリンクを強調表示
  */
-export class LinkStatusBadgeService implements Service {
-  name = "Link status badge";
+export class LinkDecorationService implements Service {
+  name = "Link decoration";
 
   unsetHandlers: (() => void)[] = [];
 
-  constructor(private plugin: Plugin) {}
+  constructor(
+    private plugin: Plugin,
+    private options: LinkDecorationOptions,
+  ) {}
 
   onload(): void {
-    this.plugin.registerEditorExtension(linkStatusBadgeExtension);
+    this.plugin.registerEditorExtension(
+      createLinkDecorationExtension(this.options),
+    );
 
-    // リンク先のstatus変更やリンク解決の変化(リネーム/削除)をバッジに反映する
+    // リンク先のプロパティ変更やリンク解決の変化(リネーム/削除)を装飾に反映する
     const refresh = () => this.refreshAllEditors();
     this.unsetHandlers = [
       setOnPropertiesChangedEvent(refresh),
@@ -42,12 +50,12 @@ export class LinkStatusBadgeService implements Service {
   }
 
   /**
-   * 開いているすべてのMarkdownエディタのバッジを再構築します
+   * 開いているすべてのMarkdownエディタの装飾を再構築します
    */
   refreshAllEditors(): void {
     for (const leaf of getAllMarkdownLeaves()) {
       (leaf.view.editor as UCodeMirrorEditor | undefined)?.cm.dispatch({
-        annotations: statusBadgeRefresh.of(true),
+        annotations: linkDecorationRefresh.of(true),
       });
     }
   }

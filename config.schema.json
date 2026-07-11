@@ -158,6 +158,10 @@
           "additionalProperties": false,
           "description": "エディタの表示に関する設定",
           "properties": {
+            "Highlight fixme links": {
+              "description": "リンク先ノートのfixmeプロパティが有効な内部リンクを強調表示する（Live Previewのみ）",
+              "type": "boolean"
+            },
             "Show link status badge": {
               "description": "内部リンクの直後にリンク先ノートのstatusプロパティをバッジ表示する（Live Previewのみ）",
               "type": "boolean"

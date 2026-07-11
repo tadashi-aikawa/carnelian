@@ -779,3 +779,13 @@ button.carnelian-lint-view__stat:hover {
    color: rgb(var(--color-green-rgb));
  }
 */
+
+/*
+ Fixme link highlight (fixmeプロパティが有効なノートへの内部リンクの強調)
+ VaultのCSSスニペット側で上書き可能
+*/
+.carnelian-link-fixme {
+  text-decoration: underline wavy;
+  text-decoration-color: var(--color-orange);
+  background-color: color-mix(in srgb, var(--color-orange) 12%, transparent);
+}

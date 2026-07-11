@@ -14,11 +14,18 @@ import { linkText2PathFrom } from "src/lib/helpers/links";
 import { getPropertiesByPath } from "src/lib/helpers/properties";
 import { parseInternalLinkText } from "src/lib/obsutils/parser";
 
+export interface LinkDecorationOptions {
+  /** リンク直後にリンク先ノートのstatusプロパティをバッジ表示する */
+  showStatusBadge: boolean;
+  /** リンク先ノートのfixmeプロパティが有効なリンクを強調表示する */
+  highlightFixmeLinks: boolean;
+}
+
 /**
- * バッジの再構築を強制するためのAnnotation
+ * リンク装飾の再構築を強制するためのAnnotation
  * (metadataCacheの変更など、ドキュメント外の理由で再描画したいときに使う)
  */
-export const statusBadgeRefresh = Annotation.define<boolean>();
+export const linkDecorationRefresh = Annotation.define<boolean>();
 
 /**
  * リンク直後にリンク先ノートのstatusプロパティを表示するバッジ
@@ -46,6 +53,13 @@ class StatusBadgeWidget extends WidgetType {
   }
 }
 
+/**
+ * fixmeプロパティが有効なノートへのリンクを強調するmark decoration
+ */
+const fixmeLinkDecoration = Decoration.mark({
+  class: "carnelian-link-fixme",
+});
+
 function selectionOverlaps(
   state: EditorState,
   from: number,
@@ -54,7 +68,10 @@ function selectionOverlaps(
   return state.selection.ranges.some((r) => r.from <= to && r.to >= from);
 }
 
-function buildDecorations(view: EditorView): DecorationSet {
+function buildDecorations(
+  view: EditorView,
+  options: LinkDecorationOptions,
+): DecorationSet {
   if (!view.state.field(editorLivePreviewField)) {
     return Decoration.none;
   }
@@ -70,7 +87,11 @@ function buildDecorations(view: EditorView): DecorationSet {
   // 連続するhmd-internal-linkノードを1つのリンクとしてマージするためのバッファ
   let link: { from: number; to: number } | null = null;
 
-  const addBadge = (linkFrom: number, linkTo: number, badgePos: number) => {
+  const addDecorations = (
+    linkFrom: number,
+    linkTo: number,
+    badgePos: number,
+  ) => {
     // リンク範囲(先頭の [[ を含む)に選択範囲が重なる場合はソース表示になるため出さない
     const outerFrom =
       state.doc.sliceString(Math.max(linkFrom - 2, 0), linkFrom) === "[["
@@ -88,17 +109,23 @@ function buildDecorations(view: EditorView): DecorationSet {
       return;
     }
 
-    const status = getPropertiesByPath(path)?.status;
-    if (typeof status !== "string" || status === "") {
-      return;
+    const properties = getPropertiesByPath(path);
+
+    if (options.highlightFixmeLinks && properties?.fixme === true) {
+      decorations.push(fixmeLinkDecoration.range(linkFrom, linkTo));
     }
 
-    decorations.push(
-      Decoration.widget({
-        widget: new StatusBadgeWidget(status),
-        side: 1,
-      }).range(badgePos),
-    );
+    if (options.showStatusBadge) {
+      const status = properties?.status;
+      if (typeof status === "string" && status !== "") {
+        decorations.push(
+          Decoration.widget({
+            widget: new StatusBadgeWidget(status),
+            side: 1,
+          }).range(badgePos),
+        );
+      }
+    }
   };
 
   for (const { from, to } of view.visibleRanges) {
@@ -116,10 +143,10 @@ function buildDecorations(view: EditorView): DecorationSet {
           return;
         }
 
-        // 閉じ括弧 ]] のノードでリンクを確定し、その直後にバッジを置く
+        // 閉じ括弧 ]] のノードでリンクを確定し、その直後に装飾を置く
         if (name.includes("formatting-link-end")) {
           if (link && node.from <= link.to + 2) {
-            addBadge(link.from, link.to, node.to);
+            addDecorations(link.from, link.to, node.to);
           }
           link = null;
         }
@@ -131,30 +158,29 @@ function buildDecorations(view: EditorView): DecorationSet {
   return Decoration.set(decorations, true);
 }
 
-class LinkStatusBadgePlugin implements PluginValue {
-  decorations: DecorationSet;
+export function createLinkDecorationExtension(options: LinkDecorationOptions) {
+  class LinkDecorationPlugin implements PluginValue {
+    decorations: DecorationSet;
 
-  constructor(view: EditorView) {
-    this.decorations = buildDecorations(view);
-  }
+    constructor(view: EditorView) {
+      this.decorations = buildDecorations(view, options);
+    }
 
-  update(update: ViewUpdate): void {
-    if (
-      update.docChanged ||
-      update.viewportChanged ||
-      update.selectionSet ||
-      update.startState.field(editorLivePreviewField) !==
-        update.state.field(editorLivePreviewField) ||
-      update.transactions.some((tr) => tr.annotation(statusBadgeRefresh))
-    ) {
-      this.decorations = buildDecorations(update.view);
+    update(update: ViewUpdate): void {
+      if (
+        update.docChanged ||
+        update.viewportChanged ||
+        update.selectionSet ||
+        update.startState.field(editorLivePreviewField) !==
+          update.state.field(editorLivePreviewField) ||
+        update.transactions.some((tr) => tr.annotation(linkDecorationRefresh))
+      ) {
+        this.decorations = buildDecorations(update.view, options);
+      }
     }
   }
-}
 
-export const linkStatusBadgeExtension = ViewPlugin.fromClass(
-  LinkStatusBadgePlugin,
-  {
+  return ViewPlugin.fromClass(LinkDecorationPlugin, {
     decorations: (v) => v.decorations,
-  },
-);
+  });
+}

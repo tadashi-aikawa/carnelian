@@ -3,7 +3,7 @@ import { AddPropertiesToHeadService } from "./services/add-properties-to-head-se
 import { AutoDatePropertiesService } from "./services/auto-date-properties-service";
 import { FormatService } from "./services/format-service";
 import { LinkClickService } from "./services/link-click-service";
-import { LinkStatusBadgeService } from "./services/link-status-badge-service";
+import { LinkDecorationService } from "./services/link-decoration-service";
 import { LintService } from "./services/lint-service";
 import type { PluginSettings } from "./settings";
 
@@ -24,8 +24,14 @@ export function createServices(
     new FormatService(settings.formatter),
     new AddPropertiesToHeadService(),
     settings.click?.["Open link vertically"] ? new LinkClickService() : [],
-    settings.appearance?.["Show link status badge"]
-      ? new LinkStatusBadgeService(plugin)
+    settings.appearance?.["Show link status badge"] ||
+    settings.appearance?.["Highlight fixme links"]
+      ? new LinkDecorationService(plugin, {
+          showStatusBadge:
+            settings.appearance["Show link status badge"] ?? false,
+          highlightFixmeLinks:
+            settings.appearance["Highlight fixme links"] ?? false,
+        })
       : [],
   ].flat();
 }

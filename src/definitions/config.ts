@@ -112,6 +112,8 @@ export interface Config {
   appearance?: {
     /** 内部リンクの直後にリンク先ノートのstatusプロパティをバッジ表示する（Live Previewのみ） */
     "Show link status badge"?: boolean;
+    /** リンク先ノートのfixmeプロパティが有効な内部リンクを強調表示する（Live Previewのみ） */
+    "Highlight fixme links"?: boolean;
   };
 
   /** 保存時のフォーマッター設定 */
