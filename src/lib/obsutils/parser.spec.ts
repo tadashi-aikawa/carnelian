@@ -1,5 +1,6 @@
 import { expect, test } from "bun:test";
 import {
+  parseInternalLinkText,
   parseMarkdownList,
   parseTags,
   stripCodeAndHtmlBlocks,
@@ -58,6 +59,20 @@ test.each([
   typeof parseTags
 >) => {
   expect(parseTags(text)).toEqual(expected);
+});
+
+test.each([
+  ["Note", "Note"],
+  ["[[Note]]", "Note"],
+  ["Note|エイリアス", "Note"],
+  ["Note#見出し", "Note"],
+  ["Note#見出し|エイリアス", "Note"],
+  ["[[Note#見出し|エイリアス]]", "Note"],
+  ["Notes/Note", "Notes/Note"],
+  [" Note ", "Note"],
+  ["", ""],
+])(`parseInternalLinkText("%s")`, (raw: string, expected: string) => {
+  expect(parseInternalLinkText(raw)).toEqual(expected);
 });
 
 test.each([

@@ -87,6 +87,56 @@ export function setOnCreateFileEvent(
   };
 }
 
+/**
+ * ファイルがリネームされたときに実行する処理を設定します
+ *
+ * @returns 処理の解除処理
+ */
+export function setOnRenameFileEvent(
+  handler: (file: TFile, oldPath: string) => any,
+  ctx?: any,
+): () => void {
+  const ref = app.vault.on(
+    "rename",
+    (entry: TAbstractFile, oldPath: string) => {
+      if (!isFile(entry)) {
+        return;
+      }
+
+      handler(entry, oldPath);
+    },
+    ctx,
+  );
+  return () => {
+    app.vault.offref(ref);
+  };
+}
+
+/**
+ * ファイルが削除されたときに実行する処理を設定します
+ *
+ * @returns 処理の解除処理
+ */
+export function setOnDeleteFileEvent(
+  handler: (file: TFile) => any,
+  ctx?: any,
+): () => void {
+  const ref = app.vault.on(
+    "delete",
+    (entry: TAbstractFile) => {
+      if (!isFile(entry)) {
+        return;
+      }
+
+      handler(entry);
+    },
+    ctx,
+  );
+  return () => {
+    app.vault.offref(ref);
+  };
+}
+
 const exWCommandEventHandlerMap: {
   [name: string]: Parameters<typeof setOnExWCommandEvent>[0];
 } = {};

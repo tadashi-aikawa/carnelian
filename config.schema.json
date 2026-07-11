@@ -154,6 +154,17 @@
           },
           "type": "object"
         },
+        "appearance": {
+          "additionalProperties": false,
+          "description": "エディタの表示に関する設定",
+          "properties": {
+            "Show link status badge": {
+              "description": "内部リンクの直後にリンク先ノートのstatusプロパティをバッジ表示する（Live Previewのみ）",
+              "type": "boolean"
+            }
+          },
+          "type": "object"
+        },
         "click": {
           "additionalProperties": false,
           "description": "クリックイベントに関連するコマンド",

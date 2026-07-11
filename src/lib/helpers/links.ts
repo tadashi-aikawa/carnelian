@@ -76,10 +76,23 @@ export function getUnresolvedLinkMap(filePath: string): {
  * ```
  */
 export function linkText2Path(linkText: string): string | null {
-  return map(
-    getActiveFile(),
-    (f) =>
-      getMetadataCache().getFirstLinkpathDest(linkText, f.path)?.path ?? null,
+  return map(getActiveFile(), (f) => linkText2PathFrom(linkText, f.path));
+}
+
+/**
+ * リンクテキストから、起点ファイルパスを基準にファイルパスを取得します
+ *
+ * ```ts
+ * linkText2PathFrom("Obsidian", "Notes/Carnelian.md")
+ * // "Notes/Obsidian.md"
+ * ```
+ */
+export function linkText2PathFrom(
+  linkText: string,
+  sourcePath: string,
+): string | null {
+  return (
+    getMetadataCache().getFirstLinkpathDest(linkText, sourcePath)?.path ?? null
   );
 }
 

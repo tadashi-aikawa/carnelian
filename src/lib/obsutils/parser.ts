@@ -26,6 +26,25 @@ export function parseTags(text: string): string[] {
 }
 
 /**
+ * 内部リンクの生テキストから、リンク先の解決に使うリンクテキストを取得します
+ *
+ * ```ts
+ * parseInternalLinkText("[[Note#見出し|エイリアス]]")
+ * // "Note"
+ * parseInternalLinkText("Note|エイリアス")
+ * // "Note"
+ * ```
+ */
+export function parseInternalLinkText(raw: string): string {
+  return raw
+    .replace(/^\[\[/, "")
+    .replace(/\]\]$/, "")
+    .split("|")[0]
+    .split("#")[0]
+    .trim();
+}
+
+/**
  * テキストの装飾を除外します
  */
 export function stripDecoration(text: string): string {

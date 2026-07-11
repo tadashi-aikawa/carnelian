@@ -108,6 +108,12 @@ export interface Config {
     "Open link vertically"?: boolean;
   };
 
+  /** エディタの表示に関する設定 */
+  appearance?: {
+    /** 内部リンクの直後にリンク先ノートのstatusプロパティをバッジ表示する（Live Previewのみ） */
+    "Show link status badge"?: boolean;
+  };
+
   /** 保存時のフォーマッター設定 */
   formatter?: {
     /**

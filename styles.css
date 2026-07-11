@@ -751,3 +751,31 @@ button.carnelian-lint-view__stat:hover {
   line-height: 1.35;
   overflow-wrap: anywhere;
 }
+
+/*
+ Link status badge (Live Previewの内部リンク直後に表示するstatusバッジ)
+*/
+.carnelian-link-status-badge {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 0 0.45em;
+  font-size: 0.75em;
+  color: var(--text-normal);
+  border: 1px solid color-mix(in srgb, currentColor 40%, transparent);
+  border-radius: var(--radius-m);
+  /* 絵文字だけが際立たないよう、絵文字ごとバッジ全体を透過する */
+  opacity: 0.6;
+  white-space: nowrap;
+  user-select: none;
+}
+
+/*
+ statusごとの色分けはCarnelianには同梱しない
+ バッジにはstatus値がそのままdata-status属性として付与されるため、
+ VaultのCSSスニペット側で属性セレクタ(前方一致 ^= や完全一致 =)を使って自由に制御できる
+
+ 例:
+ .carnelian-link-status-badge[data-status^="✅"] {
+   color: rgb(var(--color-green-rgb));
+ }
+*/

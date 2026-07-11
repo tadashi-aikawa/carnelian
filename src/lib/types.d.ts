@@ -74,6 +74,8 @@ export type UCodeMirror = {
   posAtDOM(dom: any): number;
   /** CodeMirrorエディタにフォーカスします */
   focus(): void;
+  /** CodeMirrorエディタにトランザクションをディスパッチします */
+  dispatch(...specs: import("@codemirror/state").TransactionSpec[]): void;
 };
 export type UCodeMirrorEditor = Editor & {
   cm: UCodeMirror;

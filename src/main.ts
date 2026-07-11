@@ -27,7 +27,7 @@ export default class CarnelianPlugin extends Plugin {
     }
 
     const init = (cacheResolvedRef?: EventRef) => {
-      this.services = createServices(this.settings);
+      this.services = createServices(this.settings, this);
       for (const sv of this.services) {
         sv.onload?.();
       }
