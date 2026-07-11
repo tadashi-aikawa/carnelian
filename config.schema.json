@@ -162,8 +162,8 @@
               "description": "リンク先ノートのfixmeプロパティが有効な内部リンクを強調表示する（Live Previewのみ）",
               "type": "boolean"
             },
-            "Show link status badge": {
-              "description": "内部リンクの直後にリンク先ノートのstatusプロパティをバッジ表示する（Live Previewのみ）",
+            "Show link status chip": {
+              "description": "内部リンクをチップ(枠)で囲み、右端にリンク先ノートのstatusプロパティをバッジ表示する（Live Previewのみ）",
               "type": "boolean"
             }
           },

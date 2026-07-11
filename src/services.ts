@@ -24,11 +24,10 @@ export function createServices(
     new FormatService(settings.formatter),
     new AddPropertiesToHeadService(),
     settings.click?.["Open link vertically"] ? new LinkClickService() : [],
-    settings.appearance?.["Show link status badge"] ||
+    settings.appearance?.["Show link status chip"] ||
     settings.appearance?.["Highlight fixme links"]
       ? new LinkDecorationService(plugin, {
-          showStatusBadge:
-            settings.appearance["Show link status badge"] ?? false,
+          showStatusChip: settings.appearance["Show link status chip"] ?? false,
           highlightFixmeLinks:
             settings.appearance["Highlight fixme links"] ?? false,
         })

@@ -15,8 +15,8 @@ import { getPropertiesByPath } from "src/lib/helpers/properties";
 import { parseInternalLinkText } from "src/lib/obsutils/parser";
 
 export interface LinkDecorationOptions {
-  /** リンク直後にリンク先ノートのstatusプロパティをバッジ表示する */
-  showStatusBadge: boolean;
+  /** リンクをチップ(枠)で囲み、右端にリンク先ノートのstatusプロパティをバッジ表示する */
+  showStatusChip: boolean;
   /** リンク先ノートのfixmeプロパティが有効なリンクを強調表示する */
   highlightFixmeLinks: boolean;
 }
@@ -28,7 +28,8 @@ export interface LinkDecorationOptions {
 export const linkDecorationRefresh = Annotation.define<boolean>();
 
 /**
- * リンク直後にリンク先ノートのstatusプロパティを表示するバッジ
+ * リンク直後に表示する、縦線区切り + statusテキスト
+ * (リンクテキスト側のmark decorationがチップ枠を担い、その外側に続けて表示する)
  */
 class StatusBadgeWidget extends WidgetType {
   constructor(private readonly status: string) {
@@ -41,11 +42,16 @@ class StatusBadgeWidget extends WidgetType {
 
   override toDOM(): HTMLElement {
     // 色などの見た目はCSSの属性セレクタ([data-status^="✅"]など)で制御する
-    return createSpan({
+    const tail = createSpan({
+      cls: "carnelian-link-status-chip-tail",
+      attr: { "data-status": this.status },
+    });
+    tail.createSpan({
       cls: "carnelian-link-status-badge",
       text: this.status,
       attr: { "data-status": this.status },
     });
+    return tail;
   }
 
   override ignoreEvent(): boolean {
@@ -115,9 +121,16 @@ function buildDecorations(
       decorations.push(fixmeLinkDecoration.range(linkFrom, linkTo));
     }
 
-    if (options.showStatusBadge) {
+    if (options.showStatusChip) {
       const status = properties?.status;
       if (typeof status === "string" && status !== "") {
+        // リンクテキストを囲むチップ枠(左側)と、その右端のバッジ(枠の右側を兼ねる)
+        decorations.push(
+          Decoration.mark({
+            class: "carnelian-link-status-chip",
+            attributes: { "data-status": status },
+          }).range(linkFrom, linkTo),
+        );
         decorations.push(
           Decoration.widget({
             widget: new StatusBadgeWidget(status),

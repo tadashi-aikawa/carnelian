@@ -753,30 +753,55 @@ button.carnelian-lint-view__stat:hover {
 }
 
 /*
- Link status badge (Live Previewの内部リンク直後に表示するstatusバッジ)
+ Link status chip (Live Previewの内部リンクを枠で囲み、その直後に縦線区切りでstatusを表示)
+ リンクテキスト部分(chip)が枠を持ち、statusテキスト(chip-tail内のbadge)は背景なしで枠の外に続く
 */
-.carnelian-link-status-badge {
-  display: inline-block;
-  margin-left: 6px;
+.carnelian-link-status-chip {
+  /* 上下paddingはインライン要素の背景を行からはみ出させ、隣接行のチップと接触して行間が潰れて見えるため付けない */
   padding: 0 0.45em;
-  font-size: 0.75em;
-  color: var(--text-normal);
-  border: 1px solid color-mix(in srgb, currentColor 40%, transparent);
-  border-radius: var(--radius-m);
-  /* 絵文字だけが際立たないよう、絵文字ごとバッジ全体を透過する */
-  opacity: 0.6;
+  /* テーマの背景色定義に依存しない色で、ボーダーが確実に見えるようにする */
+  border: 1px solid color-mix(in srgb, var(--text-normal) 15%, transparent);
+  border-right: none;
+  border-radius: 4px 0 0 4px;
+  /* 行末で折り返されたとき、各フラグメントにも角丸とpaddingを複製して破綻感を減らす */
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
+/* チップ枠に隙間なく連結するstatus枠。左borderが境目の縦線を兼ねる。
+   塗りは面積の小さいstatus側だけに付けてアクセントにする(shields.io風) */
+.carnelian-link-status-chip-tail {
+  padding: 0 0.45em;
+  border: 1px solid color-mix(in srgb, var(--text-normal) 15%, transparent);
+  border-radius: 0 4px 4px 0;
+  /* コードブロックと同じ面の色。テーマに追従する */
+  background-color: var(--code-background);
+  user-select: none;
+}
+
+/* 背景・枠なしのstatusテキスト */
+.carnelian-link-status-badge {
+  font-size: 0.7em;
+  font-weight: 600;
+  color: var(--text-muted);
+  /* 縮小文字をベースライン揃えのままにすると塗り領域内で下寄りに見えるため、中央に補正する */
+  vertical-align: middle;
   white-space: nowrap;
   user-select: none;
 }
 
 /*
  statusごとの色分けはCarnelianには同梱しない
- バッジにはstatus値がそのままdata-status属性として付与されるため、
+ チップ枠とバッジにはstatus値がそのままdata-status属性として付与されるため、
  VaultのCSSスニペット側で属性セレクタ(前方一致 ^= や完全一致 =)を使って自由に制御できる
 
  例:
  .carnelian-link-status-badge[data-status^="✅"] {
    color: rgb(var(--color-green-rgb));
+ }
+ .carnelian-link-status-chip[data-status^="✅"],
+ .carnelian-link-status-chip-tail[data-status^="✅"] {
+   border-color: rgb(var(--color-green-rgb));
  }
 */
 
