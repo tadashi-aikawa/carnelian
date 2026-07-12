@@ -753,7 +753,7 @@ button.carnelian-lint-view__stat:hover {
 }
 
 /*
- Link status chip (Live Previewの内部リンクを枠で囲み、その直後に縦線区切りでstatusを表示)
+ Link status chip (Live Preview / Reading viewの内部リンクを枠で囲み、その直後に縦線区切りでstatusを表示)
  リンクテキスト部分(chip)が枠を持ち、statusテキスト(chip-tail内のbadge)は背景なしで枠の外に続く
 */
 .carnelian-link-status-chip {

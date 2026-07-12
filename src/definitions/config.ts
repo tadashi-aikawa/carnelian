@@ -110,7 +110,7 @@ export interface Config {
 
   /** エディタの表示に関する設定 */
   appearance?: {
-    /** 内部リンクをチップ(枠)で囲み、右端にリンク先ノートのプロパティ値をバッジ表示する（Live Previewのみ） */
+    /** 内部リンクをチップ(枠)で囲み、右端にリンク先ノートのプロパティ値をバッジ表示する（Live Preview / Reading view） */
     "Show link property chip"?: {
       /**
        * バッジ表示するプロパティ名の配列。先に見つかったプロパティの値を表示する
@@ -118,7 +118,7 @@ export interface Config {
        */
       properties: string[];
     };
-    /** リンク先ノートのfixmeプロパティが有効な内部リンクを強調表示する（Live Previewのみ） */
+    /** リンク先ノートのfixmeプロパティが有効な内部リンクを強調表示する（Live Preview / Reading view） */
     "Highlight fixme links"?: boolean;
   };
 

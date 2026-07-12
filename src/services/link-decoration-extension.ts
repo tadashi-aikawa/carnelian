@@ -10,19 +10,13 @@ import {
   WidgetType,
 } from "@codemirror/view";
 import { editorInfoField, editorLivePreviewField } from "obsidian";
-import { linkText2PathFrom } from "src/lib/helpers/links";
-import { getPropertiesByPath } from "src/lib/helpers/properties";
-import { parseInternalLinkText } from "src/lib/obsutils/parser";
+import {
+  createStatusChipTail,
+  type LinkDecorationOptions,
+  resolveLinkDecoration,
+} from "./link-decoration-common";
 
-export interface LinkDecorationOptions {
-  /**
-   * リンクをチップ(枠)で囲み、右端にリンク先ノートのプロパティ値をバッジ表示する
-   * (配列の先に見つかったプロパティの値を表示。空配列なら表示しない)
-   */
-  chipProperties: string[];
-  /** リンク先ノートのfixmeプロパティが有効なリンクを強調表示する */
-  highlightFixmeLinks: boolean;
-}
+export type { LinkDecorationOptions } from "./link-decoration-common";
 
 /**
  * リンク装飾の再構築を強制するためのAnnotation
@@ -44,17 +38,7 @@ class StatusBadgeWidget extends WidgetType {
   }
 
   override toDOM(): HTMLElement {
-    // 色などの見た目はCSSの属性セレクタ([data-status^="✅"]など)で制御する
-    const tail = createSpan({
-      cls: "carnelian-link-status-chip-tail",
-      attr: { "data-status": this.status },
-    });
-    tail.createSpan({
-      cls: "carnelian-link-status-badge",
-      text: this.status,
-      attr: { "data-status": this.status },
-    });
-    return tail;
+    return createStatusChipTail(this.status);
   }
 
   override ignoreEvent(): boolean {
@@ -110,39 +94,30 @@ function buildDecorations(
       return;
     }
 
-    const linkText = parseInternalLinkText(
+    const { fixme, status } = resolveLinkDecoration(
       state.doc.sliceString(linkFrom, linkTo),
+      sourcePath,
+      options,
     );
-    const path = linkText2PathFrom(linkText, sourcePath);
-    if (!path) {
-      return;
-    }
 
-    const properties = getPropertiesByPath(path);
-
-    if (options.highlightFixmeLinks && properties?.fixme === true) {
+    if (fixme) {
       decorations.push(fixmeLinkDecoration.range(linkFrom, linkTo));
     }
 
-    if (options.chipProperties.length > 0) {
-      const status = options.chipProperties
-        .map((key) => properties?.[key])
-        .find((value) => typeof value === "string" && value !== "");
-      if (typeof status === "string") {
-        // リンクテキストを囲むチップ枠(左側)と、その右端のバッジ(枠の右側を兼ねる)
-        decorations.push(
-          Decoration.mark({
-            class: "carnelian-link-status-chip",
-            attributes: { "data-status": status },
-          }).range(linkFrom, linkTo),
-        );
-        decorations.push(
-          Decoration.widget({
-            widget: new StatusBadgeWidget(status),
-            side: 1,
-          }).range(badgePos),
-        );
-      }
+    if (status != null) {
+      // リンクテキストを囲むチップ枠(左側)と、その右端のバッジ(枠の右側を兼ねる)
+      decorations.push(
+        Decoration.mark({
+          class: "carnelian-link-status-chip",
+          attributes: { "data-status": status },
+        }).range(linkFrom, linkTo),
+      );
+      decorations.push(
+        Decoration.widget({
+          widget: new StatusBadgeWidget(status),
+          side: 1,
+        }).range(badgePos),
+      );
     }
   };
 

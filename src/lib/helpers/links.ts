@@ -51,6 +51,34 @@ export function hasBacklink(path: string): boolean {
 }
 
 /**
+ * ファイルが指定パスへのリンクを持つかどうかを返します
+ * (既存のリンクグラフ `resolvedLinks` を引くだけなので軽量です)
+ *
+ * ```ts
+ * hasLinkFromTo("Notes/Obsidian.md", "Notes/Carnelian.md")
+ * // true
+ * ```
+ */
+export function hasLinkFromTo(sourcePath: string, targetPath: string): boolean {
+  return targetPath in (app.metadataCache.resolvedLinks[sourcePath] ?? {});
+}
+
+/**
+ * ファイルの解決済みリンクを{ファイルパス: 出現数}のマッピングオブジェクトで取得します
+ * キャッシュに存在しない場合はnullを返します
+ *
+ * ```ts
+ * getResolvedLinkMap("Obsidian.md")
+ * // { "Notes/Minerva.md": 2, "Notes/Carnelian.md": 3 }
+ * ```
+ */
+export function getResolvedLinkMap(filePath: string): {
+  [path: string]: number;
+} | null {
+  return app.metadataCache.resolvedLinks[filePath] ?? null;
+}
+
+/**
  * ファイルの未解決リンクを{ノート名: 出現数}のマッピングオブジェクトで取得します
  * キャッシュに存在しない場合はnullを返します
  *
