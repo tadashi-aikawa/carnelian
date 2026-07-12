@@ -15,8 +15,11 @@ import { getPropertiesByPath } from "src/lib/helpers/properties";
 import { parseInternalLinkText } from "src/lib/obsutils/parser";
 
 export interface LinkDecorationOptions {
-  /** リンクをチップ(枠)で囲み、右端にリンク先ノートのstatusプロパティをバッジ表示する */
-  showStatusChip: boolean;
+  /**
+   * リンクをチップ(枠)で囲み、右端にリンク先ノートのプロパティ値をバッジ表示する
+   * (配列の先に見つかったプロパティの値を表示。空配列なら表示しない)
+   */
+  chipProperties: string[];
   /** リンク先ノートのfixmeプロパティが有効なリンクを強調表示する */
   highlightFixmeLinks: boolean;
 }
@@ -121,9 +124,11 @@ function buildDecorations(
       decorations.push(fixmeLinkDecoration.range(linkFrom, linkTo));
     }
 
-    if (options.showStatusChip) {
-      const status = properties?.status;
-      if (typeof status === "string" && status !== "") {
+    if (options.chipProperties.length > 0) {
+      const status = options.chipProperties
+        .map((key) => properties?.[key])
+        .find((value) => typeof value === "string" && value !== "");
+      if (typeof status === "string") {
         // リンクテキストを囲むチップ枠(左側)と、その右端のバッジ(枠の右側を兼ねる)
         decorations.push(
           Decoration.mark({

@@ -110,8 +110,14 @@ export interface Config {
 
   /** エディタの表示に関する設定 */
   appearance?: {
-    /** 内部リンクをチップ(枠)で囲み、右端にリンク先ノートのstatusプロパティをバッジ表示する（Live Previewのみ） */
-    "Show link status chip"?: boolean;
+    /** 内部リンクをチップ(枠)で囲み、右端にリンク先ノートのプロパティ値をバッジ表示する（Live Previewのみ） */
+    "Show link property chip"?: {
+      /**
+       * バッジ表示するプロパティ名の配列。先に見つかったプロパティの値を表示する
+       * ex: ["status", "confidence"]
+       */
+      properties: string[];
+    };
     /** リンク先ノートのfixmeプロパティが有効な内部リンクを強調表示する（Live Previewのみ） */
     "Highlight fixme links"?: boolean;
   };

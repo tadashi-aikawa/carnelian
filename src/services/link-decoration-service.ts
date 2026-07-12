@@ -15,7 +15,7 @@ import {
 
 /**
  * Live Previewで内部リンクをリンク先ノートのプロパティに応じて装飾するサービスです
- * - statusプロパティをリンク直後にバッジ表示
+ * - 指定プロパティの値をリンク直後にバッジ表示
  * - fixmeプロパティが有効なリンクを強調表示
  */
 export class LinkDecorationService implements Service {

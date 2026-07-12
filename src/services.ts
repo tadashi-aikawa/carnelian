@@ -18,18 +18,19 @@ export function createServices(
   settings: PluginSettings,
   plugin: Plugin,
 ): Service[] {
+  const propertyChip = settings.appearance?.["Show link property chip"];
+
   return [
     new AutoDatePropertiesService(),
     settings.linter ? new LintService(settings.linter) : [],
     new FormatService(settings.formatter),
     new AddPropertiesToHeadService(),
     settings.click?.["Open link vertically"] ? new LinkClickService() : [],
-    settings.appearance?.["Show link status chip"] ||
-    settings.appearance?.["Highlight fixme links"]
+    propertyChip || settings.appearance?.["Highlight fixme links"]
       ? new LinkDecorationService(plugin, {
-          showStatusChip: settings.appearance["Show link status chip"] ?? false,
+          chipProperties: propertyChip?.properties ?? [],
           highlightFixmeLinks:
-            settings.appearance["Highlight fixme links"] ?? false,
+            settings.appearance?.["Highlight fixme links"] ?? false,
         })
       : [],
   ].flat();
