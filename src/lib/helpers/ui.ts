@@ -1,7 +1,7 @@
 import { exec, execFile } from "child_process";
 import { Modal, type TFile } from "obsidian";
 import { ConfirmDialog } from "src/lib/helpers/components/ConfirmDialog";
-import type { UApp } from "../types";
+import type { UApp, UFileView } from "../types";
 import { FileSearchDialog } from "./components/FileSearchDialog";
 import { InputDialog, type InputDialogResult } from "./components/InputDialog";
 import { SelectionDialog } from "./components/SelectionDialog";
@@ -256,22 +256,25 @@ export async function showFileSearchDialog(): Promise<TFile | null> {
 }
 
 /**
- * 現在ファイルViewのヘッダ後に要素を差し込みます
+ * ファイルViewのヘッダ後に要素を差し込みます(view未指定の場合は現在ファイルView)
  */
-export function insertElementAfterHeader(element: Element): void {
-  app.workspace
-    .getActiveFileView()
-    .containerEl.find(".view-header")
+export function insertElementAfterHeader(
+  element: Element,
+  view: UFileView = app.workspace.getActiveFileView(),
+): void {
+  view.containerEl
+    .find(".view-header")
     .insertAdjacentElement("afterend", element);
 }
 
 /**
- * 現在ファイルViewから要素を削除します
+ * ファイルViewから要素を削除します(view未指定の場合は現在ファイルView)
  */
-export function removeElementsFromContainer(selector: string): void {
-  const elements = app.workspace
-    .getActiveFileView()
-    .containerEl.querySelectorAll(selector);
+export function removeElementsFromContainer(
+  selector: string,
+  view: UFileView = app.workspace.getActiveFileView(),
+): void {
+  const elements = view.containerEl.querySelectorAll(selector);
 
   for (const el of elements) {
     el.remove();

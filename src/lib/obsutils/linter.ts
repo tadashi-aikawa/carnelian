@@ -16,22 +16,37 @@ import {
 } from "src/lib/utils/linter";
 import type { PluginSettings } from "src/settings";
 import { getActiveOffset, moveToOffset } from "../helpers/editors/basic";
+import { getAllMarkdownLeaves } from "../helpers/leaves";
+import type { UApp, UFileView } from "../types";
 import { groupBy, orderBy } from "../utils/collections";
 import type { PartialRequired } from "../utils/types";
+
+declare let app: UApp;
 
 type LintInspectionWithOffset = PartialRequired<LintInspection, "offset">;
 let inspectionsOrderByOffset: LintInspectionWithOffset[] = [];
 
+// Lintの非同期処理中に同じViewへ新しいLintが開始された場合、古い結果を反映しないための世代管理
+const lintGenerationByView = new WeakMap<UFileView, number>();
+
 /**
  * ファイルにLinterをかけます
- * Lintの結果はヘッダ下部にDOMとして追加されます
+ * Lintの結果はviewsで指定した各Viewのヘッダ下部にDOMとして追加されます
+ * (views未指定の場合はアクティブなViewのみ)
  */
 export async function lint(
   file: TFile,
   linters: Linter[],
   settings: PluginSettings["linter"],
   autofix: boolean,
+  views: UFileView[] = [app.workspace.getActiveFileView()],
 ) {
+  const generations = views.map((view) => {
+    const generation = (lintGenerationByView.get(view) ?? 0) + 1;
+    lintGenerationByView.set(view, generation);
+    return { view, generation };
+  });
+
   const content = await loadFileContentCache(file.path);
   const body = await loadFileBodyCache(file.path);
   const properties = getPropertiesByPath(file.path) ?? undefined;
@@ -44,17 +59,37 @@ export async function lint(
     settings,
   });
 
-  removeLinterInspectionElements();
-  const canAutoFix = !properties?.ignoreAutoFix && autofix;
+  // fix関数は実行時点のアクティブファイルを書き換えるため、
+  // 非同期処理中にアクティブファイルが切り替わっていた場合はautofixしない
+  const canAutoFix =
+    autofix &&
+    !properties?.ignoreAutoFix &&
+    app.workspace.getActiveFileView()?.file?.path === file.path;
   if (canAutoFix) {
     await fixByInspections(inspections);
   }
-  addLinterInspectionElement(inspections, canAutoFix);
 
-  inspectionsOrderByOffset = orderBy(
-    inspections.filter((x) => x.offset != null),
-    (x) => x.offset!,
-  ) as LintInspectionWithOffset[];
+  const activeView = app.workspace.getActiveFileView();
+  for (const { view, generation } of generations) {
+    // 非同期処理中に新しいLintが開始された、またはViewの表示ファイルが切り替わった場合は反映しない
+    if (lintGenerationByView.get(view) !== generation) {
+      continue;
+    }
+    if (view.file?.path !== file.path) {
+      continue;
+    }
+
+    removeLinterInspectionElements(view);
+    addLinterInspectionElement(inspections, canAutoFix, view);
+
+    // 検査位置ジャンプ(move-to-next/previous-inspection)はアクティブエディタ専用のため
+    if (view === activeView) {
+      inspectionsOrderByOffset = orderBy(
+        inspections.filter((x) => x.offset != null),
+        (x) => x.offset!,
+      ) as LintInspectionWithOffset[];
+    }
+  }
 }
 
 export function moveToNextInspection(): void {
@@ -103,6 +138,7 @@ async function fixByInspections(inspections: LintInspection[]) {
 function addLinterInspectionElement(
   inspections: LintInspection[],
   canAutoFix: boolean,
+  view: UFileView,
 ) {
   const summaries = Object.entries(groupBy(inspections, (x) => x.code)).map(
     ([code, inspections]) => ({ code, inspections }),
@@ -182,12 +218,20 @@ function addLinterInspectionElement(
     inspectionsEl.appendChild(fixedInspectionsEl);
   }
 
-  insertElementAfterHeader(inspectionsEl);
+  insertElementAfterHeader(inspectionsEl, view);
 }
 
 /**
- * ファイルが表示されているViewからプロパティ要素を削除します
+ * ViewからLint結果の要素を削除します
+ * view未指定の場合は開いているすべてのMarkdown Viewから削除します
  */
-export function removeLinterInspectionElements(): void {
-  removeElementsFromContainer(".linter-inspections");
+export function removeLinterInspectionElements(view?: UFileView): void {
+  if (view) {
+    removeElementsFromContainer(".linter-inspections", view);
+    return;
+  }
+
+  for (const leaf of getAllMarkdownLeaves()) {
+    removeElementsFromContainer(".linter-inspections", leaf.view);
+  }
 }

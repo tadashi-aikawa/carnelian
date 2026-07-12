@@ -10,9 +10,10 @@ import {
   setOnActiveLeafChangeEvent,
   setOnExWCommandEvent,
 } from "src/lib/helpers/events";
+import { getVisibleMarkdownLeaves } from "src/lib/helpers/leaves";
 import { getPropertiesByPath } from "src/lib/helpers/properties";
 import { lint, removeLinterInspectionElements } from "src/lib/obsutils/linter";
-import type { UApp } from "src/lib/types";
+import type { UApp, UFileView } from "src/lib/types";
 import { type LintInspection, lintAll } from "src/lib/utils/linter";
 import type { Service } from "src/services";
 import type { PluginSettings } from "src/settings";
@@ -69,13 +70,56 @@ export class LintService implements Service {
   }
 }
 
+// 古いlintFile()由来の背景Lintが、後から開始されたlintFile()の結果を上書きしないための世代管理
+let latestLintFileSession = 0;
+
 export async function lintFile(
   file: TFile,
   settings: PluginSettings["linter"],
   autofix: boolean,
 ) {
-  await lint(file, [contentLinter, propertyLinter], settings, autofix);
+  const session = ++latestLintFileSession;
+  const activeView = app.workspace.getActiveFileView();
+  // 同一ファイルを表示中の非アクティブペインにも同じ検査結果を描画する
+  // (autofix後に再検査すると修正前の内容が対象になり表示が矛盾するため)
+  // 背面タブは前面に出るときに必ずactive-leaf-changeでLintされるため対象外
+  const sameFileViews = getVisibleMarkdownLeaves()
+    .map((leaf) => leaf.view)
+    .filter((view) => view !== activeView && view.file?.path === file.path);
+  await lint(file, [contentLinter, propertyLinter], settings, autofix, [
+    activeView,
+    ...sameFileViews,
+  ]);
   app.workspace.trigger("carnelian:lint-complete" as any, file, autofix);
+
+  // アクティブファイル以外のペインに表示中のファイルもLint結果を更新する
+  // (autofixが必要なのはアクティブエディタだけなので検査のみ)
+  await lintOpenFilesExcept(file, settings, session);
+}
+
+async function lintOpenFilesExcept(
+  excludedFile: TFile,
+  settings: PluginSettings["linter"],
+  session: number,
+) {
+  const viewsByPath = new Map<string, { file: TFile; views: UFileView[] }>();
+  for (const leaf of getVisibleMarkdownLeaves()) {
+    const file = leaf.view.file;
+    if (!file || file.path === excludedFile.path) {
+      continue;
+    }
+    const entry = viewsByPath.get(file.path) ?? { file, views: [] };
+    entry.views.push(leaf.view);
+    viewsByPath.set(file.path, entry);
+  }
+
+  for (const { file, views } of viewsByPath.values()) {
+    // 新しいlintFile()が開始されたら、この背景更新は古いため中止する
+    if (session !== latestLintFileSession) {
+      return;
+    }
+    await lint(file, [contentLinter, propertyLinter], settings, false, views);
+  }
 }
 
 export async function inspectFile(

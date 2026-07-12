@@ -36,6 +36,16 @@ export function getAllMarkdownLeaves(): UWorkspaceMarkdownLeaf[] {
 }
 
 /**
+ * 表示中(各ペインで前面になっている)のMarkdownリーフを返却します
+ * 背面タブのリーフは含まれません
+ */
+export function getVisibleMarkdownLeaves(): UWorkspaceMarkdownLeaf[] {
+  return getAllMarkdownLeaves().filter((leaf) =>
+    leaf.view.containerEl.isShown(),
+  );
+}
+
+/**
  * 開いているMarkdownファイルを重複除外して返却します
  */
 export function getOpenMarkdownFiles(): TFile[] {
