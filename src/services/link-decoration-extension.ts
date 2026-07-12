@@ -94,8 +94,9 @@ function buildDecorations(
       return;
     }
 
+    const linkText = state.doc.sliceString(linkFrom, linkTo);
     const { fixme, status } = resolveLinkDecoration(
-      state.doc.sliceString(linkFrom, linkTo),
+      linkText,
       sourcePath,
       options,
     );
@@ -105,12 +106,20 @@ function buildDecorations(
     }
 
     if (status != null) {
+      // エイリアス付きリンクではタイトル部とパイプがLive Previewで非表示になるが、
+      // markはセグメントごとに分割されCSSのpadding/borderが空スパンとして残るため、
+      // チップ枠は表示されるエイリアス部分だけに貼る
+      const pipeIndex = linkText.indexOf("|");
+      const chipFrom =
+        pipeIndex >= 0 && linkFrom + pipeIndex + 1 < linkTo
+          ? linkFrom + pipeIndex + 1
+          : linkFrom;
       // リンクテキストを囲むチップ枠(左側)と、その右端のバッジ(枠の右側を兼ねる)
       decorations.push(
         Decoration.mark({
           class: "carnelian-link-status-chip",
           attributes: { "data-status": status },
-        }).range(linkFrom, linkTo),
+        }).range(chipFrom, linkTo),
       );
       decorations.push(
         Decoration.widget({
