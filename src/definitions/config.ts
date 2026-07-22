@@ -245,6 +245,8 @@ export interface Config {
        */
       domain: `${string}.atlassian.net`;
     };
+    /** 現在の内容をスプレッドシートに貼り付け可能な形式(リンク付きリッチテキスト)に変換してコピー */
+    "Copy as Spreadsheet"?: boolean;
     /** 現在の内容をSlack記法に変換してコピー */
     "Copy as Slack"?: {
       /** Slackのメッセージを置換するための正規表現マッピング */

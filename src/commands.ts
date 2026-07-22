@@ -8,6 +8,7 @@ import { copyActiveFileFullPath } from "./commands/copy-active-file-full-path";
 import { copyActiveImageFileToClipboard } from "./commands/copy-active-image-file-to-clipboard";
 import { copyAsConfluence } from "./commands/copy-as-confluence";
 import { copyAsSlack } from "./commands/copy-as-slack";
+import { copyAsSpreadsheet } from "./commands/copy-as-spreadsheet";
 import { copyDailyNoteSectionInRange } from "./commands/copy-daily-note-section-in-range";
 import { copyMinervaURL } from "./commands/copy-minerva-url";
 import { copyStripLinksAndDecorations } from "./commands/copy-strip-links-and-decorations";
@@ -221,6 +222,12 @@ function createCarnelianCommands(settings: PluginSettings) {
       enabled: se?.["Copy as Confluence"],
       executor: () =>
         copyAsConfluence({ domain: se?.["Copy as Confluence"]?.domain }),
+    },
+    {
+      name: "Copy as Spreadsheet",
+      kind: "editor",
+      enabled: se?.["Copy as Spreadsheet"],
+      executor: copyAsSpreadsheet,
     },
     {
       name: "Copy as Slack",

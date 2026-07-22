@@ -67,6 +67,25 @@ export async function copyToClipboard(text: string): Promise<void> {
 }
 
 /**
+ * クリップボードにリッチテキスト(HTML)とプレーンテキストの両方をコピーします
+ *
+ * ```ts
+ * await copyRichTextToClipboard("<a href='https://example.com'>リンク</a>", "リンク")
+ * ```
+ */
+export async function copyRichTextToClipboard(
+  html: string,
+  plain: string,
+): Promise<void> {
+  await navigator.clipboard.write([
+    new ClipboardItem({
+      "text/html": new Blob([html], { type: "text/html" }),
+      "text/plain": new Blob([plain], { type: "text/plain" }),
+    }),
+  ]);
+}
+
+/**
  * クリップボードに画像を保存します
  *
  * ```ts

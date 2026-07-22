@@ -307,6 +307,10 @@
               },
               "type": "object"
             },
+            "Copy as Spreadsheet": {
+              "description": "現在の内容をスプレッドシートに貼り付け可能な形式(リンク付きリッチテキスト)に変換してコピー",
+              "type": "boolean"
+            },
             "Copy url property": {
               "description": "現在ファイルのurlプロパティ値をコピー",
               "type": "boolean"
