@@ -75,7 +75,7 @@ function transformLine(line: string): string {
 
   // チェックボックス
   line = line.replace(/^(\s*)- \[x\]\s+/, (_, s) => `${toIndent(s)}✅ `);
-  line = line.replace(/^(\s*)- \[ \]\s+/, (_, s) => `${toIndent(s)}▢ `);
+  line = line.replace(/^(\s*)- \[ \]\s+/, (_, s) => `${toIndent(s)}⬜ `);
   // 箇条書き
   line = line.replace(/^(\s*)- /, (_, s) => `${toIndent(s)}• `);
 
