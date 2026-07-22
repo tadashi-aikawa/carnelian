@@ -107,10 +107,12 @@ export async function copyAsSpreadsheet() {
 
   htmlText = htmlText.split("\n").map(transformLine).join("<br>");
   htmlText = htmlText.replace(/\*\*(.+?)\*\*/g, "$1");
+  htmlText = htmlText.replace(/<br>【/g, "<br><br>【");
   htmlText = `<table><tr><td>${htmlText}</td></tr></table>`;
 
   plainText = plainText.split("\n").map(transformLine).join("\n");
   plainText = plainText.replace(/\*\*(.+?)\*\*/g, "$1");
+  plainText = plainText.replace(/\n【/g, "\n\n【");
 
   await copyRichTextToClipboard(htmlText, plainText);
 
